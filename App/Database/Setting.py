@@ -1,0 +1,89 @@
+#!/usr/bin/env python
+# -*- encoding: utf-8 -*-
+
+# Author: Paolo De Stefani
+# Contact: paolo <at> paolodestefani <dot> it
+# Copyright (C) 2026 Paolo De Stefani
+# License: GPL v3
+
+# This file is part of pySagra.
+#
+# pySagra is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# pySagra is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with pySagra.  If not, see <http://www.gnu.org/licenses/>.
+
+"""Database - Settings database management
+
+"""
+
+# psycopg
+import psycopg
+
+# application modules
+from App.Database.Exceptions import PyAppDBError
+from App.Database.Connect import appconn
+
+# application modules
+from App import session
+from App.Database.Utility import Record
+
+
+
+class SettingClass():
+    "A dict subclass for get/set a single setting parmeter"
+
+    def __getitem__(self, key):
+        "Get value for key from setting table"
+        # use fstring because field names are not used for cursor parameters
+        try:
+            with appconn.cursor() as cur:
+                cur.execute(f"""
+                SELECT {key}
+                FROM company.setting 
+                WHERE company_id = system.pa_current_company();""")
+                return cur.fetchone()[0]
+        except psycopg.Error as er:
+            raise PyAppDBError(er.diag.sqlstate, str(er))
+
+    def __setitem__(self, key, value):
+        "Set value for key in setting table"
+        try:
+            with appconn.transaction():
+                with appconn.cursor() as cur:
+                    cur.execute(f"""
+        UPDATE company.setting
+        SET {key} = %s
+        WHERE company_id = system.pa_current_company();""", (value,))
+        except psycopg.Error as er:
+            raise PyAppDBError(er.diag.sqlstate, str(er))
+
+    def __repr__(self):
+        return "Company setting get/set utility class"
+
+#Setting = SettingClass()
+
+
+class Setting(Record):
+    "A Record (dict) subclass for load/seve settings from database"
+
+    def __init__(self):
+        super().__init__('company.setting', ('company_id',))
+        self['company_id'] = session['current_company']
+        self.load()
+
+    def load(self):
+        self.select_record()
+
+    def save(self):
+        self.update_record()
+        self.commit()
+

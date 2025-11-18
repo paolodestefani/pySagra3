@@ -1,0 +1,71 @@
+<html lang="it">
+  <head>
+    <title>
+      Help sulla procedura di login
+    </title>
+  </head>
+  <body style="font-family: Arial, Sans-Serif;">
+    <h1 style="color: #009">
+      Documentazione in linea su pySagra
+    </h1>
+    <h2 id="login">
+      Procedura di login
+    </h2>
+    <p>
+     Al primo avvio dell'applicazione vengono richiesti i parametri di connessione
+	 al server e la finestra si presenta come in figura:
+	 <center>
+      <img src="qrc:/help/login1.png">
+    </center>
+    </p>
+    <p>
+      I parametri richiesti per effettuare la connessione al
+      database server sono:
+    </p>
+    <ul>
+      <li>
+        <b>Utente:</b> inserire il nome utente applicativo
+      </li>
+      <li>
+        <b>Password:</b> inserire la password associata all'utente
+        selezionato. Pu&ograve; essere non obbligatoria in base a
+        come &egrave; configurato il meccanismo di autenticazione 
+		degli utenti. Ci sono 2 utenti predefiniti e non modificabili:
+		<ul>
+			<li><i>system</i> con password <b>System@1</b></li>
+			<li><i>utente</i> con password <b>utente</b></li>
+		</ul>
+      </li>
+      <li>
+        <b>Server:</b> inserire il nome del computer che svolge il
+        ruolo di server di database. E' possibile inserire anche
+        l'indirizzo ip del server (es. 192.168.1.1). Se il
+        programma viene eseguito sullo stesso computer dove
+        &egrave; in esecuzione il database server &egrave;
+        possibile inserire il nome computer 'localhost' oppure l'ip
+        127.0.0.1
+      </li>
+      <li>
+        <b>Porta:</b> indicare la porta TCP da utilizzare per la
+        connessione. Tipicamente nelle installazioni di PostgreSQL
+        viene utilizzata la porta 5432, chiedere all'amministratore
+        di rete nel caso si utilizzi una porta diversa
+      </li>
+      <li>
+        <b>Database:</b> indicare il nome del database al quale
+        collegarsi
+      </li>
+    </ul>
+    <p>
+      La prima volta che si accede ad un server <b>TUTTI</b> questi
+      parametri devono essere valorizzati. Le volte successive
+      vengono riproposti gli stessi parametri gi&agrave; utilizzati
+      con successo in precedenza ad esclusione del nome utente e
+      della password:
+		<center>
+	      <img src="qrc:/help/login2.png">
+		</center>
+	  Per modificare i parametri inseriti cliccare sulla casella <i>Dettagli della connessione</i>
+    </p>
+  </body>
+</html>

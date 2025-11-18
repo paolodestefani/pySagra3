@@ -1,0 +1,113 @@
+#!/usr/bin/env python
+# -*- encoding: utf-8 -*-
+
+# Author: Paolo De Stefani
+# Contact: paolo <at> paolodestefani <dot> it
+# Copyright (C) 2026 Paolo De Stefani
+# License: GPL v3
+
+# This file is part of pySagra.
+#
+# pySagra is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# pySagra is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with pySagra.  If not, see <http://www.gnu.org/licenses/>.
+
+"""Order report utilities
+
+
+"""
+
+# standard library
+
+# PySide6
+from PySide6.QtPrintSupport import QPrinter
+from PySide6.QtPrintSupport import QPrintPreviewDialog
+from PySide6.QtPrintSupport import QPrinterInfo
+
+# application modules
+from App import session
+from App.Database.Report import report_id_xml, report_query
+from App.Report.ReportEngine import Report
+from App.Widget.Dialog import PrintPreviewDialog
+
+
+
+def printOrderReport(report_id, order_id, printer=None, copies=1):
+    report = Report(report_id_xml(report_id))
+    # report definition on condition fields must have code for Order Id
+    where = []
+    for i in report.conditions:
+        if report.conditions[i].code == 'order_id':
+            where.append((f"{i} = %s", order_id))
+    report.data = report_query(report, where)
+    report.generate()
+    if printer:
+        prnt = QPrinter(QPrinterInfo.printerInfo(printer))
+        prnt.setCopyCount(copies)
+        report.print_(prnt)
+    else:
+        # print preview
+        dialog = PrintPreviewDialog(session['mainwin'])
+        # start
+        dialog.paintRequested.connect(report.print_)
+        dialog.exec_()
+
+def printOrderDepartmentReport(report_id, l10n, order_id, printer=None, department=None, copies=1):
+    report = Report(report_id_xml(report_id))
+    # create condition
+    # report definition on condition fields must have a code for Order Id and Order Department Id
+    where = []
+    for i in report.conditions:
+        if report.conditions[i].code == 'order_id':
+            where.append((f"{i} = %s", order_id))
+        if report.conditions[i].code == 'department_id':
+            where.append((f"{i} = %s", department))
+    report.data = report_query(report, where)
+    report.generate()
+    if printer:
+        prnt = QPrinter(QPrinterInfo.printerInfo(printer))
+        #prnt.setFullPage(True)
+        prnt.setCopyCount(copies)
+        report.print_(prnt)
+    else:
+        # print preview
+        dialog = PrintPreviewDialog(session['mainwin'])
+        # start
+        dialog.paintRequested.connect(report.print_)
+        dialog.exec_()
+
+def printStockUnloadReport(report_id, printer=None, copies=1, event=None, day=None, daypart=None):
+    report = Report(report_id_xml(report_id))
+    # create condition
+    # report definition on condition fields must have a code for event, day, day_part and unload_control
+    where = []
+    for i in report.conditions:
+        if report.conditions[i].code == 'event':
+            where.append((f"{i} = %s", event))
+        if report.conditions[i].code == 'event_date':
+            where.append((f"{i} = %s", day))
+        if report.conditions[i].code == 'day_part':
+            where.append((f"{i} = %s", daypart))
+        if report.conditions[i].code == 'unload_control':
+            where.append((f"{i} IS %s", True))
+    report.data = report_query(report, where)
+    report.generate()
+    if printer:
+        prnt = QPrinter(QPrinterInfo.printerInfo(printer))
+        prnt.setCopyCount(copies)
+        report.print_(prnt)
+    else:
+        # print preview
+        dialog = PrintPreviewDialog(session['mainwin'])
+        # start
+        dialog.paintRequested.connect(report.print_)
+        dialog.exec_()

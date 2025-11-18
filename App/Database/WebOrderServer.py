@@ -1,0 +1,108 @@
+#!/usr/bin/env python
+# -*- encoding: utf-8 -*-
+
+# Author: Paolo De Stefani
+# Contact: paolo <at> paolodestefani <dot> it
+# Copyright (C) 2026 Paolo De Stefani
+# License: GPL v3
+
+# This file is part of pySagra.
+#
+# pySagra is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# pySagra is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with pySagra.  If not, see <http://www.gnu.org/licenses/>.
+
+"""Database - WebOrderServer module
+
+"""
+
+# psycopg
+import psycopg
+
+# application modules
+from App.Database.Exceptions import PyAppDBError
+from App.Database.Connect import appconn
+from App.System.Utility import string_encode
+from App.System.Utility import string_decode
+
+
+
+def get_web_order_server_params() -> tuple[str|None, int|None, str|None, str|None, str|None, str|None]:
+    "Get web order server connection parameters and file name"
+    script = """
+SELECT
+    server_address,
+    port_number,
+    encoding_type,
+    user_name,
+    user_password,
+    file_name
+FROM web_order_server
+WHERE company_id = pa_current_company();"""
+    try:
+        with appconn.cursor() as cur:
+            cur.execute(script)
+            if cur.rowcount:
+                r = cur.fetchone()  # must be only one record
+                return (r[0],
+                        r[1],
+                        r[2],
+                        string_decode(r[3]),
+                        string_decode(r[4]),
+                        string_decode(r[5]))
+            else:
+                return (None, None, None, None, None, None)
+    except psycopg.Error as er:
+        raise PyAppDBError(er.diag.sqlstate, str(er))
+
+def set_web_order_server_params(server: str,
+                                port: int,
+                                encoding: str,
+                                username: str,
+                                password: str,
+                                filename: str) -> None:
+    "Set web order server connection parameters and file name"
+    script = """
+INSERT INTO web_order_server (
+    company_id, 
+    server_address,
+    port_number,
+    encoding_type,
+    user_name,
+    user_password,
+    file_name)
+VALUES (
+        pa_current_company(),
+        %s,
+        %s,
+        %s,
+        %s,
+        %s,
+        %s)
+ON CONFLICT ON CONSTRAINT web_order_server_pkey DO 
+UPDATE SET server_address = EXCLUDED.server_address,
+    port_number = EXCLUDED.port_number,
+    user_name = EXCLUDED.user_name,
+    user_password = EXCLUDED.user_password,
+    file_name = EXCLUDED.file_name;"""
+    try:
+        with appconn.transaction():
+            with appconn.cursor() as cur:
+                cur.execute(script, (server,
+                                     port,
+                                     encoding,
+                                     string_encode(username),
+                                     string_encode(password),
+                                     string_encode(filename)))
+    except psycopg.Error as er:
+        raise PyAppDBError(er.diag.sqlstate, str(er))
+    

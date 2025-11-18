@@ -1,0 +1,421 @@
+#!/usr/bin/env python
+# -*- encoding: utf-8 -*-
+
+# Author: Paolo De Stefani
+# Contact: paolo <at> paolodestefani <dot> it
+# Copyright (C) 2026 Paolo De Stefani
+# License: GPL v3
+
+# This file is part of pySagra.
+#
+# pySagra is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# pySagra is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with pySagra.  If not, see <http://www.gnu.org/licenses/>.
+
+"""Users
+
+This module manages application users and user access rights to each company
+
+
+"""
+
+# standard library
+import logging
+
+# PySide6
+
+from PySide6.QtCore import Qt
+from PySide6.QtCore import QObject
+from PySide6.QtCore import QSettings
+from PySide6.QtCore import QDir
+from PySide6.QtCore import QFileInfo
+from PySide6.QtCore import QSize
+from PySide6.QtCore import QAbstractItemModel
+from PySide6.QtGui import QPixmap
+from PySide6.QtWidgets import QWidget
+from PySide6.QtWidgets import QVBoxLayout
+from PySide6.QtWidgets import QAbstractItemView
+from PySide6.QtWidgets import QFileDialog
+from PySide6.QtWidgets import QDialog
+from PySide6.QtWidgets import QDialogButtonBox
+from PySide6.QtWidgets import QMessageBox
+from PySide6.QtWidgets import QDataWidgetMapper
+
+
+# application modules
+from App import session
+from App import currentAction
+from App import currentIcon
+from App.Database.Exceptions import PyAppDBError
+from App.Database.User import change_password
+from App.Database.CodeDescriptionList import company_cdl
+from App.Database.CodeDescriptionList import profile_cdl
+from App.Database.CodeDescriptionList import menu_cdl
+from App.Database.CodeDescriptionList import toolbar_cdl
+from App.Database.Models import UserModel
+from App.Database.Models import UserIndexModel
+from App.Database.Models import UserCompanyModelReferenceUser
+from App.Database.User import encrypt_password
+from App.Database.User import force_password_change
+from App.Widget.Dialog import PrintDialog
+from App.Widget.Form import FormIndexManager
+from App.Widget.Control import TextEditor
+from App.Widget.Delegate import ImageDelegate
+from App.Widget.Delegate import HideTextDelegate
+from App.Widget.Delegate import RelationDelegate
+from App.Widget.Delegate import BooleanDelegate
+from App.Widget.Delegate import PasswordDelegate
+from App.Ui.UserWidget import Ui_UserWidget
+from App.Ui.ChangePasswordDialog import Ui_ChangePasswordDialog
+from App.System.Utility import _tr
+from App.System.Utility import langCountryFlags
+from App.System.Utility import langCountry
+from App.System.Utility import scriptInit
+from App.System.Utility import scriptMethod
+
+
+(V_CODE, V_DESCRIPTION, V_IMAGE, V_SYSTEM, V_ISADMIN,
+ V_CAN_EDIT_VIEWS, V_CAN_EDIT_SORTFILTERS, V_CAN_EDIT_REPORTS, V_L10N, V_LASTLOGIN, V_LASTCOMPANY,
+ V_USER_INS, V_DATE_INS, V_USER_UPD, V_DATE_UPD) = range(15)
+(CODE, DESCRIPTION, IMAGE, PASSWORD, PWDDATE, CHANGEPWDREQ, SYSTEM, ISADMIN,
+ CAN_EDIT_VIEWS, CAN_EDIT_SORTFILTERS, CAN_EDIT_REPORTS, L10N, LASTCOMPANY, LASTLOGIN,
+ USER_INS, DATE_INS, USER_UPD, DATE_UPD) = range(18)
+(UC_COMPANY, UC_USER, UC_PROFILE, UC_MENU, UC_TOOLBAR, 
+ UC_USER_INS, UC_DATE_INS, UC_USER_UPD, UC_DATE_UPD) = range(9)
+
+
+
+def users() -> None:
+    "Users management"
+    logging.info('Starting users Form')
+    mw = session['mainwin']
+    title = currentAction['sys_user'].text()
+    auth = currentAction['sys_user'].data()
+    uw = UsersForm(mw, title, auth)
+    uw.reload()
+    mw.addTab(title, uw)
+    logging.info('Users Form added to main window')
+
+
+def changePassword() -> None:
+    "Change password dialog"
+    # this dialog is used in users form too and is not called by an action
+    # so can't use action properties
+    logging.info('Starting change password dialog')
+    mw = session['mainwin']
+    pd = ChangePasswordDialog(mw, session['app_user_code'])
+    pd.exec()
+    logging.info('Change password dialog shown')
+
+
+class UsersForm(FormIndexManager):
+
+    def __init__(self, parent: QWidget, title: str, auth: str) -> None:
+        super().__init__(parent, auth)
+        model = UserModel(self)
+        idxModel = UserIndexModel(self)
+        ucModel = UserCompanyModelReferenceUser(self)
+        self.setModel(model, idxModel)
+        self.addDetailRelation(ucModel, 0, 1)
+        self.tabName = title
+        self.helpLink = None
+        # available status
+        # NEW, SAVE, DELETE, RELOAD, FIRST, PREVIOUS, NEXT, LAST
+        # FILTER, CHANGE, REPORT, EXPORT
+        self.availableStatus = (True, True, True, True, True, True, True, True,
+                                True, True, True, True)
+        self.ui = Ui_UserWidget()
+        self.ui.setupUi(self)
+        # icons for add/remove buttons
+        self.ui.pushButtonAdd.setIcon(currentIcon['edit_add'])
+        self.ui.pushButtonRemove.setIcon(currentIcon['edit_remove'])
+        # widget settings
+        self.setIndexView(self.ui.tableView)
+        self.ui.tableView.setLayoutName('user')
+        # can't change system checkbox
+        self.ui.checkBoxSystem.setAttribute(Qt.WA_TransparentForMouseEvents)
+        self.ui.checkBoxSystem.setFocusPolicy(Qt.NoFocus)
+        #self.ui.tableView.setItemDelegateForColumn(CHANGEPWDREQ, BooleanDelegate(self.ui.tableView))
+        self.ui.tableView.setItemDelegateForColumn(V_SYSTEM, BooleanDelegate(self.ui.tableView))
+        self.ui.tableView.setItemDelegateForColumn(V_ISADMIN, BooleanDelegate(self.ui.tableView))
+        self.ui.tableView.setItemDelegateForColumn(V_CAN_EDIT_VIEWS, BooleanDelegate(self.ui.tableView))
+        self.ui.tableView.setItemDelegateForColumn(V_CAN_EDIT_SORTFILTERS, BooleanDelegate(self.ui.tableView))
+        self.ui.tableView.setItemDelegateForColumn(V_CAN_EDIT_REPORTS, BooleanDelegate(self.ui.tableView))
+        self.ui.tableView.setItemDelegateForColumn(V_L10N, RelationDelegate(self, langCountry))
+        self.ui.tableView.setItemDelegateForColumn(V_IMAGE, ImageDelegate(self))
+        # set password/password change
+        self.ui.pushButtonSetTemporaryPassword.clicked.connect(self.setTemporaryPassword)
+        # self.ui.pushButtonForcePasswordChange.clicked.connect(self.forcePasswordChange)
+        # signal/slot mappings
+        self.ui.pushButtonUpload.clicked.connect(self.upload)
+        self.ui.pushButtonDownload.clicked.connect(self.download)
+        self.ui.pushButtonDelete.clicked.connect(self.removeImage)
+        # other widgets
+        self.mapper.addMapping(self.ui.lineEditUser, CODE)
+        self.mapper.addMapping(self.ui.lineEditUserDescription, DESCRIPTION)
+        #self.mapper.addMapping(self.ui.lineEditEmail, EMAIL)
+        self.mapper.addMapping(self.ui.labelImage, IMAGE, b"imageBytearray")
+        self.mapper.addMapping(self.ui.lineEditLastCompany, LASTCOMPANY)
+        self.mapper.addMapping(self.ui.dateTimeEditLastLogin, LASTLOGIN, b"modelDataDateTime")
+        self.ui.comboBoxL10n.setItemList(langCountryFlags())
+        self.mapper.addMapping(self.ui.comboBoxL10n, L10N, b"modelDataStr")
+        self.mapper.addMapping(self.ui.dateTimeEditPasswordDate, PWDDATE, b"modelDataDateTime")
+        self.mapper.addMapping(self.ui.checkBoxForcePasswordChange, CHANGEPWDREQ)
+        self.mapper.addMapping(self.ui.checkBoxSystem, SYSTEM)
+        self.mapper.addMapping(self.ui.checkBoxIsAdmin, ISADMIN)
+        self.mapper.addMapping(self.ui.checkBoxCanEditViews, CAN_EDIT_VIEWS)
+        self.mapper.addMapping(self.ui.checkBoxCanEditSortFilters, CAN_EDIT_SORTFILTERS)
+        self.mapper.addMapping(self.ui.checkBoxCanEditReports, CAN_EDIT_REPORTS)
+        # make system checkbox not user editable
+        #self.ui.checkBoxSystem.setAttribute(Qt.WA_TransparentForMouseEvents)
+        #self.ui.checkBoxSystem.setFocusPolicy(Qt.NoFocus)
+        # user/company
+        self.ui.tableViewUserCompany.setModel(ucModel)
+        self.ui.tableViewUserCompany.setLayoutName('usersUserCompany')
+        self.ui.tableViewUserCompany.setItemDelegateForColumn(UC_COMPANY, RelationDelegate(self, company_cdl))
+        #self.ui.tableViewUserCompany.setItemDelegateForColumn(UC_USER, RelationDelegate(self, UserRelation))
+        self.ui.tableViewUserCompany.setItemDelegateForColumn(UC_PROFILE, RelationDelegate(self, profile_cdl))
+        self.ui.tableViewUserCompany.setItemDelegateForColumn(UC_MENU, RelationDelegate(self, menu_cdl))
+        self.ui.tableViewUserCompany.setItemDelegateForColumn(UC_TOOLBAR, RelationDelegate(self, toolbar_cdl))
+        # map detail view/mapper
+        #self.ui.tableViewEmailAccounts.selectionModel().currentRowChanged.connect(self.accMapper.setCurrentModelIndex)
+        #self.accMapper.currentIndexChanged.connect(self.ui.tableViewEmailAccounts.selectRow)
+        #model3.rowCountChanged.connect(self.accountRowChanged)
+        # self.ui.tableViewEmailAccounts.selectionModel().currentRowChanged.connect(self.accountViewRowChanged)
+        # self.accMapper.currentIndexChanged.connect(self.accountMapperRowChanged)
+        # read only account table view
+        #self.ui.tableViewEmailAccounts.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        # SSL make TLS useless
+        #self.ui.checkBoxSSL.stateChanged.connect(self.deactivateTls)
+        self.ui.pushButtonAdd.clicked.connect(self.add)
+        self.ui.pushButtonRemove.clicked.connect(self.remove)
+        # scripting
+        self.script = scriptInit(self)
+
+    def deactivateTls(self, state: int) -> None:
+        if state == Qt.Checked:
+            self.ui.checkBoxTLS.setCheckState(Qt.Unchecked)
+            self.ui.checkBoxTLS.setDisabled(True)
+        else:
+            self.ui.checkBoxTLS.setEnabled(True)
+
+    def add(self) -> None:
+        self.ui.tableViewUserCompany.add()
+
+    def remove(self) -> None:
+        self.ui.tableViewUserCompany.remove()
+
+    @scriptMethod
+    def new(self) -> None:
+        super().new()
+        self.ui.lineEditUser.setEnabled(True)
+        self.ui.lineEditUser.setFocus()
+
+    def save(self) -> None:
+        "Save and ask for password if null (new user)"
+        if self.model.data(self.model.index(self.mapper.currentIndex(), PASSWORD)) is None:
+            userIndex = self.model.index(self.mapper.currentIndex(), CODE)
+            passwordIndex = self.model.index(self.mapper.currentIndex(), PASSWORD)
+            dlg = SetPasswordDialog(self, self.model, userIndex, passwordIndex)
+            dlg.exec()
+        super().save()
+        self.ui.lineEditUser.setDisabled(True)
+
+    def reload(self) -> None:
+        "Reload data, set widgets to default state"
+        super().reload()
+        self.ui.lineEditUser.setDisabled(True)
+
+    def delete(self) -> None:
+        userId = self.ui.lineEditUser.text()
+        userDescription = self.ui.lineEditUserDescription.text()
+        if self.ui.checkBoxSystem.isChecked():
+            QMessageBox.information(self,
+                                    _tr('MessageDialog', "Information"),
+                                    _tr('User', "It is not possible to delete a system user"))
+            return
+        msg = _tr('User', "Are you sure you want to delete this user ?")
+        if QMessageBox.question(self,
+                                _tr('MessageDialog', "Question"),
+                                f"{msg}\n{userId} - {userDescription}",
+                                QMessageBox.Yes | QMessageBox.No,  # butons
+                                QMessageBox.No  # default botton
+                                ) == QMessageBox.No:
+            return
+        # ok, delete
+        super().delete()
+
+    def mapperIndexChanged(self, row: int) -> None:
+        super().mapperIndexChanged(row)
+        if self.ui.checkBoxSystem.isChecked():
+            self.ui.lineEditUserDescription.setReadOnly(True)
+            self.ui.comboBoxL10n.setDisabled(True)
+            self.ui.pushButtonUpload.setDisabled(True)
+            self.ui.pushButtonDownload.setDisabled(True)
+            self.ui.pushButtonDelete.setDisabled(True)
+            self.ui.checkBoxIsAdmin.setDisabled(True)  # setChackable don't work...
+        else:
+            self.ui.lineEditUserDescription.setReadOnly(False)
+            self.ui.comboBoxL10n.setDisabled(False)
+            self.ui.pushButtonUpload.setDisabled(False)
+            self.ui.pushButtonDownload.setDisabled(False)
+            self.ui.pushButtonDelete.setDisabled(False)
+            self.ui.checkBoxIsAdmin.setEnabled(True)
+        #self.accMapper.revert()
+        #self.accMapper.toFirst()
+
+    def setTemporaryPassword(self) -> None:
+        "Ask for a temporary password for current user"
+        userIndex = self.model.index(self.mapper.currentIndex(), CODE)
+        passwordIndex = self.model.index(self.mapper.currentIndex(), PASSWORD)
+        dlg = SetPasswordDialog(self, self.model, userIndex, passwordIndex)
+        if dlg.exec_() == QDialog.Accepted:
+            # if password was modified set for change required
+            cprIndex = self.model.index(self.mapper.currentIndex(), CHANGEPWDREQ)
+            self.model.setData(cprIndex, True)
+
+    @scriptMethod
+    def upload(self) -> None:
+        "Upload user image file"
+        st = QSettings()
+        path = st.value("PathImagesUsers", QDir.current().path())
+        f, t = QFileDialog.getOpenFileName(self,
+                                           _tr('User', "Select the image to upload"),
+                                           path,
+                                           _tr('User', "Portable Network Graphics (*.png);;All files (*.*)"))
+
+        if f == "":
+            return
+        pix = QPixmap(f)
+        if pix.width() > 640 or pix.height() > 480:
+            pix = pix.scaled(640, 480, Qt.KeepAspectRatio)
+            self.ui.labelCompanyImage.setPixmap(pix)
+            QMessageBox.warning(self,
+                                _tr('MessageDialog', "Warning"),
+                                _tr('User', "The selected image is too big, it was"
+                                    "automaticlly resized to the max allowed size of 640x480 pixels"))
+        else:
+            self.ui.labelImage.setPixmap(pix)
+        st.setValue("PathImagesUsers", QFileInfo(f).path())
+        self.model.isDirty = True
+        self.model.userDataChanged.emit()
+
+    @scriptMethod
+    def download(self, checked: bool) -> None:
+        "Download user image file"
+        if not self.ui.labelImage.pixmap():
+            return
+        st = QSettings()
+        path = st.value("PathImagesUsers", QDir.current().path())
+        f, t = QFileDialog.getSaveFileName(self,
+                                           _tr('User', "Select the destination file name"),
+                                           path,
+                                           _tr('User', "Portable Network Graphics (*.png);;All files (*.*)"))
+        if f == "":
+            return
+        pix = self.ui.labelImage.pixmap()
+        if pix.save(f):
+            QMessageBox.information(self,
+                                    _tr('MessageDialog', "Information"),
+                                    _tr('User', "Image file saved"))
+        else:
+            QMessageBox.critical(self,
+                                 _tr('MessageDialog', "Critical"),
+                                 _tr('User', "Error on saving image file"))
+
+    def removeImage(self, checked: bool) -> None:
+        "Remove company image"
+        self.ui.labelImage.clear()
+        self.ui.labelImage.setText(_tr('User', "NO IMAGE"))
+        self.model.isDirty = True
+        self.model.userDataChanged.emit()
+
+    def print(self) -> None:
+        dialog = PrintDialog(self, 'USER')
+        dialog.show()
+
+
+class ChangePasswordDialog(QDialog):
+    "Change password dialog"
+
+    def __init__(self, parent: QWidget, user: str) -> None:
+        super().__init__(parent)
+        self.ui = Ui_ChangePasswordDialog()
+        self.ui.setupUi(self)
+        # this dialog is used in users too, can't use action properties
+        # because is not called by an action
+        self.setWindowTitle(_tr('User', 'Change password'))
+        self.ui.labelIcon.setPixmap(currentIcon['system_password'].pixmap(100))
+        self.ui.lineEditUser.setText(user)
+        self.ui.buttonBox.button(QDialogButtonBox.Cancel).setDefault(True)
+        #self.buttonBox.button(QDialogButtonBox.Help).clicked.connect(self.helpRequested)
+
+    def accept(self) -> None:
+        # check not null and correct password
+        if (self.ui.lineEditNewPassword.text() == '' or
+            self.ui.lineEditConfirmPassword.text() == ''):
+            QMessageBox.critical(self,
+                                 _tr('MessageDialog', "Critical"),
+                                 _tr('ChangePassword', "Insert a valid password "
+                                     "on both the line edit boxes"))
+            return
+        if self.ui.lineEditNewPassword.text() != self.ui.lineEditConfirmPassword.text():
+            QMessageBox.critical(self,
+                                 _tr('MessageDialog', "Critical"),
+                                 _tr('ChangePassword', "The Inserted password "
+                                     "in the 'New password' does not match "
+                                     "that of the 'Confirm password'"))
+            return
+        try:
+            change_password(self.ui.lineEditUser.text(),
+                            self.ui.lineEditNewPassword.text())
+        except PyAppDBError as er:
+            QMessageBox.critical(self,
+                                 _tr('MessageDialog', "Critical"),
+                                 f"Database error: {er.code}\n{er.message}")
+        else:
+            QMessageBox.information(self,
+                                    _tr('MessageDialog', "Information"),
+                                    _tr('ChangePassword', "Password changed successfully"))
+        QDialog.accept(self)
+
+    def helpRequested(self) -> None:
+        print("Help request")
+
+
+class SetPasswordDialog(ChangePasswordDialog):
+
+    def __init__(self, parent: QWidget, model: QAbstractItemModel, userIndex: int, passwordIndex: int) -> None:
+        super().__init__(parent, model.data(userIndex))
+        self.model = model
+        self.userIndex = userIndex
+        self.passwordIndex = passwordIndex
+        self.setWindowTitle(_tr('User', 'Set temporary password dialog'))
+
+    def accept(self) -> None:
+        # check correct password
+        if self.ui.lineEditConfirmPassword.text() == '':
+            QMessageBox.critical(self,
+                                 _tr('MessageDialog', "Critical"),
+                                 _tr('ChangePassword', "Insert a valid password on both the line edit"))
+            return
+        if self.ui.lineEditNewPassword.text() != self.ui.lineEditConfirmPassword.text():
+            QMessageBox.critical(self, _tr('MessageDialog', "Critical"),
+                                 _tr('ChangePassword', "New password and confirmed password does not match"))
+            return
+        # return encrypted password to model
+        ep = encrypt_password(self.ui.lineEditNewPassword.text())
+        self.model.setData(self.passwordIndex, ep)
+        QDialog.accept(self)
+
+
+

@@ -1,0 +1,67 @@
+<html lang="en">
+  <head>
+    <title>
+      Help on login procedure
+    </title>
+  </head>
+  <body style="font-family: Arial, Sans-Serif;">
+    <h1 style="color: #009">pySagra on line documentation</h1>
+    <h2 id="login">
+      Login procedure
+    </h2>
+    <p>
+     When the application started for the first time, the connection parameters are requested
+	 and the window looks like in the following figure:
+	 <center>
+      <img src="qrc:/help/login1.png">
+    </center>
+    </p>
+    <p>
+      The parameters required to connect to
+	  the database server are:
+    </p>
+    <ul>
+      <li>
+        <b>User:</b> type in the application user name
+      </li>
+      <li>
+        <b>Password:</b> type in the user password
+        The user password can be optional
+		based on the authentication settings
+        There are 2 built in user account:
+		<ul>
+			<li><i>system</i> with password <b>System@1</b></li>
+			<li><i>utente</i> with password <b>utente</b></li>
+		</ul>
+      </li>
+      <li>
+        <b> Server: </b> enter the name of the computer running the
+		role of database server. It is also possible to enter
+		the server's ip address (eg 192.168.1.1). If the
+		program runs on the same computer where
+		the database server is running
+		You can enter the computer name 'localhost' or the ip
+		127.0.0.1
+      </li>
+      <li>
+        <b> Port: </b> type in the TCP port to use for the
+		connection. Typically in PostgreSQL installations
+		port 5432 is used, ask the administrator
+		network if a different port is used
+      </li>
+      <li>
+        <b>Database:</b> type in the database name to connect to
+      </li>
+    </ul>
+    <p>
+		The first time you access a server <b> ALL of these </b>
+		parameters must be setted. The subsequent times
+		the same parameters already used successfully are re-proposed
+		excluding the username and password:
+		<center>
+	      <img src="qrc:/help/login2.png">
+		</center>
+	  Click on <i>Connection details</i> to modify the connection prameters
+    </p>
+  </body>
+</html>
