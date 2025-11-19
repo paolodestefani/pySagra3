@@ -201,6 +201,5 @@ cython_debug/
 .cursorignore
 .cursorindexingignore
 
-
 # varie
 .vscode/
