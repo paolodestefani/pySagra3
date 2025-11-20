@@ -6,13 +6,13 @@ REM * Per il Restore è necessario aver già riallineato gli utenti     *
 REM * sul server di ripristino                                        *
 REM *******************************************************************
 
-SET BACKUPFILE="C:\"
+SET BACKUPFILE="C:\temp\pysagra3.sql"
 SET SERVER=localhost
 SET PORT=5432
-SET DATABASE=bidasio
+SET DATABASE=pysagra3
 SET PGUSER=postgres
 SET PGPASSWORD=postgres
-SET PSQL="c:\Program Files\PostgreSQL\9.3\bin\psql.exe"
+SET PSQL="c:\Program Files\PostgreSQL\16\bin\psql.exe"
 
 REM Start
 %PSQL% -h %SERVER% -p %PORT% -U %USER% -d %DATABASE% -w %DATABASE% < %BACKUPFILE%

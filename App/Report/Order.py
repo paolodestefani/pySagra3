@@ -53,12 +53,12 @@ def printOrderReport(report_id, order_id, printer=None, copies=1):
     if printer:
         prnt = QPrinter(QPrinterInfo.printerInfo(printer))
         prnt.setCopyCount(copies)
-        report.print_(prnt)
+        report.print(prnt)
     else:
         # print preview
         dialog = PrintPreviewDialog(session['mainwin'])
         # start
-        dialog.paintRequested.connect(report.print_)
+        dialog.paintRequested.connect(report.print)
         dialog.exec_()
 
 def printOrderDepartmentReport(report_id, l10n, order_id, printer=None, department=None, copies=1):
@@ -77,12 +77,12 @@ def printOrderDepartmentReport(report_id, l10n, order_id, printer=None, departme
         prnt = QPrinter(QPrinterInfo.printerInfo(printer))
         #prnt.setFullPage(True)
         prnt.setCopyCount(copies)
-        report.print_(prnt)
+        report.print(prnt)
     else:
         # print preview
         dialog = PrintPreviewDialog(session['mainwin'])
         # start
-        dialog.paintRequested.connect(report.print_)
+        dialog.paintRequested.connect(report.print)
         dialog.exec_()
 
 def printStockUnloadReport(report_id, printer=None, copies=1, event=None, day=None, daypart=None):
@@ -104,10 +104,10 @@ def printStockUnloadReport(report_id, printer=None, copies=1, event=None, day=No
     if printer:
         prnt = QPrinter(QPrinterInfo.printerInfo(printer))
         prnt.setCopyCount(copies)
-        report.print_(prnt)
+        report.print(prnt)
     else:
         # print preview
         dialog = PrintPreviewDialog(session['mainwin'])
         # start
-        dialog.paintRequested.connect(report.print_)
+        dialog.paintRequested.connect(report.print)
         dialog.exec_()

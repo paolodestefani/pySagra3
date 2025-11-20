@@ -420,7 +420,7 @@ def createActionDictionary(mw):
         _tr("Action", 'About {}').format(APPNAME),
         about,
         False,
-        'help_about',
+        APPNAME,
         None,
         _tr("Action", 'About...'),
         _tr("Action", 'Information about {}').format(APPNAME),
