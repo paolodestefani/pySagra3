@@ -4,9 +4,9 @@
     <file alias="login_gif">login.gif</file>
   </qresource>
   <qresource>
-    <file alias="login_it">qm/login_it.qm</file>
-    <file alias="pySagra_it">qm/pySagra_it.qm</file>
-	<file alias="pySagra_th">qm/pySagra_th.qm</file>
+    <file alias="login_it">translation/login_it.qm</file>
+    <file alias="pySagra_it">translation/pySagra_it.qm</file>
+	<file alias="pySagra_th">translation/pySagra_th.qm</file>
   </qresource>
   <qresource  prefix="/flags">
 	<file alias="flag_usa">icons/flags/flag_usa.png</file>
@@ -149,7 +149,6 @@
     <file alias="edit_export">icons/tango/edit_export.svg</file>
     <file alias="help_contents">icons/tango/help_contents.svg</file>
     <file alias="help_faq">icons/tango/help_faq.svg</file>
-    <file alias="help_about">icons/pySagra.png</file>
     <file alias="help_system_info">icons/tango/help_system_info.svg</file>
     <file alias="help_aboutqt">icons/oxygen/help_aboutqt.png</file>
   </qresource>

@@ -117,11 +117,11 @@ class AboutDialog(QDialog):
             f'</ul>'
             f'<p>{iconRef} <a href="http://www.wendellverli.com/">Wendell Fernandes</a></p>'
             f'<p>{gifRef} <a href="https://pixabay.com/users/placidplace-25572496/">Placidplace</a></p>'
-            f'<p style="font-size: 16pt;">{licence1}</p>'
-            f'<p style="font-size: 16pt;">{licence2}</p>'
-            f'<p style="font-size: 16pt;">{licence3}</p>'
+            f'<p>{licence1}</p>'
+            f'<p>{licence2}</p>'
+            f'<p>{licence3}</p>'
             f'<hr />'
-            f'<p style="font-weight: bold; font-size: 20pt; text-align: center;"><a href="https://www.gnu.org/licenses/gpl-3.0.html">GNU Gpl 3.0</a>')
+            f'<p style="font-weight: bold; font-size: 16pt; text-align: center;"><a href="https://www.gnu.org/licenses/gpl-3.0.html">GNU Gpl 3.0</a>')
         
         self.ui.labelAbout.setText(text)
         rect = QPixmap(":/login_gif").rect()

@@ -18,9 +18,9 @@ pyside6-rcc resources.qrc -o resources_rc.py
 pyside6-lupdate \
 	App/System/Login.py \
 	App/Ui/LoginDialog.ui \
-	-tr-function-alias translate+=_tr -noobsolete -ts ts/login_it.ts 
+	-tr-function-alias translate+=_tr -noobsolete -ts translation/ts/login_it.ts 
 	
-pyside6-lrelease ts/login_it.ts -qm qm/login_it.qm
+pyside6-lrelease translation/ts/login_it.ts -qm translation/login_it.qm
 
 # translations without pro file, sources and forms
 pyside6-lupdate	\
@@ -40,9 +40,9 @@ pyside6-lupdate	\
 	App/Widget/Delegate.py \
 	App/Widget/Dialog.py \
 	App/Widget/Form.py \
-	-tr-function-alias translate+=_tr -noobsolete -ts ts/pySagra_it.ts 
+	-tr-function-alias translate+=_tr -noobsolete -ts translation/ts/pySagra_it.ts 
 
-pyside6-lrelease ts/pySagra_it.ts -qm qm/pySagra_it.qm
+pyside6-lrelease translation/ts/pySagra_it.ts -qm translation/pySagra_it.qm
 
 # exit from venv
 deactivate
