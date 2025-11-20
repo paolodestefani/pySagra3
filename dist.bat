@@ -1,4 +1,4 @@
-REM creazione pacchetto per pySagra 2.0
+REM creazione pacchetto per pySagra 3.0
 
 REM utilizzo di un virtual enviroment
 
