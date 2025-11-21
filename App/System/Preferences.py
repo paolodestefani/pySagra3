@@ -231,7 +231,7 @@ def setColorScheme(color: str) -> None:
     
 def setIconTheme(theme: str) -> None: # used in login, currentIcon created before currentAction
     "Fill currentIcon dictionary"
-    it = QDirIterator(f":/icons/{theme or 'oxygen'}", QDirIterator.NoIteratorFlags)
+    it = QDirIterator(f":/icon/{theme or 'oxygen'}", QDirIterator.NoIteratorFlags)
     # in resource.qrc an alias is mandatory, the it.fileName() is the alias
     while it.hasNext():
         it.next()
