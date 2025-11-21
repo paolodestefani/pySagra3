@@ -603,7 +603,7 @@ FROM system.report;"""
         self.isCompanyTable = False
         self.setRepr('Report index model')
         # sql order by clause, plain sql string without ORDER BY
-        self.addOrderBy("report_code, l10n")
+        self.addOrderBy("report_id, report_code, l10n")
         
 
 class ReportModel(TableModel):
@@ -628,7 +628,7 @@ class ReportModel(TableModel):
         # True if is a company table
         self.isCompanyTable = False
         self.primaryKey = ("report_id",)
-        self.automaticPKey = False
+        self.automaticPKey = True
         # sql order by clause, plain sql string without ORDER BY
         #self.addOrderBy(("code, l10n"))
 
