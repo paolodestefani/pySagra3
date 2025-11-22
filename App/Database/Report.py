@@ -77,7 +77,7 @@ VALUES (%s, %s, %s, %s, %s, %s)
     except psycopg.Error as er:
         raise PyAppDBError(er.diag.sqlstate, str(er))
 
-def list_all_report():
+def list_all_reports():
     "List all reports from system.report for exporting purposes"
     script = """
 SELECT

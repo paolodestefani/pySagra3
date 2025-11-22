@@ -67,7 +67,7 @@ from App import currentIcon
 from App.Database.Exceptions import PyAppDBError
 from App.Database.Report import delete_all_reports
 from App.Database.Report import load_report
-from App.Database.Report import list_all_report
+from App.Database.Report import list_all_reports
 from App.Database.Models import ReportModel
 from App.Database.Models import ReportIndexModel
 from App.Widget.Form import FormIndexManager
@@ -302,7 +302,7 @@ class ReportForm(FormIndexManager):
         if directory == "":
             return
         try:
-            for i, (cod, lcn, cls, sys, dsc, xml) in enumerate(list_all_report()):
+            for i, (cod, lcn, cls, sys, dsc, xml) in enumerate(list_all_reports()):
                 fileName = (f"{directory}"
                             f"/{i:02d}"
                             f"_{cod}"
