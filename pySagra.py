@@ -195,9 +195,11 @@ if __name__ == "__main__":
     # l10n
     logging.info('Setting up QLocale to system locale')
     lang = QLocale.system().name()[:2]  # = system language
+    #print('Systen', QLocale.system())
+    #print('Langs', QLocale().uiLanguages(QLocale.TagSeparator.Underscore)[-1])
     # on macos system locale is not correct, force to italian
     if QOperatingSystemVersion.currentType() == QOperatingSystemVersion.OSType.MacOS:
-        lang = 'it'
+        lang = QLocale().uiLanguages(QLocale.TagSeparator.Underscore)[-1]
     # install translators for qt and main application
     logging.info('Installing translators')
     for i in ('login', APPNAME):
