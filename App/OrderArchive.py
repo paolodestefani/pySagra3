@@ -271,6 +271,7 @@ class OrderForm(FormIndexManager):
         # customer copy
         if self.ui.checkBoxPrintCustomerCopy.isChecked():
             printer = get_printer_name(setting['customer_printer_class'], session['hostname'])
+            #reportId = get_report_id(setting['customer_report'], session['l10n'],)
             if not printer:
                 QMessageBox.warning(self,
                                     _tr('MessageDialog', "Warning"),
@@ -278,7 +279,7 @@ class OrderForm(FormIndexManager):
                                         "Generating a print preview"))
             try:
                 printOrderReport(setting['customer_report'],
-                                 session['l10n'],
+                                 #session['l10n'],
                                  ti,
                                  printer,
                                  setting['customer_copies'])
