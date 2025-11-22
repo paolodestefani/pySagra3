@@ -999,22 +999,22 @@ class FormIndexManager(QWidget):
         # cursor wait
         QGuiApplication.setOverrideCursor(QCursor(Qt.WaitCursor))
         currentIndex = self.indexMapper.currentIndex() # before first select = -1
-        indexRowCount = self.indexModel.rowCount() # before first select = 0
+        brc = self.indexModel.rowCount() # before first select = 0
         # 
         self.indexModel.revertAll()  # also do a select()
         #
         # reposition mapper
-        rc = self.indexModel.rowCount()
+        crc = self.indexModel.rowCount()
         if currentIndex == -1:
             self.indexMapper.toFirst()
-        #elif rc == 0: # no rows
-        #    self.mapperIndexChanged(-1)
-        #    self.mapper.revert()
+        elif crc == 0: # no rows
+            self.mapperIndexChanged(-1)
+            self.mapper.revert()
         #elif indexRowCount == rc: # same rows of before -> update
         #    self.indexMapper.setCurrentIndex(currentIndex)
         #elif indexRowCount < rc: # less rows then before -> delete
         #    self.indexMapper.setCurrentIndex(currentIndex -1)
-        elif indexRowCount < rc: # more rows then before -> insert
+        elif brc < crc: # more rows then before -> insert
             self.indexMapper.toLast()
         #    key = self.model.index(0, 0).data() # None on first select and after delete-
         #    # look for index number of the current id

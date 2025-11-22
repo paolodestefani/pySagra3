@@ -28,7 +28,7 @@ class Ui_ReportWidget(object):
     def setupUi(self, ReportWidget):
         if not ReportWidget.objectName():
             ReportWidget.setObjectName(u"ReportWidget")
-        ReportWidget.resize(813, 651)
+        ReportWidget.resize(1105, 662)
         self.verticalLayout_6 = QVBoxLayout(ReportWidget)
         self.verticalLayout_6.setObjectName(u"verticalLayout_6")
         self.verticalLayout_5 = QVBoxLayout()
@@ -81,7 +81,7 @@ class Ui_ReportWidget(object):
 
         self.checkBoxSystem = QCheckBox(self.form)
         self.checkBoxSystem.setObjectName(u"checkBoxSystem")
-        self.checkBoxSystem.setFocusPolicy(Qt.NoFocus)
+        self.checkBoxSystem.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 
         self.gridLayout.addWidget(self.checkBoxSystem, 0, 7, 1, 1)
 
@@ -139,7 +139,7 @@ class Ui_ReportWidget(object):
         self.fontComboBox.setObjectName(u"fontComboBox")
         self.fontComboBox.setEditable(True)
         self.fontComboBox.setMaxVisibleItems(20)
-        self.fontComboBox.setFontFilters(QFontComboBox.MonospacedFonts)
+        self.fontComboBox.setFontFilters(QFontComboBox.FontFilter.MonospacedFonts)
         font1 = QFont()
         font1.setPointSize(8)
         self.fontComboBox.setCurrentFont(font1)
@@ -151,10 +151,6 @@ class Ui_ReportWidget(object):
 
         self.horizontalLayout.addWidget(self.spinBoxFontSize)
 
-        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout.addItem(self.horizontalSpacer_3)
-
         self.pushButtonInsertImage = QPushButton(ReportWidget)
         self.pushButtonInsertImage.setObjectName(u"pushButtonInsertImage")
 
@@ -163,6 +159,11 @@ class Ui_ReportWidget(object):
         self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout.addItem(self.horizontalSpacer)
+
+        self.pushButtonDeleteAll = QPushButton(ReportWidget)
+        self.pushButtonDeleteAll.setObjectName(u"pushButtonDeleteAll")
+
+        self.horizontalLayout.addWidget(self.pushButtonDeleteAll)
 
         self.pushButtonDownload = QPushButton(ReportWidget)
         self.pushButtonDownload.setObjectName(u"pushButtonDownload")
@@ -222,6 +223,7 @@ class Ui_ReportWidget(object):
         self.groupBox_5.setTitle(QCoreApplication.translate("ReportWidget", u"XML report definition", None))
         self.label_5.setText(QCoreApplication.translate("ReportWidget", u"Font", None))
         self.pushButtonInsertImage.setText(QCoreApplication.translate("ReportWidget", u"Insert image to clipboard", None))
+        self.pushButtonDeleteAll.setText(QCoreApplication.translate("ReportWidget", u"Delete All", None))
         self.pushButtonDownload.setText(QCoreApplication.translate("ReportWidget", u"Download ...", None))
         self.pushButtonUpload.setText(QCoreApplication.translate("ReportWidget", u"Upload ...", None))
         self.pushButtonDownloadAll.setText(QCoreApplication.translate("ReportWidget", u"Download all reports...", None))

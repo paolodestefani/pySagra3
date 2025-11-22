@@ -65,6 +65,7 @@ from App import session
 from App import currentAction
 from App import currentIcon
 from App.Database.Exceptions import PyAppDBError
+from App.Database.Report import delete_all_reports
 from App.Database.Report import load_report
 from App.Database.Report import list_all_report
 from App.Database.Models import ReportModel
@@ -147,6 +148,7 @@ class ReportForm(FormIndexManager):
         # syntax highlighting
         self.highlighter = XMLHighlighter(self.ui.textEditXML.document())
         # signal/slot
+        self.ui.pushButtonDeleteAll.clicked.connect(self.deleteAll)
         self.ui.pushButtonDownload.clicked.connect(self.download)
         self.ui.pushButtonUpload.clicked.connect(self.upload)
         self.ui.pushButtonDownloadAll.clicked.connect(self.downloadAll)
@@ -240,6 +242,19 @@ class ReportForm(FormIndexManager):
         cb = QApplication.clipboard()
         cb.setText(f"""<image left="0.0" top="0.0" width="45.0" height="48.0" aspectRatio="KeepAspectRatio">{str(ba.toBase64(), encoding='utf8')}</image>""")
         st.setValue("PathImagesReports", QFileInfo(f).path())
+        
+    def deleteAll(self) -> None:
+        "Delete all reports"
+        msg = _tr('Report', 'Delete ALL reports ?')
+        if QMessageBox.question(self,
+                                _tr('MessageDialog', 'Question'),
+                                msg,
+                                QMessageBox.Yes | QMessageBox.No,  # butons
+                                QMessageBox.No  # default botton
+                                ) == QMessageBox.No:
+            return
+        delete_all_reports()
+        self.reload()        
 
     def download(self) -> None:
         "Dowload current report to file"
@@ -287,9 +302,10 @@ class ReportForm(FormIndexManager):
         if directory == "":
             return
         try:
-            for cod, lcn, cls, sys, dsc, xml in list_all_report():
+            for i, (cod, lcn, cls, sys, dsc, xml) in enumerate(list_all_report()):
                 fileName = (f"{directory}"
-                            f"/{cod}"
+                            f"/{i:02d}"
+                            f"_{cod}"
                             f"_{lcn}"
                             f".rpt.zip")
                 with zipfile.ZipFile(fileName, 'w', zipfile.ZIP_DEFLATED) as zf:
@@ -359,11 +375,9 @@ class ReportForm(FormIndexManager):
         if directory == "":
             return
         error = False
-        it = QDirIterator(QDir(directory), QDirIterator.NoIteratorFlags)
-        while it.hasNext():
-            it.next()
-            if it.fileInfo().isFile() and it.fileInfo().completeSuffix() == 'rpt.zip':
-                fileName = it.fileInfo().absoluteFilePath()
+        for f in QDir(directory).entryInfoList(QDir.Filter.NoFilter, QDir.SortFlag.Name):
+            if f.isFile() and f.completeSuffix() == 'rpt.zip':
+                fileName = f.absoluteFilePath()
                 try:
                     with zipfile.ZipFile(fileName, 'r', zipfile.ZIP_DEFLATED) as zf:
                         cod = zf.read('code').decode('utf-8')

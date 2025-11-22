@@ -35,6 +35,18 @@ from App.Database.Exceptions import PyAppDBError
 from App.Database.Connect import appconn
 
 
+def delete_all_reports():
+    "Delete all reports, update identity"
+    script = """
+DELETE FROM system.report;
+ALTER TABLE system.report ALTER COLUMN report_id RESTART WITH 1;"""
+    try:
+        with appconn.cursor() as cur:
+            with appconn.transaction():
+                cur.execute(script)
+    except psycopg.Error as er:
+        raise PyAppDBError(er.diag.sqlstate, str(er))
+
 def load_report(report_code, l10n, report_class, system, description, xml_data):
     "Load a report filling system.report"
     script = """
@@ -69,14 +81,35 @@ def list_all_report():
     "List all reports from system.report for exporting purposes"
     script = """
 SELECT
-    report_code,
-    l10n,
-    report_class,
-    is_system_object,
-    description,
-    xml_data
-FROM system.report
-ORDER BY report_code ASC, l10n ASC;"""
+    r.report_code,
+    r.l10n,
+    r.report_class,
+    r.is_system_object,
+    r.description,
+    r.xml_data
+FROM system.report r
+-- set a specifit sorting
+LEFT JOIN (
+	SELECT v.i, v.c
+	FROM (VALUES 
+		(1, 'COMPANY'), 
+		(2, 'PROFILE'),
+		(3, 'USER'), 
+		(4, 'PRINTER'),
+		(5, 'EVENT'),
+		(6, 'ITEM'),
+		(7, 'PRICE_LIST'),
+		(8, 'ORDER_CUSTOMER'),
+		(9, 'ORDER_DEPARTMENT'), 
+		(10, 'ORDER_COVER'),
+		(11, 'ORDER_LIST'), 
+		(12, 'STOCK_UNLOAD'),
+		(13, 'INCOME_SUMMARY'), 
+		(14, 'STATISTICS'),
+		(15, 'STATSVIEW')
+		) v(i, c)) v 
+	ON r.report_class = v.c 
+ORDER BY v.i, report_code, l10n;"""
     try:
         with appconn.cursor() as cur:
             cur.execute(script)

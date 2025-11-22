@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>813</width>
-    <height>651</height>
+    <width>1105</width>
+    <height>662</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -72,7 +72,7 @@
            <item row="0" column="6">
             <spacer name="horizontalSpacer_2">
              <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+              <enum>Qt::Orientation::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -85,7 +85,7 @@
            <item row="0" column="7">
             <widget class="QCheckBox" name="checkBoxSystem">
              <property name="focusPolicy">
-              <enum>Qt::NoFocus</enum>
+              <enum>Qt::FocusPolicy::NoFocus</enum>
              </property>
              <property name="text">
               <string>System report</string>
@@ -154,7 +154,7 @@
           <number>20</number>
          </property>
          <property name="fontFilters">
-          <set>QFontComboBox::MonospacedFonts</set>
+          <set>QFontComboBox::FontFilter::MonospacedFonts</set>
          </property>
          <property name="currentFont">
           <font>
@@ -167,19 +167,6 @@
         <widget class="QSpinBox" name="spinBoxFontSize"/>
        </item>
        <item>
-        <spacer name="horizontalSpacer_3">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
         <widget class="QPushButton" name="pushButtonInsertImage">
          <property name="text">
           <string>Insert image to clipboard</string>
@@ -189,7 +176,7 @@
        <item>
         <spacer name="horizontalSpacer">
          <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -198,6 +185,13 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButtonDeleteAll">
+         <property name="text">
+          <string>Delete All</string>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QPushButton" name="pushButtonDownload">
