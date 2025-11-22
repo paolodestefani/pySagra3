@@ -62,7 +62,7 @@ def get_printer_name(class_id, computer):
     "Return the printer name of class_id"
     script = """SELECT printer
 FROM printer_class_printer
-WHERE class_id = %s AND computer = %s;"""
+WHERE printer_class_id = %s AND computer = %s;"""
     try:
             with appconn.cursor() as cur:
                 cur.execute(script, (class_id, computer))
