@@ -44,8 +44,8 @@ def get_event_data(event: int) -> tuple[str|None, QDate|None, QDate|None, int|No
     sql = """
 SELECT
     description,
-    date_start,
-    date_end,
+    start_date,
+    end_date,
     price_list_id
 FROM event
 WHERE id = %s;"""
@@ -83,7 +83,7 @@ SELECT
 FROM event
 WHERE
     company_id = pa_current_company()
-    AND date_start <= %s AND date_end >= %s;"""
+    AND start_date <= %s AND end_date >= %s;"""
     try:
         with appconn.cursor() as cur:
             cur.execute(sql, (date, date))

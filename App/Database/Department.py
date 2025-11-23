@@ -92,12 +92,12 @@ WHERE department_id = %s;"""
 def get_department_printer_class(dep):
     "Returns the printer class for dep department"
     script = """
-SELECT printer_class
+SELECT printer_class_id
 FROM department
 WHERE 
     department_id = %s 
     AND is_obsolete IS false 
-    AND is_not_managed IS false;"""
+    AND is_menu_container IS false;"""
     try:
         with appconn.cursor() as cur:
             cur.execute(script, (dep,))

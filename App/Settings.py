@@ -139,7 +139,7 @@ class SettingsDialog(QDialog):
         self.ui.pushButtonDT.color = self.setting['disabled_text_color']
         self.ui.pushButtonDT.setStyleSheet(f"background-color: {self.ui.pushButtonDT.color};")
         self.updateExampleButtons()
-
+        
         self.ui.checkBoxCustomerCopy.setChecked(self.setting['print_customer_copy'])
         self.ui.checkBoxDepartmentCopy.setChecked(self.setting['print_department_copy'])
         self.ui.checkBoxCoverCopy.setChecked(self.setting['print_cover_copy'])

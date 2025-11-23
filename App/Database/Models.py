@@ -711,8 +711,8 @@ class EventIndexModel(QueryModel):
 SELECT 
     event_id,
     description,
-    date_start,
-    date_end,
+    start_date,
+    end_date,
     price_list_id,
     image,
     created_by,
@@ -724,8 +724,8 @@ FROM company.event;"""
         # model columns: (field, description, readonly, type), tuple of tuples
         self.columns = (("event_id", _tr('Models', 'ID'), True, 'int'),
                         ("description", _tr('Models', 'Event description'), False, 'str'),
-                        ("date_start", _tr('Models', 'Start date'), False, 'datetime'),
-                        ("date_end", _tr('Models', 'End date'), False, 'datetime'),
+                        ("start_date", _tr('Models', 'Start date'), False, 'datetime'),
+                        ("end_date", _tr('Models', 'End date'), False, 'datetime'),
                         ("price_list_id", _tr('Models', 'Price list'), False, 'int'),
                         ("image", _tr('Models', 'Event image'), False, None),
                         ("created_by", _tr('Models', 'User Ins'), True, 'str'),
@@ -748,8 +748,8 @@ class EventModel(TableModel):
         # available types: int, bool, decimal2, str, date, datetime, None = no filter
         self.columns = (("event_id", _tr('Models', 'ID'), True, 'int'),
                         ("description", _tr('Models', 'Event description'), False, 'str'),
-                        ("date_start", _tr('Models', 'Start date'), False, 'datetime'),
-                        ("date_end", _tr('Models', 'End date'), False, 'datetime'),
+                        ("start_date", _tr('Models', 'Start date'), False, 'datetime'),
+                        ("end_date", _tr('Models', 'End date'), False, 'datetime'),
                         ("price_list_id", _tr('Models', 'Price list'), False, 'int'),
                         ("image", _tr('Models', 'Event image'), False, None),
                         ("created_by", _tr('Models', 'User Ins'), True, 'str'),
@@ -762,7 +762,7 @@ class EventModel(TableModel):
         self.primaryKey = ("event_id",)
         self.automaticPKey = True
         # sql order by clause, plain sql string without ORDER BY
-        self.addOrderBy("date_start DESC")
+        self.addOrderBy("start_date DESC")
 
 
 class CashDeskModel(TableModel):

@@ -412,6 +412,7 @@ class RelationalComboBox(QComboBox):
     def updateList(self):
         self.clear()
         data = self.sqlFunc()
+        #print(data)
         if data:
             if len(data[0]) == 3:  # items with icon
                 if self.nullable:

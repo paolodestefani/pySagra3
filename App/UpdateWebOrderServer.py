@@ -109,8 +109,8 @@ class UpdateWebOrderServerDialog(QDialog):
         root = ET.Element("event")
         ed, ds, de, pli = get_event_data(event)
         ET.SubElement(root, "title").text = ed
-        ET.SubElement(root, "date_start").text = ds.toString(Qt.ISODate)
-        ET.SubElement(root, "date_end").text = de.toString(Qt.ISODate)
+        ET.SubElement(root, "start_date").text = ds.toString(Qt.ISODate)
+        ET.SubElement(root, "end_date").text = de.toString(Qt.ISODate)
 
         items = ET.SubElement(root, "items")        
         for did, d in department_list():

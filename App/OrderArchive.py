@@ -67,6 +67,7 @@ from App.System.Utility import scriptMethod
 from App.Report.ReportEngine import ReportException
 from App.Report.ReportEngine import ReportNoDataError
 from App.Report.Order import printOrderReport
+from App.Report.Order import printOrderCoverReport
 from App.Report.Order import printOrderDepartmentReport
 
 # index model order header
@@ -277,11 +278,7 @@ class OrderForm(FormIndexManager):
                                     _tr('OrderArchive', "No customer copy printer set for this computer\n"
                                         "Generating a print preview"))
             try:
-                printOrderReport(setting['customer_report'],
-                                 #session['l10n'],
-                                 ti,
-                                 printer,
-                                 setting['customer_copies'])
+                printOrderReport(ti, printer)
             except ReportNoDataError:
                 QMessageBox.information(self,
                                         _tr('MessageDialog', "Information"),
@@ -297,11 +294,7 @@ class OrderForm(FormIndexManager):
                                     _tr('OrderArchive', "No cover copy printer set for this computer\n"
                                         "Generating a print preview"))
             try:
-                printOrderReport(setting['cover_report'],
-                                 session['l10n'],
-                                 ti,
-                                 printer,
-                                 setting['cover_copies'])
+                printOrderCoverReport(ti, printer)
             except ReportNoDataError:
                 QMessageBox.information(self,
                                         _tr('MessageDialog', "Information"),
@@ -323,12 +316,7 @@ class OrderForm(FormIndexManager):
                                             _tr('MessageDialog', "Warning"),
                                             msg.format(department_desc(i)))
                     try:
-                        printOrderDepartmentReport(setting['department_report'],
-                                                   session['l10n'],
-                                                   ti,
-                                                   printer,
-                                                   i,
-                                                   setting['department_copies'])
+                        printOrderDepartmentReport(ti, i, printer)
                     except ReportNoDataError:
                         QMessageBox.information(self,
                                                 _tr('MessageDialog', "Information"),

@@ -294,7 +294,7 @@ SELECT
 FROM company.event
 WHERE 
     company_id = pa_current_company()
-    AND %s BETWEEN date_start AND date_end;"""
+    AND %s BETWEEN start_date AND end_date"""
     try:
         with appconn.cursor() as cur:
             cur.execute(script, (QDateTime.currentDateTime(),))  # event based on client date

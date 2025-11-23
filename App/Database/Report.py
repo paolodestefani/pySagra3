@@ -261,7 +261,7 @@ def report_list(report_class, l10n, null=False):
     "Return code and description of all reports of l10n localization or en_US"
     script = """
 SELECT 
-    report_id, 
+    report_code, 
     description
 FROM system.report
 WHERE 
@@ -290,20 +290,20 @@ WHERE report_id = %s;"""
     except psycopg.Error as er:
         raise PyAppDBError(er.diag.sqlstate, str(er))
     
-# def get_report_id(report_code, l10n):
-#     "Return the report ID of report code and l10n localization or en_US"
-#     script = """
-# SELECT 
-#     report_id
-# FROM system.report
-# WHERE report_code = %s AND report ;"""
-#     try:
-#         with appconn.cursor() as cur:
-#             cur.execute(script, (report_id,))
-#             if cur.rowcount:
-#                 return cur.fetchone()[0]
-#     except psycopg.Error as er:
-#         raise PyAppDBError(er.diag.sqlstate, str(er))
+def get_report_id(report_code, l10n):
+    "Return the report ID of report code and l10n localization or en_US"
+    script = """
+SELECT coalesce(a.report_id, b.report_id)
+FROM system.report a
+JOIN system.report b ON a.report_code = b.report_code AND b.l10n = 'en_US'
+WHERE a.report_code = %s AND a.l10n = %s;"""
+    try:
+        with appconn.cursor() as cur:
+            cur.execute(script, (report_code, l10n))
+            if cur.rowcount:
+                return cur.fetchone()[0]
+    except psycopg.Error as er:
+        raise PyAppDBError(er.diag.sqlstate, str(er))
 
 def report_xml(adapt_id):
     "Report XML definition of the report for required report customization"

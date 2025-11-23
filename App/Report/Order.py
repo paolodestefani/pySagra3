@@ -35,13 +35,18 @@ from PySide6.QtPrintSupport import QPrinterInfo
 
 # application modules
 from App import session
-from App.Database.Report import report_id_xml, report_query
+from App.Database.Setting import Setting
+from App.Database.Report import get_report_id
+from App.Database.Report import report_id_xml
+from App.Database.Report import report_query
 from App.Report.ReportEngine import Report
 from App.Widget.Dialog import PrintPreviewDialog
 
 
 
-def printOrderReport(report_id, order_id, printer=None, copies=1):
+def printOrderReport(order_id, printer=None):
+    setting = Setting()
+    report_id = get_report_id(setting['customer_report'], session['l10n'])
     report = Report(report_id_xml(report_id))
     # report definition on condition fields must have code for Order Id
     where = []
@@ -52,16 +57,40 @@ def printOrderReport(report_id, order_id, printer=None, copies=1):
     report.generate()
     if printer:
         prnt = QPrinter(QPrinterInfo.printerInfo(printer))
-        prnt.setCopyCount(copies)
+        prnt.setCopyCount(setting['customer_copies'])
         report.print(prnt)
     else:
         # print preview
         dialog = PrintPreviewDialog(session['mainwin'])
         # start
         dialog.paintRequested.connect(report.print)
-        dialog.exec_()
+        dialog.exec()
+        
+def printOrderCoverReport(order_id, printer=None):
+    setting = Setting()
+    report_id = get_report_id(setting['cover_report'], session['l10n'])
+    report = Report(report_id_xml(report_id))
+    # report definition on condition fields must have code for Order Id
+    where = []
+    for i in report.conditions:
+        if report.conditions[i].code == 'order_id':
+            where.append((f"{i} = %s", order_id))
+    report.data = report_query(report, where)
+    report.generate()
+    if printer:
+        prnt = QPrinter(QPrinterInfo.printerInfo(printer))
+        prnt.setCopyCount(setting['cover_copies'])
+        report.print(prnt)
+    else:
+        # print preview
+        dialog = PrintPreviewDialog(session['mainwin'])
+        # start
+        dialog.paintRequested.connect(report.print)
+        dialog.exec()
 
-def printOrderDepartmentReport(report_id, l10n, order_id, printer=None, department=None, copies=1):
+def printOrderDepartmentReport(order_id,  department=None, printer=None):
+    setting = Setting()
+    report_id = get_report_id(setting['department_report'], session['l10n'])
     report = Report(report_id_xml(report_id))
     # create condition
     # report definition on condition fields must have a code for Order Id and Order Department Id
@@ -76,14 +105,14 @@ def printOrderDepartmentReport(report_id, l10n, order_id, printer=None, departme
     if printer:
         prnt = QPrinter(QPrinterInfo.printerInfo(printer))
         #prnt.setFullPage(True)
-        prnt.setCopyCount(copies)
+        prnt.setCopyCount(setting['department_copies'])
         report.print(prnt)
     else:
         # print preview
         dialog = PrintPreviewDialog(session['mainwin'])
         # start
         dialog.paintRequested.connect(report.print)
-        dialog.exec_()
+        dialog.exec()
 
 def printStockUnloadReport(report_id, printer=None, copies=1, event=None, day=None, daypart=None):
     report = Report(report_id_xml(report_id))
