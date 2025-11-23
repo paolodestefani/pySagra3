@@ -67,7 +67,7 @@ SELECT
 	i.normal_text_color         AS normal_text_color,
 	i.normal_background_color   AS normal_background_color,
     i.has_stock_control         AS has_stock_control,
-    i.has_unload_control,       AS has_unload_control,
+    i.has_unload_control        AS has_unload_control,
     i.has_variants              AS has_variants,
     COALESCE(s.quantity, 0.00)  AS quantity, -- from stock_inventory
 	i.is_web_available          AS web_available,
