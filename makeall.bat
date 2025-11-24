@@ -1,18 +1,14 @@
 REM move to projec root
 cd C:\pyWare\pySagra3
-pause
 
 REM activate virtual env
-"C:\PyWare\.venv\pyside6psycopg\Scripts\activate.bat"
-pause
+CALL "C:\PyWare\.venv\pyside6psycopg\Scripts\activate.bat"
 
 REM create lib ui modules
 "c:\windows\system32\forfiles.exe" /P "App\Ui" /M *.ui /c "cmd /c pyside6-uic -o @fname.py @file"
-pause
 
 REM resources
 pyside6-rcc resources.qrc -o resources_rc.py 
-pause
 
 REM translations without pro file login sources and form
 pyside6-lupdate ^
@@ -20,7 +16,7 @@ pyside6-lupdate ^
 	App\Ui\LoginDialog.ui ^
 	-tr-function-alias translate+=_tr -noobsolete -ts login_it.ts 
     
-pyside6-lrelease ts/login_it.ts -qm qm/login_it.qm
+pyside6-lrelease translation\ts\login_it.ts -qm translation\login_it.qm
 
 REM translations without pro file SMS sources and forms
 pyside6-lupdate ^
@@ -42,6 +38,5 @@ pyside6-lupdate ^
 	App/Widget/Form.py ^
 	-tr-function-alias translate+=_tr -noobsolete -ts ts/pySagra_it.ts 
     
-pyside6-lrelease ts/pySagra_it.ts -qm qm/pySagra_it.qm
+pyside6-lrelease translation\ts\pySagra_it.ts -qm translation\pySagra_it.qm
 
-pause

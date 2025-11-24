@@ -467,7 +467,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Cash desk'),
         cashDesk,
         False,
-        'file_cashdesk',
+        'file_cash_desks',
         None,
         _tr("Action", 'Cash desk'),
         _tr("Action", 'Manage cash desk names and parameters'),
