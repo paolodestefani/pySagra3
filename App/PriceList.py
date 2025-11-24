@@ -200,7 +200,7 @@ class PriceListForm(FormIndexManager):
         self.reload()
 
     @scriptMethod
-    def print_(self):
+    def print(self):
         "Price list report"
         dialog = PrintDialog(self, 'PRICE_LIST')
         dialog.show()

@@ -368,7 +368,7 @@ class ItemsForm(FormIndexManager):
         super().reload()
 
     @scriptMethod
-    def print_(self):
+    def print(self):
         "Items report"
         dialog = PrintDialog(self, 'ITEM')
         dialog.show()

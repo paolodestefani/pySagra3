@@ -37,7 +37,7 @@ from App import session
 from App.Database.Exceptions import PyAppDBError
 from App.Database.Connect import appconn
 #from App.System.Utility import _tr
-from App.Database.Report import report_list
+from App.Database.Report import get_report_list
 
 
 def generic_cdl(code, description, table, condition=[], order_by=[], null=False):
@@ -106,29 +106,29 @@ def printer_class_cdl():
     
 def customer_order_report_cdl():
     "Get a list of all reports of customer order class"
-    return report_list('ORDER_CUSTOMER', session['l10n'])
+    return get_report_list('ORDER_CUSTOMER', session['l10n'])
 
 def department_order_report_cdl():
     "Get a list of all reports of department order class"
-    return report_list('ORDER_DEPARTMENT', session['l10n'])
+    return get_report_list('ORDER_DEPARTMENT', session['l10n'])
 
 def cover_order_report_cdl():
     "Get a list of all reports of cover order class"
-    return report_list('ORDER_COVER', session['l10n'])
+    return get_report_list('ORDER_COVER', session['l10n'])
 
 def stock_unload_report_cdl():
     "Get a list of all reports of stock unload class"
-    return report_list('STOCK_UNLOAD', session['l10n'])
+    return get_report_list('STOCK_UNLOAD', session['l10n'])
 
 # def statisticsViewerReportList():
 #     "Get a list of all reports available for statistics viewer"
-#     return report_list('STATSVIEW', session['l10n'], null=True)
+#     return get_report_list('STATSVIEW', session['l10n'], null=True)
 
 def event_cdl():
     "Get event list"
     return generic_cdl('event_id', 'description', 'event', 
                         ['company_id = system.pa_current_company()'], 
-                        ['date_end DESC'])
+                        ['end_date DESC'])
 
 def department_cdl():
     "Get departments list"

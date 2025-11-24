@@ -108,7 +108,7 @@ def orderEntry() -> None:
     title = currentAction['app_activity_order_entry'].text()
     auth = currentAction['app_activity_order_entry'].data()
     # exit if no event available
-    if not session['event']:
+    if not session['event_id']:
         QMessageBox.warning(mw,
                             _tr('MessageDialog', "Warning"),
                             _tr('OrderDialog', 'No event available, for order entry '
@@ -495,7 +495,7 @@ class BaseOrderDialog(QDialog):
     def resetDialog(self):
         "Setup initial dialog's values"
         # exit if no event available for the current date (changed event table)
-        if not session['event']:
+        if not session['event_id']:
             QMessageBox.warning(session['mainwin'],
                                 _tr('MessageDialog', 'Warning'),
                                 _tr('OrderDialog', 'No event available, for order entry '
@@ -569,7 +569,7 @@ class BaseOrderDialog(QDialog):
             ti = self.ui.tabWidgetList.addTab(QWidget(), dep)
             gl = QGridLayout()
             gl.setSpacing(setting['order_list_spacing'])
-            for ji, jd, jp, jr, jc, jl, jtc, jbc, jv, js in item_list(session['event'], i):
+            for ji, jd, jp, jr, jc, jl, jtc, jbc, jv, js in item_list(session['event_id'], i):
                 # check item position
                 if not jr or not jc:
                     message = _tr('OrderDialog', "Item '{}' lacks of position settings, will not be created").format(jd)
