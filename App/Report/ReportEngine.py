@@ -389,6 +389,7 @@ class BaseRenderer():
         painter = self.report.painter
         painter.save()
         pen = QPen()
+        #print('Color', QColor(self.color))
         pen.setColor(QColor(self.color))
         painter.setPen(pen)
         painter.setFont(QFont(self.fontName, self.fontSize, self.fontWeight, self.fontItalic))
@@ -1058,11 +1059,11 @@ class Report():
         if self.page_background:
             for i in self.page_background:
                 i.render(0.0, self.page_height)
-        # print header
+        # print page header
         if self.page_header:
             for b in self.page_header:
                 b.render(record)
-        # print footer
+        # print page footer
         page_offset = self.offset # copy current page offset
         self.offset = self.page_height - self.footer_height # set footer offset
         if self.page_footer:

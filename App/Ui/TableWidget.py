@@ -53,7 +53,7 @@ class Ui_TableWidget(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 840, 294))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 98, 28))
         self.verticalLayout_7 = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_7.setObjectName(u"verticalLayout_7")
         self.verticalLayout_7.setSizeConstraint(QLayout.SizeConstraint.SetDefaultConstraint)
@@ -113,6 +113,10 @@ class Ui_TableWidget(object):
 
         self.pushButtonPreview = QPushButton(TableWidget)
         self.pushButtonPreview.setObjectName(u"pushButtonPreview")
+        font1 = QFont()
+        font1.setPointSize(32)
+        font1.setKerning(True)
+        self.pushButtonPreview.setFont(font1)
         self.pushButtonPreview.setCheckable(True)
 
         self.horizontalLayout_3.addWidget(self.pushButtonPreview)

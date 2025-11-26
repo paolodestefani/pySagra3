@@ -85,97 +85,97 @@
         <translation>NESSUNA IMMAGINE</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="647"/>
+        <location filename="../../App/Widget/Control.py" line="648"/>
         <source>Transparent</source>
         <translation>Trasparente</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="648"/>
+        <location filename="../../App/Widget/Control.py" line="649"/>
         <source>Black</source>
         <translation>Nero</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="649"/>
+        <location filename="../../App/Widget/Control.py" line="650"/>
         <source>Red</source>
         <translation>Rosso</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="650"/>
+        <location filename="../../App/Widget/Control.py" line="651"/>
         <source>Dark red</source>
         <translation>Rosso scuro</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="651"/>
+        <location filename="../../App/Widget/Control.py" line="652"/>
         <source>Green</source>
         <translation>Verde</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="652"/>
+        <location filename="../../App/Widget/Control.py" line="653"/>
         <source>Dark green</source>
         <translation>Verde scuro</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="653"/>
+        <location filename="../../App/Widget/Control.py" line="654"/>
         <source>Blue</source>
         <translation>Blu</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="654"/>
+        <location filename="../../App/Widget/Control.py" line="655"/>
         <source>Dark blue</source>
         <translation>Blu scuro</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="655"/>
+        <location filename="../../App/Widget/Control.py" line="656"/>
         <source>Cyan</source>
         <translation>Ciano</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="656"/>
+        <location filename="../../App/Widget/Control.py" line="657"/>
         <source>Dark cyan</source>
         <translation>Ciano scuro</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="657"/>
+        <location filename="../../App/Widget/Control.py" line="658"/>
         <source>Magenta</source>
         <translation>Magenta</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="658"/>
+        <location filename="../../App/Widget/Control.py" line="659"/>
         <source>Dark magenta</source>
         <translation>Magenta scuro</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="659"/>
+        <location filename="../../App/Widget/Control.py" line="660"/>
         <source>Yellow</source>
         <translation>Giallo</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="660"/>
+        <location filename="../../App/Widget/Control.py" line="661"/>
         <source>Dark yellow</source>
         <translation>Giallo scuro</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="661"/>
+        <location filename="../../App/Widget/Control.py" line="662"/>
         <source>Gray</source>
         <translation>Grigio</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="662"/>
+        <location filename="../../App/Widget/Control.py" line="663"/>
         <source>Dark gray</source>
         <translation>Grigio scuro</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="663"/>
+        <location filename="../../App/Widget/Control.py" line="664"/>
         <source>Light gray</source>
         <translation>Grigio chiaro</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="664"/>
+        <location filename="../../App/Widget/Control.py" line="665"/>
         <source>Whyte</source>
         <translation>Bianco</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="921"/>
+        <location filename="../../App/Widget/Control.py" line="922"/>
         <source>Are you sure to clear all the text ?</source>
         <translation>Sei sicuro di voler cancellare tutto il testo ?</translation>
     </message>
@@ -357,58 +357,58 @@
 <context>
     <name>Editor</name>
     <message>
-        <location filename="../../App/Widget/Control.py" line="825"/>
+        <location filename="../../App/Widget/Control.py" line="826"/>
         <source>Get/set the text font family</source>
         <translation>Mostra/imposta la famiglia del font</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="832"/>
+        <location filename="../../App/Widget/Control.py" line="833"/>
         <source>Get/set the text font size</source>
         <translation>Mostra/imposta la dimensione del font</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="836"/>
+        <location filename="../../App/Widget/Control.py" line="837"/>
         <source>Text color</source>
         <translation>Colore del testo</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="840"/>
+        <location filename="../../App/Widget/Control.py" line="841"/>
         <source>Text background color
 Black = Transparent</source>
         <translation>Coloro dello sfondo Nero = Trasparente</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="845"/>
+        <location filename="../../App/Widget/Control.py" line="846"/>
         <source>Format text as bold</source>
         <translation>Formatta come grassetto</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="852"/>
+        <location filename="../../App/Widget/Control.py" line="853"/>
         <source>Format text as italic</source>
         <translation>Formatta come corsivo</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="859"/>
+        <location filename="../../App/Widget/Control.py" line="860"/>
         <source>Format text as underline</source>
         <translation>Formatta come sottolineato</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="866"/>
+        <location filename="../../App/Widget/Control.py" line="867"/>
         <source>Align text left</source>
         <translation>Allinea a sinistra</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="873"/>
+        <location filename="../../App/Widget/Control.py" line="874"/>
         <source>Align text center</source>
         <translation>Allinea al centro</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="880"/>
+        <location filename="../../App/Widget/Control.py" line="881"/>
         <source>Align text right</source>
         <translation>Allinea a destra</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="887"/>
+        <location filename="../../App/Widget/Control.py" line="888"/>
         <source>Justify text</source>
         <translation>Giustifica</translation>
     </message>
@@ -595,8 +595,8 @@ Black = Transparent</source>
         <location filename="../../App/System/Connection.py" line="281"/>
         <location filename="../../App/System/Mainwindow.py" line="564"/>
         <location filename="../../App/System/Profile.py" line="107"/>
-        <location filename="../../App/System/Report.py" line="344"/>
-        <location filename="../../App/System/Report.py" line="388"/>
+        <location filename="../../App/System/Report.py" line="360"/>
+        <location filename="../../App/System/Report.py" line="402"/>
         <location filename="../../App/System/Scripting.py" line="389"/>
         <location filename="../../App/System/Scripting.py" line="433"/>
         <location filename="../../App/System/User.py" line="332"/>
@@ -655,8 +655,8 @@ Black = Transparent</source>
         <location filename="../../App/System/Menu.py" line="160"/>
         <location filename="../../App/System/Profile.py" line="111"/>
         <location filename="../../App/System/Profile.py" line="193"/>
-        <location filename="../../App/System/Report.py" line="183"/>
-        <location filename="../../App/System/Report.py" line="194"/>
+        <location filename="../../App/System/Report.py" line="185"/>
+        <location filename="../../App/System/Report.py" line="196"/>
         <location filename="../../App/System/User.py" line="243"/>
         <location filename="../../App/System/User.py" line="328"/>
         <location filename="../../App/System/User.py" line="387"/>
@@ -682,10 +682,11 @@ Black = Transparent</source>
         <location filename="../../App/System/Mainwindow.py" line="605"/>
         <location filename="../../App/System/Menu.py" line="167"/>
         <location filename="../../App/System/Profile.py" line="200"/>
-        <location filename="../../App/System/Report.py" line="200"/>
+        <location filename="../../App/System/Report.py" line="202"/>
+        <location filename="../../App/System/Report.py" line="250"/>
         <location filename="../../App/System/Scripting.py" line="252"/>
         <location filename="../../App/System/User.py" line="248"/>
-        <location filename="../../App/Widget/Control.py" line="920"/>
+        <location filename="../../App/Widget/Control.py" line="921"/>
         <location filename="../../App/Widget/Dialog.py" line="2021"/>
         <location filename="../../App/Widget/Dialog.py" line="2282"/>
         <location filename="../../App/Widget/Form.py" line="191"/>
@@ -697,8 +698,8 @@ Black = Transparent</source>
     <message>
         <location filename="../../App/System/Connection.py" line="246"/>
         <location filename="../../App/System/Connection.py" line="269"/>
-        <location filename="../../App/System/Report.py" line="349"/>
-        <location filename="../../App/System/Report.py" line="397"/>
+        <location filename="../../App/System/Report.py" line="365"/>
+        <location filename="../../App/System/Report.py" line="411"/>
         <location filename="../../App/System/Scripting.py" line="245"/>
         <location filename="../../App/System/Scripting.py" line="394"/>
         <location filename="../../App/System/Scripting.py" line="442"/>
@@ -706,7 +707,7 @@ Black = Transparent</source>
         <translation>Informazione</translation>
     </message>
     <message>
-        <location filename="../../App/System/Report.py" line="393"/>
+        <location filename="../../App/System/Report.py" line="407"/>
         <location filename="../../App/System/Scripting.py" line="438"/>
         <source>Error</source>
         <translation>Errore</translation>
@@ -962,106 +963,111 @@ Black = Transparent</source>
 <context>
     <name>Report</name>
     <message>
-        <location filename="../../App/System/Report.py" line="249"/>
-        <location filename="../../App/System/Report.py" line="285"/>
-        <location filename="../../App/System/Report.py" line="357"/>
+        <location filename="../../App/System/Report.py" line="264"/>
+        <location filename="../../App/System/Report.py" line="300"/>
+        <location filename="../../App/System/Report.py" line="373"/>
         <source>Select the directory</source>
         <translation>Selezionare la directory</translation>
     </message>
     <message>
-        <location filename="../../App/System/Report.py" line="270"/>
-        <location filename="../../App/System/Report.py" line="275"/>
+        <location filename="../../App/System/Report.py" line="285"/>
+        <location filename="../../App/System/Report.py" line="290"/>
         <source>Download current report</source>
         <translation>Scarica il report corrente</translation>
     </message>
     <message>
-        <location filename="../../App/System/Report.py" line="320"/>
+        <location filename="../../App/System/Report.py" line="336"/>
         <source>Select the file to import</source>
         <translation>Selezionare il file da importare</translation>
     </message>
     <message>
-        <location filename="../../App/System/Report.py" line="195"/>
+        <location filename="../../App/System/Report.py" line="197"/>
         <source>It is not possible to delete a system report</source>
         <translation>Non è possibile cancellare un report di sistema</translation>
     </message>
     <message>
-        <location filename="../../App/System/Report.py" line="184"/>
+        <location filename="../../App/System/Report.py" line="186"/>
         <source>Can&apos;t use &apos;.&apos; (dot) in report code</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../App/System/Report.py" line="273"/>
+        <location filename="../../App/System/Report.py" line="288"/>
         <source>Current report saved to file:</source>
         <translation>Report corrente salvato su file:</translation>
     </message>
     <message>
-        <location filename="../../App/System/Report.py" line="198"/>
+        <location filename="../../App/System/Report.py" line="200"/>
         <source>Delete current report ?</source>
         <translation>Cancello il report corrente ?</translation>
     </message>
     <message>
-        <location filename="../../App/System/Report.py" line="268"/>
+        <location filename="../../App/System/Report.py" line="248"/>
+        <source>Delete ALL reports ?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Report.py" line="283"/>
         <source>Error on saving current report to file</source>
         <translation>Errore nel salvataggio del report corrente</translation>
     </message>
     <message>
-        <location filename="../../App/System/Report.py" line="303"/>
+        <location filename="../../App/System/Report.py" line="319"/>
         <source>Error on saving all reports to file</source>
         <translation>Errore nel salvataggio di tutti i report</translation>
     </message>
     <message>
-        <location filename="../../App/System/Report.py" line="305"/>
-        <location filename="../../App/System/Report.py" line="310"/>
+        <location filename="../../App/System/Report.py" line="321"/>
+        <location filename="../../App/System/Report.py" line="326"/>
         <source>Download all reports</source>
         <translation>Scarica tutti i report</translation>
     </message>
     <message>
-        <location filename="../../App/System/Report.py" line="308"/>
+        <location filename="../../App/System/Report.py" line="324"/>
         <source>All reports saved to directory</source>
         <translation>Tutti i report sono stati salvati nella directory</translation>
     </message>
     <message>
-        <location filename="../../App/System/Report.py" line="334"/>
+        <location filename="../../App/System/Report.py" line="350"/>
         <source>Error on opening a report file</source>
         <translation>Errore in apertura del file del report</translation>
     </message>
     <message>
-        <location filename="../../App/System/Report.py" line="336"/>
+        <location filename="../../App/System/Report.py" line="352"/>
         <source>Upload current report</source>
         <translation>Carica il report corrente</translation>
     </message>
     <message>
-        <location filename="../../App/System/Report.py" line="350"/>
+        <location filename="../../App/System/Report.py" line="366"/>
         <source>Report file imported to database</source>
         <translation>File di report importati nel database</translation>
     </message>
     <message>
-        <location filename="../../App/System/Report.py" line="376"/>
+        <location filename="../../App/System/Report.py" line="390"/>
         <source>Error on opening report file:</source>
         <translation>Errore in apertura del file del report:</translation>
     </message>
     <message>
-        <location filename="../../App/System/Report.py" line="378"/>
+        <location filename="../../App/System/Report.py" line="392"/>
         <source>Upload all reports</source>
         <translation>Carica tutti i report</translation>
     </message>
     <message>
-        <location filename="../../App/System/Report.py" line="394"/>
+        <location filename="../../App/System/Report.py" line="408"/>
         <source>Reports imported to database with errors</source>
         <translation>Report importati nel database con errori</translation>
     </message>
     <message>
-        <location filename="../../App/System/Report.py" line="398"/>
+        <location filename="../../App/System/Report.py" line="412"/>
         <source>All reports imported to database</source>
         <translation>Tutti i report son stati importati nel database</translation>
     </message>
     <message>
-        <location filename="../../App/System/Report.py" line="231"/>
+        <location filename="../../App/System/Report.py" line="233"/>
         <source>Portable Network Graphics (*.png);;All files (*.*)</source>
         <translation>Portable Network Graphics (*.png);;Tutti i file (*.*)</translation>
     </message>
     <message>
-        <location filename="../../App/System/Report.py" line="229"/>
+        <location filename="../../App/System/Report.py" line="231"/>
         <source>Select the image to insert into clipboard</source>
         <translation>Selezionare l&apos;immagine da inserire nella clipboard</translation>
     </message>
@@ -1267,7 +1273,7 @@ Black = Transparent</source>
 <context>
     <name>controls</name>
     <message>
-        <location filename="../../App/Widget/Control.py" line="628"/>
+        <location filename="../../App/Widget/Control.py" line="629"/>
         <source>Type the password here</source>
         <translation>Inserire la password</translation>
     </message>

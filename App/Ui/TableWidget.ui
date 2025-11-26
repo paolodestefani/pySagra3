@@ -43,8 +43,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>840</width>
-            <height>294</height>
+            <width>98</width>
+            <height>28</height>
            </rect>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -149,6 +149,12 @@
      </item>
      <item>
       <widget class="QPushButton" name="pushButtonPreview">
+       <property name="font">
+        <font>
+         <pointsize>32</pointsize>
+         <kerning>true</kerning>
+        </font>
+       </property>
        <property name="text">
         <string>Preview</string>
        </property>
