@@ -151,7 +151,7 @@
       <widget class="QPushButton" name="pushButtonPreview">
        <property name="font">
         <font>
-         <pointsize>32</pointsize>
+         <pointsize>24</pointsize>
          <kerning>true</kerning>
         </font>
        </property>
