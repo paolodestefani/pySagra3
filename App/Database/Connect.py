@@ -300,7 +300,7 @@ WHERE
             cur.execute(script, (QDateTime.currentDateTime(),))  # event based on client date
             event = cur.fetchone()
             if event:
-                session['event'] = event[0] # code
+                session['event_id'] = event[0] # code
                 session['event_description'] = event[1] # description
                 session['event_image'] = event[2] # image
     except psycopg.Error as er:

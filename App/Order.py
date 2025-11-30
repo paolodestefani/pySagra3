@@ -108,6 +108,7 @@ def orderEntry() -> None:
     title = currentAction['app_activity_order_entry'].text()
     auth = currentAction['app_activity_order_entry'].data()
     # exit if no event available
+    print("Event", session)
     if not session['event_id']:
         QMessageBox.warning(mw,
                             _tr('MessageDialog', "Warning"),
@@ -569,7 +570,7 @@ class BaseOrderDialog(QDialog):
             ti = self.ui.tabWidgetList.addTab(QWidget(), dep)
             gl = QGridLayout()
             gl.setSpacing(setting['order_list_spacing'])
-            for ji, jd, jp, jr, jc, jl, jtc, jbc, jv, js in item_list(session['event_id'], i):
+            for ji, jd, jp, jr, jc, jl, jx, jtc, jbc, jv, js in item_list(session['event_id'], i):
                 # check item position
                 if not jr or not jc:
                     message = _tr('OrderDialog', "Item '{}' lacks of position settings, will not be created").format(jd)

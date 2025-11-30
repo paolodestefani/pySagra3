@@ -124,9 +124,9 @@ class StocksInventoryForm(FormViewManager):
         self.ui.tableViewMenu.setLayoutName('stockInventoryMenu')
         self.ui.tableViewMenu.setItemDelegateForColumn(2, QuantityDelegate(self))
         # select initial event, ask if current event is None
-        if session['event']:
-            self.selectedEvent = session['event']
-            self.updateFilterConditions(session['event'])
+        if session['event_id']:
+            self.selectedEvent = session['event_id']
+            self.updateFilterConditions(session['event_id'])
         else:
             self.setFilters()
         # splitter

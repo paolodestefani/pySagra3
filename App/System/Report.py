@@ -302,7 +302,7 @@ class ReportForm(FormIndexManager):
         if directory == "":
             return
         try:
-            for i, (cod, lcn, cls, sys, dsc, xml) in enumerate(list_all_reports()):
+            for i, (cod, lcn, cls, sys, dsc, xml) in enumerate(list_all_reports(), 1):
                 fileName = (f"{directory}"
                             f"/{i:02d}"
                             f"_{cod}"

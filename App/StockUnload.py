@@ -101,7 +101,7 @@ class StockUnloadForm(FormViewManager):
         self.ui.tableView.setItemDelegateForColumn(DAY_PART, RelationDelegate(self, dayPartMapping))
         self.ui.tableView.setItemDelegateForColumn(UNLOADED, QuantityDelegate(self, bold=True))
         # initial filtering
-        self.selectedEvent = session['event']
+        self.selectedEvent = session['event_id']
         # set date and day part base on current date and time
         setting = SettingClass()
         now = QDateTime.currentDateTime()
@@ -118,8 +118,8 @@ class StockUnloadForm(FormViewManager):
             # dinner of the current date
             self.selectedDate = now.date()
             self.selectedDayPart = 'D'
-        if session['event']:
-            self.updateFilterConditions(session['event'], self.selectedDate, self.selectedDayPart)
+        if session['event_id']:
+            self.updateFilterConditions(session['event_id'], self.selectedDate, self.selectedDayPart)
             model.select()
         else:
             self.setFilters()
