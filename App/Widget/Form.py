@@ -45,6 +45,8 @@ from App import session
 from App.System.Utility import _tr
 from App.Database.Connect import appconn
 from App.Database.Exceptions import PyAppDBError
+#from App.Widget.Delegate import mapperItemDelegate
+from App.Widget.Control import DataWidgetMapper
 from App.Widget.Dialog import SortFilterDialog
 
 # edit status settings
@@ -83,8 +85,9 @@ class FormManager(QWidget):
         # track form's state
         self._state = VIEW # initial state
         # mapper
-        self.mapper = QDataWidgetMapper(self)
+        self.mapper = DataWidgetMapper(self)
         self.mapper.setSubmitPolicy(QDataWidgetMapper.AutoSubmit)
+        #self.mapper.setItemDelegate(mapperItemDelegate(self))
         self.linkedMappers = [] # linked mapper list
         self.auth = auth
         # mapper cursor changed update detail
@@ -682,8 +685,9 @@ class FormIndexManager(QWidget):
         self.indexMapper.setSubmitPolicy(QDataWidgetMapper.AutoSubmit)
         self.indexMapper.currentIndexChanged.connect(self.mapperIndexChanged)
         # form mapper
-        self.mapper = QDataWidgetMapper(self)
+        self.mapper = DataWidgetMapper(self)
         self.mapper.setSubmitPolicy(QDataWidgetMapper.AutoSubmit)
+        #self.mapper.setItemDelegate(mapperItemDelegate(self))
 
     def setModel(self, model, indexModel):
         "Set the main form model and index model, index model can change from filter dialog"
@@ -788,24 +792,24 @@ class FormIndexManager(QWidget):
                 status[i] = False
         session['mainwin'].updateEditStatus(status, current, total, self.indexModel.limitCondition)
 
-    def checkIfDirty(self):
-        "Alert of unsaved changes if any"
-        if self.state == VIEW:
-            return True
-        if self.model.isEditable and self._model.isDirty:
-            result = QMessageBox.question(self,
-                                          _tr("MessageDialog", "Question"),
-                                          _tr("Form", "The data has been modified, save ?"),
-                                          QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel)
-            if result == QMessageBox.Cancel:
-                return False
-            elif result == QMessageBox.Yes:
-                self.save()
-            else:
-                self.model.revert()
-                self.state = VIEW
-                self.updateEditStatus()
-        return True
+    # def checkIfDirty(self):
+    #     "Alert of unsaved changes if any"
+    #     if self.state == VIEW:
+    #         return True
+    #     if self.model.isEditable and self._model.isDirty:
+    #         result = QMessageBox.question(self,
+    #                                       _tr("MessageDialog", "Question"),
+    #                                       _tr("Form", "The data has been modified, save ?"),
+    #                                       QMessageBox.Yes | QMessageBox.No | QMessageBox.Cancel)
+    #         if result == QMessageBox.Cancel:
+    #             return False
+    #         elif result == QMessageBox.Yes:
+    #             self.save()
+    #         else:
+    #             self.model.revert()
+    #             self.state = VIEW
+    #             self.updateEditStatus()
+    #     return True
 
     def toFirst(self):
         "To first"

@@ -60,7 +60,7 @@ from App.Database.Models import ToolbarItemTreeModel
 #from App.Database.Models import ShortcutKeysequenceModel
 from App.Widget.Delegate import BooleanDelegate
 from App.Widget.Delegate import ActionDelegate
-from App.Widget.Delegate import KeySequenceDelegate
+#from App.Widget.Delegate import KeySequenceDelegate
 from App.Widget.Form import FormIndexManager
 #from App.Widgets.Actions import actionDefinition
 from App.Widget.Dialog import PrintDialog

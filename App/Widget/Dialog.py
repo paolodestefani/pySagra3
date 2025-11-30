@@ -2015,6 +2015,16 @@ class PrintDialog(QDialog):
         "Generated report and a pdf file, optionally open it"
         if not self.generateReport():
             return
+        if self.ui.lineEditDirectory.text() == "":
+            QMessageBox.critical(self,
+                                 _tr('MessageDialog', 'Critical'),
+                                 _tr('Dialog', "Export directory not set"))
+            return
+        if self.ui.lineEditFileName.text() == "":
+            QMessageBox.critical(self,
+                                 _tr('MessageDialog', 'Critical'),
+                                 _tr('Dialog', "File name not set"))
+            return
         file_name = self.ui.lineEditDirectory.text() + "/" + self.ui.lineEditFileName.text() + ".pdf"
         if QFile(file_name).exists():
             if QMessageBox.question(self,

@@ -45,7 +45,7 @@ from PySide6.QtGui import QFont
 from PySide6.QtGui import QFontMetrics
 from PySide6.QtGui import QFontDatabase
 from PySide6.QtGui import QTextDocument
-from PySide6.QtGui import QStandardItemModel
+#from PySide6.QtGui import QStandardItemModel
 from PySide6.QtGui import QStandardItem
 from PySide6.QtGui import QCursor
 from PySide6.QtGui import QAction
@@ -63,6 +63,7 @@ from PySide6.QtWidgets import QDateTimeEdit
 from PySide6.QtWidgets import QLineEdit
 from PySide6.QtWidgets import QFontComboBox
 from PySide6.QtWidgets import QTextEdit
+from PySide6.QtWidgets import QDataWidgetMapper
 from PySide6.QtWidgets import QMainWindow
 from PySide6.QtWidgets import QToolBar
 from PySide6.QtWidgets import QMessageBox
@@ -400,7 +401,7 @@ class RelationalComboBox(QComboBox):
         super().__init__(parent)
         self.sqlFunc = None
         self.nullable = False
-
+        
     def setNullable(self, nullable):
         self.nullable = nullable
 
@@ -465,6 +466,20 @@ class RelationalComboBox(QComboBox):
     def modelDataStr(self, data):
         index = self.findData(data, Qt.UserRole, Qt.MatchExactly|Qt.MatchCaseSensitive)
         self.setCurrentIndex(index if index >= 0 else 0) # can be -1 on New
+        
+
+class DataWidgetMapper(QDataWidgetMapper):
+    "Subclass of QDataWidgetMapper that commit data on combobox change, workaround for comboboxes on MacOS that not get focusOut event properly"
+    
+    def addMapping(self, widget, section, propertyName=None):
+        if propertyName is None:
+            super().addMapping(widget, section)
+        else:
+            super().addMapping(widget, section, propertyName)
+
+        if isinstance(widget, QComboBox):
+            delegate = self.itemDelegate()
+            widget.currentIndexChanged.connect(lambda: delegate.commitData.emit(widget))
 
 
 class ColorComboBox(QComboBox):

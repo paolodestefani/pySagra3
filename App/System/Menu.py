@@ -52,7 +52,7 @@ from App.Database.Models import MenuModel
 from App.Database.Models import MenuItemTreeModel
 from App.Widget.Delegate import BooleanDelegate
 from App.Widget.Delegate import ActionDelegate
-from App.Widget.Delegate import KeySequenceDelegate
+#from App.Widget.Delegate import KeySequenceDelegate
 from App.Widget.Form import FormIndexManager
 from App.Widget.Dialog import PrintDialog
 from App.Ui.MenuWidget import Ui_MenuWidget

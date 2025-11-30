@@ -48,9 +48,11 @@ from PySide6.QtGui import QPixmap
 from PySide6.QtGui import QColor
 from PySide6.QtGui import QBrush
 from PySide6.QtGui import QPalette
-from PySide6.QtGui import QKeySequence
+#from PySide6.QtGui import QKeySequence
 from PySide6.QtWidgets import QApplication
+from PySide6.QtWidgets import QAbstractItemDelegate
 from PySide6.QtWidgets import QStyledItemDelegate
+from PySide6.QtWidgets import QItemDelegate
 from PySide6.QtWidgets import QAbstractItemView
 from PySide6.QtWidgets import QComboBox
 from PySide6.QtWidgets import QSpinBox
@@ -61,7 +63,7 @@ from PySide6.QtWidgets import QStyleOptionButton
 from PySide6.QtWidgets import QStyleOptionViewItem
 from PySide6.QtWidgets import QStyle
 from PySide6.QtWidgets import QColorDialog
-from PySide6.QtWidgets import QKeySequenceEdit
+#from PySide6.QtWidgets import QKeySequenceEdit
 
 # application modules
 from App import session
@@ -70,6 +72,7 @@ from App.System.Utility import string_encode
 from App.System.Utility import string_decode
 from App.Database.Setting import SettingClass
 from App.Widget.Control import ColorComboBox
+from App.Widget.Control import RelationalComboBox
 from App.Widget.Dialog import SelectImageDialog
 
 
@@ -742,20 +745,20 @@ class BoldDelegate(QStyledItemDelegate):
         super().paint(painter, option, index)
 
 
-class KeySequenceDelegate(QStyledItemDelegate):
-    "Key sequence edit delegate"
+# class KeySequenceDelegate(QStyledItemDelegate):
+#     "Key sequence edit delegate"
 
-    def createEditor(self, parent, option, index):
-        kse = QKeySequenceEdit(parent)
-        return kse
+#     def createEditor(self, parent, option, index):
+#         kse = QKeySequenceEdit(parent)
+#         return kse
 
-    def setEditorData(self, editor, index):
-        if not index.data():
-            return
-        editor.setKeySequence(QKeySequence(index.data()))
+#     def setEditorData(self, editor, index):
+#         if not index.data():
+#             return
+#         editor.setKeySequence(QKeySequence(index.data()))
 
-    def setModelData(self, editor, model, index):
-        model.setData(index, editor.keySequence().toString(), Qt.EditRole)
+#     def setModelData(self, editor, model, index):
+#         model.setData(index, editor.keySequence().toString(), Qt.EditRole)
 
 
 class ActionDelegate(QStyledItemDelegate):
