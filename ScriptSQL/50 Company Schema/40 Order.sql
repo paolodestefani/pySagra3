@@ -156,7 +156,7 @@ BEGIN
 	IF (
         SELECT bool_and(CASE WHEN fullfillment_date IS NULL THEN false ELSE true END) 
         FROM company.order_header_department 
-        WHERE header_id = NEW.header_id
+        WHERE order_header_id = NEW.order_header_id
         ) THEN
         UPDATE company.order_header 
         SET status = 'P', fullfillment_date = now() 
@@ -164,7 +164,7 @@ BEGIN
 	ELSIF ( 
         SELECT bool_or(CASE WHEN fullfillment_date IS NULL THEN false ELSE true END) 
         FROM company.order_header_department 
-        WHERE header_id = NEW.header_id
+        WHERE order_header_id = NEW.order_header_id
         ) THEN
 		UPDATE company.order_header 
         SET status = 'I', fullfillment_date = Null 

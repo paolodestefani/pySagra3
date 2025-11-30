@@ -80,102 +80,102 @@
 <context>
     <name>Controls</name>
     <message>
-        <location filename="../../App/Widget/Control.py" line="223"/>
+        <location filename="../../App/Widget/Control.py" line="224"/>
         <source>NO IMAGE</source>
         <translation>NESSUNA IMMAGINE</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="648"/>
+        <location filename="../../App/Widget/Control.py" line="663"/>
         <source>Transparent</source>
         <translation>Trasparente</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="649"/>
+        <location filename="../../App/Widget/Control.py" line="664"/>
         <source>Black</source>
         <translation>Nero</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="650"/>
+        <location filename="../../App/Widget/Control.py" line="665"/>
         <source>Red</source>
         <translation>Rosso</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="651"/>
+        <location filename="../../App/Widget/Control.py" line="666"/>
         <source>Dark red</source>
         <translation>Rosso scuro</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="652"/>
+        <location filename="../../App/Widget/Control.py" line="667"/>
         <source>Green</source>
         <translation>Verde</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="653"/>
+        <location filename="../../App/Widget/Control.py" line="668"/>
         <source>Dark green</source>
         <translation>Verde scuro</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="654"/>
+        <location filename="../../App/Widget/Control.py" line="669"/>
         <source>Blue</source>
         <translation>Blu</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="655"/>
+        <location filename="../../App/Widget/Control.py" line="670"/>
         <source>Dark blue</source>
         <translation>Blu scuro</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="656"/>
+        <location filename="../../App/Widget/Control.py" line="671"/>
         <source>Cyan</source>
         <translation>Ciano</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="657"/>
+        <location filename="../../App/Widget/Control.py" line="672"/>
         <source>Dark cyan</source>
         <translation>Ciano scuro</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="658"/>
+        <location filename="../../App/Widget/Control.py" line="673"/>
         <source>Magenta</source>
         <translation>Magenta</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="659"/>
+        <location filename="../../App/Widget/Control.py" line="674"/>
         <source>Dark magenta</source>
         <translation>Magenta scuro</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="660"/>
+        <location filename="../../App/Widget/Control.py" line="675"/>
         <source>Yellow</source>
         <translation>Giallo</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="661"/>
+        <location filename="../../App/Widget/Control.py" line="676"/>
         <source>Dark yellow</source>
         <translation>Giallo scuro</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="662"/>
+        <location filename="../../App/Widget/Control.py" line="677"/>
         <source>Gray</source>
         <translation>Grigio</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="663"/>
+        <location filename="../../App/Widget/Control.py" line="678"/>
         <source>Dark gray</source>
         <translation>Grigio scuro</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="664"/>
+        <location filename="../../App/Widget/Control.py" line="679"/>
         <source>Light gray</source>
         <translation>Grigio chiaro</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="665"/>
+        <location filename="../../App/Widget/Control.py" line="680"/>
         <source>Whyte</source>
         <translation>Bianco</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="922"/>
+        <location filename="../../App/Widget/Control.py" line="937"/>
         <source>Are you sure to clear all the text ?</source>
         <translation>Sei sicuro di voler cancellare tutto il testo ?</translation>
     </message>
@@ -272,19 +272,29 @@
         <translation>Nuova personalizzazione &apos;{}&apos; creata</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="2022"/>
-        <location filename="../../App/Widget/Dialog.py" line="2283"/>
+        <location filename="../../App/Widget/Dialog.py" line="2021"/>
+        <source>Export directory not set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../App/Widget/Dialog.py" line="2026"/>
+        <source>File name not set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../App/Widget/Dialog.py" line="2032"/>
+        <location filename="../../App/Widget/Dialog.py" line="2293"/>
         <source>File {} exists, overwrite ?</source>
         <translation>IL file {} è già presente, sovrascrivo ?</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="2115"/>
-        <location filename="../../App/Widget/Dialog.py" line="2169"/>
+        <location filename="../../App/Widget/Dialog.py" line="2125"/>
+        <location filename="../../App/Widget/Dialog.py" line="2179"/>
         <source>Select export directory</source>
         <translation>Selezionare la directory di destinazione</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="2621"/>
+        <location filename="../../App/Widget/Dialog.py" line="2631"/>
         <source>Select a date:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -294,30 +304,30 @@
         <translation>Anteprima di stampa</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="2158"/>
+        <location filename="../../App/Widget/Dialog.py" line="2168"/>
         <source>Print current page ({})</source>
         <translation>Stampa la pagina corrente ({})</translation>
     </message>
     <message>
         <location filename="../../App/Widget/Dialog.py" line="1327"/>
-        <location filename="../../App/Widget/Dialog.py" line="2140"/>
+        <location filename="../../App/Widget/Dialog.py" line="2150"/>
         <source>Pdf 1.4</source>
         <translation>Pdf 1.4</translation>
     </message>
     <message>
         <location filename="../../App/Widget/Dialog.py" line="1328"/>
-        <location filename="../../App/Widget/Dialog.py" line="2141"/>
+        <location filename="../../App/Widget/Dialog.py" line="2151"/>
         <source>Pdf A-1b</source>
         <translation>Pdf A-1b</translation>
     </message>
     <message>
         <location filename="../../App/Widget/Dialog.py" line="1329"/>
-        <location filename="../../App/Widget/Dialog.py" line="2142"/>
+        <location filename="../../App/Widget/Dialog.py" line="2152"/>
         <source>Pdf 1.6</source>
         <translation>Pdf 1.6</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="2041"/>
+        <location filename="../../App/Widget/Dialog.py" line="2051"/>
         <source>PDF file created</source>
         <translation>File PDF generato</translation>
     </message>
@@ -331,7 +341,7 @@
         <location filename="../../App/Widget/Dialog.py" line="1982"/>
         <location filename="../../App/Widget/Dialog.py" line="1999"/>
         <location filename="../../App/Widget/Dialog.py" line="2011"/>
-        <location filename="../../App/Widget/Dialog.py" line="2032"/>
+        <location filename="../../App/Widget/Dialog.py" line="2042"/>
         <source>Critical</source>
         <translation>Errore critico</translation>
     </message>
@@ -349,7 +359,7 @@
 <context>
     <name>Dialogs</name>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="2263"/>
+        <location filename="../../App/Widget/Dialog.py" line="2273"/>
         <source>Export PDF</source>
         <translation>Esporta in PDF</translation>
     </message>
@@ -357,58 +367,58 @@
 <context>
     <name>Editor</name>
     <message>
-        <location filename="../../App/Widget/Control.py" line="826"/>
+        <location filename="../../App/Widget/Control.py" line="841"/>
         <source>Get/set the text font family</source>
         <translation>Mostra/imposta la famiglia del font</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="833"/>
+        <location filename="../../App/Widget/Control.py" line="848"/>
         <source>Get/set the text font size</source>
         <translation>Mostra/imposta la dimensione del font</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="837"/>
+        <location filename="../../App/Widget/Control.py" line="852"/>
         <source>Text color</source>
         <translation>Colore del testo</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="841"/>
+        <location filename="../../App/Widget/Control.py" line="856"/>
         <source>Text background color
 Black = Transparent</source>
         <translation>Coloro dello sfondo Nero = Trasparente</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="846"/>
+        <location filename="../../App/Widget/Control.py" line="861"/>
         <source>Format text as bold</source>
         <translation>Formatta come grassetto</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="853"/>
+        <location filename="../../App/Widget/Control.py" line="868"/>
         <source>Format text as italic</source>
         <translation>Formatta come corsivo</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="860"/>
+        <location filename="../../App/Widget/Control.py" line="875"/>
         <source>Format text as underline</source>
         <translation>Formatta come sottolineato</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="867"/>
+        <location filename="../../App/Widget/Control.py" line="882"/>
         <source>Align text left</source>
         <translation>Allinea a sinistra</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="874"/>
+        <location filename="../../App/Widget/Control.py" line="889"/>
         <source>Align text center</source>
         <translation>Allinea al centro</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="881"/>
+        <location filename="../../App/Widget/Control.py" line="896"/>
         <source>Align text right</source>
         <translation>Allinea a destra</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="888"/>
+        <location filename="../../App/Widget/Control.py" line="903"/>
         <source>Justify text</source>
         <translation>Giustifica</translation>
     </message>
@@ -416,48 +426,47 @@ Black = Transparent</source>
 <context>
     <name>Form</name>
     <message>
-        <location filename="../../App/Widget/Form.py" line="192"/>
-        <location filename="../../App/Widget/Form.py" line="528"/>
-        <location filename="../../App/Widget/Form.py" line="798"/>
+        <location filename="../../App/Widget/Form.py" line="195"/>
+        <location filename="../../App/Widget/Form.py" line="531"/>
         <source>The data has been modified, save ?</source>
         <translation>I dati sono stati modificati, vuoi salvare ?</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Form.py" line="248"/>
-        <location filename="../../App/Widget/Form.py" line="837"/>
+        <location filename="../../App/Widget/Form.py" line="251"/>
+        <location filename="../../App/Widget/Form.py" line="841"/>
         <source>Error inserting a new row</source>
         <translation>Errore in inserimento di una nuova riga</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Form.py" line="260"/>
-        <location filename="../../App/Widget/Form.py" line="855"/>
+        <location filename="../../App/Widget/Form.py" line="263"/>
+        <location filename="../../App/Widget/Form.py" line="859"/>
         <source>Error on mapper submit</source>
         <translation>Errore in mapper submit</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Form.py" line="287"/>
-        <location filename="../../App/Widget/Form.py" line="372"/>
-        <location filename="../../App/Widget/Form.py" line="572"/>
-        <location filename="../../App/Widget/Form.py" line="601"/>
-        <location filename="../../App/Widget/Form.py" line="882"/>
-        <location filename="../../App/Widget/Form.py" line="975"/>
+        <location filename="../../App/Widget/Form.py" line="290"/>
+        <location filename="../../App/Widget/Form.py" line="375"/>
+        <location filename="../../App/Widget/Form.py" line="575"/>
+        <location filename="../../App/Widget/Form.py" line="604"/>
+        <location filename="../../App/Widget/Form.py" line="886"/>
+        <location filename="../../App/Widget/Form.py" line="979"/>
         <source>Error on model submit all</source>
         <translation>Errore in model submitt all</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Form.py" line="303"/>
-        <location filename="../../App/Widget/Form.py" line="337"/>
-        <location filename="../../App/Widget/Form.py" line="373"/>
-        <location filename="../../App/Widget/Form.py" line="559"/>
-        <location filename="../../App/Widget/Form.py" line="602"/>
-        <location filename="../../App/Widget/Form.py" line="895"/>
-        <location filename="../../App/Widget/Form.py" line="941"/>
-        <location filename="../../App/Widget/Form.py" line="976"/>
+        <location filename="../../App/Widget/Form.py" line="306"/>
+        <location filename="../../App/Widget/Form.py" line="340"/>
+        <location filename="../../App/Widget/Form.py" line="376"/>
+        <location filename="../../App/Widget/Form.py" line="562"/>
+        <location filename="../../App/Widget/Form.py" line="605"/>
+        <location filename="../../App/Widget/Form.py" line="899"/>
+        <location filename="../../App/Widget/Form.py" line="945"/>
+        <location filename="../../App/Widget/Form.py" line="980"/>
         <source>Referential integrity violation: unable to delete the current record because is still referenced from another database object</source>
         <translation>Violazione dell&apos;integrità referenziale: impossibile cancellare il record corrente perchè è referenziato da un altro oggetto del database</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Form.py" line="609"/>
+        <location filename="../../App/Widget/Form.py" line="612"/>
         <source>Error on submitAll</source>
         <translation>Errore in submit all</translation>
     </message>
@@ -467,39 +476,39 @@ Black = Transparent</source>
         <translation>Annullare le modifiche e ricaricare i dati ?</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Form.py" line="279"/>
-        <location filename="../../App/Widget/Form.py" line="307"/>
-        <location filename="../../App/Widget/Form.py" line="341"/>
-        <location filename="../../App/Widget/Form.py" line="563"/>
-        <location filename="../../App/Widget/Form.py" line="874"/>
-        <location filename="../../App/Widget/Form.py" line="899"/>
-        <location filename="../../App/Widget/Form.py" line="945"/>
+        <location filename="../../App/Widget/Form.py" line="282"/>
+        <location filename="../../App/Widget/Form.py" line="310"/>
+        <location filename="../../App/Widget/Form.py" line="344"/>
+        <location filename="../../App/Widget/Form.py" line="566"/>
+        <location filename="../../App/Widget/Form.py" line="878"/>
+        <location filename="../../App/Widget/Form.py" line="903"/>
+        <location filename="../../App/Widget/Form.py" line="949"/>
         <source>Duplicate key value violates unique constraint: Can not insert the current record because a key value is already present in the database table</source>
         <translation>Valore chiave duplicato viola un vincolo di univocità: Non è possibile inserire il record corrente perché un valore chiave è già presente nella tabella del database</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Form.py" line="315"/>
-        <location filename="../../App/Widget/Form.py" line="349"/>
-        <location filename="../../App/Widget/Form.py" line="907"/>
-        <location filename="../../App/Widget/Form.py" line="953"/>
+        <location filename="../../App/Widget/Form.py" line="318"/>
+        <location filename="../../App/Widget/Form.py" line="352"/>
+        <location filename="../../App/Widget/Form.py" line="911"/>
+        <location filename="../../App/Widget/Form.py" line="957"/>
         <source>Error on model detail submit all</source>
         <translation>Errore in model detail submit all</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Form.py" line="267"/>
-        <location filename="../../App/Widget/Form.py" line="862"/>
+        <location filename="../../App/Widget/Form.py" line="270"/>
+        <location filename="../../App/Widget/Form.py" line="866"/>
         <source>Integrity constraint violation: unable to commit the transaction because a generic integrity violation occured</source>
         <translation>Violazione di un vincolo di integrità: impossibile completare la transazione per un generico errore di violazione di integrità</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Form.py" line="271"/>
-        <location filename="../../App/Widget/Form.py" line="866"/>
+        <location filename="../../App/Widget/Form.py" line="274"/>
+        <location filename="../../App/Widget/Form.py" line="870"/>
         <source>Integrity constraint violation: unable to commit the transaction because a not null error occured</source>
         <translation>Violazione di un vincolo di integrità: impossibile completare la transazione per un errore di valore nullo non permesso</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Form.py" line="275"/>
-        <location filename="../../App/Widget/Form.py" line="870"/>
+        <location filename="../../App/Widget/Form.py" line="278"/>
+        <location filename="../../App/Widget/Form.py" line="874"/>
         <source>Foreign key violation: unable to delete the current record because is still referenced from another database object</source>
         <translation>Violazione di una chiave esterna: impossibile cancellare il record corrente perchè è referenziato da un altro oggetto del database</translation>
     </message>
@@ -628,15 +637,17 @@ Black = Transparent</source>
         <location filename="../../App/Widget/Dialog.py" line="1592"/>
         <location filename="../../App/Widget/Dialog.py" line="1619"/>
         <location filename="../../App/Widget/Dialog.py" line="1741"/>
-        <location filename="../../App/Widget/Form.py" line="247"/>
-        <location filename="../../App/Widget/Form.py" line="259"/>
-        <location filename="../../App/Widget/Form.py" line="362"/>
-        <location filename="../../App/Widget/Form.py" line="381"/>
-        <location filename="../../App/Widget/Form.py" line="412"/>
-        <location filename="../../App/Widget/Form.py" line="836"/>
-        <location filename="../../App/Widget/Form.py" line="854"/>
-        <location filename="../../App/Widget/Form.py" line="965"/>
-        <location filename="../../App/Widget/Form.py" line="984"/>
+        <location filename="../../App/Widget/Dialog.py" line="2020"/>
+        <location filename="../../App/Widget/Dialog.py" line="2025"/>
+        <location filename="../../App/Widget/Form.py" line="250"/>
+        <location filename="../../App/Widget/Form.py" line="262"/>
+        <location filename="../../App/Widget/Form.py" line="365"/>
+        <location filename="../../App/Widget/Form.py" line="384"/>
+        <location filename="../../App/Widget/Form.py" line="415"/>
+        <location filename="../../App/Widget/Form.py" line="840"/>
+        <location filename="../../App/Widget/Form.py" line="858"/>
+        <location filename="../../App/Widget/Form.py" line="969"/>
+        <location filename="../../App/Widget/Form.py" line="988"/>
         <source>Critical</source>
         <translation>Errore critico</translation>
     </message>
@@ -669,7 +680,7 @@ Black = Transparent</source>
         <location filename="../../App/Widget/Dialog.py" line="1551"/>
         <location filename="../../App/Widget/Dialog.py" line="1745"/>
         <location filename="../../App/Widget/Dialog.py" line="1955"/>
-        <location filename="../../App/Widget/Dialog.py" line="2040"/>
+        <location filename="../../App/Widget/Dialog.py" line="2050"/>
         <source>Information</source>
         <translation>Informazione</translation>
     </message>
@@ -686,12 +697,11 @@ Black = Transparent</source>
         <location filename="../../App/System/Report.py" line="250"/>
         <location filename="../../App/System/Scripting.py" line="252"/>
         <location filename="../../App/System/User.py" line="248"/>
-        <location filename="../../App/Widget/Control.py" line="921"/>
-        <location filename="../../App/Widget/Dialog.py" line="2021"/>
-        <location filename="../../App/Widget/Dialog.py" line="2282"/>
-        <location filename="../../App/Widget/Form.py" line="191"/>
-        <location filename="../../App/Widget/Form.py" line="527"/>
-        <location filename="../../App/Widget/Form.py" line="797"/>
+        <location filename="../../App/Widget/Control.py" line="936"/>
+        <location filename="../../App/Widget/Dialog.py" line="2031"/>
+        <location filename="../../App/Widget/Dialog.py" line="2292"/>
+        <location filename="../../App/Widget/Form.py" line="194"/>
+        <location filename="../../App/Widget/Form.py" line="530"/>
         <source>Question</source>
         <translation>Richiesta</translation>
     </message>
@@ -1273,7 +1283,7 @@ Black = Transparent</source>
 <context>
     <name>controls</name>
     <message>
-        <location filename="../../App/Widget/Control.py" line="629"/>
+        <location filename="../../App/Widget/Control.py" line="644"/>
         <source>Type the password here</source>
         <translation>Inserire la password</translation>
     </message>

@@ -35,6 +35,7 @@ import logging
 # PySide6
 from PySide6.QtCore import QObject
 from PySide6.QtCore import Qt
+from PySide6.QtCore import QCoreApplication
 from PySide6.QtGui import QCursor
 from PySide6.QtWidgets import QApplication
 from PySide6.QtWidgets import QDialog
@@ -46,10 +47,10 @@ from App import session
 from App import currentAction
 from App.Database.Exceptions import PyAppDBError
 from App.Database.CodeDescriptionList import event_cdl
-from App.Database.Tool import delete_orders
+from App.Database.Tool import delete_order
 from App.Database.Tool import unload_rebuild
 from App.Database.Tool import numbering_rebuild
-from App.Database.Tool import mark_orders_as_processed
+from App.Database.Tool import mark_order_as_processed
 from App.Database.Tool import delete_all_orders
 from App.Database.Tool import delete_all_web_orders
 from App.Database.Tool import delete_all_inventory
@@ -150,6 +151,7 @@ class EventToolDialog(QDialog):
         self.ui.comboBoxUtility.currentIndexChanged.connect(self.updateWarning)
         self.updateWarning(0)
         self.ui.buttonBox.button(QDialogButtonBox.StandardButton.Close).setDefault(True)
+        self.ui.progressBar.hide()
        
     def updateWarning(self, index):
         "Update warning text according to selected utility"
@@ -185,7 +187,7 @@ class EventToolDialog(QDialog):
         eventDescription = self.ui.comboBoxEvent.currentText()
         utility_id = self.ui.comboBoxUtility.currentData()
         utilities = {
-            0: [delete_orders, _tr('Utility', 'Delete Orders'), 
+            0: [delete_order, _tr('Utility', 'Delete Orders'), 
                 _tr("Utility", "Are you sure you want to delete all orders of event\n"
                                "'{}' ?").format(eventDescription)],
             1: [unload_rebuild, _tr('Utility', 'Unload Rebuild'), 
@@ -194,7 +196,7 @@ class EventToolDialog(QDialog):
             2: [numbering_rebuild, _tr('Utility', 'Numbering Rebuild'), 
                 _tr("Utility", "Are you sure you want to procede with rebuild number sequence for event\n"
                                "'{}' ?").format(eventDescription)],
-            3: [mark_orders_as_processed, _tr('Utility', 'Mark Orders as Processed'), 
+            3: [mark_order_as_processed, _tr('Utility', 'Mark Orders as Processed'), 
                 _tr("Utility", "Are you sure you want to mark all orders as processed for event\n"
                                "'{}' ?").format(eventDescription)]}
         if QMessageBox.question(self,
@@ -204,6 +206,10 @@ class EventToolDialog(QDialog):
                                 QMessageBox.No  # default botton
                                 ) == QMessageBox.No:
             return
+        QCoreApplication.processEvents() # update dialog
+        #self.ui.progressBar.setText(_tr('Utility', 'Processing...'))
+        self.ui.progressBar.show()
+        self.ui.progressBar.setRange(0, 0)  # infinite progress
         try:
             utilities[utility_id][FUNC](event_id), 
         except PyAppDBError as er:
@@ -214,6 +220,9 @@ class EventToolDialog(QDialog):
             QMessageBox.information(self,
                                     _tr('MessageDialog', 'Information'),
                                     _tr('Utility', 'Operation completed successfully'))
+        finally:
+            self.ui.progressBar.setRange(0, 100)
+            self.ui.progressBar.hide()
             #super().accept()
 
 

@@ -114,7 +114,7 @@ class Ui_TableWidget(object):
         self.pushButtonPreview = QPushButton(TableWidget)
         self.pushButtonPreview.setObjectName(u"pushButtonPreview")
         font1 = QFont()
-        font1.setPointSize(32)
+        font1.setPointSize(24)
         font1.setKerning(True)
         self.pushButtonPreview.setFont(font1)
         self.pushButtonPreview.setCheckable(True)

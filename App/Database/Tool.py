@@ -37,12 +37,12 @@ from App.Database.Connect import appconn
 
 
 
-def delete_orders(event_id):
+def delete_order(event_id):
     "Delete all orders of the given event"
     try:
         with appconn.transaction():
             with appconn.cursor() as cur:
-                cur.execute('SELECT company.delete_event_orders(%s);', (event_id,))
+                cur.execute('SELECT company.delete_event_order(%s);', (event_id,))
     except psycopg.Error as er:
         raise PyAppDBError(er.diag.sqlstate, str(er))
 
@@ -64,7 +64,7 @@ def numbering_rebuild(event_id):
     except psycopg.Error as er:
         raise PyAppDBError(er.diag.sqlstate, str(er))
 
-def mark_orders_as_processed(event_id):
+def mark_order_as_processed(event_id):
     "Mark all unprocessed orders as processed ad order date"
     # order headers are updated by the trigger
     # no need to filter by company id as event_id is unique per company
@@ -72,7 +72,7 @@ def mark_orders_as_processed(event_id):
 UPDATE company.order_header_department
 SET fullfillment_date = oh.date_time
 FROM company.order_header_department ohd
-JOIN company.order_header oh ON ohd.header_id = oh.id
+JOIN company.order_header oh ON ohd.order_header_id = oh.order_header_id
 WHERE 
     oh.event_id = %s 
     AND ohd.fullfillment_date is null;"""
