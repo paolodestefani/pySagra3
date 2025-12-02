@@ -75,7 +75,7 @@ from App.System.Utility import scriptMethod
  USER_INS, DATE_INS, USER_UPD, DATE_UPD) = range(10)
 
 
-def events() -> None:
+def event() -> None:
     "Show/Edit curent connections"
     logging.info('Starting events Form')
     mw = session['mainwin']

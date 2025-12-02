@@ -63,19 +63,19 @@ ID, DESCRIPTION, USER_INS, DATE_INS, USER_UPD, DATE_UPD = range(6)
 P_ID, P_CLASS_ID, P_COMPUTER, P_PRINTER, P_USER_INS, P_DATE_INS, P_USER_UPD, P_DATE_UPD = range(8)
 
 
-def printers() -> None:
+def printer() -> None:
     "Show/Edit printer classes"
     logging.info('Starting printers Form')
     mw = session['mainwin']
     title = currentAction['app_file_printer'].text()
     auth = currentAction['app_file_printer'].data()
-    pf = PrintersForm(mw, title, auth)
+    pf = PrinterForm(mw, title, auth)
     pf.reload()
     mw.addTab(title, pf)
     logging.info('Printers Form added to main window')
 
 
-class PrintersForm(FormIndexManager):
+class PrinterForm(FormIndexManager):
 
     def __init__(self, parent: QWidget, title: str, auth: str) -> None:
         super().__init__(parent, auth)

@@ -61,6 +61,7 @@ from App.Ui.GenerateTableNumbersDialog import Ui_GenerateTableNumbers
 from App.Widget.Form import  FormManager
 from App.Widget.Delegate import ColorDelegate
 from App.Widget.Delegate import BooleanDelegate
+from App.Widget.Dialog import PrintDialog
 
 
 
@@ -69,13 +70,13 @@ ID, TABLE_CODE, ROW, COLUMN, TEXT_COLOR, BACKGROUND_COLOR, IS_OBSOLETE = range(7
 EDIT, PREVIEW = range(2)
 
 
-def tables() -> None:
+def table() -> None:
     "Manage numbered tables"
     logging.info('Starting tables Form')
     mw = session['mainwin']
     title = currentAction['app_file_table'].text()
     auth = currentAction['app_file_table'].data()
-    tw = TablesForm(mw, title, auth)
+    tw = TableForm(mw, title, auth)
     tw.reload()
     mw.addTab(title, tw)
     logging.info('Tables Form added to main window')
@@ -192,7 +193,7 @@ class GenerateTables(QDialog):
                     self.model.setData(self.model.createIndex(modelRow, IS_OBSOLETE), False)
 
 
-class TablesForm(FormManager):
+class TableForm(FormManager):
 
     def __init__(self, parent: QWidget, title: str, auth: str) -> None:
         super().__init__(parent, auth)
@@ -335,3 +336,8 @@ class TablesForm(FormManager):
                     #w.setMinimumWidth(5)
                     w.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
                     self.ui.gridLayoutPreview.addWidget(w, r, c)
+    @scriptMethod
+    def print(self) -> None:
+        "Tables report"
+        dialog = PrintDialog(self, 'TABLE')
+        dialog.show()

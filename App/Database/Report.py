@@ -367,6 +367,9 @@ def report_query(report, condition=None, sorting=None):
             script += ' AND '
         script += f"{' AND '.join([i[0] for i in condition])}"
         args += [i[1] for i in condition if i[1] is not None] # for unary operant es. IS NULL, IS NOT NULL
+    # fixed group by
+    if report.query_group_by:
+        script += f"\nGROUP BY {report.query_group_by}"
     # fixed order by
     if report.query_order_by:
         script += f"\nORDER BY {report.query_order_by}"

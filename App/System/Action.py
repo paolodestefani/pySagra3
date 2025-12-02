@@ -52,19 +52,18 @@ from App.System.Profile import profile
 from App.System.User import user
 from App.System.Menu import menu
 from App.System.Toolbar import toolbar
-#from App.System.Shortcut import shortcuts
 from App.System.Report import report
 from App.System.Scripting import scripting
 from App.System.Customization import customization
 from App.CashDesk import cashDesk
-from App.Printer import printers
-from App.Department import departments
-from App.StandTable import tables
-from App.Item import items
+from App.Printer import printer
+from App.Department import department
+from App.StandTable import table
+from App.Item import item
 from App.PriceList import priceList
-from App.Event import events
+from App.Event import event
 from App.UpdateWebOrderServer import updateWebOrderServer
-from App.WebOrder import webOrders
+from App.WebOrder import webOrder
 from App.OrderArchive import orderArchive
 from App.StockInventory import stockInventory
 from App.OrderProgress import orderProgress
@@ -476,7 +475,7 @@ def createActionDictionary(mw):
     
     actionDefinition['app_file_printer'] = (
         _tr("Action", 'Printers'),
-        printers,
+        printer,
         False,
         'file_printers',
         None,
@@ -487,7 +486,7 @@ def createActionDictionary(mw):
 
     actionDefinition['app_file_event'] = (
         _tr("Action", 'Events'),
-        events,
+        event,
         False,
         'file_events',
         None,
@@ -509,7 +508,7 @@ def createActionDictionary(mw):
 
     actionDefinition['app_file_department'] = (
         _tr("Action", 'Departments'),
-        departments,
+        department,
         False,
         'file_departments',
         None,
@@ -520,7 +519,7 @@ def createActionDictionary(mw):
 
     actionDefinition['app_file_table'] = (
         _tr("Action", 'Tables'),
-        tables,
+        table,
         False,
         'file_tables',
         None,
@@ -531,7 +530,7 @@ def createActionDictionary(mw):
 
     actionDefinition['app_file_item'] = (
         _tr("Action", 'Items'),
-        items,
+        item,
         False,
         'file_items',
         None,
@@ -564,7 +563,7 @@ def createActionDictionary(mw):
 
     actionDefinition['app_file_web_order'] = (
         _tr("Action", 'Web orders'),
-        webOrders,
+        webOrder,
         False,
         'file_weborders',
         None,

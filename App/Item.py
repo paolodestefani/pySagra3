@@ -104,13 +104,13 @@ def itemType() -> list:
             ('M', _tr('Item', 'Menu'))]
 
 
-def items() -> None:
+def item() -> None:
     "Manage items"
     logging.info('Starting items Form')
     mw = session['mainwin']
     title = currentAction['app_file_item'].text()
     auth = currentAction['app_file_item'].data()
-    iw = ItemsForm(mw, title, auth)
+    iw = ItemForm(mw, title, auth)
     iw.reload()
     mw.addTab(title, iw)
     logging.info('Items Form added to main window')
@@ -125,7 +125,7 @@ class ChooseItemDialog(QDialog, Ui_ChooseItemDialog):
             self.comboBoxItems.addItem(v, k)
 
 
-class ItemsForm(FormIndexManager):
+class ItemForm(FormIndexManager):
 
     def __init__(self, parent: QWidget, title: str, auth: str) -> None:
         super().__init__(parent, auth)

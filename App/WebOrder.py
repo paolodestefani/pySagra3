@@ -68,7 +68,7 @@ def deliveryType():
             ('A', _tr('WebOrder', 'Take-away'))]
 
 
-def webOrders() -> None:
+def webOrder() -> None:
     "Manage web orders"
     logging.info('Starting web orders form')
     mw = session['mainwin']

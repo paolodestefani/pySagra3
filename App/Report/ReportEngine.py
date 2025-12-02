@@ -86,6 +86,7 @@ from PySide6.QtWidgets import QApplication
 from PySide6.QtPrintSupport import QPrinter
 from PySide6.QtPrintSupport import QPrintPreviewDialog
 
+
 # application definitions for special fields
 if __name__ != "__main__":
     from App import APPNAME
@@ -112,8 +113,8 @@ else:
     session = dict()
     session['qlocale'] = QLocale()
     session['event_image'] = QByteArray()
-    def Setting():
-        return {'quantity_decimal_places': 2, 'currency_symbol': '€'}
+    # def Setting():
+    #     return {'quantity_decimal_places': 2, 'currency_symbol': '€'}
 
 # report engine version
 VERSION = '1.0'
@@ -252,7 +253,10 @@ defaultOptions = {'documentName': 'pyReportEngine document',
                   'defaultLineStyle': 'SolidLine',
                   'defaultBrushStyle': 'NoBrush',
                   'defaultBrushColor': 'Black',
-                  'defaultAspectRatio': 'KeepAspectRatio'}
+                  'defaultAspectRatio': 'KeepAspectRatio',
+                  'quantityDecimals': 2,
+                  'currencySymbol': '€'
+                  }
 
 
 # code39 barcode characters
@@ -300,6 +304,8 @@ class BaseRenderer():
         self.textAlign = TextAlign[paramdict.get("textAlign", options['defaultTextAlign'])]
         self.color = paramdict.get("color", options['defaultColor'])
         self.canGrow = 'True' == paramdict.get("canGrow", "False")
+        self.quantityDecimals = int(paramdict.get("quantityDecimals", options['quantityDecimals']))
+        self.currencySymbol = paramdict.get("currencySymbol", options['currencySymbol'])
         self.value = None  # default value
 
     def textFormat(self):
@@ -314,7 +320,7 @@ class BaseRenderer():
             if self.fieldFormat:
                 if self.fieldFormat == 'currency':
                     text = session['qlocale'].toCurrencyString(float(self.value),
-                                                               self.report.currency_symbol) # looks like int/decimal require a float conversion before currency string
+                                                               self.currencySymbol) # looks like int/decimal require a float conversion before currency string
                 elif self.fieldFormat == 'decimal2':
                     text = session['qlocale'].toString(float(self.value),
                                                        'f',
@@ -322,7 +328,7 @@ class BaseRenderer():
                 elif self.fieldFormat == 'quantity':
                     text = session['qlocale'].toString(float(self.value),
                                                        'f',
-                                                       self.report.quantity_decimals)
+                                                       self.quantityDecimals)
                 else:
                     # python string format for numbers f.e. '{0:.2f}'
                     text = self.fieldFormat.format(self.value)
@@ -850,6 +856,7 @@ class Report():
         # sql query and field used for generate dataset from sql database
         self.query = None
         self.query_where = None
+        self.query_group_by = None
         self.query_order_by = None
         self.conditions = collections.OrderedDict()
         # dataset column definition
@@ -869,9 +876,6 @@ class Report():
         self.pages = [] # list of pages (QPicture)
         self.offset = 0.0
         self.page_num = 0
-        # decimal places for quantity
-        self.quantity_decimals = Setting()['quantity_decimal_places']
-        self.currency_symbol = Setting()['currency_symbol']
 
     def appendBands(self, childElement):
         outList = []
@@ -966,6 +970,8 @@ class Report():
                     self.query = child.text
                 if child.tag == 'where':
                     self.query_where = child.text
+                if child.tag == 'groupBy':
+                    self.query_group_by = child.text
                 if child.tag == 'orderBy':
                     self.query_order_by = child.text
                 if child.tag == 'conditions':

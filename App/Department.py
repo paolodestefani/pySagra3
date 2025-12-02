@@ -57,7 +57,7 @@ from App.Ui.DepartmentWidget import Ui_DepartmentWidget
  USER_INS, DATE_INS, USER_UPD, DATE_UPD) = range(11)
 
 
-def departments() -> None:
+def department() -> None:
     "Manage departments"
     logging.info('Starting departments Form')
     mw = session['mainwin']
