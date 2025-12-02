@@ -105,20 +105,20 @@ def printer_class_cdl():
                         null=True)
     
 def customer_order_report_cdl():
-    "Get a list of all reports of customer order class"
-    return get_report_list('ORDER_CUSTOMER', session['l10n'])
+    "Get a list of all report (code, description) of customer order class"
+    return [(c, d) for i, c, d in get_report_list('ORDER_CUSTOMER', session['l10n'])]
 
 def department_order_report_cdl():
     "Get a list of all reports of department order class"
-    return get_report_list('ORDER_DEPARTMENT', session['l10n'])
+    return [(c, d) for i, c, d in get_report_list('ORDER_DEPARTMENT', session['l10n'])]
 
 def cover_order_report_cdl():
     "Get a list of all reports of cover order class"
-    return get_report_list('ORDER_COVER', session['l10n'])
+    return [(c, d) for i, c, d in get_report_list('ORDER_COVER', session['l10n'])]
 
 def stock_unload_report_cdl():
     "Get a list of all reports of stock unload class"
-    return get_report_list('STOCK_UNLOAD', session['l10n'])
+    return [(c, d) for i, c, d in get_report_list('STOCK_UNLOAD', session['l10n'])]
 
 # def statisticsViewerReportList():
 #     "Get a list of all reports available for statistics viewer"

@@ -73,7 +73,7 @@ CODE, DESCRIPTION, SYSTEM = range(3)
 PARENT, CHILD, ITEMDESCRIPTION, SORTING, ITEMTYPE, ACTION = range(6)
 
 
-def toolbars(auth):
+def toolbar(auth):
     "Show/Edit toolbars"
     logging.info('Starting toolbar Form')
     mw = session['mainwin']

@@ -261,6 +261,7 @@ def get_report_list(report_class, l10n, null=False):
     "Return code and description of all reports of l10n localization or en_US"
     script = """
 SELECT 
+    report_id,
     report_code, 
     description
 FROM system.report

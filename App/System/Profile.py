@@ -75,7 +75,7 @@ def authorizations() -> list[tuple[str, str]]:
             ('X', _tr('Profile', 'Execute')))
 
 
-def profiles() -> None:
+def profile() -> None:
     "Show/Edit profiles"
     logging.info('Starting profiles Form')
     mw = session['mainwin']

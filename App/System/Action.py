@@ -48,14 +48,14 @@ from App.System.Preferences import preferences
 from App.System.Connection import connection
 from App.System.Connection import connectionHistory
 from App.System.Company import company
-from App.System.Profile import profiles
-from App.System.User import users
-from App.System.Menu import menus
-from App.System.Toolbar import toolbars
+from App.System.Profile import profile
+from App.System.User import user
+from App.System.Menu import menu
+from App.System.Toolbar import toolbar
 #from App.System.Shortcut import shortcuts
-from App.System.Report import reports
+from App.System.Report import report
 from App.System.Scripting import scripting
-from App.System.Customization import customizations
+from App.System.Customization import customization
 from App.CashDesk import cashDesk
 from App.Printer import printers
 from App.Department import departments
@@ -161,7 +161,7 @@ def createActionDictionary(mw):
     
     actionDefinition['sys_profile'] = (
         _tr("Action", 'Profiles'),
-        profiles,
+        profile,
         False,
         'system_profiles',
         None,
@@ -172,7 +172,7 @@ def createActionDictionary(mw):
     
     actionDefinition['sys_user'] = (
         _tr("Action", 'Users'),
-        users,
+        user,
         False,
         'system_users',
         None,
@@ -183,7 +183,7 @@ def createActionDictionary(mw):
     
     actionDefinition['sys_menu'] = (
         _tr("Action", 'Menus'),
-        menus,
+        menu,
         False,
         'system_menus',
         None,
@@ -194,7 +194,7 @@ def createActionDictionary(mw):
     
     actionDefinition['sys_toolbar'] = (
         _tr("Action", 'Toolbars'),
-        toolbars,
+        toolbar,
         False,
         'system_toolbars',
         None,
@@ -205,7 +205,7 @@ def createActionDictionary(mw):
     
     actionDefinition['sys_report'] = (
         _tr("Action", 'Reports'),
-        reports,
+        report,
         False,
         'system_reports',
         None,
@@ -227,7 +227,7 @@ def createActionDictionary(mw):
     
     actionDefinition['sys_customization'] = (
         _tr("Action", 'Customizations'),
-        customizations,
+        customization,
         False,
         'system_customizations',
         None,

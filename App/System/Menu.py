@@ -64,7 +64,7 @@ CODE, DESCRIPTION, SYSTEM = range(3)
 PARENT, CHILD, ITEMDESCRIPTION, SORTING, ITEMTYPE, ACTION = range(6)
 
 
-def menus() -> None:
+def menu() -> None:
     "Show/Edit menus"
     logging.info('Starting menus Form')
     mw = session['mainwin']

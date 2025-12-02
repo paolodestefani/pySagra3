@@ -1330,7 +1330,7 @@ class IncomeSummaryModel(QueryWithParamsModel):
         super().__init__(parent)
         self.selectQuery = """
         SELECT 
-            event,
+            event_id,
             event_description,
             order_date,
             num_orders_lunch,
@@ -1361,11 +1361,11 @@ class IncomeSummaryModel(QueryWithParamsModel):
             amount_dinner - discount_dinner AS total_dinner,
             amount_lunch + amount_dinner - discount_lunch - discount_dinner AS total
         FROM income_summary
-        WHERE event = %(event)s;
+        WHERE event_id = %(event_id)s;
         """
         # model columns: (field, description, readonly, type), tuple of tuples
         # available types: int, bool, float, str, date, datetime, None = no filter
-        self.columns = (("event", _tr('Models', 'Event'), True, 'int'),
+        self.columns = (("event_id", _tr('Models', 'Event'), True, 'int'),
                         ("event_description", _tr('Models', 'Event description'), True, 'str'),
                         ("order_date", _tr('Models', 'Date'), True, 'date'),
                         ("num_orders_lunch", _tr('Models', 'Orders L'), True, 'int'),

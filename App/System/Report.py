@@ -93,7 +93,7 @@ REPORT_CLASSES = [None,
 FORM, GRID = range(2)
 
 
-def reports() -> None:
+def report() -> None:
     "Show/Edit reports"
     logging.info('Starting report Form')
     mw = session['mainwin']

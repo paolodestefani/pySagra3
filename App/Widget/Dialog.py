@@ -104,6 +104,7 @@ from App.Ui.DateTimeInputDialog import Ui_DateTimeInputDialog
 #from App.Ui.PrintEmailDialog import Ui_PrintEmailDialog
 from App.Database.Report import report_class_adapt_list
 from App.Database.Report import get_report_list
+from App.Database.Report import get_report_id
 from App.Database.Report import report_xml
 from App.Database.Report import report_id_xml
 from App.Database.Report import report_query
@@ -1355,8 +1356,8 @@ class PrintDialog(QDialog):
             self.ui.comboBoxReportList.addItem(report_description(reportId),
                                                 reportId)
         else:
-            for i, j in get_report_list(self.reportClass, self.l10n):
-                self.ui.comboBoxReportList.addItem(j, i)
+            for i, c, d in get_report_list(self.reportClass, self.l10n):
+                self.ui.comboBoxReportList.addItem(d, i)
         # signal for change report customization
         self.ui.comboBoxReportCustomizations.currentIndexChanged.connect(self.setReportCustomization)
         # report customization list

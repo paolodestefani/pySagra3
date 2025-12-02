@@ -94,7 +94,7 @@ from App.System.Utility import scriptMethod
 
 
 
-def users() -> None:
+def user() -> None:
     "Users management"
     logging.info('Starting users Form')
     mw = session['mainwin']

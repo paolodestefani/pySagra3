@@ -82,15 +82,17 @@ class IncomeSummaryForm(FormViewManager):
     def __init__(self, parent: QWidget, title: str, auth: str) -> None:
         super().__init__(parent, auth)
         model = IncomeSummaryModel(self)
-        model.setParameter('event', session['event'])
+        model.setParameter('event_id', session['event_id'])
         self.setModel(model)
         self.tabName = title
         self.helpLink = None
+        # overwrite standard sortfilterdialog with event filter dialog
+        self.sortFilterDialog = EventFilterDialog(self, session['event_id'])
         # available edit status
         # NEW, SAVE, DELETE, RELOAD, FIRST, PREVIOUS, NEXT, LAST
         # FILTER, CHANGE, REPORT, EXPORT
         self.availableStatus = (True, True, True, True, False, False, False, False,
-                                False, False, False, False)
+                                True, False, True, False)
         self.ui = Ui_IncomeSummaryWidget()
         self.ui.setupUi(self)
         self.setView(self.ui.tableView)  # required for formviewmanager
@@ -119,7 +121,7 @@ class IncomeSummaryForm(FormViewManager):
         self.ui.tableView.setItemDelegateForColumn(TOTAL_D, AmountDelegate(self))
         self.ui.tableView.setItemDelegateForColumn(TOTAL, AmountDelegate(self))
         # daily details
-        self.ui.checkBoxDetail.stateChanged.connect(self.showDetails)
+        self.ui.checkBoxDetail.checkStateChanged.connect(self.showDetails)
         self.showDetails(Qt.Unchecked)
 
     def showDetails(self, state):
@@ -162,8 +164,8 @@ class IncomeSummaryForm(FormViewManager):
             self.ui.tableView.setColumnHidden(TOTAL_L, False)
             self.ui.tableView.setColumnHidden(TOTAL_D, False)
 
-    def updateFilterConditions(self, event, eventDate=None, dayPart=None):
-        self.model.setParameter('event', event)
+    def updateFilterConditions(self, event_id, eventDate=None, dayPart=None):
+        self.model.setParameter('event_id', event_id)
         self.model.select()
 
     def setFilters(self):
@@ -174,22 +176,22 @@ class IncomeSummaryForm(FormViewManager):
                                 _tr('IncomeSummary', 'No event available'))
             return
         # create filter dialog if not exists
-        if not hasattr(self, 'sortFilterDialog'):
-            self.sortFilterDialog = EventFilterDialog(self, session['event'])
+        #if not hasattr(self, 'sortFilterDialog'):
+        #self.sortFilterDialog = EventFilterDialog(self, session['event_id'])
         self.sortFilterDialog.show()
 
-    def print_(self):
+    def print(self):
         "Income summary report"
         dialog = PrintDialog(self, 'INCOME_SUMMARY')
-        if not dialog.layoutFilters.itemAtPosition(0, 0):
+        if not dialog.ui.layoutFilters.itemAtPosition(0, 0):
             QMessageBox.warning(self,
                                 _tr("MessageDialog", "Warning"),
                                 _tr("IncomeSummary", "A report customization for income summary is required"))
             return
         # set current daily detail setting
-        dialog.layoutParameters.itemAtPosition(0, 1).widget().setChecked(self.ui.checkBoxDetail.isChecked())
+        dialog.ui.layoutParameters.itemAtPosition(0, 1).widget().setChecked(self.ui.checkBoxDetail.isChecked())
         # filter on current selected event
-        dialog.layoutFilters.itemAtPosition(0, 0).widget().setCurrentIndex(1)
-        dialog.layoutFilters.itemAtPosition(0, 1).widget().setCurrentIndex(1)
-        dialog.layoutFilters.itemAtPosition(0, 2).widget().setValue(self.model.parameters['event'])
+        dialog.ui.layoutFilters.itemAtPosition(0, 0).widget().setCurrentIndex(1)
+        dialog.ui.layoutFilters.itemAtPosition(0, 1).widget().setCurrentIndex(1)
+        dialog.ui.layoutFilters.itemAtPosition(0, 2).widget().setValue(self.model.parameter['event_id'])
         dialog.show()

@@ -73,7 +73,7 @@ REPORT = 'report.csv'
 REPORTSETTING = 'reportsetting.csv'
 
 
-def customizations() -> None:
+def customization() -> None:
     logging.info('Starting customization dialog')
     mw = session['mainwin']
     auth = currentAction['sys_customization'].data()

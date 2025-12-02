@@ -345,6 +345,8 @@ class QueryWithParamsModel(QAbstractTableModel):
     def sort(self, column: int, order: int = Qt.AscendingOrder) -> None:
         "One column inplace sorting of the model, manage null values base on declared data time"
         # convert data dict to a list of lists
+        if not self.dataSet:
+            return
         data = []
         for r in range(self.rowCount() - self.hasTotalsRow): # True = 1 line False = 0 line
             row = []
@@ -377,7 +379,7 @@ class QueryWithParamsModel(QAbstractTableModel):
                               [Qt.DisplayRole, Qt.EditRole])
 
     def setParameter(self, parameter: str, value: int|str|QDate|QDateTime|None) -> None:
-        "Set de value of a parameter in prams dictionaty"
+        "Set the value of a parameter in prams dictionaty"
         self.parameter[parameter] = value
 
     def select(self) -> None:

@@ -870,8 +870,8 @@ class Report():
         self.offset = 0.0
         self.page_num = 0
         # decimal places for quantity
-        self.quantity_decimals = 0  # Setting()['quantity_decimal_places']
-        self.currency_symbol = '€' #Setting()['currency_symbol']
+        self.quantity_decimals = Setting()['quantity_decimal_places']
+        self.currency_symbol = Setting()['currency_symbol']
 
     def appendBands(self, childElement):
         outList = []
@@ -1204,16 +1204,16 @@ class Report():
             u = list(Unit.keys())[list(Unit.values()).index(self.pageLayout.units())]
             if not self.options['ignoreWarningOnSetPageLayout']:
                 raise ReportPrintError(f"Unable to set page layout ( {u} {w} x {h} ) to paint device")
-        # Coordinate sistem to selected unit of report definition (converted to Points)
+        # Coordinate system to selected unit of report definition (converted to Points)
         rect = self.pageLayout.paintRect(self.pageLayout.units()).toRect()
         #print("Width", rect.width(), "Height", rect.height(), "Unit", list(Unit.keys())[list(Unit.values()).index(self.pageLayout.units())])
         rect.moveTo(0, 0)
         painter = QPainter(paintDevice)
         painter.setWindow(rect)
         painter.setViewport(0, 0, paintDevice.width(), paintDevice.height())
-        #print("Painter window", painter.window().width(), painter.window().height())
-        #print("Painter viewport", painter.viewport().width(), painter.viewport().height())
-        #print("Painter trasform", painter.viewTransformEnabled())
+        print("Painter window", painter.window().width(), painter.window().height())
+        print("Painter viewport", painter.viewport().width(), painter.viewport().height())
+        print("Painter trasform", painter.viewTransformEnabled())
 
         if isinstance(paintDevice, QPrinter):
             fromPage = paintDevice.fromPage() or 1
