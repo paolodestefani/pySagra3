@@ -198,9 +198,7 @@ WHERE report_adapt_id = %s;"""
 def create_new_adapt(report_id, adapt_desc):
     "Create a new customization"
     script = """
-INSERT INTO system.report_adapt (
-    report_adapt_id, 
-    description)
+INSERT INTO system.report_adapt (report_id, description)
 VALUES (%s, %s);"""
     try:
         with appconn.cursor() as cur:
@@ -312,7 +310,7 @@ def report_xml(adapt_id):
 SELECT 
     r.xml_data
 FROM system.report_adapt ra
-JOIN system.report r ON ra.report_id = r.id
+JOIN system.report r ON ra.report_id = r.report_id
 WHERE ra.report_id = %s;"""
     try:
         with appconn.cursor() as cur:
