@@ -33,10 +33,10 @@ from PySide6.QtGui import QIcon
 
 # constants, language indipendent
 APPNAME = 'pySagra'
-APPVERSIONMAJOR = 3
+APPVERSIONMAJOR = 1
 APPVERSIONMINOR = 0
 APPVERSIONPATCH = 0
-APPVERSIONTAG   = '"A new world"'
+APPVERSIONTAG   = 'Alpha' #'"A new world"'
 AUTHOR = 'Paolo De Stefani'
 EMAIL = 'info@paolodestefani.it'
 ORGANIZATION = 'PDS Software'

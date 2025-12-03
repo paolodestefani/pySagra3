@@ -73,7 +73,7 @@ CREATE TABLE numbering (
         REFERENCES system.company (company_id) 
         MATCH SIMPLE ON UPDATE NO ACTION ON DELETE CASCADE,
     CONSTRAINT numbering_sequence_type_check 
-        CHECK (sequence_type IN ('ORDERNUM'), -- order number and order count 
+        CHECK (sequence_type IN ('ORDERNUM')), -- order number 
     CONSTRAINT numbering_event_fk 
         FOREIGN KEY (event_id) 
         REFERENCES event (event_id)
