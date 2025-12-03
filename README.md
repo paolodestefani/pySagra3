@@ -1,4 +1,5 @@
 # pySagra
+![pySagra](pySagra.png)
 
 *A small program to manage a food stand*
 
