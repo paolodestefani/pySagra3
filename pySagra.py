@@ -35,6 +35,11 @@ import traceback
 import logging
 import argparse
 
+# Windows font scaling fix, no effect on MacOS (as of PySide6 6.10.1)
+# Set this environment variable BEFORE creating QApplication
+os.environ["QT_ENABLE_HIGHDPI_SCALING"] = "0" 
+os.environ["QT_SCALE_FACTOR"] = "1"
+
 # check component version modules
 from platform import python_version
 from psycopg import __version__ as psycopg_version

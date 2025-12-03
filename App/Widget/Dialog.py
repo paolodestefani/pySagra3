@@ -1408,7 +1408,7 @@ class PrintDialog(QDialog):
         # report customization list for current class and l10n
         self.ui.comboBoxReportCustomizations.clear()
         try:
-            result = report_class_adapt_list(self.reportClass)
+            result = report_class_adapt_list(self.reportClass, session['l10n'])
         except PyAppDBError as er:
             QMessageBox.critical(self,
                                  _tr('MessageDialog', 'Critical'),

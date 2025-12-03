@@ -96,17 +96,18 @@ LEFT JOIN (
 		(2, 'PROFILE'),
 		(3, 'USER'), 
 		(4, 'PRINTER'),
-		(5, 'EVENT'),
-		(6, 'ITEM'),
-		(7, 'PRICE_LIST'),
-		(8, 'ORDER_CUSTOMER'),
-		(9, 'ORDER_DEPARTMENT'), 
-		(10, 'ORDER_COVER'),
-		(11, 'ORDER_LIST'), 
-		(12, 'STOCK_UNLOAD'),
-		(13, 'INCOME_SUMMARY'), 
-		(14, 'STATISTICS'),
-		(15, 'STATSVIEW')
+        (5, 'TABLE'),
+		(6, 'EVENT'),
+		(7, 'ITEM'),
+		(8, 'PRICE_LIST'),
+		(9, 'ORDER_CUSTOMER'),
+		(10, 'ORDER_DEPARTMENT'), 
+		(11, 'ORDER_COVER'),
+		(12, 'ORDER_LIST'), 
+		(13, 'STOCK_UNLOAD'),
+		(14, 'INCOME_SUMMARY'), 
+		(15, 'STATISTICS'),
+		(16, 'STATSVIEW')
 		) v(i, c)) v 
 	ON r.report_class = v.c 
 ORDER BY v.i, report_code, l10n;"""
@@ -207,7 +208,7 @@ VALUES (%s, %s);"""
     except psycopg.Error as er:
         raise PyAppDBError(er.diag.sqlstate, str(er))
 
-def report_class_adapt_list(class_code):
+def report_class_adapt_list(class_code, l10n='en_US'):
     "Return id and description of all the report customizations of the input class"
     script1 = """
 SELECT 
@@ -215,11 +216,11 @@ SELECT
     ra.description
 FROM system.report_adapt ra
 JOIN system.report r ON ra.report_id = r.report_id
-WHERE r.report_class = %s
+WHERE r.report_class = %s AND r.l10n = %s 
 ORDER BY ra.class_sorting;"""
     try:
         with appconn.cursor() as cur:
-            cur.execute(script1, (class_code,))
+            cur.execute(script1, (class_code, l10n))
             return cur.fetchall()
     except psycopg.Error as er:
         raise PyAppDBError(er.diag.sqlstate, str(er))

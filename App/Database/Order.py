@@ -74,7 +74,7 @@ WHERE
 
 
 def get_orders_issued(event_id, date, day_part):
-    "Returns the issued number of orders for dey and day part"
+    "Returns the issued number of orders for day and day part"
      # actually we don't need to filter company_id as event_id is unique across companies
     script = """
 SELECT current_value

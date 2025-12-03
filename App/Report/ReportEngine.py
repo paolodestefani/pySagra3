@@ -53,11 +53,17 @@ All sections are optional but a report need at least one detail band.
 
 # standard library
 import sys
+import os
 import collections
 import decimal
 import itertools
 import xml.etree.ElementTree as ET
 import operator
+
+# Windows font scaling fix, no effect on MacOS
+# Set this environment variable BEFORE creating QApplication
+os.environ["QT_ENABLE_HIGHDPI_SCALING"] = "0" 
+os.environ["QT_SCALE_FACTOR"] = "1"
 
 # PySide6
 from PySide6.QtCore import QLocale
