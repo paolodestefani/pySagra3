@@ -12,7 +12,8 @@ Develped with:
 - [qt](https://www.qt.io/) cross-platform application and UI framework
 - [qt for python](https://doc.qt.io/qtforpython-6/) the official Python bindings for Qt
 
-The main icons used for the graphical interface are from [oxygen icon set](https://github.com/KDE/oxygen-icons) 
-The pySagra icon is from DelliOS system icons set created by [Wendell Fernandes](https://www.wendellverli.com/)
-pySagra's login/version animation was created by [Placidplace](https://pixabay.com/users/placidplace-25572496/)
+> The main icons used for the graphical interface are from [oxygen icon set](https://github.com/KDE/oxygen-icons) 
+> The pySagra icon is from DelliOS system icons set created by [Wendell Fernandes](https://www.wendellverli.com/)
+> pySagra's login/version animation was created by [Placidplace](https://pixabay.com/users/placidplace-25572496/)
+> 
 
