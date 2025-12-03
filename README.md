@@ -7,4 +7,12 @@ This program aims to manage the food stand of the festival, from placing the ord
 It is developed in python programming language and uses a PostgreSql database for storing, managing, and providing access to data and pyside6/Qt framework for the user interface and printing. The main development platforms are macOS and Windows but it should also work on all other operating systems supported by Python and Pyside6/Qt6.
 
 Develped with:
-- python programming language [pythom](https://www.python.org/)
+- [python](https://www.python.org/) programming language
+- [psycopg](https://www.psycopg.org/) PostgreSql adapter for python
+- [qt](https://www.qt.io/) cross-platform application and UI framework
+- [qt for python](https://doc.qt.io/qtforpython-6/) the official Python bindings for Qt
+
+The main icons used for the graphical interface are from [oxygen icon set](https://github.com/KDE/oxygen-icons) 
+The pySagra icon is from DelliOS system icons set created by [Wendell Fernandes](https://www.wendellverli.com/)
+pySagra's login/version animation was created by [Placidplace](https://pixabay.com/users/placidplace-25572496/)
+
