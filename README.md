@@ -1,3 +1,3 @@
-pySagra3
+pySagra
 
 A small program to manage a food stand
