@@ -184,7 +184,7 @@ INSERT INTO system.sortfilter_adapt_setting (
     combo2_index,
     widget_value)
 VALUES (%s, %s, %s, %s, %s, %s, %s)
-ON CONFLICT ON CONSTRAINT sortfilter_adapt_setting_pkey DO
+ON CONFLICT ON CONSTRAINT sortfilter_adapt_setting_pk DO
 UPDATE SET 
     combo1_index = %s,
     negate_state = %s,

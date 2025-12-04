@@ -207,7 +207,7 @@ BEGIN
                 AND event_id = in_event;
         END IF;
         -- update/insert orders count
-        IF NOT EXISTS(  SELECT current_value 
+        /*IF NOT EXISTS(  SELECT current_value 
                         FROM company.numbering 
                         WHERE sequence_type = 'ORDERS' 
                             AND event_id = in_event 
@@ -222,7 +222,7 @@ BEGIN
                 AND event_id = odh.event_id 
                 AND event_date = odh.stat_order_date 
                 AND day_part = odh.stat_order_day_part;
-        END IF;
+        END IF;*/
     END LOOP;
 END;
 $$ 

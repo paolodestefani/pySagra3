@@ -106,7 +106,7 @@ from App.Database.Report import report_class_adapt_list
 from App.Database.Report import get_report_list
 from App.Database.Report import get_report_id
 from App.Database.Report import report_xml
-from App.Database.Report import report_id_xml
+from App.Database.Report import get_report_id_from_adapt
 from App.Database.Report import report_query
 from App.Database.Report import clear_report_adapt
 from App.Database.Report import set_report_adapt
@@ -1014,8 +1014,6 @@ class SortFilterDialog(QDialog):
         self.ui.layoutFilters.itemAtPosition(row, NEGATE).widget().setChecked(False)
         # get field type
         field = self.ui.layoutFilters.itemAtPosition(row, FIELD).widget().currentData()
-        if '.' in field: # remove alias
-            field = field.split('.')[1]
         ftype = self.fieldType[field]
         # set operator alternatives
         self.ui.layoutFilters.itemAtPosition(row, OPERATOR).widget().clear()
@@ -1043,8 +1041,6 @@ class SortFilterDialog(QDialog):
             return
         # get field type
         field = self.ui.layoutFilters.itemAtPosition(row, FIELD).widget().currentData()
-        if '.' in field: # remove alias
-            field = field.split('.')[1]
         fi = self.ui.layoutFilters.itemAtPosition(row, FIELD).widget().currentIndex() -1
         ftype = self.fieldType[field]
         w = self.ui.layoutFilters.itemAtPosition(row, OPERAND).widget()
@@ -1353,8 +1349,7 @@ class PrintDialog(QDialog):
         self.ui.spinBoxResolution.setValue(int(st.value("ExportPDFResolution", '100')))
         # report list for customizations or given report code
         if reportId:
-            self.ui.comboBoxReportList.addItem(report_description(reportId),
-                                                reportId)
+            self.ui.comboBoxReportList.addItem(report_description(reportId), reportId)
         else:
             for i, c, d in get_report_list(self.reportClass, self.l10n):
                 self.ui.comboBoxReportList.addItem(d, i)
@@ -1362,7 +1357,7 @@ class PrintDialog(QDialog):
         self.ui.comboBoxReportCustomizations.currentIndexChanged.connect(self.setReportCustomization)
         # report customization list
         self.reportCustomizationList()
-        self.setReportCustomization()  # initial settings
+        self.setReportCustomization(-1)  # initial settings
         # signal/slot for buttonbox
         self.ui.buttonBox.button(QDialogButtonBox.StandardButton.Reset).clicked.connect(self.reset)
         # signal/slot for toolbuttons
@@ -1500,11 +1495,11 @@ class PrintDialog(QDialog):
                 cmb2 = self.ui.layoutSorting.itemAtPosition(row, 1).widget().currentIndex()
                 try:
                     set_report_adapt(customizationId,
-                                         'S',
-                                         row,
-                                         cmb1,
-                                         cmb2,
-                                         None)
+                                    'S',
+                                    row,
+                                    cmb1,
+                                    cmb2,
+                                    None)
                 except PyAppDBError as er:
                     QMessageBox.critical(self,
                                          _tr("MessageDialog", "Critical"),
@@ -1628,16 +1623,19 @@ class PrintDialog(QDialog):
             self.ui.lineEditFileName.setText(self.report.options.get('documentName'))
             #self.ui.lineEditAttachment.setText(self.report.options.get('documentName'))
 
-    def setReportCustomization(self):
+    def setReportCustomization(self, index):
         "Set report customiztion and create widgets"
+        print("Index", index)
         customizationId = self.ui.comboBoxReportCustomizations.currentData()
         if customizationId:
             # create a report instance for current report id and l10n
-            self.report = Report(report_xml(customizationId))
+            report_id = get_report_id_from_adapt(customizationId)
         else:
             # no customizations, use the default report
-            rpt = self.ui.comboBoxReportList.currentData()
-            self.report = Report(report_id_xml(rpt))
+            report_id =  self.ui.comboBoxReportList.currentData()    
+        if not report_id:
+            return
+        self.report = Report(report_xml(report_id))
         self.parameter = self.report.parameter
         self.query = self.report.query
         self.conditions = self.report.conditions

@@ -148,23 +148,18 @@ ORDER BY layout_row;"""
     except psycopg.Error as er:
         raise PyAppDBError(er.diag.sqlstate, str(er))
 
-def set_report_adapt(adapt_id,
-                         adapt_type,
-                         layout_row,
-                         combo1_index,
-                         combo2_index,
-                         widget_value):
-    "Set the view definition"
+def set_report_adapt(adapt_id, adapt_type, layout_row, combo1_index, combo2_index, widget_value):
+    "Set the report adaptation definition"
     script = """
 INSERT INTO system.report_adapt_setting (
     report_adapt_id, 
-    adapt__type, 
+    adapt_type, 
     layout_row, 
     combo1_index, 
     combo2_index, 
     widget_value)
 VALUES (%s, %s, %s, %s, %s, %s)
-ON CONFLICT ON CONSTRAINT report_adapt_setting_pkey DO 
+ON CONFLICT ON CONSTRAINT report_adapt_setting_pk DO 
 UPDATE
 SET combo1_index = %s,
     combo2_index = %s,
@@ -212,7 +207,7 @@ def report_class_adapt_list(class_code, l10n='en_US'):
     "Return id and description of all the report customizations of the input class"
     script1 = """
 SELECT 
-    ra.report_id, 
+    ra.report_adapt_id, 
     ra.description
 FROM system.report_adapt ra
 JOIN system.report r ON ra.report_id = r.report_id
@@ -305,25 +300,8 @@ WHERE a.report_code = %s AND a.l10n = %s;"""
     except psycopg.Error as er:
         raise PyAppDBError(er.diag.sqlstate, str(er))
 
-def report_xml(adapt_id):
+def report_xml(report_id):
     "Report XML definition of the report for required report customization"
-    script = """
-SELECT 
-    r.xml_data
-FROM system.report_adapt ra
-JOIN system.report r ON ra.report_id = r.report_id
-WHERE ra.report_id = %s;"""
-    try:
-        with appconn.cursor() as cur:
-            cur.execute(script, (adapt_id,))
-            if cur.rowcount == 1:
-                return cur.fetchone()[0]
-            else:
-                return (None,)
-    except psycopg.Error as er:
-        raise PyAppDBError(er.diag.sqlstate, str(er))
-
-def report_id_xml(report_id):
     script = """
 SELECT 
     xml_data
@@ -336,6 +314,23 @@ WHERE report_id = %s;"""
                 return cur.fetchone()[0]
             else:
                 return (None,)
+    except psycopg.Error as er:
+        raise PyAppDBError(er.diag.sqlstate, str(er))
+
+def get_report_id_from_adapt(adapt_id):
+    script = """
+SELECT 
+    r.report_id
+FROM system.report r
+JOIN system.report_adapt ra ON r.report_id = ra.report_id
+WHERE ra.report_adapt_id = %s;"""
+    try:
+        with appconn.cursor() as cur:
+            cur.execute(script, (adapt_id,))
+            if cur.rowcount == 1:
+                return cur.fetchone()[0]
+            else:
+                return None
     except psycopg.Error as er:
         raise PyAppDBError(er.diag.sqlstate, str(er))
 

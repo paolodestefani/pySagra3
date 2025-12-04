@@ -37,7 +37,7 @@ from PySide6.QtPrintSupport import QPrinterInfo
 from App import session
 from App.Database.Setting import Setting
 from App.Database.Report import get_report_id
-from App.Database.Report import report_id_xml
+from App.Database.Report import report_xml
 from App.Database.Report import report_query
 from App.Report.ReportEngine import Report
 from App.Widget.Dialog import PrintPreviewDialog
@@ -47,7 +47,7 @@ from App.Widget.Dialog import PrintPreviewDialog
 def printOrderReport(order_id, printer=None):
     setting = Setting()
     report_id = get_report_id(setting['customer_report'], session['l10n'])
-    report = Report(report_id_xml(report_id))
+    report = Report(report_xml(report_id))
     # report definition on condition fields must have code for Order Id
     where = []
     for i in report.conditions:
@@ -69,7 +69,7 @@ def printOrderReport(order_id, printer=None):
 def printOrderCoverReport(order_id, printer=None):
     setting = Setting()
     report_id = get_report_id(setting['cover_report'], session['l10n'])
-    report = Report(report_id_xml(report_id))
+    report = Report(report_xml(report_id))
     # report definition on condition fields must have code for Order Id
     where = []
     for i in report.conditions:
@@ -91,7 +91,7 @@ def printOrderCoverReport(order_id, printer=None):
 def printOrderDepartmentReport(order_id,  department=None, printer=None):
     setting = Setting()
     report_id = get_report_id(setting['department_report'], session['l10n'])
-    report = Report(report_id_xml(report_id))
+    report = Report(report_xml(report_id))
     # create condition
     # report definition on condition fields must have a code for Order Id and Order Department Id
     where = []
@@ -115,7 +115,7 @@ def printOrderDepartmentReport(order_id,  department=None, printer=None):
         dialog.exec()
 
 def printStockUnloadReport(report_id, printer=None, copies=1, event=None, day=None, daypart=None):
-    report = Report(report_id_xml(report_id))
+    report = Report(report_xml(report_id))
     # create condition
     # report definition on condition fields must have a code for event, day, day_part and unload_control
     where = []

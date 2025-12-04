@@ -73,6 +73,7 @@ CREATE TABLE numbering (
         REFERENCES system.company (company_id) 
         MATCH SIMPLE ON UPDATE NO ACTION ON DELETE CASCADE,
     CONSTRAINT numbering_sequence_type_check 
+        --CHECK (sequence_type IN ('ORDERNUM', 'ORDERS')), -- order number 
         CHECK (sequence_type IN ('ORDERNUM')), -- order number 
     CONSTRAINT numbering_event_fk 
         FOREIGN KEY (event_id) 
@@ -118,6 +119,23 @@ BEGIN
         WHERE sequence_type = 'ORDERNUM' 
             AND event_id = NEW.event_id; -- event include company
     END IF;
+    -- update/insert orders count
+    /*IF NOT EXISTS(  SELECT current_value 
+                    FROM company.numbering 
+                    WHERE sequence_type = 'ORDERS' 
+                        AND event_id = NEW.event 
+                        AND event_date = NEW.stat_order_date 
+                        AND day_part = NEW.stat_order_day_part) THEN
+        INSERT INTO numbering (sequence_type, company_id, event_id, event_date, day_part, current_value) 
+        VALUES ('ORDERS', NEW.company_id, NEW.event_id, NEW.stat_order_date, NEW.stat_order_day_part, 1);
+    ELSE 
+        UPDATE numbering 
+        SET current_value = current_value + 1 
+        WHERE sequence_type = 'ORDERS' 
+            AND event = NEW.event_id -- event include company
+            AND event_date = NEW.stat_order_date 
+            AND day_part = NEW.stat_order_day_part;
+    END IF;*/
     RETURN NULL;
 END
 $$ 
