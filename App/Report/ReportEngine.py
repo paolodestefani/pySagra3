@@ -315,13 +315,12 @@ class BaseRenderer():
     def textFormat(self):
         "Format text for check height and painting"
         if isinstance(self.value, bool):
+            #text = '\u2713' if self.value else '\u2717'
             #text = '\u2714' if self.value else '\u2718'
-            #text = '\u2713' if self.value else '\u2718'
-            #text = '\u2611' if self.value else '\u2612'
             #text = '\u2705' if self.value else '\u274C'
-            #text = '\u25C9' if self.value else '\u25CE'
+            text = '\u25C9' if self.value else '\u25CE'
             #text = '\u26AB' if self.value else '\u26AA'
-            text = '\u25A0' if self.value else '\u25A1'
+            #text = '\u25FC' if self.value else '\u25FB'
         elif isinstance(self.value, (int, float, decimal.Decimal)):
             if self.fieldFormat:
                 if self.fieldFormat == 'currency':
