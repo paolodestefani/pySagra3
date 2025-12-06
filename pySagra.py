@@ -221,7 +221,7 @@ if __name__ == "__main__":
     app.setWindowIcon(QIcon(f":/{APPNAME}"))
     # create a db and application connection
     logging.info('Starting the login dialog')
-    login = LoginDialog(None)
+    login = LoginDialog()
     if login.exec() == QDialog.Rejected:
         sys.exit(0)
     # create a main window
