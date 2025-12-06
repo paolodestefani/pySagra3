@@ -119,9 +119,7 @@ else:
     session = dict()
     session['qlocale'] = QLocale()
     session['event_image'] = QByteArray()
-    # def Setting():
-    #     return {'quantity_decimal_places': 2, 'currency_symbol': '€'}
-
+   
 # report engine version
 VERSION = '1.0'
 
@@ -317,12 +315,13 @@ class BaseRenderer():
     def textFormat(self):
         "Format text for check height and painting"
         if isinstance(self.value, bool):
-            text = '\u2714' if self.value else '\u2718'
-            #text = '\u2713' if self.value else '\u2717'
-            #text = '\u2611' if self.value else '\u2610'
+            #text = '\u2714' if self.value else '\u2718'
+            #text = '\u2713' if self.value else '\u2718'
+            #text = '\u2611' if self.value else '\u2612'
             #text = '\u2705' if self.value else '\u274C'
             #text = '\u25C9' if self.value else '\u25CE'
-            #text = '\u26AA' if self.value else '\u26AB'
+            #text = '\u26AB' if self.value else '\u26AA'
+            text = '\u25A0' if self.value else '\u25A1'
         elif isinstance(self.value, (int, float, decimal.Decimal)):
             if self.fieldFormat:
                 if self.fieldFormat == 'currency':
@@ -1252,7 +1251,6 @@ class Report():
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    #app.setAttribute(Qt.AA_EnableHighDpiScaling); # DPI support
     QLocale.setDefault(QLocale.English)
     
     xml_string0 = """<?xml version="1.0" encoding="UTF-8"?>
@@ -1749,65 +1747,67 @@ else:
     </details>
 </report>
 """
-
-    r = Report(xml_string0)
+    for i in (xml_string0, xml_string1, xml_string2, xml_string3, xml_string4):
+        r = Report(i)
+       
+    #r = Report(xml_string2)
     #dlg = ReportDialog()
     #dlg.setReport(r)
     #dlg.exec_()
-    r.setData([('AAAAA', 'description 1 that is very long so it could be wrapped', 'Research', True, 22, QDate(2018, 1, 1)),
-               ('BBBBB', 'description 2', 'Production', True, 25, QDate(2018, 2, 2)),
-               ('CCCCC', 'description 3', 'Accounting', False, 1, QDate(2018, 3, 3)),
-               ('DDDDD', 'description 4', 'Research', False, 23, QDate(2018, 1, 2)),
-               ('EEEEE', 'description 5', 'Production', True, 25, QDate(2018, 2, 2)),
-               ('FFFFF', 'description 6', 'Accounting', True, 10, QDate(2018, 3, 3)),
-               ('GGGGG', 'description 7', 'Research', True, 23, QDate(2018, 1, 3)),
-               ('HHHHH', 'description 8', 'Production', False, 25, QDate(2018, 2, 2)),
-               ('IIIII', 'description 9', 'Accounting', False, 0, QDate(2018, 3, 3)),
-               ('JJJJJ', 'description 10', 'Research', True, 23, QDate(2018, 1, 4)),
-               ('KKKKK', 'description 11', 'Production', True, 25, QDate(2018, 2, 3)),
-               ('LLLLL', 'description 12', 'Accounting', True, 2250, QDate(2018, 3, 3)),
-               ('MMMMM', 'description 13', 'Research', True, 11, QDate(2018, 1, 5)),
-               ('NNNNN', 'description 14', 'Production', False, 25, QDate(2018, 2, 2)),
-               ('OOOOO', 'description 15', 'Accounting', False, 0, QDate(2018, 3, 3)),
-               ('PPPPP', 'description 16', 'Research', True, 23, QDate(2018, 2, 1)),
-               ('QQQQQ', 'description 17', 'Production', True, 25, QDate(2018, 2, 3)),
-               ('RRRRR', 'description 18', 'Accounting', False, 110, QDate(2018, 3, 3)),
-               ('SSSSS', 'description 19', 'Research', True, 11, QDate(2018, 1, 1)),
-               ('TTTTT', 'description 20', 'Production', True, 25, QDate(2018, 2, 2)),
-               ('UUUUU', 'description 21', 'Accounting', False, 0, QDate(2018, 3, 3)),
-               ('VVVVV', 'description 22', 'Research', True, 23, QDate(2018, 1, 1)),
-               ('WWWWW', 'description 23', 'Production', True, 25, QDate(2018, 2, 2)),
-               ('XXXXX', 'description 24 description - description - accounting description | very large description only for testing', 'Accounting', False, 7, QDate(2018, 3, 3)),
-               ('YYYYY', 'description 25', 'Research', True, 23, QDate(2018, 1, 1)),
-               ('ZZZZZ', 'description 26', 'Production', True, 25, QDate(2018, 2, 2)),
-               ('11111', 'description 27', 'Accounting', False, 0, QDate(2018, 3, 3)),
-               ('22222', 'description 28', 'Research', True, 23, QDate(2018, 1, 1)),
-               ('33333', 'description 29', 'Production', True, 25, QDate(2018, 2, 2)),
-               ('44444', 'description 30', 'Accounting', False, 0, QDate(2018, 3, 3)),
-               ('55555', 'description 31', 'Research', True, 33, QDate(2018, 1, 1)),
-               ('66666', 'description 32', 'Production', True, 9991, QDate(2018, 2, 2)),
-               ('77777', 'description 33', 'Accounting', False, 0, QDate(2018, 3, 3)),
-               ('88888', 'description 34', 'Research', True, 23, QDate(2018, 1, 1)),
-               ('99999', 'description 35', 'Production', True, 26, QDate(2018, 2, 2)),
-               ('00000', 'description 36', 'Production', True, 26, QDate(2018, 2, 2)),
-               ('A', 'description 37', 'Production', True, 1225, QDate(2018, 2, 2)),
-               ('AA', 'description 38', 'Production', True, 26, QDate(2018, 2, 2)),
-               ('AAA', 'description 39', 'Production', True, 27, QDate(2018, 2, 2)),
-               ('AAAA', 'description 40 go to 2 lines description *', 'Production', True, 28, QDate(2018, 2, 2)),
-               ('AAAAA', 'description 41', 'Production', True, 29, QDate(2018, 2, 2)),
-               ('AAAAAA', 'description 42', 'Production', True, 30, QDate(2018, 2, 2)),
-               ('AAAAAAA', 'description 43', 'Production', True, 31, QDate(2018, 2, 2)),
-               ('AAAAAAAA', 'description 44', 'Accounting', False, 0, QDate(2018, 3, 3))])
-    # cursor wait
-    QApplication.setOverrideCursor(QCursor(Qt.WaitCursor))
-    r.generate()
-    # cursor restore
-    QApplication.restoreOverrideCursor()
-    # print preview
-    dialog = QPrintPreviewDialog()
-    dialog.setWindowFlags(Qt.Dialog|Qt.WindowMinMaxButtonsHint|Qt.WindowCloseButtonHint)
-    dialog.setWindowTitle("Print preview")
-    print(dialog.printer().pageRect(QPrinter.Point))
-    print(dialog.printer().paperRect(QPrinter.Point))
-    dialog.paintRequested.connect(r.print)
-    dialog.exec()
+        r.setData([('AAAAA', 'description 1 that is very long so it could be wrapped', 'Research', True, 22, QDate(2018, 1, 1)),
+                ('BBBBB', 'description 2', 'Production', True, 25, QDate(2018, 2, 2)),
+                ('CCCCC', 'description 3', 'Accounting', False, 1, QDate(2018, 3, 3)),
+                ('DDDDD', 'description 4', 'Research', False, 23, QDate(2018, 1, 2)),
+                ('EEEEE', 'description 5', 'Production', True, 25, QDate(2018, 2, 2)),
+                ('FFFFF', 'description 6', 'Accounting', True, 10, QDate(2018, 3, 3)),
+                ('GGGGG', 'description 7', 'Research', True, 23, QDate(2018, 1, 3)),
+                ('HHHHH', 'description 8', 'Production', False, 25, QDate(2018, 2, 2)),
+                ('IIIII', 'description 9', 'Accounting', False, 0, QDate(2018, 3, 3)),
+                ('JJJJJ', 'description 10', 'Research', True, 23, QDate(2018, 1, 4)),
+                ('KKKKK', 'description 11', 'Production', True, 25, QDate(2018, 2, 3)),
+                ('LLLLL', 'description 12', 'Accounting', True, 2250, QDate(2018, 3, 3)),
+                ('MMMMM', 'description 13', 'Research', True, 11, QDate(2018, 1, 5)),
+                ('NNNNN', 'description 14', 'Production', False, 25, QDate(2018, 2, 2)),
+                ('OOOOO', 'description 15', 'Accounting', False, 0, QDate(2018, 3, 3)),
+                ('PPPPP', 'description 16', 'Research', True, 23, QDate(2018, 2, 1)),
+                ('QQQQQ', 'description 17', 'Production', True, 25, QDate(2018, 2, 3)),
+                ('RRRRR', 'description 18', 'Accounting', False, 110, QDate(2018, 3, 3)),
+                ('SSSSS', 'description 19', 'Research', True, 11, QDate(2018, 1, 1)),
+                ('TTTTT', 'description 20', 'Production', True, 25, QDate(2018, 2, 2)),
+                ('UUUUU', 'description 21', 'Accounting', False, 0, QDate(2018, 3, 3)),
+                ('VVVVV', 'description 22', 'Research', True, 23, QDate(2018, 1, 1)),
+                ('WWWWW', 'description 23', 'Production', True, 25, QDate(2018, 2, 2)),
+                ('XXXXX', 'description 24 description - description - accounting description | very large description only for testing', 'Accounting', False, 7, QDate(2018, 3, 3)),
+                ('YYYYY', 'description 25', 'Research', True, 23, QDate(2018, 1, 1)),
+                ('ZZZZZ', 'description 26', 'Production', True, 25, QDate(2018, 2, 2)),
+                ('11111', 'description 27', 'Accounting', False, 0, QDate(2018, 3, 3)),
+                ('22222', 'description 28', 'Research', True, 23, QDate(2018, 1, 1)),
+                ('33333', 'description 29', 'Production', True, 25, QDate(2018, 2, 2)),
+                ('44444', 'description 30', 'Accounting', False, 0, QDate(2018, 3, 3)),
+                ('55555', 'description 31', 'Research', True, 33, QDate(2018, 1, 1)),
+                ('66666', 'description 32', 'Production', True, 9991, QDate(2018, 2, 2)),
+                ('77777', 'description 33', 'Accounting', False, 0, QDate(2018, 3, 3)),
+                ('88888', 'description 34', 'Research', True, 23, QDate(2018, 1, 1)),
+                ('99999', 'description 35', 'Production', True, 26, QDate(2018, 2, 2)),
+                ('00000', 'description 36', 'Production', True, 26, QDate(2018, 2, 2)),
+                ('A', 'description 37', 'Production', True, 1225, QDate(2018, 2, 2)),
+                ('AA', 'description 38', 'Production', True, 26, QDate(2018, 2, 2)),
+                ('AAA', 'description 39', 'Production', True, 27, QDate(2018, 2, 2)),
+                ('AAAA', 'description 40 go to 2 lines description *', 'Production', True, 28, QDate(2018, 2, 2)),
+                ('AAAAA', 'description 41', 'Production', True, 29, QDate(2018, 2, 2)),
+                ('AAAAAA', 'description 42', 'Production', True, 30, QDate(2018, 2, 2)),
+                ('AAAAAAA', 'description 43', 'Production', True, 31, QDate(2018, 2, 2)),
+                ('AAAAAAAA', 'description 44', 'Accounting', False, 0, QDate(2018, 3, 3))])
+        # cursor wait
+        QApplication.setOverrideCursor(QCursor(Qt.WaitCursor))
+        r.generate()
+        # cursor restore
+        QApplication.restoreOverrideCursor()
+        # print preview
+        dialog = QPrintPreviewDialog()
+        dialog.setWindowFlags(Qt.Dialog|Qt.WindowMinMaxButtonsHint|Qt.WindowCloseButtonHint)
+        dialog.setWindowTitle("Print preview")
+        #print(dialog.printer().pageRect(QPrinter.Point))
+        #print(dialog.printer().paperRect(QPrinter.Point))
+        dialog.paintRequested.connect(r.print)
+        dialog.exec()
