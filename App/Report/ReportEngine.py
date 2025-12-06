@@ -318,7 +318,7 @@ class BaseRenderer():
             #text = '\u2713' if self.value else '\u2717'
             #text = '\u2714' if self.value else '\u2718'
             #text = '\u2705' if self.value else '\u274C'
-            text = '\u25C9' if self.value else '\u25CE'
+            text = '\u25C9' if self.value else '\u25CB'
             #text = '\u26AB' if self.value else '\u26AA'
             #text = '\u25FC' if self.value else '\u25FB'
         elif isinstance(self.value, (int, float, decimal.Decimal)):
