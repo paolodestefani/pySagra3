@@ -196,7 +196,6 @@ if __name__ == "__main__":
     # start PySide6 Application
     logging.info('Setting up QApplication')
     app = QApplication(sys.argv)
-    #app.setAttribute(Qt.AA_EnableHighDpiScaling)
     # l10n
     logging.info('Setting up QLocale to system locale')
     lang = QLocale.system().name()[:2]  # = system language
