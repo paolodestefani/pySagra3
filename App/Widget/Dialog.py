@@ -1625,7 +1625,6 @@ class PrintDialog(QDialog):
 
     def setReportCustomization(self, index):
         "Set report customiztion and create widgets"
-        print("Index", index)
         customizationId = self.ui.comboBoxReportCustomizations.currentData()
         if customizationId:
             # create a report instance for current report id and l10n
@@ -2049,75 +2048,6 @@ class PrintDialog(QDialog):
                                     _tr("MessageDialog", "Information"),
                                     _tr('Dialog', "PDF file created"))
 
-    # def sendEmail(self):
-    #     "Send a PDF copy via email"
-    #     if not self.generateReport():
-    #         return  # no data
-    #     if self.comboBoxSenderAccount.count() == 0:
-    #         QMessageBox.information(self,
-    #                                 _tr('MessageDialog', 'Information'),
-    #                                 _tr('MessageDialog', 'No email account available'))
-    #         return  # no email account
-    #     if not self.lineEditTo.text():
-    #         QMessageBox.information(self,
-    #                                 _tr('MessageDialog', 'Information'),
-    #                                 _tr('MessageDialog', 'An email recipient is required'))
-    #         return  # no recipient
-    #     account = self.comboBoxSenderAccount.currentData()
-    #     file_name = self.lineEditAttachment.text() + ".pdf"
-    #     subject = self.lineEditSubject.text()
-    #     receiver = self.lineEditTo.text()
-    #     cc = self.lineEditCc.text()
-    #     bcc = self.lineEditBcc.text()
-    #     sender_copy = self.checkBoxSenderCopy.isChecked()
-    #     content_txt = self.emailEdit.textEdit.toPlainText()
-    #     content_html = self.emailEdit.textEdit.toHtml()
-    #     # generate a temp pdf file
-    #     file = QTemporaryFile()
-    #     if not file.open():
-    #         raise EmailException(_tr('Email', "Error opening temporary file"))
-    #     paintDevice = QPdfWriter(file)
-    #     paintDevice.setPdfVersion(self.comboBoxPDFVersion.currentData())
-    #     paintDevice.setResolution(self.spinBoxResolution.value())
-    #     try:
-    #         self.report.print(paintDevice)
-    #     except ReportException as er:
-    #         QMessageBox.critical(self,
-    #                                  _tr("Dialog", "Critical"),
-    #                                  er)
-    #         return
-    #     finally:
-    #         file.close()
-    #     if not file.open():
-    #         QMessageBox.critical(self,
-    #                                  _tr('MessageDialog', 'Critical'),
-    #                                  _tr('MessageDialog', "Error opening temporary file"))
-    #         return
-    #     attachment = file.readAll().data()
-    #     # send the email message
-    #     # cursor wait
-    #     QApplication.setOverrideCursor(QCursor(Qt.WaitCursor))
-    #     try:
-    #         sendEmail(account, file_name, attachment, subject, receiver,
-    #                   cc, bcc, sender_copy, content_txt, content_html)
-    #     except EmailException as er:
-    #         # cursor restore
-    #         QApplication.restoreOverrideCursor()
-    #         mbox = QMessageBox(self)
-    #         mbox.setIcon(QMessageBox.Critical)
-    #         mbox.setWindowTitle(_tr('MessageDialog', 'Critical'))
-    #         msg = _tr('PrintDialog', "Error on sending email: SMTP exception")
-    #         mbox.setText(f"<p><b>{msg}</b>")
-    #         mbox.setDetailedText(str(er))
-    #         mbox.exec()
-    #         logging.error("Error on sending email: SMTP exception - %s", er)
-    #     else:
-    #         # cursor restore
-    #         QApplication.restoreOverrideCursor()
-    #         QMessageBox.information(self,
-    #                                     _tr('MessageDialog', 'Information'),
-    #                                     _tr('MessageDialog', 'Email sent correctly'))
-
     def selectDirectoryClicked(self):
         "Select export directory"
         dirname = QFileDialog.getExistingDirectory(self,
@@ -2136,6 +2066,7 @@ class PrintDialog(QDialog):
         st.setValue("ExportPDFVersion", self.ui.comboBoxPDFVersion.currentIndex())
         st.setValue("ExportPDFResolution", self.ui.spinBoxResolution.value())
         super().done(r)
+
 
 class PrintPDFDialog(QDialog):
     "Select export to PDF options dialog"

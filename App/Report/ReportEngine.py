@@ -317,11 +317,12 @@ class BaseRenderer():
     def textFormat(self):
         "Format text for check height and painting"
         if isinstance(self.value, bool):
-            #text = '\u2714' if self.value else '\u2718'
+            text = '\u2714' if self.value else '\u2718'
             #text = '\u2713' if self.value else '\u2717'
             #text = '\u2611' if self.value else '\u2610'
             #text = '\u2705' if self.value else '\u274C'
-            text = '\u25C9' if self.value else '\u25CE'
+            #text = '\u25C9' if self.value else '\u25CE'
+            #text = '\u26AA' if self.value else '\u26AB'
         elif isinstance(self.value, (int, float, decimal.Decimal)):
             if self.fieldFormat:
                 if self.fieldFormat == 'currency':
@@ -909,7 +910,7 @@ class Report():
 
         # sanity check
         if root.tag != 'report':
-            raise ReportXMLParseError("Element 'report' not found")
+            raise ReportXMLParseError("The mandatory element 'report' was not found.")
         if root.attrib.get('version') != VERSION:
             raise ReportXMLParseError(f"Wrong report engine version: "
                                       f"{root.attrib.get('version')}")
@@ -917,7 +918,7 @@ class Report():
         # Get options from report definition when different from default
         opt = root.find('options')
         if opt is None:
-            raise ReportXMLParseError("Element 'options' not found")
+            raise ReportXMLParseError("The mandatory element 'options' was not found.")
         for child in opt:
             attr = child.attrib.get('type')
             val = child.text
@@ -935,7 +936,7 @@ class Report():
 
         # report parameters
         params = root.find('parameters')
-        if params: # is not None:
+        if params is not None:
             for child in params:
                 if child.tag == 'parameter':
                     param = child.attrib.get('id')
@@ -970,7 +971,7 @@ class Report():
 
         # query definition
         query = root.find('query')
-        if query:
+        if query is not None:
             for child in query:
                 if child.tag == 'select':
                     self.query = child.text
@@ -988,12 +989,15 @@ class Report():
 
         # columns' names
         columns = root.find('columns')
-        for i, c in enumerate(columns.findall("fieldName")):
-            self.column[c.text] = i
+        if columns is None:
+            raise ReportXMLParseError("The mandatory element 'columns' was not found.")
+        else:
+            for i, c in enumerate(columns.findall("fieldName")):
+                self.column[c.text] = i
 
         # sortings
         sorting = root.find('sorting')
-        if sorting:
+        if sorting is not None:
             for sort in sorting.findall("sort"):
                 field = sort.attrib.get('field')
                 reverse = sort.attrib.get('reverse')
@@ -1001,7 +1005,7 @@ class Report():
 
         # groups headers/footers
         groups = root.find('groups')
-        if groups:
+        if groups is not None:
             for group in groups.findall('group'):
                 field = group.attrib.get('field')
                 reverse = group.attrib.get('reverse')
@@ -1036,7 +1040,7 @@ class Report():
                 self.report_footer = self.appendBands(child)
 
         if self.details is None:
-            raise ReportXMLParseError("Element 'details' not found")
+            raise ReportXMLParseError("The mandatory element 'details' was not found.")
 
         # set report page layout
         if self.options['pageSize'] == 'Custom':
@@ -1223,9 +1227,9 @@ class Report():
         painter = QPainter(paintDevice)
         painter.setWindow(rect)
         painter.setViewport(0, 0, paintDevice.width(), paintDevice.height())
-        print("Painter window", painter.window().width(), painter.window().height())
-        print("Painter viewport", painter.viewport().width(), painter.viewport().height())
-        print("Painter trasform", painter.viewTransformEnabled())
+        #print("Painter window", painter.window().width(), painter.window().height())
+        #print("Painter viewport", painter.viewport().width(), painter.viewport().height())
+        #print("Painter trasform", painter.viewTransformEnabled())
 
         if isinstance(paintDevice, QPrinter):
             fromPage = paintDevice.fromPage() or 1
@@ -1248,13 +1252,13 @@ class Report():
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    app.setAttribute(Qt.AA_EnableHighDpiScaling); # DPI support
+    #app.setAttribute(Qt.AA_EnableHighDpiScaling); # DPI support
     QLocale.setDefault(QLocale.English)
     
     xml_string0 = """<?xml version="1.0" encoding="UTF-8"?>
 <report version="1.0">
     <options>
-        <documentName type="str">Test report One</documentName>
+        <documentName type="str">Test of a minimal report</documentName>
         <orientation type="str">Portrait</orientation>
         <pageSize type="str">A4</pageSize>
         <topMargin type="float">15.0</topMargin>
@@ -1263,7 +1267,6 @@ if __name__ == "__main__":
         <rightMargin type="float">15.0</rightMargin>
         <defaultFontName type="str">Arial</defaultFontName>
         <defaultFontSize type="int">8</defaultFontSize>
-        <defaultColor type="str">---</defaultColor> <!-- use an invalid color name for black (as of PySide6 6.10.1-->
     </options>
     <columns>
         <fieldName>code</fieldName>
@@ -1273,78 +1276,6 @@ if __name__ == "__main__":
         <fieldName>quantity</fieldName>
         <fieldName>date</fieldName>
     </columns>
-    <pageHeader>
-        <band height="80.0">
-        <label left="0.0" top="20.0" width="550.0" height="38.0" fontSize="24" textAlign="AlignHCenter">* Page Header *</label>
-        <rectangle color="#88FF22" left="0.0" top="20.0" width="550.0" height="38.0" lineWidth="3.0"/>
-        <line x1="0.0" y1="60.0" x2="550.0" y2="60.0" lineWidth="1.0"/>
-        <label left="0.0" top="62.0" width="100.0" height="15.0">Code</label>
-        <label left="100.0" top="62.0" width="150.0" height="15.0">Description</label>
-        <label left="250.0" top="62.0" width="80.0" height="15.0">Department</label>
-        <label left="330.0" top="62.0" width="25.0" height="15.0">S.C.</label>
-        <label left="355.0" top="62.0" width="60.0" height="15.0" textAlign="AlignRight">Quantity</label>
-        <label left="480.0" top="62.0" width="70.0" height="15.0" textAlign="AlignRight">Date</label>
-        <line x1="0.0" y1="78.0" x2="550.0" y2="78.0" lineWidth="3.0" color="green"/>
-    </band>
-    </pageHeader>
-    <reportHeader>
-        <band height="32">
-            <label left="0.0" top="0.0" width="550.0" height="30.0" fontName="Sans Serif" fontSize="16"
-            textAlign="AlignHCenter">° Report Header °</label>
-        </band>
-    </reportHeader>
-    <groups>
-        <!-- groups are nested -->
-        <group field="department" reverse="False">
-            <groupHeader>
-                <band height="25.0">
-                    <execute before="True" after="True">print('TEST')</execute>
-                    <label left="0.0" top="0.0" width="100.0" height="25.0" fontWeight="Bold">Department:</label>
-                    <field left="100.0" top="0.0" width="80" height="25.0" fontWeight="Bold">department</field>
-                </band>
-            </groupHeader>
-            <groupFooter>
-                <band height="30.0" newPageAfter="True">
-                    <line x1="20.0" y1="3.0" x2="550.0" y2="3.0" width="1.0"/>
-                    <label left="20.0" top="4.0" width="140.0" height="20" fontWeight="Bold">Footer for:</label>
-                    <field left="120.0" top="4.0" width="80" height="20.0" fontWeight="Bold">department</field>
-                    <label left="200.0" top="4.0" width="30.0" height="20">Sum:</label>
-                    <summary function="sum" left="230.0" top="4.0" width="40.0" height="16">quantity</summary>
-                    <label left="280.0" top="4.0" width="35.0" height="20.0">Cnt:</label>
-                    <summary function="count" left="315.0" top="4.0" width="35.0" height="20.0">quantity</summary>
-                    <label left="350.0" top="4.0" width="35.0" height="20.0">Min:</label>
-                    <summary function="min" left="385.0" top="4.0" width="35" height="20.0">quantity</summary>
-                    <label left="410.0" top="4.0" width="30.0" height="20">Max:</label>
-                    <summary function="max" left="440.0" top="4.0" width="40" height="20">quantity</summary>
-                    <label left="480.0" top="4.0" width="30.0" height="20">Avg:</label>
-                    <summary function="average" left="510.0" top="4.0" width="40" height="20" textAlign="AlignRight" format="{:06.2f}">quantity</summary>
-                </band>
-            </groupFooter>
-        </group>
-        <group field="date" reverse="True">
-            <groupHeader>
-                <band height="20">
-                    <label left="0.0" top="0.0" width="50.0" height="16" color="blue">Date:</label>
-                    <field left="60.0" top="0.0" width="80" height="16" color="blue">date</field>
-                </band>
-            </groupHeader>
-            <groupFooter>
-                <band height="30" isVisible = "True">
-                    <line x1="400.0" y1="3.0" x2="550.0" y2="3.0" width="1.0"/>
-                    <label left="80.0" top="4.0" width="40.0" height="20">Sum:</label>
-                    <summary function="sum" left="120.0" top="4.0" width="40.0" height="16">quantity</summary>
-                    <label left="160.0" top="4.0" width="40.0" height="20.0">Count:</label>
-                    <summary function="count" left="200.0" top="4.0" width="40" height="20.0">quantity</summary>
-                    <label left="240.0" top="4.0" width="40.0" height="20.0">Min:</label>
-                    <summary function="min" left="280.0" top="4.0" width="40" height="20.0">quantity</summary>
-                    <label left="320.0" top="4.0" width="40.0" height="20">Max:</label>
-                    <summary function="max" left="360.0" top="4.0" width="40" height="20">quantity</summary>
-                    <label left="400.0" top="4.0" width="50.0" height="20">Avg:</label>
-                    <summary function="average" left="450.0" top="4.0" width="50" height="20" format="{:06.2f}">quantity</summary>
-                </band>
-            </groupFooter>
-        </group>
-    </groups>
     <details>
         <band height="20.0" canGrow="True">
             <field left="0.0" top="3" width="100" height="20" fontName="Courier" textAlign="AlignLeft">code</field>
@@ -1356,38 +1287,6 @@ if __name__ == "__main__":
             <line x1="480.0" y1="23.0" x2="550.0" y2="23.0" width="1"/>
         </band>
     </details>
-    <reportFooter>
-        <band height="60.0">
-            <rectangle xRadius="4.0" yRadius="4.0" color="blue" left="0.0" top="0.0" width="550.0" height="60.0"
-            lineWidth="2.0" brushStyle="DiagCrossPattern" brushColor="lightgrey"/>
-            <label left="10.0" top="4.0" width="550.0" height="16" fontItalic="True"
-            fontWeight="Bold" textAlign="AlignHCenter">Report footer summaries of quantity field</label>
-            <label left="10.0" top="24.0" width="50.0" height="20" fontWeight="Bold">Sum:</label>
-            <summary function="sum" left="60.0" top="24.0" width="50.0" height="16" fontWeight="Bold">quantity</summary>
-            <label left="110.0" top="24.0" width="50.0" height="20.0" fontWeight="Bold">Count:</label>
-            <summary function="count" left="160.0" top="24.0" width="50" height="20.0" fontWeight="Bold">quantity</summary>
-            <label left="210.0" top="24.0" width="50.0" height="20.0" fontWeight="Bold">Min:</label>
-            <summary function="min" left="260.0" top="24.0" width="50" height="20.0" fontWeight="Bold">quantity</summary>
-            <label left="310.0" top="24.0" width="50.0" height="20" fontWeight="Bold">Max:</label>
-            <summary function="max" left="360.0" top="24.0" width="50" height="20" fontWeight="Bold">quantity</summary>
-            <label left="410.0" top="24.0" width="50.0" height="20" fontWeight="Bold">Average:</label>
-            <summary function="average" left="460.0" top="24.0" width="50" height="20" fontWeight="Bold" format="{:07.2f}">quantity</summary>
-        </band>
-    </reportFooter>
-    <pageFooter>
-        <band height="24.0">
-            <rectangle left="0.0" top="0.0" width="550.0" height="18.0" brushStyle="Dense3Pattern" brushColor="lightgrey"/>
-            <label left="2.0" top="0.0" width="60.0" height="16.0" textAlign="AlignLeft">Print date:</label>
-            <special left="60.0" top="0.0" width="70.0" height="16.0" textAlign="AlignLeft">printDate</special>
-            <label left="1.0" top="0.0" width="550.0" height="16.0" textAlign="AlignHCenter">-* Page footer *-</label>
-            <label left="500.0" top="0.0" width="60.0" height="16.0" textAlign="AlignLeft">Page:</label>
-            <special left="530.0" top="0.0" width="50.0" height="16.0" textAlign="AlignLeft">pageNumber</special>
-        </band>
-        <band height="20.0">
-            <label left="0.0" top="0.0" width="550.0" height="15.0" color="black" textAlign="AlignHCenter">Test second page footer band</label>
-            <line x1="0.0" y1="18.0" x2="550.0" y2="18.0" width="1.0" style="SolidLine"/>
-        </band>
-    </pageFooter>
 </report>
 """
 
