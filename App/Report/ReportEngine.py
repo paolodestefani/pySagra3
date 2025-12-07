@@ -252,14 +252,16 @@ defaultOptions = {'documentName': 'pyReportEngine document',
                   'defaultFontItalic': 'False',
                   'defaultFontWeight': 'Normal',
                   'defaultTextAlign': 'AlignLeft',
-                  'defaultColor': '???', # as of PySide6 6.10.1 use an invalid color name for black
+                  'defaultColor': 'black',
                   'defaultLineWidth': 1.0,
                   'defaultLineStyle': 'SolidLine',
                   'defaultBrushStyle': 'NoBrush',
                   'defaultBrushColor': 'Black',
                   'defaultAspectRatio': 'KeepAspectRatio',
                   'quantityDecimals': 2,
-                  'currencySymbol': '€'
+                  'currencySymbol': '€',
+                  'trueSymbol': '\u25CF',   #'\u25CF'
+                  'falseSymbol': '\u25CB'   #'\u25CB'
                   }
 
 
@@ -307,9 +309,14 @@ class BaseRenderer():
         self.fontWeight = FontWeight[paramdict.get("fontWeight", options['defaultFontWeight'])]
         self.textAlign = TextAlign[paramdict.get("textAlign", options['defaultTextAlign'])]
         self.color = paramdict.get("color", options['defaultColor'])
+        # macOS dark mode and color scheme conflicts workaround
+        if self.color in ('black', '#000000'):
+            self.color = '???' # an invalid color that Qt interpret as black on any platforms
         self.canGrow = 'True' == paramdict.get("canGrow", "False")
         self.quantityDecimals = int(paramdict.get("quantityDecimals", options['quantityDecimals']))
         self.currencySymbol = paramdict.get("currencySymbol", options['currencySymbol'])
+        self.trueSymbol = paramdict.get("trueSymbol", options['trueSymbol'])
+        self.falseSymbol = paramdict.get("falseSymbol", options['falseSymbol'])
         self.value = None  # default value
 
     def textFormat(self):
@@ -318,9 +325,11 @@ class BaseRenderer():
             #text = '\u2713' if self.value else '\u2717'
             #text = '\u2714' if self.value else '\u2718'
             #text = '\u2705' if self.value else '\u274C'
-            text = '\u25C9' if self.value else '\u25CB'
+            #text = '\u25C9' if self.value else '\u25CB'
             #text = '\u26AB' if self.value else '\u26AA'
             #text = '\u25FC' if self.value else '\u25FB'
+            #text = '\u25CF' if self.value else '\u25CB'
+            text = self.trueSymbol if self.value else self.falseSymbol
         elif isinstance(self.value, (int, float, decimal.Decimal)):
             if self.fieldFormat:
                 if self.fieldFormat == 'currency':
@@ -400,7 +409,7 @@ class BaseRenderer():
         painter = self.report.painter
         painter.save()
         pen = QPen()
-        #print('Color', QColor(self.color))
+        #print('Valid Color Name', self.color, QColor.isValidColorName(self.color))
         pen.setColor(QColor(self.color))
         painter.setPen(pen)
         painter.setFont(QFont(self.fontName, self.fontSize, self.fontWeight, self.fontItalic))
@@ -1264,6 +1273,7 @@ if __name__ == "__main__":
         <rightMargin type="float">15.0</rightMargin>
         <defaultFontName type="str">Arial</defaultFontName>
         <defaultFontSize type="int">8</defaultFontSize>
+        <defaultColor type="str">black</defaultColor>
     </options>
     <columns>
         <fieldName>code</fieldName>
@@ -1274,14 +1284,13 @@ if __name__ == "__main__":
         <fieldName>date</fieldName>
     </columns>
     <details>
-        <band height="20.0" canGrow="True">
-            <field left="0.0" top="3" width="100" height="20" fontName="Courier" textAlign="AlignLeft">code</field>
-            <field left="100.0" top="3" width="150" height="20" canGrow="True">description</field>
-            <field left="250.0" top="3" width="80" height="20">department</field>
-            <field left="330.0" top="3" width="25" height="20">stock_control</field>
-            <field left="355.0" top="3" width="60" height="20" format="" textAlign="AlignRight">quantity</field>
-            <field left="480.0" top="3" width="70" height="20" format="dd.MM.yy" textAlign="AlignRight">date</field>
-            <line x1="480.0" y1="23.0" x2="550.0" y2="23.0" width="1"/>
+        <band height="15.0" canGrow="True">
+            <field left="0.0" top="3" width="100" height="15" textAlign="AlignLeft">code</field>
+            <field left="100.0" top="3" width="150" height="15" canGrow="True">description</field>
+            <field left="250.0" top="3" width="80" height="15">department</field>
+            <field left="330.0" top="3" width="25" height="15">stock_control</field>
+            <field left="355.0" top="3" width="60" height="15" format="" textAlign="AlignRight">quantity</field>
+            <field left="480.0" top="3" width="70" height="15" format="dd.MM.yy" textAlign="AlignRight">date</field>
         </band>
     </details>
 </report>
@@ -1753,7 +1762,9 @@ else:
     #dlg = ReportDialog()
     #dlg.setReport(r)
     #dlg.exec_()
-        r.setData([('AAAAA', 'description 1 that is very long so it could be wrapped', 'Research', True, 22, QDate(2018, 1, 1)),
+        
+        r.setData([
+                ('AAAAA', 'description 1 that is very long so it could be wrapped', 'Research', True, 22, QDate(2018, 1, 1)),
                 ('BBBBB', 'description 2', 'Production', True, 25, QDate(2018, 2, 2)),
                 ('CCCCC', 'description 3', 'Accounting', False, 1, QDate(2018, 3, 3)),
                 ('DDDDD', 'description 4', 'Research', False, 23, QDate(2018, 1, 2)),
@@ -1797,6 +1808,8 @@ else:
                 ('AAAAAA', 'description 42', 'Production', True, 30, QDate(2018, 2, 2)),
                 ('AAAAAAA', 'description 43', 'Production', True, 31, QDate(2018, 2, 2)),
                 ('AAAAAAAA', 'description 44', 'Accounting', False, 0, QDate(2018, 3, 3))])
+        if i == xml_string0:
+            r.setData([('', 'One line recordset test', 'Accounting', False, 0, QDate(2018, 3, 3))])  # test empty dataset
         # cursor wait
         QApplication.setOverrideCursor(QCursor(Qt.WaitCursor))
         r.generate()
