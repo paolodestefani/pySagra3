@@ -28,7 +28,7 @@ class Ui_PrintDialog(object):
     def setupUi(self, PrintDialog):
         if not PrintDialog.objectName():
             PrintDialog.setObjectName(u"PrintDialog")
-        PrintDialog.resize(663, 480)
+        PrintDialog.resize(640, 480)
         self.verticalLayout = QVBoxLayout(PrintDialog)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.horizontalLayout = QHBoxLayout()
@@ -87,7 +87,7 @@ class Ui_PrintDialog(object):
         self.scrollAreaParameters.setWidgetResizable(True)
         self.scrollAreaWidgetContentsParameters = QWidget()
         self.scrollAreaWidgetContentsParameters.setObjectName(u"scrollAreaWidgetContentsParameters")
-        self.scrollAreaWidgetContentsParameters.setGeometry(QRect(0, 0, 619, 309))
+        self.scrollAreaWidgetContentsParameters.setGeometry(QRect(0, 0, 596, 309))
         self.verticalLayout_3 = QVBoxLayout(self.scrollAreaWidgetContentsParameters)
         self.verticalLayout_3.setSpacing(0)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
@@ -307,12 +307,8 @@ class Ui_PrintDialog(object):
         self.scrollAreaCustomize.setWidgetResizable(True)
         self.scrollAreaWidgetContentsCustomize = QWidget()
         self.scrollAreaWidgetContentsCustomize.setObjectName(u"scrollAreaWidgetContentsCustomize")
-        self.scrollAreaWidgetContentsCustomize.setGeometry(QRect(0, 0, 591, 289))
-        self.verticalLayout_18 = QVBoxLayout(self.scrollAreaWidgetContentsCustomize)
-        self.verticalLayout_18.setSpacing(0)
-        self.verticalLayout_18.setObjectName(u"verticalLayout_18")
-        self.verticalLayout_18.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout_16 = QVBoxLayout()
+        self.scrollAreaWidgetContentsCustomize.setGeometry(QRect(0, 0, 568, 289))
+        self.verticalLayout_16 = QVBoxLayout(self.scrollAreaWidgetContentsCustomize)
         self.verticalLayout_16.setObjectName(u"verticalLayout_16")
         self.groupBoxCurrent = QGroupBox(self.scrollAreaWidgetContentsCustomize)
         self.groupBoxCurrent.setObjectName(u"groupBoxCurrent")
@@ -370,49 +366,31 @@ class Ui_PrintDialog(object):
         self.groupBoxNew.setObjectName(u"groupBoxNew")
         self.verticalLayout_12 = QVBoxLayout(self.groupBoxNew)
         self.verticalLayout_12.setObjectName(u"verticalLayout_12")
-        self.gridLayout_2 = QGridLayout()
-        self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.horizontalLayout_5 = QHBoxLayout()
+        self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
         self.label_2 = QLabel(self.groupBoxNew)
         self.label_2.setObjectName(u"label_2")
 
-        self.gridLayout_2.addWidget(self.label_2, 0, 0, 1, 1)
+        self.horizontalLayout_5.addWidget(self.label_2)
 
         self.lineEditNewName = QLineEdit(self.groupBoxNew)
         self.lineEditNewName.setObjectName(u"lineEditNewName")
 
-        self.gridLayout_2.addWidget(self.lineEditNewName, 0, 1, 1, 1)
+        self.horizontalLayout_5.addWidget(self.lineEditNewName)
 
         self.pushButtonNewCustomization = QPushButton(self.groupBoxNew)
         self.pushButtonNewCustomization.setObjectName(u"pushButtonNewCustomization")
 
-        self.gridLayout_2.addWidget(self.pushButtonNewCustomization, 0, 2, 1, 1)
-
-        self.label_3 = QLabel(self.groupBoxNew)
-        self.label_3.setObjectName(u"label_3")
-
-        self.gridLayout_2.addWidget(self.label_3, 1, 0, 1, 1)
-
-        self.comboBoxReportList = QComboBox(self.groupBoxNew)
-        self.comboBoxReportList.setObjectName(u"comboBoxReportList")
-
-        self.gridLayout_2.addWidget(self.comboBoxReportList, 1, 1, 1, 1)
+        self.horizontalLayout_5.addWidget(self.pushButtonNewCustomization)
 
 
-        self.verticalLayout_12.addLayout(self.gridLayout_2)
+        self.verticalLayout_12.addLayout(self.horizontalLayout_5)
 
 
         self.verticalLayout_16.addWidget(self.groupBoxNew)
 
-        self.verticalSpacer_2 = QSpacerItem(198, 13, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.verticalLayout_16.addItem(self.verticalSpacer_2)
-
         self.horizontalLayout_6 = QHBoxLayout()
         self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
-        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_6.addItem(self.horizontalSpacer_3)
-
         self.label = QLabel(self.scrollAreaWidgetContentsCustomize)
         self.label.setObjectName(u"label")
 
@@ -426,11 +404,26 @@ class Ui_PrintDialog(object):
 
         self.horizontalLayout_6.addWidget(self.labelReportClass)
 
+        self.label_3 = QLabel(self.scrollAreaWidgetContentsCustomize)
+        self.label_3.setObjectName(u"label_3")
+
+        self.horizontalLayout_6.addWidget(self.label_3)
+
+        self.comboBoxReportList = QComboBox(self.scrollAreaWidgetContentsCustomize)
+        self.comboBoxReportList.setObjectName(u"comboBoxReportList")
+
+        self.horizontalLayout_6.addWidget(self.comboBoxReportList)
+
+        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_6.addItem(self.horizontalSpacer_3)
+
 
         self.verticalLayout_16.addLayout(self.horizontalLayout_6)
 
+        self.verticalSpacer_2 = QSpacerItem(198, 51, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
-        self.verticalLayout_18.addLayout(self.verticalLayout_16)
+        self.verticalLayout_16.addItem(self.verticalSpacer_2)
 
         self.scrollAreaCustomize.setWidget(self.scrollAreaWidgetContentsCustomize)
 
@@ -453,7 +446,7 @@ class Ui_PrintDialog(object):
         self.buttonBox.accepted.connect(PrintDialog.accept)
         self.buttonBox.rejected.connect(PrintDialog.reject)
 
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(PrintDialog)
@@ -487,9 +480,9 @@ class Ui_PrintDialog(object):
         self.groupBoxNew.setTitle(QCoreApplication.translate("PrintDialog", u"New customization", None))
         self.label_2.setText(QCoreApplication.translate("PrintDialog", u"Name", None))
         self.pushButtonNewCustomization.setText(QCoreApplication.translate("PrintDialog", u"Create", None))
-        self.label_3.setText(QCoreApplication.translate("PrintDialog", u"Report", None))
         self.label.setText(QCoreApplication.translate("PrintDialog", u"Report class: ", None))
         self.labelReportClass.setText(QCoreApplication.translate("PrintDialog", u"ReportClassText", None))
+        self.label_3.setText(QCoreApplication.translate("PrintDialog", u"Report", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tabCustomize), QCoreApplication.translate("PrintDialog", u"Customize", None))
     # retranslateUi
 

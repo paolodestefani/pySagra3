@@ -1355,6 +1355,7 @@ class PrintDialog(QDialog):
                 self.ui.comboBoxReportList.addItem(d, i)
         # signal for change report customization
         self.ui.comboBoxReportCustomizations.currentIndexChanged.connect(self.setReportCustomization)
+        self.ui.comboBoxReportList.currentIndexChanged.connect(self.setReportCustomization)
         # report customization list
         self.reportCustomizationList()
         self.setReportCustomization(-1)  # initial settings
@@ -1524,7 +1525,7 @@ class PrintDialog(QDialog):
                                     _tr("MessageDialog", "Information"),
                                     _tr("Dialog", "Customization deleted"))
         # update report customization list
-        self.ui.reportCustomizationList()
+        self.reportCustomizationList()
 
     def saveNewCustomizationAs(self):
         "Create a new customization"
@@ -1630,7 +1631,7 @@ class PrintDialog(QDialog):
             # create a report instance for current report id and l10n
             report_id = get_report_id_from_adapt(customizationId)
         else:
-            # no customizations, use the default report
+            # no customizations, use the current report
             report_id =  self.ui.comboBoxReportList.currentData()    
         if not report_id:
             return
