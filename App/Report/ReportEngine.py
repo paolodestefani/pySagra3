@@ -1173,11 +1173,27 @@ class Report():
 
         # sort for required sorting
         for col, rev in [(self.column[i], i.reverse) for i in reversed(self.sortings)]:
-            self.data.sort(key=operator.itemgetter(col), reverse=rev)
-
+            try:
+                self.data.sort(key=operator.itemgetter(col), reverse=rev)
+            except TypeError: # if a value is None
+                try:
+                    # sort with None values and strings
+                    self.data.sort(key= lambda i: '' if not i[col] else i[col], reverse=rev)
+                except TypeError:
+                    # sort with None values and numbers
+                    self.data.sort(key= lambda i: 0 if not i[col] else i[col], reverse=rev)
+                    
         # sort for grouping
         for col, rev in [(self.column[i], i.reverse) for i in reversed(self.groups)]:
-            self.data.sort(key=operator.itemgetter(col), reverse=rev)
+            try:
+                self.data.sort(key=operator.itemgetter(col), reverse=rev)
+            except TypeError: # if a value is None
+                try:
+                    # sort with None values and strings
+                    self.data.sort(key= lambda i: '' if not i[col] else i[col], reverse=rev)
+                except TypeError:
+                    # sort with None values and numbers
+                    self.data.sort(key= lambda i: 0 if not i[col] else i[col], reverse=rev)
 
         first_record_num = 1
         last_record_num = len(self.data)
