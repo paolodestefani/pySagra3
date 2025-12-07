@@ -164,7 +164,7 @@ def has_stock_management(item_id):
     # actually we don't need to filter company_id as item_id is unique across companies
     script = """
 SELECT 
-    has_stock_management 
+    has_stock_control 
 FROM company.item 
 WHERE
     company_id = pa_current_company()

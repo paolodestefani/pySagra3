@@ -157,8 +157,8 @@ class ChooseVariantDialog(QDialog):
         self.ui = Ui_ChooseVariantsDialog()
         self.ui.setupUi(self)
         self.setWindowTitle(item)
-        self.bg = QButtonGroup(self)
-        self.bg.setExclusive(False)
+        self.ui.bg = QButtonGroup(self)
+        self.ui.bg.setExclusive(False)
         for variant, delta in variants:
             v = VariantCheckBox(self, variant, delta)
             self.ui.bg.addButton(v)
