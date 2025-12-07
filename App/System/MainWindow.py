@@ -139,11 +139,7 @@ def createActions(mainWindow: QMainWindow) -> None:
         
         mainWindow.addAction(action)
         currentAction[act] = action
-    # add go hidden action
-    gt = QAction('goTo', mainWindow)
-    gt.setShortcut('Ctrl+F12')
-    gt.triggered.connect(mainWindow.goTo)
-    mainWindow.addAction(gt)
+        
 
 # create menu
 
@@ -592,11 +588,6 @@ class MainWindow(QMainWindow):
         # update status bar
         self.updateStatusBar()
 
-    def goTo(self) -> None:
-        "Speed action activation"
-        dlg = GoToDialog(self)
-        dlg.show()
-
     def closeEvent(self, event: QEvent) -> None:
         "Confirm exiting request on closing"
         # _tr function can't be inside an f-string as it will not be recognized
@@ -627,19 +618,3 @@ class MainWindow(QMainWindow):
         else:
             return "help/main.html"
 
-
-class GoToDialog(QDialog, Ui_GoToDialog):
-    def __init__(self, parent: QWidget) -> None:
-        super().__init__(parent)
-        self.setupUi(self)
-        self.comboBoxActions.setInsertPolicy(QComboBox.NoInsert)
-        for i in currentAction:
-            self.comboBoxActions.addItem(currentAction[i].text(), i)
-        self.comboBoxActions.setCurrentText('')
-
-    def accept(self) -> None:
-        action = currentAction.get(self.comboBoxActions.currentData())
-        if not action:
-            return
-        action.triggered.emit()
-        super().accept()
