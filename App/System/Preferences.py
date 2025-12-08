@@ -47,6 +47,7 @@ from PySide6.QtWidgets import QStyleFactory
 from PySide6.QtWidgets import QPushButton
 
 # application modules
+from App import APPNAME
 from App import session
 from App import currentAction
 from App import actionDefinition
@@ -231,6 +232,8 @@ def setColorScheme(color: str) -> None:
     
 def setIconTheme(theme: str) -> None: # used in login, currentIcon created before currentAction
     "Fill currentIcon dictionary"
+    # application icon
+    currentIcon[APPNAME] = QIcon(f":/{APPNAME}")
     it = QDirIterator(f":/icon/{theme or 'oxygen'}", QDirIterator.NoIteratorFlags)
     # in resource.qrc an alias is mandatory, the it.fileName() is the alias
     while it.hasNext():

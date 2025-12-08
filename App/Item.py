@@ -86,6 +86,8 @@ from App.Ui.ChooseItemDialog import Ui_ChooseItemDialog
 
 TABVAR, TABCOM, TABMEN, TABPRI = range(4)
 
+
+# colors for color combo box
 COLORS = [('#FF0000', _tr('Item', 'Red')),
           ('#FF7700', _tr('Item', 'Orange')),
           ('#00FF00', _tr('Item', 'Green')),
@@ -97,6 +99,7 @@ COLORS = [('#FF0000', _tr('Item', 'Red')),
           ('#770000', _tr('Item', 'Dark red')),
           ('#007700', _tr('Item', 'Dark green')),
           ('#000077', _tr('Item', 'Dark blue'))]
+
 
 def itemType() -> list:
     return [('I', _tr('Item', 'Item')),

@@ -275,7 +275,7 @@ class Ui_SortFilterDialog(object):
         self.buttonBox.rejected.connect(SortFilterDialog.reject)
         self.checkBoxMaxRows.clicked["bool"].connect(self.spinBoxMaxRows.setEnabled)
 
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(2)
 
 
         QMetaObject.connectSlotsByName(SortFilterDialog)

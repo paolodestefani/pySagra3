@@ -58,6 +58,7 @@ from App.Ui.SettingsDialog import Ui_SettingsDialog
 from App.System.Utility import _tr
 from App.System.Utility import scriptInit
 from App.System.Utility import scriptMethod
+from App.Item import COLORS
 
 
 
@@ -122,10 +123,13 @@ class SettingsDialog(QDialog):
         self.ui.spinBoxTableListFontSize.setValue(self.setting['table_list_font_size'])
         self.ui.checkBoxUseTableList.setChecked(self.setting['use_table_list'])
         # colors
-        self.ui.pushButtonNB.color = self.setting['normal_background_color']
-        self.ui.pushButtonNB.setStyleSheet(f"background-color: {self.ui.pushButtonNB.color};")
-        self.ui.pushButtonNT.color = self.setting['normal_text_color']
-        self.ui.pushButtonNT.setStyleSheet(f"background-color: {self.ui.pushButtonNT.color};")
+        self.ui.colorComboBoxBackground.setColorList(COLORS)
+        self.ui.colorComboBoxBackground.setCurrentColor(self.setting['normal_background_color'])
+        self.ui.colorComboBoxText.setColorList(COLORS)
+        self.ui.colorComboBoxText.setCurrentColor(self.setting['normal_text_color'])
+        #self.ui.pushButtonNB.setStyleSheet(f"background-color: {self.ui.pushButtonNB.color};")
+        #self.ui.pushButtonNT.color = self.setting['normal_text_color']
+        #self.ui.pushButtonNT.setStyleSheet(f"background-color: {self.ui.pushButtonNT.color};")
         self.ui.pushButtonWB.color = self.setting['warning_background_color']
         self.ui.pushButtonWB.setStyleSheet(f"background-color: {self.ui.pushButtonWB.color};")
         self.ui.pushButtonWT.color = self.setting['warning_text_color']
@@ -202,8 +206,8 @@ class SettingsDialog(QDialog):
         self.ui.spinBoxDinner.valueChanged.connect(self.ui.horizontalSliderDinner.setValue)
         self.ui.spinBoxCriticalLevel.valueChanged.connect(self.criticalLevelChanged)
         self.ui.spinBoxWarningLevel.valueChanged.connect(self.warningLevelChanged)
-        self.ui.pushButtonNB.clicked.connect(self.selectNormalBackground)
-        self.ui.pushButtonNT.clicked.connect(self.selectNormalText)
+        self.ui.colorComboBoxBackground.currentIndexChanged.connect(self.updateExampleNormalButton)
+        self.ui.colorComboBoxText.currentIndexChanged.connect(self.updateExampleNormalButton)
         self.ui.pushButtonWB.clicked.connect(self.selectWarningBackground)
         self.ui.pushButtonWT.clicked.connect(self.selectWarningText)
         self.ui.pushButtonCB.clicked.connect(self.selectCriticalBackground)
@@ -211,6 +215,8 @@ class SettingsDialog(QDialog):
         self.ui.pushButtonDB.clicked.connect(self.selectDisabledBackground)
         self.ui.pushButtonDT.clicked.connect(self.selectDisabledText)
         self.ui.buttonBox.clicked.connect(self.clicked)
+        # initial example buttons
+        self.updateExampleNormalButton()
         # scripting init
         self.script = scriptInit(self)
 
@@ -232,21 +238,21 @@ class SettingsDialog(QDialog):
         if value < self.ui.horizontalSliderLunch.value():
             self.ui.horizontalSliderLunch.setValue(value)
 
-    def selectNormalBackground(self) -> None:
-        color = QColorDialog.getColor(QColor(self.ui.pushButtonNB.color), self)
-        if not color.isValid():
-            return
-        self.ui.pushButtonNB.color = color.name()
-        self.ui.pushButtonNB.setStyleSheet(f"background-color: {self.ui.pushButtonNB.color};")
-        self.updateExampleButtons()
+    # def selectNormalBackground(self) -> None:
+    #     color = QColorDialog.getColor(QColor(self.ui.pushButtonNB.color), self)
+    #     if not color.isValid():
+    #         return
+    #     self.ui.pushButtonNB.color = color.name()
+    #     self.ui.pushButtonNB.setStyleSheet(f"background-color: {self.ui.pushButtonNB.color};")
+    #     self.updateExampleButtons()
 
-    def selectNormalText(self) -> None:
-        color = QColorDialog.getColor(QColor(self.ui.pushButtonNT.color), self)
-        if not color.isValid():
-            return
-        self.ui.pushButtonNT.color = color.name()
-        self.ui.pushButtonNT.setStyleSheet(f"background-color: {self.ui.pushButtonNT.color};")
-        self.updateExampleButtons()
+    # def selectNormalText(self) -> None:
+    #     color = QColorDialog.getColor(QColor(self.ui.pushButtonNT.color), self)
+    #     if not color.isValid():
+    #         return
+    #     self.ui.pushButtonNT.color = color.name()
+    #     self.ui.pushButtonNT.setStyleSheet(f"background-color: {self.ui.pushButtonNT.color};")
+    #     self.updateExampleButtons()
 
     def selectWarningBackground(self) -> None:
         color = QColorDialog.getColor(QColor(self.ui.pushButtonWB.color), self)
@@ -297,9 +303,7 @@ class SettingsDialog(QDialog):
         self.updateExampleButtons()
 
     def updateExampleButtons(self) -> None:
-        # normal level
-        ss = f"background-color: {self.ui.pushButtonNB.color}; color: {self.ui.pushButtonNT.color};"
-        self.ui.pushButtonExampleNL.setStyleSheet(ss)
+        "Update example buttons with new selected colors"
         # warning level
         ss = f"background-color: {self.ui.pushButtonWB.color}; color: {self.ui.pushButtonWT.color};"
         self.ui.pushButtonExampleWL.setStyleSheet(ss)
@@ -309,6 +313,12 @@ class SettingsDialog(QDialog):
         # disabled level
         ss = f"background-color: {self.ui.pushButtonDB.color}; color: {self.ui.pushButtonDT.color};"
         self.ui.pushButtonExampleDL.setStyleSheet(ss)
+        
+    def updateExampleNormalButton(self) -> None:
+        "Update example button with normal colors"
+        # normal level
+        ss = f"background-color: {self.ui.colorComboBoxBackground.currentColor()}; color: {self.ui.colorComboBoxText.currentColor()};"
+        self.ui.pushButtonExampleNL.setStyleSheet(ss)
 
     def clicked(self, button: QPushButton) -> None:
         "Call Apply on clicked Ok or Apply button"
@@ -343,8 +353,8 @@ class SettingsDialog(QDialog):
         self.setting['table_list_font_size'] = self.ui.spinBoxTableListFontSize.value()
         self.setting['use_table_list'] = self.ui.checkBoxUseTableList.isChecked()
         # colors
-        self.setting['normal_background_color'] = self.ui.pushButtonNB.color
-        self.setting['normal_text_color'] = self.ui.pushButtonNT.color
+        self.setting['normal_background_color'] = self.ui.colorComboBoxBackground.currentColor()
+        self.setting['normal_text_color'] = self.ui.colorComboBoxText.currentColor()
         self.setting['warning_background_color'] = self.ui.pushButtonWB.color
         self.setting['warning_text_color'] = self.ui.pushButtonWT.color
         self.setting['critical_background_color'] = self.ui.pushButtonCB.color

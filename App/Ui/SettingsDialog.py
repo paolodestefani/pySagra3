@@ -22,20 +22,27 @@ from PySide6.QtWidgets import (QAbstractButton, QApplication, QCheckBox, QComboB
     QSlider, QSpacerItem, QSpinBox, QTabWidget,
     QVBoxLayout, QWidget)
 
-from App.Widget.Control import RelationalComboBox
+from App.Widget.Control import (ColorComboBox, RelationalComboBox)
 
 class Ui_SettingsDialog(object):
     def setupUi(self, SettingsDialog):
         if not SettingsDialog.objectName():
             SettingsDialog.setObjectName(u"SettingsDialog")
         SettingsDialog.setWindowModality(Qt.WindowModality.ApplicationModal)
-        SettingsDialog.resize(768, 584)
+        SettingsDialog.resize(768, 576)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(SettingsDialog.sizePolicy().hasHeightForWidth())
+        SettingsDialog.setSizePolicy(sizePolicy)
         self.verticalLayout_17 = QVBoxLayout(SettingsDialog)
         self.verticalLayout_17.setObjectName(u"verticalLayout_17")
         self.verticalLayout_13 = QVBoxLayout()
         self.verticalLayout_13.setObjectName(u"verticalLayout_13")
         self.tabWidget = QTabWidget(SettingsDialog)
         self.tabWidget.setObjectName(u"tabWidget")
+        sizePolicy.setHeightForWidth(self.tabWidget.sizePolicy().hasHeightForWidth())
+        self.tabWidget.setSizePolicy(sizePolicy)
         self.tab1 = QWidget()
         self.tab1.setObjectName(u"tab1")
         self.verticalLayout_5 = QVBoxLayout(self.tab1)
@@ -75,11 +82,11 @@ class Ui_SettingsDialog(object):
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.groupBoxOrderGeometry = QGroupBox(self.tab1)
         self.groupBoxOrderGeometry.setObjectName(u"groupBoxOrderGeometry")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.groupBoxOrderGeometry.sizePolicy().hasHeightForWidth())
-        self.groupBoxOrderGeometry.setSizePolicy(sizePolicy)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.groupBoxOrderGeometry.sizePolicy().hasHeightForWidth())
+        self.groupBoxOrderGeometry.setSizePolicy(sizePolicy1)
         self.verticalLayout_10 = QVBoxLayout(self.groupBoxOrderGeometry)
         self.verticalLayout_10.setObjectName(u"verticalLayout_10")
         self.verticalLayout_10.setContentsMargins(5, 5, 5, 5)
@@ -137,8 +144,8 @@ class Ui_SettingsDialog(object):
 
         self.fontComboBoxOrderList = QFontComboBox(self.groupBoxOrderGeometry)
         self.fontComboBoxOrderList.setObjectName(u"fontComboBoxOrderList")
-        sizePolicy.setHeightForWidth(self.fontComboBoxOrderList.sizePolicy().hasHeightForWidth())
-        self.fontComboBoxOrderList.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.fontComboBoxOrderList.sizePolicy().hasHeightForWidth())
+        self.fontComboBoxOrderList.setSizePolicy(sizePolicy1)
         self.fontComboBoxOrderList.setEditable(False)
 
         self.gridLayout_5.addWidget(self.fontComboBoxOrderList, 3, 1, 1, 1)
@@ -151,8 +158,8 @@ class Ui_SettingsDialog(object):
 
         self.groupBoxTableGeometry = QGroupBox(self.tab1)
         self.groupBoxTableGeometry.setObjectName(u"groupBoxTableGeometry")
-        sizePolicy.setHeightForWidth(self.groupBoxTableGeometry.sizePolicy().hasHeightForWidth())
-        self.groupBoxTableGeometry.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.groupBoxTableGeometry.sizePolicy().hasHeightForWidth())
+        self.groupBoxTableGeometry.setSizePolicy(sizePolicy1)
         self.verticalLayout_11 = QVBoxLayout(self.groupBoxTableGeometry)
         self.verticalLayout_11.setObjectName(u"verticalLayout_11")
         self.verticalLayout_11.setContentsMargins(5, 5, 5, 5)
@@ -199,8 +206,8 @@ class Ui_SettingsDialog(object):
 
         self.fontComboBoxTableList = QFontComboBox(self.groupBoxTableGeometry)
         self.fontComboBoxTableList.setObjectName(u"fontComboBoxTableList")
-        sizePolicy.setHeightForWidth(self.fontComboBoxTableList.sizePolicy().hasHeightForWidth())
-        self.fontComboBoxTableList.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.fontComboBoxTableList.sizePolicy().hasHeightForWidth())
+        self.fontComboBoxTableList.setSizePolicy(sizePolicy1)
         self.fontComboBoxTableList.setEditable(False)
 
         self.gridLayout_6.addWidget(self.fontComboBoxTableList, 3, 1, 1, 1)
@@ -277,8 +284,8 @@ class Ui_SettingsDialog(object):
 
         self.spinBoxWarningLevel = QSpinBox(self.groupBox_2)
         self.spinBoxWarningLevel.setObjectName(u"spinBoxWarningLevel")
-        sizePolicy.setHeightForWidth(self.spinBoxWarningLevel.sizePolicy().hasHeightForWidth())
-        self.spinBoxWarningLevel.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.spinBoxWarningLevel.sizePolicy().hasHeightForWidth())
+        self.spinBoxWarningLevel.setSizePolicy(sizePolicy1)
         self.spinBoxWarningLevel.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
         self.spinBoxWarningLevel.setMinimum(2)
         self.spinBoxWarningLevel.setValue(10)
@@ -318,8 +325,8 @@ class Ui_SettingsDialog(object):
 
         self.spinBoxCriticalLevel = QSpinBox(self.groupBox_2)
         self.spinBoxCriticalLevel.setObjectName(u"spinBoxCriticalLevel")
-        sizePolicy.setHeightForWidth(self.spinBoxCriticalLevel.sizePolicy().hasHeightForWidth())
-        self.spinBoxCriticalLevel.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.spinBoxCriticalLevel.sizePolicy().hasHeightForWidth())
+        self.spinBoxCriticalLevel.setSizePolicy(sizePolicy1)
         self.spinBoxCriticalLevel.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
         self.spinBoxCriticalLevel.setMinimum(1)
         self.spinBoxCriticalLevel.setValue(5)
@@ -520,11 +527,11 @@ class Ui_SettingsDialog(object):
 
         self.spinBoxMaxCovers = QSpinBox(self.tab2)
         self.spinBoxMaxCovers.setObjectName(u"spinBoxMaxCovers")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
-        sizePolicy1.setHorizontalStretch(0)
-        sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.spinBoxMaxCovers.sizePolicy().hasHeightForWidth())
-        self.spinBoxMaxCovers.setSizePolicy(sizePolicy1)
+        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.spinBoxMaxCovers.sizePolicy().hasHeightForWidth())
+        self.spinBoxMaxCovers.setSizePolicy(sizePolicy2)
         self.spinBoxMaxCovers.setMinimum(0)
         self.spinBoxMaxCovers.setMaximum(999)
         self.spinBoxMaxCovers.setValue(0)
@@ -633,8 +640,8 @@ class Ui_SettingsDialog(object):
         self.comboBoxCustomerPrinter = RelationalComboBox(self.groupBox_4)
         self.comboBoxCustomerPrinter.setObjectName(u"comboBoxCustomerPrinter")
         self.comboBoxCustomerPrinter.setEnabled(False)
-        sizePolicy.setHeightForWidth(self.comboBoxCustomerPrinter.sizePolicy().hasHeightForWidth())
-        self.comboBoxCustomerPrinter.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.comboBoxCustomerPrinter.sizePolicy().hasHeightForWidth())
+        self.comboBoxCustomerPrinter.setSizePolicy(sizePolicy1)
 
         self.gridLayout.addWidget(self.comboBoxCustomerPrinter, 1, 3, 1, 1)
 
@@ -648,8 +655,8 @@ class Ui_SettingsDialog(object):
         self.comboBoxCustomerReport = RelationalComboBox(self.groupBox_4)
         self.comboBoxCustomerReport.setObjectName(u"comboBoxCustomerReport")
         self.comboBoxCustomerReport.setEnabled(False)
-        sizePolicy.setHeightForWidth(self.comboBoxCustomerReport.sizePolicy().hasHeightForWidth())
-        self.comboBoxCustomerReport.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.comboBoxCustomerReport.sizePolicy().hasHeightForWidth())
+        self.comboBoxCustomerReport.setSizePolicy(sizePolicy1)
 
         self.gridLayout.addWidget(self.comboBoxCustomerReport, 1, 2, 1, 1)
 
@@ -669,16 +676,16 @@ class Ui_SettingsDialog(object):
         self.comboBoxCoverReport = RelationalComboBox(self.groupBox_4)
         self.comboBoxCoverReport.setObjectName(u"comboBoxCoverReport")
         self.comboBoxCoverReport.setEnabled(False)
-        sizePolicy.setHeightForWidth(self.comboBoxCoverReport.sizePolicy().hasHeightForWidth())
-        self.comboBoxCoverReport.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.comboBoxCoverReport.sizePolicy().hasHeightForWidth())
+        self.comboBoxCoverReport.setSizePolicy(sizePolicy1)
 
         self.gridLayout.addWidget(self.comboBoxCoverReport, 7, 2, 1, 1)
 
         self.comboBoxDepartmentReport = RelationalComboBox(self.groupBox_4)
         self.comboBoxDepartmentReport.setObjectName(u"comboBoxDepartmentReport")
         self.comboBoxDepartmentReport.setEnabled(False)
-        sizePolicy.setHeightForWidth(self.comboBoxDepartmentReport.sizePolicy().hasHeightForWidth())
-        self.comboBoxDepartmentReport.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.comboBoxDepartmentReport.sizePolicy().hasHeightForWidth())
+        self.comboBoxDepartmentReport.setSizePolicy(sizePolicy1)
 
         self.gridLayout.addWidget(self.comboBoxDepartmentReport, 3, 2, 1, 1)
 
@@ -704,8 +711,8 @@ class Ui_SettingsDialog(object):
         self.comboBoxCoverPrinter = RelationalComboBox(self.groupBox_4)
         self.comboBoxCoverPrinter.setObjectName(u"comboBoxCoverPrinter")
         self.comboBoxCoverPrinter.setEnabled(False)
-        sizePolicy.setHeightForWidth(self.comboBoxCoverPrinter.sizePolicy().hasHeightForWidth())
-        self.comboBoxCoverPrinter.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.comboBoxCoverPrinter.sizePolicy().hasHeightForWidth())
+        self.comboBoxCoverPrinter.setSizePolicy(sizePolicy1)
 
         self.gridLayout.addWidget(self.comboBoxCoverPrinter, 7, 3, 1, 1)
 
@@ -739,8 +746,8 @@ class Ui_SettingsDialog(object):
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
         self.label_7 = QLabel(self.groupBoxAutomaticUpdate)
         self.label_7.setObjectName(u"label_7")
-        sizePolicy.setHeightForWidth(self.label_7.sizePolicy().hasHeightForWidth())
-        self.label_7.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.label_7.sizePolicy().hasHeightForWidth())
+        self.label_7.setSizePolicy(sizePolicy1)
 
         self.horizontalLayout_4.addWidget(self.label_7)
 
@@ -751,8 +758,8 @@ class Ui_SettingsDialog(object):
 
         self.label_19 = QLabel(self.groupBoxAutomaticUpdate)
         self.label_19.setObjectName(u"label_19")
-        sizePolicy.setHeightForWidth(self.label_19.sizePolicy().hasHeightForWidth())
-        self.label_19.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.label_19.sizePolicy().hasHeightForWidth())
+        self.label_19.setSizePolicy(sizePolicy1)
 
         self.horizontalLayout_4.addWidget(self.label_19)
 
@@ -768,8 +775,8 @@ class Ui_SettingsDialog(object):
 
         self.groupBoxStockUnloadReport = QGroupBox(self.tab4)
         self.groupBoxStockUnloadReport.setObjectName(u"groupBoxStockUnloadReport")
-        sizePolicy.setHeightForWidth(self.groupBoxStockUnloadReport.sizePolicy().hasHeightForWidth())
-        self.groupBoxStockUnloadReport.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.groupBoxStockUnloadReport.sizePolicy().hasHeightForWidth())
+        self.groupBoxStockUnloadReport.setSizePolicy(sizePolicy1)
         self.groupBoxStockUnloadReport.setCheckable(True)
         self.groupBoxStockUnloadReport.setChecked(False)
         self.verticalLayout_14 = QVBoxLayout(self.groupBoxStockUnloadReport)
@@ -781,15 +788,15 @@ class Ui_SettingsDialog(object):
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.label_9 = QLabel(self.groupBoxStockUnloadReport)
         self.label_9.setObjectName(u"label_9")
-        sizePolicy.setHeightForWidth(self.label_9.sizePolicy().hasHeightForWidth())
-        self.label_9.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.label_9.sizePolicy().hasHeightForWidth())
+        self.label_9.setSizePolicy(sizePolicy1)
 
         self.horizontalLayout_2.addWidget(self.label_9)
 
         self.spinBoxOrdersStartLevel = QSpinBox(self.groupBoxStockUnloadReport)
         self.spinBoxOrdersStartLevel.setObjectName(u"spinBoxOrdersStartLevel")
-        sizePolicy.setHeightForWidth(self.spinBoxOrdersStartLevel.sizePolicy().hasHeightForWidth())
-        self.spinBoxOrdersStartLevel.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.spinBoxOrdersStartLevel.sizePolicy().hasHeightForWidth())
+        self.spinBoxOrdersStartLevel.setSizePolicy(sizePolicy1)
         self.spinBoxOrdersStartLevel.setMinimum(1)
         self.spinBoxOrdersStartLevel.setMaximum(1000)
 
@@ -797,15 +804,15 @@ class Ui_SettingsDialog(object):
 
         self.label_11 = QLabel(self.groupBoxStockUnloadReport)
         self.label_11.setObjectName(u"label_11")
-        sizePolicy.setHeightForWidth(self.label_11.sizePolicy().hasHeightForWidth())
-        self.label_11.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.label_11.sizePolicy().hasHeightForWidth())
+        self.label_11.setSizePolicy(sizePolicy1)
 
         self.horizontalLayout_2.addWidget(self.label_11)
 
         self.spinBoxOrdersNextLevel = QSpinBox(self.groupBoxStockUnloadReport)
         self.spinBoxOrdersNextLevel.setObjectName(u"spinBoxOrdersNextLevel")
-        sizePolicy.setHeightForWidth(self.spinBoxOrdersNextLevel.sizePolicy().hasHeightForWidth())
-        self.spinBoxOrdersNextLevel.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.spinBoxOrdersNextLevel.sizePolicy().hasHeightForWidth())
+        self.spinBoxOrdersNextLevel.setSizePolicy(sizePolicy1)
         self.spinBoxOrdersNextLevel.setMinimum(1)
         self.spinBoxOrdersNextLevel.setMaximum(999)
 
@@ -813,8 +820,8 @@ class Ui_SettingsDialog(object):
 
         self.label_12 = QLabel(self.groupBoxStockUnloadReport)
         self.label_12.setObjectName(u"label_12")
-        sizePolicy.setHeightForWidth(self.label_12.sizePolicy().hasHeightForWidth())
-        self.label_12.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.label_12.sizePolicy().hasHeightForWidth())
+        self.label_12.setSizePolicy(sizePolicy1)
 
         self.horizontalLayout_2.addWidget(self.label_12)
 
@@ -829,36 +836,36 @@ class Ui_SettingsDialog(object):
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.label_10 = QLabel(self.groupBoxStockUnloadReport)
         self.label_10.setObjectName(u"label_10")
-        sizePolicy.setHeightForWidth(self.label_10.sizePolicy().hasHeightForWidth())
-        self.label_10.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.label_10.sizePolicy().hasHeightForWidth())
+        self.label_10.setSizePolicy(sizePolicy1)
 
         self.gridLayout_2.addWidget(self.label_10, 0, 1, 1, 1)
 
         self.labelCopy_5 = QLabel(self.groupBoxStockUnloadReport)
         self.labelCopy_5.setObjectName(u"labelCopy_5")
-        sizePolicy.setHeightForWidth(self.labelCopy_5.sizePolicy().hasHeightForWidth())
-        self.labelCopy_5.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.labelCopy_5.sizePolicy().hasHeightForWidth())
+        self.labelCopy_5.setSizePolicy(sizePolicy1)
 
         self.gridLayout_2.addWidget(self.labelCopy_5, 0, 0, 1, 1)
 
         self.comboBoxStockUnloadReport = RelationalComboBox(self.groupBoxStockUnloadReport)
         self.comboBoxStockUnloadReport.setObjectName(u"comboBoxStockUnloadReport")
-        sizePolicy.setHeightForWidth(self.comboBoxStockUnloadReport.sizePolicy().hasHeightForWidth())
-        self.comboBoxStockUnloadReport.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.comboBoxStockUnloadReport.sizePolicy().hasHeightForWidth())
+        self.comboBoxStockUnloadReport.setSizePolicy(sizePolicy1)
 
         self.gridLayout_2.addWidget(self.comboBoxStockUnloadReport, 1, 1, 1, 1)
 
         self.label_8 = QLabel(self.groupBoxStockUnloadReport)
         self.label_8.setObjectName(u"label_8")
-        sizePolicy.setHeightForWidth(self.label_8.sizePolicy().hasHeightForWidth())
-        self.label_8.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.label_8.sizePolicy().hasHeightForWidth())
+        self.label_8.setSizePolicy(sizePolicy1)
 
         self.gridLayout_2.addWidget(self.label_8, 0, 2, 1, 1)
 
         self.comboBoxStockUnloadPrinterClass = RelationalComboBox(self.groupBoxStockUnloadReport)
         self.comboBoxStockUnloadPrinterClass.setObjectName(u"comboBoxStockUnloadPrinterClass")
-        sizePolicy.setHeightForWidth(self.comboBoxStockUnloadPrinterClass.sizePolicy().hasHeightForWidth())
-        self.comboBoxStockUnloadPrinterClass.setSizePolicy(sizePolicy)
+        sizePolicy1.setHeightForWidth(self.comboBoxStockUnloadPrinterClass.sizePolicy().hasHeightForWidth())
+        self.comboBoxStockUnloadPrinterClass.setSizePolicy(sizePolicy1)
 
         self.gridLayout_2.addWidget(self.comboBoxStockUnloadPrinterClass, 1, 2, 1, 1)
 
@@ -889,8 +896,8 @@ class Ui_SettingsDialog(object):
         self.tabWidget.addTab(self.tab4, "")
         self.tab5 = QWidget()
         self.tab5.setObjectName(u"tab5")
-        self.verticalLayout_20 = QVBoxLayout(self.tab5)
-        self.verticalLayout_20.setObjectName(u"verticalLayout_20")
+        self.verticalLayout_21 = QVBoxLayout(self.tab5)
+        self.verticalLayout_21.setObjectName(u"verticalLayout_21")
         self.gridLayout_7 = QGridLayout()
         self.gridLayout_7.setObjectName(u"gridLayout_7")
         self.label_25 = QLabel(self.tab5)
@@ -900,11 +907,11 @@ class Ui_SettingsDialog(object):
 
         self.lineEditCurrencySymbol = QLineEdit(self.tab5)
         self.lineEditCurrencySymbol.setObjectName(u"lineEditCurrencySymbol")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
-        sizePolicy2.setHorizontalStretch(0)
-        sizePolicy2.setVerticalStretch(0)
-        sizePolicy2.setHeightForWidth(self.lineEditCurrencySymbol.sizePolicy().hasHeightForWidth())
-        self.lineEditCurrencySymbol.setSizePolicy(sizePolicy2)
+        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
+        sizePolicy3.setHorizontalStretch(0)
+        sizePolicy3.setVerticalStretch(0)
+        sizePolicy3.setHeightForWidth(self.lineEditCurrencySymbol.sizePolicy().hasHeightForWidth())
+        self.lineEditCurrencySymbol.setSizePolicy(sizePolicy3)
         self.lineEditCurrencySymbol.setMaximumSize(QSize(100, 16777215))
         self.lineEditCurrencySymbol.setMaxLength(3)
 
@@ -926,65 +933,64 @@ class Ui_SettingsDialog(object):
         self.gridLayout_7.addItem(self.horizontalSpacer_4, 0, 2, 1, 1)
 
 
-        self.verticalLayout_20.addLayout(self.gridLayout_7)
+        self.verticalLayout_21.addLayout(self.gridLayout_7)
 
         self.groupBox_10 = QGroupBox(self.tab5)
         self.groupBox_10.setObjectName(u"groupBox_10")
-        self.verticalLayout_22 = QVBoxLayout(self.groupBox_10)
-        self.verticalLayout_22.setObjectName(u"verticalLayout_22")
-        self.verticalLayout_22.setContentsMargins(5, 5, 5, 5)
-        self.gridLayout_9 = QGridLayout()
-        self.gridLayout_9.setObjectName(u"gridLayout_9")
-        self.pushButtonNB = QPushButton(self.groupBox_10)
-        self.pushButtonNB.setObjectName(u"pushButtonNB")
+        self.verticalLayout_20 = QVBoxLayout(self.groupBox_10)
+        self.verticalLayout_20.setObjectName(u"verticalLayout_20")
+        self.gridLayout_8 = QGridLayout()
+        self.gridLayout_8.setObjectName(u"gridLayout_8")
+        self.labelYellow_12 = QLabel(self.groupBox_10)
+        self.labelYellow_12.setObjectName(u"labelYellow_12")
+        self.labelYellow_12.setFont(font)
+        self.labelYellow_12.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.gridLayout_9.addWidget(self.pushButtonNB, 1, 0, 1, 1)
+        self.gridLayout_8.addWidget(self.labelYellow_12, 0, 0, 1, 1)
 
         self.labelRed_9 = QLabel(self.groupBox_10)
         self.labelRed_9.setObjectName(u"labelRed_9")
         self.labelRed_9.setFont(font)
         self.labelRed_9.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.gridLayout_9.addWidget(self.labelRed_9, 0, 1, 1, 1)
-
-        self.pushButtonExampleNL = QPushButton(self.groupBox_10)
-        self.pushButtonExampleNL.setObjectName(u"pushButtonExampleNL")
-
-        self.gridLayout_9.addWidget(self.pushButtonExampleNL, 1, 2, 1, 1)
+        self.gridLayout_8.addWidget(self.labelRed_9, 0, 1, 1, 1)
 
         self.labelRed_8 = QLabel(self.groupBox_10)
         self.labelRed_8.setObjectName(u"labelRed_8")
         self.labelRed_8.setFont(font)
         self.labelRed_8.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.gridLayout_9.addWidget(self.labelRed_8, 0, 2, 1, 1)
+        self.gridLayout_8.addWidget(self.labelRed_8, 0, 2, 1, 1)
 
-        self.labelYellow_12 = QLabel(self.groupBox_10)
-        self.labelYellow_12.setObjectName(u"labelYellow_12")
-        self.labelYellow_12.setFont(font)
-        self.labelYellow_12.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.colorComboBoxBackground = ColorComboBox(self.groupBox_10)
+        self.colorComboBoxBackground.setObjectName(u"colorComboBoxBackground")
 
-        self.gridLayout_9.addWidget(self.labelYellow_12, 0, 0, 1, 1)
+        self.gridLayout_8.addWidget(self.colorComboBoxBackground, 1, 0, 1, 1)
 
-        self.pushButtonNT = QPushButton(self.groupBox_10)
-        self.pushButtonNT.setObjectName(u"pushButtonNT")
+        self.colorComboBoxText = ColorComboBox(self.groupBox_10)
+        self.colorComboBoxText.setObjectName(u"colorComboBoxText")
 
-        self.gridLayout_9.addWidget(self.pushButtonNT, 1, 1, 1, 1)
+        self.gridLayout_8.addWidget(self.colorComboBoxText, 1, 1, 1, 1)
+
+        self.pushButtonExampleNL = QPushButton(self.groupBox_10)
+        self.pushButtonExampleNL.setObjectName(u"pushButtonExampleNL")
+
+        self.gridLayout_8.addWidget(self.pushButtonExampleNL, 1, 2, 1, 1)
 
 
-        self.verticalLayout_22.addLayout(self.gridLayout_9)
+        self.verticalLayout_20.addLayout(self.gridLayout_8)
 
 
-        self.verticalLayout_20.addWidget(self.groupBox_10)
+        self.verticalLayout_21.addWidget(self.groupBox_10)
 
         self.checkBoxOrderProgress = QCheckBox(self.tab5)
         self.checkBoxOrderProgress.setObjectName(u"checkBoxOrderProgress")
 
-        self.verticalLayout_20.addWidget(self.checkBoxOrderProgress)
+        self.verticalLayout_21.addWidget(self.checkBoxOrderProgress)
 
         self.verticalSpacer_2 = QSpacerItem(20, 516, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
-        self.verticalLayout_20.addItem(self.verticalSpacer_2)
+        self.verticalLayout_21.addItem(self.verticalSpacer_2)
 
         self.tabWidget.addTab(self.tab5, "")
 
@@ -1024,6 +1030,8 @@ class Ui_SettingsDialog(object):
         self.checkBoxDepartmentCopy.clicked["bool"].connect(self.comboBoxDepartmentReport.setEnabled)
         self.horizontalSliderLunch.valueChanged.connect(self.spinBoxLunch.setValue)
         self.horizontalSliderDinner.valueChanged.connect(self.spinBoxDinner.setValue)
+        self.checkBoxInactivity.clicked["bool"].connect(self.spinBoxInactivityTime.setEnabled)
+        self.checkBoxInactivity.clicked["bool"].connect(self.labelInactivity.setEnabled)
 
         self.tabWidget.setCurrentIndex(0)
 
@@ -1111,12 +1119,10 @@ class Ui_SettingsDialog(object):
         self.label_25.setText(QCoreApplication.translate("SettingsDialog", u"Currency symbol", None))
         self.label_24.setText(QCoreApplication.translate("SettingsDialog", u"Decimal places for quantity", None))
         self.groupBox_10.setTitle(QCoreApplication.translate("SettingsDialog", u"New item normal stock level colors", None))
-        self.pushButtonNB.setText("")
-        self.labelRed_9.setText(QCoreApplication.translate("SettingsDialog", u"Text color", None))
-        self.pushButtonExampleNL.setText(QCoreApplication.translate("SettingsDialog", u"Normal", None))
-        self.labelRed_8.setText(QCoreApplication.translate("SettingsDialog", u"Example", None))
         self.labelYellow_12.setText(QCoreApplication.translate("SettingsDialog", u"Background color", None))
-        self.pushButtonNT.setText("")
+        self.labelRed_9.setText(QCoreApplication.translate("SettingsDialog", u"Text color", None))
+        self.labelRed_8.setText(QCoreApplication.translate("SettingsDialog", u"Example", None))
+        self.pushButtonExampleNL.setText(QCoreApplication.translate("SettingsDialog", u"Normal", None))
         self.checkBoxOrderProgress.setText(QCoreApplication.translate("SettingsDialog", u"Order progress management", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab5), QCoreApplication.translate("SettingsDialog", u"Other", None))
     # retranslateUi

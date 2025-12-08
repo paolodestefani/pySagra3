@@ -151,23 +151,30 @@ WHERE sortfilter_adapt_id = %s;"""
     except psycopg.Error as er:
         raise PyAppDBError(er.diag.sqlstate, str(er))
 
-def get_sortfilter_setting(sf_id, sf_element):
+def get_sortfilter_setting(sf_id):
     "Get available sortfilter customizations settings for id and element"
     script = """
 SELECT 
+    element_type,
     layout_row,
     combo1_index,
     negate_state,
     combo2_index,
     widget_value
 FROM system.sortfilter_adapt_setting
-WHERE sortfilter_adapt_id = %s AND element_type = %s
+WHERE sortfilter_adapt_id = %s
 ORDER BY layout_row;"""
     try:
         with appconn.cursor() as cur:
             with appconn.transaction():
-                cur.execute(script, (sf_id, sf_element))
-                return cur.fetchall()
+                cur.execute(script, (sf_id,))
+                if cur.rowcount == 0:
+                    return [], []  # no customization
+                else:
+                    d = cur.fetchall()
+                    f = [i for i in d if i[0] == 'F'] # Filters
+                    s = [i for i in d if i[0] == 'S'] # Sorting
+                    return f, s
     except psycopg.Error as er:
         raise PyAppDBError(er.diag.sqlstate, str(er))
 

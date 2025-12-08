@@ -85,97 +85,97 @@
         <translation>NESSUNA IMMAGINE</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="663"/>
+        <location filename="../../App/Widget/Control.py" line="666"/>
         <source>Transparent</source>
         <translation>Trasparente</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="664"/>
+        <location filename="../../App/Widget/Control.py" line="667"/>
         <source>Black</source>
         <translation>Nero</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="665"/>
+        <location filename="../../App/Widget/Control.py" line="668"/>
         <source>Red</source>
         <translation>Rosso</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="666"/>
+        <location filename="../../App/Widget/Control.py" line="669"/>
         <source>Dark red</source>
         <translation>Rosso scuro</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="667"/>
+        <location filename="../../App/Widget/Control.py" line="670"/>
         <source>Green</source>
         <translation>Verde</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="668"/>
+        <location filename="../../App/Widget/Control.py" line="671"/>
         <source>Dark green</source>
         <translation>Verde scuro</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="669"/>
+        <location filename="../../App/Widget/Control.py" line="672"/>
         <source>Blue</source>
         <translation>Blu</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="670"/>
+        <location filename="../../App/Widget/Control.py" line="673"/>
         <source>Dark blue</source>
         <translation>Blu scuro</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="671"/>
+        <location filename="../../App/Widget/Control.py" line="674"/>
         <source>Cyan</source>
         <translation>Ciano</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="672"/>
+        <location filename="../../App/Widget/Control.py" line="675"/>
         <source>Dark cyan</source>
         <translation>Ciano scuro</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="673"/>
+        <location filename="../../App/Widget/Control.py" line="676"/>
         <source>Magenta</source>
         <translation>Magenta</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="674"/>
+        <location filename="../../App/Widget/Control.py" line="677"/>
         <source>Dark magenta</source>
         <translation>Magenta scuro</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="675"/>
+        <location filename="../../App/Widget/Control.py" line="678"/>
         <source>Yellow</source>
         <translation>Giallo</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="676"/>
+        <location filename="../../App/Widget/Control.py" line="679"/>
         <source>Dark yellow</source>
         <translation>Giallo scuro</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="677"/>
+        <location filename="../../App/Widget/Control.py" line="680"/>
         <source>Gray</source>
         <translation>Grigio</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="678"/>
+        <location filename="../../App/Widget/Control.py" line="681"/>
         <source>Dark gray</source>
         <translation>Grigio scuro</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="679"/>
+        <location filename="../../App/Widget/Control.py" line="682"/>
         <source>Light gray</source>
         <translation>Grigio chiaro</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="680"/>
+        <location filename="../../App/Widget/Control.py" line="683"/>
         <source>Whyte</source>
         <translation>Bianco</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="937"/>
+        <location filename="../../App/Widget/Control.py" line="940"/>
         <source>Are you sure to clear all the text ?</source>
         <translation>Sei sicuro di voler cancellare tutto il testo ?</translation>
     </message>
@@ -237,121 +237,121 @@
         <translation>Impossibile caricare il file {}</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="1005"/>
+        <location filename="../../App/Widget/Dialog.py" line="999"/>
         <source>Current customization was updated</source>
         <translation>La personalizzazione corrente è stata aggiornata</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="1124"/>
+        <location filename="../../App/Widget/Dialog.py" line="1118"/>
         <source>New customization saved</source>
         <translation>Nuova personalizzazione salvata</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="1141"/>
+        <location filename="../../App/Widget/Dialog.py" line="1135"/>
         <source>Current customization deleted</source>
         <translation>Personalizzazione corrente cancellata</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="1511"/>
+        <location filename="../../App/Widget/Dialog.py" line="1505"/>
         <source>Customization saved</source>
         <translation>Personalizzazione salvata</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="1526"/>
+        <location filename="../../App/Widget/Dialog.py" line="1520"/>
         <source>Customization deleted</source>
         <translation>Personalizzazione cancellata</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="1538"/>
+        <location filename="../../App/Widget/Dialog.py" line="1532"/>
         <source>You must fill all the parameters of a new customization</source>
         <translation>E&apos; necessario compilare tutti i parametri della nuova personalizzazione</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="1549"/>
+        <location filename="../../App/Widget/Dialog.py" line="1543"/>
         <source>New customization &apos;{}&apos; created</source>
         <translation>Nuova personalizzazione &apos;{}&apos; creata</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="2010"/>
+        <location filename="../../App/Widget/Dialog.py" line="2004"/>
         <source>Export directory not set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="2015"/>
+        <location filename="../../App/Widget/Dialog.py" line="2009"/>
         <source>File name not set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="2021"/>
-        <location filename="../../App/Widget/Dialog.py" line="2214"/>
+        <location filename="../../App/Widget/Dialog.py" line="2015"/>
+        <location filename="../../App/Widget/Dialog.py" line="2208"/>
         <source>File {} exists, overwrite ?</source>
         <translation>IL file {} è già presente, sovrascrivo ?</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="2045"/>
-        <location filename="../../App/Widget/Dialog.py" line="2100"/>
+        <location filename="../../App/Widget/Dialog.py" line="2039"/>
+        <location filename="../../App/Widget/Dialog.py" line="2094"/>
         <source>Select export directory</source>
         <translation>Selezionare la directory di destinazione</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="2552"/>
+        <location filename="../../App/Widget/Dialog.py" line="2546"/>
         <source>Select a date:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="1961"/>
+        <location filename="../../App/Widget/Dialog.py" line="1955"/>
         <source>Print preview</source>
         <translation>Anteprima di stampa</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="2089"/>
+        <location filename="../../App/Widget/Dialog.py" line="2083"/>
         <source>Print current page ({})</source>
         <translation>Stampa la pagina corrente ({})</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="1324"/>
-        <location filename="../../App/Widget/Dialog.py" line="2071"/>
+        <location filename="../../App/Widget/Dialog.py" line="1318"/>
+        <location filename="../../App/Widget/Dialog.py" line="2065"/>
         <source>Pdf 1.4</source>
         <translation>Pdf 1.4</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="1325"/>
-        <location filename="../../App/Widget/Dialog.py" line="2072"/>
+        <location filename="../../App/Widget/Dialog.py" line="1319"/>
+        <location filename="../../App/Widget/Dialog.py" line="2066"/>
         <source>Pdf A-1b</source>
         <translation>Pdf A-1b</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="1326"/>
-        <location filename="../../App/Widget/Dialog.py" line="2073"/>
+        <location filename="../../App/Widget/Dialog.py" line="1320"/>
+        <location filename="../../App/Widget/Dialog.py" line="2067"/>
         <source>Pdf 1.6</source>
         <translation>Pdf 1.6</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="2040"/>
+        <location filename="../../App/Widget/Dialog.py" line="2034"/>
         <source>PDF file created</source>
         <translation>File PDF generato</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="1158"/>
-        <location filename="../../App/Widget/Dialog.py" line="1732"/>
+        <location filename="../../App/Widget/Dialog.py" line="1152"/>
+        <location filename="../../App/Widget/Dialog.py" line="1726"/>
         <source>Current customization sorting updated</source>
         <translation>Ordinamento della personalizzazione corrente aggiornato</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="1971"/>
-        <location filename="../../App/Widget/Dialog.py" line="1988"/>
-        <location filename="../../App/Widget/Dialog.py" line="2000"/>
-        <location filename="../../App/Widget/Dialog.py" line="2031"/>
+        <location filename="../../App/Widget/Dialog.py" line="1965"/>
+        <location filename="../../App/Widget/Dialog.py" line="1982"/>
+        <location filename="../../App/Widget/Dialog.py" line="1994"/>
+        <location filename="../../App/Widget/Dialog.py" line="2025"/>
         <source>Critical</source>
         <translation>Errore critico</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="1399"/>
+        <location filename="../../App/Widget/Dialog.py" line="1393"/>
         <source>No report available</source>
         <translation>Nessun report disponibile</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="1945"/>
+        <location filename="../../App/Widget/Dialog.py" line="1939"/>
         <source>No data to render</source>
         <translation>Nessun dato da stampare</translation>
     </message>
@@ -359,7 +359,7 @@
 <context>
     <name>Dialogs</name>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="2194"/>
+        <location filename="../../App/Widget/Dialog.py" line="2188"/>
         <source>Export PDF</source>
         <translation>Esporta in PDF</translation>
     </message>
@@ -367,58 +367,58 @@
 <context>
     <name>Editor</name>
     <message>
-        <location filename="../../App/Widget/Control.py" line="841"/>
+        <location filename="../../App/Widget/Control.py" line="844"/>
         <source>Get/set the text font family</source>
         <translation>Mostra/imposta la famiglia del font</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="848"/>
+        <location filename="../../App/Widget/Control.py" line="851"/>
         <source>Get/set the text font size</source>
         <translation>Mostra/imposta la dimensione del font</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="852"/>
+        <location filename="../../App/Widget/Control.py" line="855"/>
         <source>Text color</source>
         <translation>Colore del testo</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="856"/>
+        <location filename="../../App/Widget/Control.py" line="859"/>
         <source>Text background color
 Black = Transparent</source>
         <translation>Coloro dello sfondo Nero = Trasparente</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="861"/>
+        <location filename="../../App/Widget/Control.py" line="864"/>
         <source>Format text as bold</source>
         <translation>Formatta come grassetto</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="868"/>
+        <location filename="../../App/Widget/Control.py" line="871"/>
         <source>Format text as italic</source>
         <translation>Formatta come corsivo</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="875"/>
+        <location filename="../../App/Widget/Control.py" line="878"/>
         <source>Format text as underline</source>
         <translation>Formatta come sottolineato</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="882"/>
+        <location filename="../../App/Widget/Control.py" line="885"/>
         <source>Align text left</source>
         <translation>Allinea a sinistra</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="889"/>
+        <location filename="../../App/Widget/Control.py" line="892"/>
         <source>Align text center</source>
         <translation>Allinea al centro</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="896"/>
+        <location filename="../../App/Widget/Control.py" line="899"/>
         <source>Align text right</source>
         <translation>Allinea a destra</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="903"/>
+        <location filename="../../App/Widget/Control.py" line="906"/>
         <source>Justify text</source>
         <translation>Giustifica</translation>
     </message>
@@ -617,26 +617,25 @@ Black = Transparent</source>
         <location filename="../../App/Widget/Dialog.py" line="193"/>
         <location filename="../../App/Widget/Dialog.py" line="788"/>
         <location filename="../../App/Widget/Dialog.py" line="891"/>
-        <location filename="../../App/Widget/Dialog.py" line="921"/>
-        <location filename="../../App/Widget/Dialog.py" line="934"/>
-        <location filename="../../App/Widget/Dialog.py" line="976"/>
-        <location filename="../../App/Widget/Dialog.py" line="985"/>
-        <location filename="../../App/Widget/Dialog.py" line="999"/>
-        <location filename="../../App/Widget/Dialog.py" line="1119"/>
-        <location filename="../../App/Widget/Dialog.py" line="1135"/>
-        <location filename="../../App/Widget/Dialog.py" line="1153"/>
-        <location filename="../../App/Widget/Dialog.py" line="1398"/>
-        <location filename="../../App/Widget/Dialog.py" line="1410"/>
-        <location filename="../../App/Widget/Dialog.py" line="1454"/>
-        <location filename="../../App/Widget/Dialog.py" line="1489"/>
-        <location filename="../../App/Widget/Dialog.py" line="1506"/>
-        <location filename="../../App/Widget/Dialog.py" line="1520"/>
-        <location filename="../../App/Widget/Dialog.py" line="1537"/>
-        <location filename="../../App/Widget/Dialog.py" line="1544"/>
-        <location filename="../../App/Widget/Dialog.py" line="1561"/>
-        <location filename="../../App/Widget/Dialog.py" line="1727"/>
-        <location filename="../../App/Widget/Dialog.py" line="2009"/>
-        <location filename="../../App/Widget/Dialog.py" line="2014"/>
+        <location filename="../../App/Widget/Dialog.py" line="922"/>
+        <location filename="../../App/Widget/Dialog.py" line="970"/>
+        <location filename="../../App/Widget/Dialog.py" line="979"/>
+        <location filename="../../App/Widget/Dialog.py" line="993"/>
+        <location filename="../../App/Widget/Dialog.py" line="1113"/>
+        <location filename="../../App/Widget/Dialog.py" line="1129"/>
+        <location filename="../../App/Widget/Dialog.py" line="1147"/>
+        <location filename="../../App/Widget/Dialog.py" line="1392"/>
+        <location filename="../../App/Widget/Dialog.py" line="1404"/>
+        <location filename="../../App/Widget/Dialog.py" line="1448"/>
+        <location filename="../../App/Widget/Dialog.py" line="1483"/>
+        <location filename="../../App/Widget/Dialog.py" line="1500"/>
+        <location filename="../../App/Widget/Dialog.py" line="1514"/>
+        <location filename="../../App/Widget/Dialog.py" line="1531"/>
+        <location filename="../../App/Widget/Dialog.py" line="1538"/>
+        <location filename="../../App/Widget/Dialog.py" line="1555"/>
+        <location filename="../../App/Widget/Dialog.py" line="1721"/>
+        <location filename="../../App/Widget/Dialog.py" line="2003"/>
+        <location filename="../../App/Widget/Dialog.py" line="2008"/>
         <location filename="../../App/Widget/Form.py" line="250"/>
         <location filename="../../App/Widget/Form.py" line="262"/>
         <location filename="../../App/Widget/Form.py" line="365"/>
@@ -669,16 +668,16 @@ Black = Transparent</source>
         <location filename="../../App/System/User.py" line="243"/>
         <location filename="../../App/System/User.py" line="328"/>
         <location filename="../../App/System/User.py" line="387"/>
-        <location filename="../../App/Widget/Dialog.py" line="1004"/>
-        <location filename="../../App/Widget/Dialog.py" line="1123"/>
-        <location filename="../../App/Widget/Dialog.py" line="1140"/>
-        <location filename="../../App/Widget/Dialog.py" line="1157"/>
-        <location filename="../../App/Widget/Dialog.py" line="1510"/>
-        <location filename="../../App/Widget/Dialog.py" line="1525"/>
-        <location filename="../../App/Widget/Dialog.py" line="1548"/>
-        <location filename="../../App/Widget/Dialog.py" line="1731"/>
-        <location filename="../../App/Widget/Dialog.py" line="1944"/>
-        <location filename="../../App/Widget/Dialog.py" line="2039"/>
+        <location filename="../../App/Widget/Dialog.py" line="998"/>
+        <location filename="../../App/Widget/Dialog.py" line="1117"/>
+        <location filename="../../App/Widget/Dialog.py" line="1134"/>
+        <location filename="../../App/Widget/Dialog.py" line="1151"/>
+        <location filename="../../App/Widget/Dialog.py" line="1504"/>
+        <location filename="../../App/Widget/Dialog.py" line="1519"/>
+        <location filename="../../App/Widget/Dialog.py" line="1542"/>
+        <location filename="../../App/Widget/Dialog.py" line="1725"/>
+        <location filename="../../App/Widget/Dialog.py" line="1938"/>
+        <location filename="../../App/Widget/Dialog.py" line="2033"/>
         <source>Information</source>
         <translation>Informazione</translation>
     </message>
@@ -695,9 +694,9 @@ Black = Transparent</source>
         <location filename="../../App/System/Report.py" line="250"/>
         <location filename="../../App/System/Scripting.py" line="252"/>
         <location filename="../../App/System/User.py" line="248"/>
-        <location filename="../../App/Widget/Control.py" line="936"/>
-        <location filename="../../App/Widget/Dialog.py" line="2020"/>
-        <location filename="../../App/Widget/Dialog.py" line="2213"/>
+        <location filename="../../App/Widget/Control.py" line="939"/>
+        <location filename="../../App/Widget/Dialog.py" line="2014"/>
+        <location filename="../../App/Widget/Dialog.py" line="2207"/>
         <location filename="../../App/Widget/Form.py" line="194"/>
         <location filename="../../App/Widget/Form.py" line="530"/>
         <source>Question</source>
@@ -731,8 +730,8 @@ Black = Transparent</source>
         <location filename="../../App/Widget/Dialog.py" line="732"/>
         <location filename="../../App/Widget/Dialog.py" line="740"/>
         <location filename="../../App/Widget/Dialog.py" line="748"/>
-        <location filename="../../App/Widget/Dialog.py" line="1301"/>
-        <location filename="../../App/Widget/Dialog.py" line="1314"/>
+        <location filename="../../App/Widget/Dialog.py" line="1295"/>
+        <location filename="../../App/Widget/Dialog.py" line="1308"/>
         <source>=</source>
         <translation>=</translation>
     </message>
@@ -741,7 +740,7 @@ Black = Transparent</source>
         <location filename="../../App/Widget/Dialog.py" line="712"/>
         <location filename="../../App/Widget/Dialog.py" line="733"/>
         <location filename="../../App/Widget/Dialog.py" line="741"/>
-        <location filename="../../App/Widget/Dialog.py" line="1302"/>
+        <location filename="../../App/Widget/Dialog.py" line="1296"/>
         <source>&lt;</source>
         <translation>&lt;</translation>
     </message>
@@ -750,7 +749,7 @@ Black = Transparent</source>
         <location filename="../../App/Widget/Dialog.py" line="713"/>
         <location filename="../../App/Widget/Dialog.py" line="734"/>
         <location filename="../../App/Widget/Dialog.py" line="742"/>
-        <location filename="../../App/Widget/Dialog.py" line="1303"/>
+        <location filename="../../App/Widget/Dialog.py" line="1297"/>
         <source>&lt;=</source>
         <translation>&lt;=</translation>
     </message>
@@ -759,7 +758,7 @@ Black = Transparent</source>
         <location filename="../../App/Widget/Dialog.py" line="714"/>
         <location filename="../../App/Widget/Dialog.py" line="735"/>
         <location filename="../../App/Widget/Dialog.py" line="743"/>
-        <location filename="../../App/Widget/Dialog.py" line="1304"/>
+        <location filename="../../App/Widget/Dialog.py" line="1298"/>
         <source>&gt;</source>
         <translation>&gt;</translation>
     </message>
@@ -768,7 +767,7 @@ Black = Transparent</source>
         <location filename="../../App/Widget/Dialog.py" line="715"/>
         <location filename="../../App/Widget/Dialog.py" line="736"/>
         <location filename="../../App/Widget/Dialog.py" line="744"/>
-        <location filename="../../App/Widget/Dialog.py" line="1305"/>
+        <location filename="../../App/Widget/Dialog.py" line="1299"/>
         <source>&gt;=</source>
         <translation>&gt;=</translation>
     </message>
@@ -790,46 +789,46 @@ Black = Transparent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="1306"/>
+        <location filename="../../App/Widget/Dialog.py" line="1300"/>
         <source>&lt;&gt;</source>
         <translation>&lt;&gt;</translation>
     </message>
     <message>
         <location filename="../../App/Widget/Dialog.py" line="721"/>
         <location filename="../../App/Widget/Dialog.py" line="729"/>
-        <location filename="../../App/Widget/Dialog.py" line="1307"/>
-        <location filename="../../App/Widget/Dialog.py" line="1311"/>
-        <location filename="../../App/Widget/Dialog.py" line="1318"/>
+        <location filename="../../App/Widget/Dialog.py" line="1301"/>
+        <location filename="../../App/Widget/Dialog.py" line="1305"/>
+        <location filename="../../App/Widget/Dialog.py" line="1312"/>
         <source>Is null</source>
         <translation>è null</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="1308"/>
-        <location filename="../../App/Widget/Dialog.py" line="1312"/>
-        <location filename="../../App/Widget/Dialog.py" line="1319"/>
+        <location filename="../../App/Widget/Dialog.py" line="1302"/>
+        <location filename="../../App/Widget/Dialog.py" line="1306"/>
+        <location filename="../../App/Widget/Dialog.py" line="1313"/>
         <source>Is not null</source>
         <translation>non è null</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="1310"/>
+        <location filename="../../App/Widget/Dialog.py" line="1304"/>
         <source>Is</source>
         <translation>è</translation>
     </message>
     <message>
         <location filename="../../App/Widget/Dialog.py" line="726"/>
-        <location filename="../../App/Widget/Dialog.py" line="1316"/>
+        <location filename="../../App/Widget/Dialog.py" line="1310"/>
         <source>Starts with</source>
         <translation>comincia con</translation>
     </message>
     <message>
         <location filename="../../App/Widget/Dialog.py" line="727"/>
-        <location filename="../../App/Widget/Dialog.py" line="1317"/>
+        <location filename="../../App/Widget/Dialog.py" line="1311"/>
         <source>Ends with</source>
         <translation>termina con</translation>
     </message>
     <message>
         <location filename="../../App/Widget/Dialog.py" line="725"/>
-        <location filename="../../App/Widget/Dialog.py" line="1315"/>
+        <location filename="../../App/Widget/Dialog.py" line="1309"/>
         <source>Contains</source>
         <translation>contiene</translation>
     </message>
@@ -920,12 +919,12 @@ Black = Transparent</source>
 <context>
     <name>PrintDialog</name>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="1925"/>
+        <location filename="../../App/Widget/Dialog.py" line="1919"/>
         <source>Error executing database query</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="1928"/>
+        <location filename="../../App/Widget/Dialog.py" line="1922"/>
         <source>Database error</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1083,7 +1082,7 @@ Black = Transparent</source>
 <context>
     <name>ReportDialog</name>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="1331"/>
+        <location filename="../../App/Widget/Dialog.py" line="1325"/>
         <source>None</source>
         <translation>Nessuno</translation>
     </message>
@@ -1208,13 +1207,13 @@ Black = Transparent</source>
     <name>Sort</name>
     <message>
         <location filename="../../App/Widget/Dialog.py" line="752"/>
-        <location filename="../../App/Widget/Dialog.py" line="1321"/>
+        <location filename="../../App/Widget/Dialog.py" line="1315"/>
         <source>Ascending</source>
         <translation>Crescente</translation>
     </message>
     <message>
         <location filename="../../App/Widget/Dialog.py" line="753"/>
-        <location filename="../../App/Widget/Dialog.py" line="1322"/>
+        <location filename="../../App/Widget/Dialog.py" line="1316"/>
         <source>Descending</source>
         <translation>Decrescente</translation>
     </message>
@@ -1281,7 +1280,7 @@ Black = Transparent</source>
 <context>
     <name>controls</name>
     <message>
-        <location filename="../../App/Widget/Control.py" line="644"/>
+        <location filename="../../App/Widget/Control.py" line="647"/>
         <source>Type the password here</source>
         <translation>Inserire la password</translation>
     </message>

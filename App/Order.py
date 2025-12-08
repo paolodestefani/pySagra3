@@ -108,7 +108,6 @@ def orderEntry() -> None:
     title = currentAction['app_activity_order_entry'].text()
     auth = currentAction['app_activity_order_entry'].data()
     # exit if no event available
-    print("Event", session)
     if not session['event_id']:
         QMessageBox.warning(mw,
                             _tr('MessageDialog', "Warning"),
@@ -271,8 +270,8 @@ class BaseOrderDialog(QDialog):
         self.ui.pushButtonTablesSwitch.setIcon(currentIcon['dialog_switch'])
         self.ui.pushButtonConfirm.setIcon(currentIcon['dialog_ok'])
         self.ui.pushButtonCancel.setIcon(currentIcon['dialog_cancel'])
-        self.ui.pushButtonVariants.setIcon(currentIcon['dialog_variants'])
-        self.ui.pushButtonShowLevel.setIcon(currentIcon['file_stockinventory'])
+        #self.ui.pushButtonVariants.setIcon(currentIcon['dialog_variants'])
+        #self.ui.pushButtonShowLevel.setIcon(currentIcon['file_stockinventory'])
         self.ui.pushButtonTablesSwitch.setText(_tr('OrderDialog', 'Order'))
         # idle time control
         if setting['check_inactivity']:

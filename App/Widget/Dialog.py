@@ -883,15 +883,16 @@ class SortFilterDialog(QDialog):
         for row in range(len(self.model.columns)):
             self.ui.layoutSorting.itemAtPosition(row, SORTFIELD).widget().setCurrentIndex(0)
             self.ui.layoutSorting.itemAtPosition(row, SORTORDER).widget().setCurrentIndex(0)
-        # set filters
+        # get sort and filter params
         try:
-            result = get_sortfilter_setting(sortFilterId, 'F')
+            filters, sortings = get_sortfilter_setting(sortFilterId)
         except PyAppDBError as er:
             QMessageBox.critical(self,
                                  _tr("MessageDialog", "Critical"),
                                  f"Database error: {er.code}\n{er.message}")
             return
-        for row, cmb1, neg, cmb2, wv in result:
+        # set filters settings
+        for t, row, cmb1, neg, cmb2, wv in filters:
             self.ui.layoutFilters.itemAtPosition(row, FIELD).widget().setCurrentIndex(cmb1)
             self.ui.layoutFilters.itemAtPosition(row, NEGATE).widget().setChecked(neg)
             self.ui.layoutFilters.itemAtPosition(row, OPERATOR).widget().setCurrentIndex(cmb2)
@@ -926,15 +927,8 @@ class SortFilterDialog(QDialog):
         else:
             self.ui.checkBoxMaxRows.setChecked(False)
         
-        # set sorting
-        try:
-            result = get_sortfilter_setting(sortFilterId, 'S')
-        except PyAppDBError as er:
-            QMessageBox.critical(self,
-                                 _tr("MessageDialog", "Critical"),
-                                 f"Database error: {er.code}\n{er.message}")
-            return
-        for row, cmb1, neg, cmb2, wv in result:
+        # set sorting settings
+        for t, row, cmb1, neg, cmb2, wv in sortings:
             self.ui.layoutSorting.itemAtPosition(row, SORTFIELD).widget().setCurrentIndex(cmb1)
             self.ui.layoutSorting.itemAtPosition(row, SORTORDER).widget().setCurrentIndex(cmb2)
         # sort filter class sorting

@@ -499,6 +499,13 @@ class ColorComboBox(QComboBox):
             painter.drawRect(pix.rect())
             self.addItem(QIcon(pix), k, v)
             painter.end()
+            
+    def currentColor(self):
+        return self.currentData(Qt.UserRole)
+    
+    def setCurrentColor(self, color):
+        index = self.findData(color)
+        self.setCurrentIndex(index if index >= 0 else 0)  # can be -1 on New
 
     @Property("QVariant", notify=itemChanged)
     def modelDataStr(self):

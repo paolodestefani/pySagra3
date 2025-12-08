@@ -28,7 +28,7 @@ class Ui_OrderDialog0(object):
         if not OrderDialog0.objectName():
             OrderDialog0.setObjectName(u"OrderDialog0")
         OrderDialog0.setWindowModality(Qt.WindowModality.NonModal)
-        OrderDialog0.resize(1151, 568)
+        OrderDialog0.resize(1133, 462)
         font = QFont()
         font.setPointSize(10)
         OrderDialog0.setFont(font)
@@ -39,21 +39,20 @@ class Ui_OrderDialog0(object):
         self.verticalLayout_14.setObjectName(u"verticalLayout_14")
         self.horizontalLayout_4 = QHBoxLayout()
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.groupBox_4 = QGroupBox(OrderDialog0)
-        self.groupBox_4.setObjectName(u"groupBox_4")
-        self.verticalLayout_6 = QVBoxLayout(self.groupBox_4)
-        self.verticalLayout_6.setSpacing(2)
+        self.groupBoxDeliver = QGroupBox(OrderDialog0)
+        self.groupBoxDeliver.setObjectName(u"groupBoxDeliver")
+        self.verticalLayout_6 = QVBoxLayout(self.groupBoxDeliver)
         self.verticalLayout_6.setObjectName(u"verticalLayout_6")
         self.verticalLayout_6.setContentsMargins(2, 2, 2, 2)
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.radioButtonTable = QRadioButton(self.groupBox_4)
+        self.radioButtonTable = QRadioButton(self.groupBoxDeliver)
         self.radioButtonTable.setObjectName(u"radioButtonTable")
         self.radioButtonTable.setChecked(True)
 
         self.horizontalLayout_2.addWidget(self.radioButtonTable)
 
-        self.radioButtonTakeAway = QRadioButton(self.groupBox_4)
+        self.radioButtonTakeAway = QRadioButton(self.groupBoxDeliver)
         self.radioButtonTakeAway.setObjectName(u"radioButtonTakeAway")
 
         self.horizontalLayout_2.addWidget(self.radioButtonTakeAway)
@@ -62,27 +61,27 @@ class Ui_OrderDialog0(object):
         self.verticalLayout_6.addLayout(self.horizontalLayout_2)
 
 
-        self.horizontalLayout_4.addWidget(self.groupBox_4)
+        self.horizontalLayout_4.addWidget(self.groupBoxDeliver)
 
-        self.groupBox_6 = QGroupBox(OrderDialog0)
-        self.groupBox_6.setObjectName(u"groupBox_6")
-        self.verticalLayout_8 = QVBoxLayout(self.groupBox_6)
+        self.groupBoxTableNum = QGroupBox(OrderDialog0)
+        self.groupBoxTableNum.setObjectName(u"groupBoxTableNum")
+        self.verticalLayout_8 = QVBoxLayout(self.groupBoxTableNum)
         self.verticalLayout_8.setObjectName(u"verticalLayout_8")
-        self.verticalLayout_8.setContentsMargins(0, 0, 0, 0)
-        self.lineEditTable = QLineEdit(self.groupBox_6)
+        self.verticalLayout_8.setContentsMargins(2, 2, 2, 2)
+        self.lineEditTable = QLineEdit(self.groupBoxTableNum)
         self.lineEditTable.setObjectName(u"lineEditTable")
 
         self.verticalLayout_8.addWidget(self.lineEditTable)
 
 
-        self.horizontalLayout_4.addWidget(self.groupBox_6)
+        self.horizontalLayout_4.addWidget(self.groupBoxTableNum)
 
-        self.groupBox_7 = QGroupBox(OrderDialog0)
-        self.groupBox_7.setObjectName(u"groupBox_7")
-        self.verticalLayout_9 = QVBoxLayout(self.groupBox_7)
+        self.groupBoxCovers = QGroupBox(OrderDialog0)
+        self.groupBoxCovers.setObjectName(u"groupBoxCovers")
+        self.verticalLayout_9 = QVBoxLayout(self.groupBoxCovers)
         self.verticalLayout_9.setObjectName(u"verticalLayout_9")
-        self.verticalLayout_9.setContentsMargins(0, 0, 0, 0)
-        self.spinBoxCovers = QSpinBox(self.groupBox_7)
+        self.verticalLayout_9.setContentsMargins(2, 2, 2, 2)
+        self.spinBoxCovers = QSpinBox(self.groupBoxCovers)
         self.spinBoxCovers.setObjectName(u"spinBoxCovers")
         self.spinBoxCovers.setMinimum(0)
         self.spinBoxCovers.setMaximum(999)
@@ -90,64 +89,53 @@ class Ui_OrderDialog0(object):
         self.verticalLayout_9.addWidget(self.spinBoxCovers)
 
 
-        self.horizontalLayout_4.addWidget(self.groupBox_7)
+        self.horizontalLayout_4.addWidget(self.groupBoxCovers)
 
-        self.groupBox_8 = QGroupBox(OrderDialog0)
-        self.groupBox_8.setObjectName(u"groupBox_8")
-        self.verticalLayout_10 = QVBoxLayout(self.groupBox_8)
+        self.groupBoxCustomerName = QGroupBox(OrderDialog0)
+        self.groupBoxCustomerName.setObjectName(u"groupBoxCustomerName")
+        self.verticalLayout_10 = QVBoxLayout(self.groupBoxCustomerName)
         self.verticalLayout_10.setObjectName(u"verticalLayout_10")
-        self.verticalLayout_10.setContentsMargins(0, 0, 0, 0)
-        self.lineEditCustomerName = QLineEdit(self.groupBox_8)
+        self.verticalLayout_10.setContentsMargins(2, 2, 2, 2)
+        self.lineEditCustomerName = QLineEdit(self.groupBoxCustomerName)
         self.lineEditCustomerName.setObjectName(u"lineEditCustomerName")
 
         self.verticalLayout_10.addWidget(self.lineEditCustomerName)
 
 
-        self.horizontalLayout_4.addWidget(self.groupBox_8)
+        self.horizontalLayout_4.addWidget(self.groupBoxCustomerName)
 
-        self.groupBox_9 = QGroupBox(OrderDialog0)
-        self.groupBox_9.setObjectName(u"groupBox_9")
-        self.verticalLayout_17 = QVBoxLayout(self.groupBox_9)
+        self.groupBoxCustomerContact = QGroupBox(OrderDialog0)
+        self.groupBoxCustomerContact.setObjectName(u"groupBoxCustomerContact")
+        self.verticalLayout_17 = QVBoxLayout(self.groupBoxCustomerContact)
         self.verticalLayout_17.setObjectName(u"verticalLayout_17")
-        self.verticalLayout_17.setContentsMargins(0, 0, 0, 0)
-        self.lineEditCustomerContact = QLineEdit(self.groupBox_9)
+        self.verticalLayout_17.setContentsMargins(2, 2, 2, 2)
+        self.lineEditCustomerContact = QLineEdit(self.groupBoxCustomerContact)
         self.lineEditCustomerContact.setObjectName(u"lineEditCustomerContact")
 
         self.verticalLayout_17.addWidget(self.lineEditCustomerContact)
 
 
-        self.horizontalLayout_4.addWidget(self.groupBox_9)
+        self.horizontalLayout_4.addWidget(self.groupBoxCustomerContact)
 
-        self.groupBoxWebOrderFlag = QGroupBox(OrderDialog0)
-        self.groupBoxWebOrderFlag.setObjectName(u"groupBoxWebOrderFlag")
-        self.groupBoxWebOrderFlag.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
-        self.groupBoxWebOrderFlag.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
-        self.groupBoxWebOrderFlag.setFlat(True)
-        self.verticalLayout_18 = QVBoxLayout(self.groupBoxWebOrderFlag)
-        self.verticalLayout_18.setObjectName(u"verticalLayout_18")
-        self.verticalLayout_18.setContentsMargins(0, 0, 0, 0)
-        self.checkBoxWebOrder = QCheckBox(self.groupBoxWebOrderFlag)
-        self.checkBoxWebOrder.setObjectName(u"checkBoxWebOrder")
-        self.checkBoxWebOrder.setEnabled(True)
-        self.checkBoxWebOrder.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
-
-        self.verticalLayout_18.addWidget(self.checkBoxWebOrder)
-
-
-        self.horizontalLayout_4.addWidget(self.groupBoxWebOrderFlag)
-
-        self.groupBox_5 = QGroupBox(OrderDialog0)
-        self.groupBox_5.setObjectName(u"groupBox_5")
-        self.verticalLayout_11 = QVBoxLayout(self.groupBox_5)
+        self.groupBoxWebOrderInput = QGroupBox(OrderDialog0)
+        self.groupBoxWebOrderInput.setObjectName(u"groupBoxWebOrderInput")
+        self.verticalLayout_11 = QVBoxLayout(self.groupBoxWebOrderInput)
         self.verticalLayout_11.setObjectName(u"verticalLayout_11")
-        self.verticalLayout_11.setContentsMargins(0, 0, 0, 0)
-        self.lineEditBarCode = QLineEdit(self.groupBox_5)
+        self.verticalLayout_11.setContentsMargins(2, 2, 2, 2)
+        self.lineEditBarCode = QLineEdit(self.groupBoxWebOrderInput)
         self.lineEditBarCode.setObjectName(u"lineEditBarCode")
 
         self.verticalLayout_11.addWidget(self.lineEditBarCode)
 
 
-        self.horizontalLayout_4.addWidget(self.groupBox_5)
+        self.horizontalLayout_4.addWidget(self.groupBoxWebOrderInput)
+
+        self.checkBoxWebOrder = QCheckBox(OrderDialog0)
+        self.checkBoxWebOrder.setObjectName(u"checkBoxWebOrder")
+        self.checkBoxWebOrder.setEnabled(True)
+        self.checkBoxWebOrder.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+
+        self.horizontalLayout_4.addWidget(self.checkBoxWebOrder)
 
         self.pushButtonTablesSwitch = QPushButton(OrderDialog0)
         self.pushButtonTablesSwitch.setObjectName(u"pushButtonTablesSwitch")
@@ -186,12 +174,10 @@ class Ui_OrderDialog0(object):
         self.stackedWidgetTableOrder.setObjectName(u"stackedWidgetTableOrder")
         self.Order = QWidget()
         self.Order.setObjectName(u"Order")
-        self.verticalLayout_12 = QVBoxLayout(self.Order)
+        self.horizontalLayout_7 = QHBoxLayout(self.Order)
+        self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
+        self.verticalLayout_12 = QVBoxLayout()
         self.verticalLayout_12.setObjectName(u"verticalLayout_12")
-        self.horizontalLayout_8 = QHBoxLayout()
-        self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
-        self.verticalLayout_2 = QVBoxLayout()
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.tabWidgetList = QTabWidget(self.Order)
         self.tabWidgetList.setObjectName(u"tabWidgetList")
         sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
@@ -208,18 +194,23 @@ class Ui_OrderDialog0(object):
         self.tabWidgetList.setElideMode(Qt.TextElideMode.ElideRight)
         self.tabWidgetList.setTabsClosable(False)
 
-        self.verticalLayout_2.addWidget(self.tabWidgetList)
+        self.verticalLayout_12.addWidget(self.tabWidgetList)
 
+        self.groupBox_10 = QGroupBox(self.Order)
+        self.groupBox_10.setObjectName(u"groupBox_10")
+        self.verticalLayout_2 = QVBoxLayout(self.groupBox_10)
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.verticalLayout_2.setContentsMargins(5, 5, 5, 5)
         self.horizontalLayout_3 = QHBoxLayout()
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.pushButtonVariants = QPushButton(self.Order)
+        self.pushButtonVariants = QPushButton(self.groupBox_10)
         self.pushButtonVariants.setObjectName(u"pushButtonVariants")
         self.pushButtonVariants.setIconSize(QSize(24, 24))
         self.pushButtonVariants.setCheckable(True)
 
         self.horizontalLayout_3.addWidget(self.pushButtonVariants)
 
-        self.pushButtonShowLevel = QPushButton(self.Order)
+        self.pushButtonShowLevel = QPushButton(self.groupBox_10)
         self.pushButtonShowLevel.setObjectName(u"pushButtonShowLevel")
         self.pushButtonShowLevel.setIconSize(QSize(24, 24))
         self.pushButtonShowLevel.setCheckable(True)
@@ -230,7 +221,7 @@ class Ui_OrderDialog0(object):
 
         self.horizontalLayout_3.addItem(self.horizontalSpacer)
 
-        self.labelCashDeskDescription = QLabel(self.Order)
+        self.labelCashDeskDescription = QLabel(self.groupBox_10)
         self.labelCashDeskDescription.setObjectName(u"labelCashDeskDescription")
         font2 = QFont()
         font2.setPointSize(16)
@@ -244,7 +235,7 @@ class Ui_OrderDialog0(object):
 
         self.horizontalLayout_3.addItem(self.horizontalSpacer_2)
 
-        self.groupBox = QGroupBox(self.Order)
+        self.groupBox = QGroupBox(self.groupBox_10)
         self.groupBox.setObjectName(u"groupBox")
         self.verticalLayout = QVBoxLayout(self.groupBox)
         self.verticalLayout.setObjectName(u"verticalLayout")
@@ -277,7 +268,10 @@ class Ui_OrderDialog0(object):
         self.verticalLayout_2.addLayout(self.horizontalLayout_3)
 
 
-        self.horizontalLayout_8.addLayout(self.verticalLayout_2)
+        self.verticalLayout_12.addWidget(self.groupBox_10)
+
+
+        self.horizontalLayout_7.addLayout(self.verticalLayout_12)
 
         self.verticalLayout_5 = QVBoxLayout()
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
@@ -385,6 +379,7 @@ class Ui_OrderDialog0(object):
         self.groupBox_3.setMaximumSize(QSize(478, 16777215))
         self.verticalLayout_4 = QVBoxLayout(self.groupBox_3)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
+        self.verticalLayout_4.setContentsMargins(5, 5, 5, 5)
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
         self.label_4 = QLabel(self.groupBox_3)
@@ -477,7 +472,6 @@ class Ui_OrderDialog0(object):
         sizePolicy7.setVerticalStretch(0)
         sizePolicy7.setHeightForWidth(self.pushButtonConfirm.sizePolicy().hasHeightForWidth())
         self.pushButtonConfirm.setSizePolicy(sizePolicy7)
-        self.pushButtonConfirm.setMinimumSize(QSize(150, 0))
         self.pushButtonConfirm.setFont(font5)
         self.pushButtonConfirm.setIconSize(QSize(32, 32))
 
@@ -487,7 +481,6 @@ class Ui_OrderDialog0(object):
         self.pushButtonCancel.setObjectName(u"pushButtonCancel")
         sizePolicy7.setHeightForWidth(self.pushButtonCancel.sizePolicy().hasHeightForWidth())
         self.pushButtonCancel.setSizePolicy(sizePolicy7)
-        self.pushButtonCancel.setMinimumSize(QSize(120, 0))
         font6 = QFont()
         font6.setPointSize(12)
         self.pushButtonCancel.setFont(font6)
@@ -538,10 +531,7 @@ class Ui_OrderDialog0(object):
         self.verticalLayout_5.addWidget(self.groupBox_3)
 
 
-        self.horizontalLayout_8.addLayout(self.verticalLayout_5)
-
-
-        self.verticalLayout_12.addLayout(self.horizontalLayout_8)
+        self.horizontalLayout_7.addLayout(self.verticalLayout_5)
 
         self.stackedWidgetTableOrder.addWidget(self.Order)
         self.Tables = QWidget()
@@ -553,7 +543,7 @@ class Ui_OrderDialog0(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 74, 16))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 98, 28))
         self.verticalLayout_13 = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_13.setObjectName(u"verticalLayout_13")
         self.verticalLayout_13.setContentsMargins(0, 0, 0, 0)
@@ -605,26 +595,26 @@ class Ui_OrderDialog0(object):
 
     def retranslateUi(self, OrderDialog0):
         OrderDialog0.setWindowTitle(QCoreApplication.translate("OrderDialog0", u"Order dialog", None))
-        self.groupBox_4.setTitle(QCoreApplication.translate("OrderDialog0", u"Deliver to", None))
+        self.groupBoxDeliver.setTitle(QCoreApplication.translate("OrderDialog0", u"Deliver to", None))
         self.radioButtonTable.setText(QCoreApplication.translate("OrderDialog0", u"Table", None))
         self.radioButtonTakeAway.setText(QCoreApplication.translate("OrderDialog0", u"Take-away", None))
-        self.groupBox_6.setTitle(QCoreApplication.translate("OrderDialog0", u"Table number", None))
+        self.groupBoxTableNum.setTitle(QCoreApplication.translate("OrderDialog0", u"Table number", None))
         self.lineEditTable.setInputMask("")
-        self.groupBox_7.setTitle(QCoreApplication.translate("OrderDialog0", u"Covers", None))
-        self.groupBox_8.setTitle(QCoreApplication.translate("OrderDialog0", u"Customer name", None))
-        self.groupBox_9.setTitle(QCoreApplication.translate("OrderDialog0", u"Customer contact", None))
-        self.groupBoxWebOrderFlag.setTitle(QCoreApplication.translate("OrderDialog0", u"WO", None))
-#if QT_CONFIG(tooltip)
-        self.checkBoxWebOrder.setToolTip(QCoreApplication.translate("OrderDialog0", u"Checked if this order was imported from an web order QRC or number", None))
-#endif // QT_CONFIG(tooltip)
-        self.checkBoxWebOrder.setText("")
-        self.groupBox_5.setTitle(QCoreApplication.translate("OrderDialog0", u"Web order input", None))
+        self.groupBoxCovers.setTitle(QCoreApplication.translate("OrderDialog0", u"Covers", None))
+        self.groupBoxCustomerName.setTitle(QCoreApplication.translate("OrderDialog0", u"Customer name", None))
+        self.groupBoxCustomerContact.setTitle(QCoreApplication.translate("OrderDialog0", u"Customer contact", None))
+        self.groupBoxWebOrderInput.setTitle(QCoreApplication.translate("OrderDialog0", u"Web order input", None))
 #if QT_CONFIG(tooltip)
         self.lineEditBarCode.setToolTip(QCoreApplication.translate("OrderDialog0", u"Press Ctrl+F11 to set focus here", None))
 #endif // QT_CONFIG(tooltip)
 #if QT_CONFIG(tooltip)
+        self.checkBoxWebOrder.setToolTip(QCoreApplication.translate("OrderDialog0", u"Checked if this order was imported from an web order QRC or number", None))
+#endif // QT_CONFIG(tooltip)
+        self.checkBoxWebOrder.setText(QCoreApplication.translate("OrderDialog0", u"WO", None))
+#if QT_CONFIG(tooltip)
         self.lcdNumberTime.setToolTip(QCoreApplication.translate("OrderDialog0", u"Press Ctrl+F12 to change date and time", None))
 #endif // QT_CONFIG(tooltip)
+        self.groupBox_10.setTitle("")
         self.pushButtonVariants.setText(QCoreApplication.translate("OrderDialog0", u"Choose variants", None))
         self.pushButtonShowLevel.setText(QCoreApplication.translate("OrderDialog0", u"Show stock", None))
         self.labelCashDeskDescription.setText(QCoreApplication.translate("OrderDialog0", u"Cash description", None))
