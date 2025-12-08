@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 # move to projec root
-cd /Users/paolo/Development/pySagra3
+cd /Users/paolo/Development/pySagra
 
 # activate virtual env
 source /Users/paolo/Development/venv/pyside-ppg/bin/activate
@@ -46,4 +46,4 @@ pyside6-lrelease translation/ts/pySagra_it.ts -qm translation/pySagra_it.qm
 
 # exit from venv
 deactivate
-
+:

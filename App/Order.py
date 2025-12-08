@@ -260,7 +260,7 @@ class BaseOrderDialog(QDialog):
         self.ui.setupUi(self)
         global setting
         setting = Setting()
-        # restore geometry or set default and cash desk description
+        # restore geometry
         st = QSettings()
         if st.value("OrderDialogGeometry"):
             self.restoreGeometry(st.value("OrderDialogGeometry"))

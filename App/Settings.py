@@ -87,9 +87,9 @@ class SettingsDialog(QDialog):
         self.setWindowTitle(title)
         self.setting = Setting()
         self.ui.spinBoxLunch.setValue(self.setting['lunch_start_time'])
-        self.ui.verticalSliderLunch.setValue(self.setting['lunch_start_time']) # initially slider/spinbox are not connected
+        self.ui.horizontalSliderLunch.setValue(self.setting['lunch_start_time']) # initially slider/spinbox are not connected
         self.ui.spinBoxDinner.setValue(self.setting['dinner_start_time'])
-        self.ui.verticalSliderDinner.setValue(self.setting['dinner_start_time']) # initially slider/spinbox are not connected
+        self.ui.horizontalSliderDinner.setValue(self.setting['dinner_start_time']) # initially slider/spinbox are not connected
         self.ui.comboBoxOrderUI.addItems([_tr('Setting', 'Standard'),
                                           _tr('Setting', 'Totals in one column'),
                                           _tr('Setting', 'Maximize items room')])
@@ -196,10 +196,10 @@ class SettingsDialog(QDialog):
             self.restoreGeometry(st.value("DialogGeometry/Settings"))
         # signal/slot
         # slider/spinbox sincro
-        self.ui.verticalSliderLunch.valueChanged.connect(self.lunchSliderChanged)
-        self.ui.spinBoxLunch.valueChanged.connect(self.ui.verticalSliderLunch.setValue)
-        self.ui.verticalSliderDinner.valueChanged.connect(self.dinnerSliderChanged)
-        self.ui.spinBoxDinner.valueChanged.connect(self.ui.verticalSliderDinner.setValue)
+        self.ui.horizontalSliderLunch.valueChanged.connect(self.lunchSliderChanged)
+        self.ui.spinBoxLunch.valueChanged.connect(self.ui.horizontalSliderLunch.setValue)
+        self.ui.horizontalSliderDinner.valueChanged.connect(self.dinnerSliderChanged)
+        self.ui.spinBoxDinner.valueChanged.connect(self.ui.horizontalSliderDinner.setValue)
         self.ui.spinBoxCriticalLevel.valueChanged.connect(self.criticalLevelChanged)
         self.ui.spinBoxWarningLevel.valueChanged.connect(self.warningLevelChanged)
         self.ui.pushButtonNB.clicked.connect(self.selectNormalBackground)
@@ -225,12 +225,12 @@ class SettingsDialog(QDialog):
             self.ui.spinBoxCriticalLevel.setValue(value - 1)
 
     def lunchSliderChanged(self, value: int) -> None:
-        if value > self.ui.verticalSliderDinner.value():
-            self.ui.verticalSliderDinner.setValue(value)
+        if value > self.ui.horizontalSliderDinner.value():
+            self.ui.horizontalSliderDinner.setValue(value)
 
     def dinnerSliderChanged(self, value: int) -> None:
-        if value < self.ui.verticalSliderLunch.value():
-            self.ui.verticalSliderLunch.setValue(value)
+        if value < self.ui.horizontalSliderLunch.value():
+            self.ui.horizontalSliderLunch.setValue(value)
 
     def selectNormalBackground(self) -> None:
         color = QColorDialog.getColor(QColor(self.ui.pushButtonNB.color), self)

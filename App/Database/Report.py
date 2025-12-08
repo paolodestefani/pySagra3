@@ -130,21 +130,29 @@ WHERE report_adapt_id = %s;"""
     except psycopg.Error as er:
         raise PyAppDBError(er.diag.sqlstate, str(er))
 
-def get_report_adapt(adapt_id, adapt_type):
+def get_report_adapt_setting(adapt_id):
     "Returns the report customizations"
     script = """
 SELECT 
+    adapt_type,
     layout_row,
     combo1_index,
     combo2_index,
     widget_value
 FROM system.report_adapt_setting
-WHERE report_adapt_id = %s AND adapt_type = %s
-ORDER BY layout_row;"""
+WHERE report_adapt_id = %s
+ORDER BY adapt_type, layout_row;"""
     try:
         with appconn.cursor() as cur:
-            cur.execute(script, (adapt_id, adapt_type))
-            return cur.fetchall()
+            cur.execute(script, (adapt_id,))
+            if cur.rowcount == 0:
+                return [], [], [] # Parameters, Filters, Sorting
+            else:
+                d = cur.fetchall()
+                p = [i for i in d if i[0] == 'P'] # Parameters
+                f = [i for i in d if i[0] == 'F'] # Filters
+                s = [i for i in d if i[0] == 'S'] # Sorting
+                return p, f, s
     except psycopg.Error as er:
         raise PyAppDBError(er.diag.sqlstate, str(er))
 
@@ -317,10 +325,14 @@ WHERE report_id = %s;"""
     except psycopg.Error as er:
         raise PyAppDBError(er.diag.sqlstate, str(er))
 
-def get_report_id_from_adapt(adapt_id):
+def get_report_from_adapt(adapt_id):
     script = """
 SELECT 
-    r.report_id
+    r.report_id,
+    r.report_code,
+    r.report_class,
+    r.description,
+    r.l10n
 FROM system.report r
 JOIN system.report_adapt ra ON r.report_id = ra.report_id
 WHERE ra.report_adapt_id = %s;"""
@@ -328,7 +340,7 @@ WHERE ra.report_adapt_id = %s;"""
         with appconn.cursor() as cur:
             cur.execute(script, (adapt_id,))
             if cur.rowcount == 1:
-                return cur.fetchone()[0]
+                return cur.fetchone()
             else:
                 return None
     except psycopg.Error as er:
@@ -371,7 +383,10 @@ def report_query(report, condition=None, sorting=None):
     if sorting:
         if not report.query_order_by:
             script += "\nORDER BY "
-        script += f"{', '.join(sorting)}"
+            script += f"{', '.join(sorting)}"
+        else:
+            script += f", {', '.join(sorting)}"
+    # terminate script
     script += ";"
     # execute query and returns result set
     print(script)

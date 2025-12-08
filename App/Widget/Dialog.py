@@ -106,11 +106,11 @@ from App.Database.Report import report_class_adapt_list
 from App.Database.Report import get_report_list
 from App.Database.Report import get_report_id
 from App.Database.Report import report_xml
-from App.Database.Report import get_report_id_from_adapt
+from App.Database.Report import get_report_from_adapt
 from App.Database.Report import report_query
 from App.Database.Report import clear_report_adapt
 from App.Database.Report import set_report_adapt
-from App.Database.Report import get_report_adapt
+from App.Database.Report import get_report_adapt_setting
 from App.Database.Report import delete_report_adapt
 from App.Database.Report import create_new_adapt
 from App.Database.Report import report_adapt_sorting
@@ -1290,7 +1290,7 @@ class EventFilterDialog(QDialog, Ui_EventFilterDialog):
 
 class PrintDialog(QDialog):
     "Print dialog"
-
+    
     def __init__(self, parent, reportClass=None, l10n=None, reportId=None, model=None):
         super().__init__(parent)
         self.ui = Ui_PrintDialog()
@@ -1520,7 +1520,7 @@ class PrintDialog(QDialog):
                                  _tr("MessageDialog", "Critical"),
                                  f"Database error: {er.code}\n{er.message}")
         else:
-            self.setCustomization()
+            self.setReportCustomization()
             QMessageBox.information(self,
                                     _tr("MessageDialog", "Information"),
                                     _tr("Dialog", "Customization deleted"))
@@ -1551,18 +1551,18 @@ class PrintDialog(QDialog):
         # update report customization list
         self.reportCustomizationList()
 
-    def setCustomization(self):
-        "Restore saved customization"
+    def setCustomizationSetting(self):
+        "Restore saved customization settings"
         customizationId = self.ui.comboBoxReportCustomizations.currentData()
-        # parameters
         try:
-            result = get_report_adapt(customizationId, 'P')
+            params, filters, sorting = get_report_adapt_setting(customizationId)
         except PyAppDBError as er:
             QMessageBox.critical(self,
                                  _tr("MessageDialog", "Critical"),
                                  f"Database error: {er.code}\n{er.message}")
             return
-        for row, cmb1, cmb2, wv in result:
+        # parameters
+        for t, row, cmb1, cmb2, wv in params:
             if not wv:  # this happens on report modification, old customization could refer to deleted objects
                 continue
             widget = self.ui.layoutParameters.itemAtPosition(row, 1).widget()
@@ -1582,14 +1582,7 @@ class PrintDialog(QDialog):
                 else:
                     widget.setChecked(False)
         # filters
-        try:
-            result = get_report_adapt(customizationId, 'F')
-        except PyAppDBError as er:
-            QMessageBox.critical(self,
-                                 _tr("MessageDialog", "Critical"),
-                                 f"Database error: {er.code}\n{er.message}")
-            return
-        for row, cmb1, cmb2, wv in result:
+        for t, row, cmb1, cmb2, wv in filters:
             self.ui.layoutFilters.itemAtPosition(row, 0).widget().setCurrentIndex(cmb1)
             self.ui.layoutFilters.itemAtPosition(row, 1).widget().setCurrentIndex(cmb2)
             widget = self.ui.layoutFilters.itemAtPosition(row, 2).widget()
@@ -1609,14 +1602,7 @@ class PrintDialog(QDialog):
                 else:
                     widget.setChecked(False)
         # sorting
-        try:
-            result = get_report_adapt(customizationId, 'S')
-        except PyAppDBError as er:
-            QMessageBox.critical(self,
-                                 _tr("MessageDialog", "Critical"),
-                                 f"Database error: {er.code}\n{er.message}")
-            return
-        for row, cmb1, cmb2, wv in result:
+        for t, row, cmb1, cmb2, wv in sorting:
             self.ui.layoutSorting.itemAtPosition(row, 0).widget().setCurrentIndex(cmb1)
             self.ui.layoutSorting.itemAtPosition(row, 1).widget().setCurrentIndex(cmb2)
         # set pdf file name if a report exists
@@ -1625,11 +1611,12 @@ class PrintDialog(QDialog):
             #self.ui.lineEditAttachment.setText(self.report.options.get('documentName'))
 
     def setReportCustomization(self, index):
-        "Set report customiztion and create widgets"
+        "Set report definition from customization and create widgets"
         customizationId = self.ui.comboBoxReportCustomizations.currentData()
         if customizationId:
             # create a report instance for current report id and l10n
-            report_id = get_report_id_from_adapt(customizationId)
+            report_id, cd, cl, report_desc, l10n = get_report_from_adapt(customizationId)
+            self.ui.comboBoxReportList.setCurrentText((report_desc))
         else:
             # no customizations, use the current report
             report_id =  self.ui.comboBoxReportList.currentData()    
@@ -1725,16 +1712,16 @@ class PrintDialog(QDialog):
         # report class sorting
         self.ui.spinBoxClassSorting.setValue(report_adapt_sorting(customizationId))
         # restore customizations
-        self.setCustomization()
+        self.setCustomizationSetting()
 
     def setReportCustomizationSorting(self):
-        "Set current report as default for report class"
+        "Set current report sorting for report class"
         if self.ui.comboBoxReportCustomizations.count() == 0:
             return
         customizationId = self.ui.comboBoxReportCustomizations.currentData()
         try:
             set_report_adapt_sorting(customizationId,
-                                             self.ui.spinBoxClassSorting.value())
+                                     self.ui.spinBoxClassSorting.value())
         except PyAppDBError as er:
             QMessageBox.critical(self,
                                  _tr("MessageDialog", "Critical"),
@@ -1743,6 +1730,9 @@ class PrintDialog(QDialog):
             QMessageBox.information(self,
                                     _tr("MessageDialog", "Information"),
                                     _tr("Dialog", "Current customization sorting updated"))
+        # apply sorting
+        self.reportCustomizationList()
+        self.setReportCustomization(-1)  # initial settings
 
     def condIndexChanged(self, index):
         "Set combobox items and parameter QWidget"
