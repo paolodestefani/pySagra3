@@ -88,7 +88,7 @@ REPORT_CLASSES = [None,
                   "COMPANY", "PROFILE", "USER",
                   "PRINTER", "TABLE", "EVENT", "ITEM", "PRICE_LIST", 
                   "ORDER_CUSTOMER", "ORDER_DEPARTMENT", "ORDER_COVER", "ORDER_LIST",
-                  "STOCK_UNLOAD", "INCOME_SUMMARY", "STATISTICS", "STATSVIEW"]
+                  "STOCK_UNLOAD", "CASH_SUMMARY", "STATISTICS", "STATSVIEW"]
 
 FORM, GRID = range(2)
 

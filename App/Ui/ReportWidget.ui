@@ -169,7 +169,7 @@
        <item>
         <widget class="QPushButton" name="pushButtonInsertImage">
          <property name="text">
-          <string>Insert image to clipboard</string>
+          <string>Insert image from file to clipboard</string>
          </property>
         </widget>
        </item>
@@ -229,14 +229,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>EnhancedTableView</class>
-   <extends>QTableView</extends>
-   <header>App.Widget.View</header>
-  </customwidget>
-  <customwidget>
    <class>RelationalComboBox</class>
    <extends>QComboBox</extends>
    <header>App.Widget.Control</header>
+  </customwidget>
+  <customwidget>
+   <class>EnhancedTableView</class>
+   <extends>QTableView</extends>
+   <header>App.Widget.View</header>
   </customwidget>
  </customwidgets>
  <tabstops>

@@ -60,12 +60,8 @@ import itertools
 import xml.etree.ElementTree as ET
 import operator
 
-# Windows font scaling fix, no effect on MacOS
-# Set this environment variable BEFORE creating QApplication
-os.environ["QT_ENABLE_HIGHDPI_SCALING"] = "0" 
-os.environ["QT_SCALE_FACTOR"] = "1"
-
 # PySide6
+from PySide6.QtCore import QOperatingSystemVersion
 from PySide6.QtCore import QLocale
 from PySide6.QtCore import Qt
 from PySide6.QtCore import QByteArray
@@ -1236,6 +1232,12 @@ class Report():
             paintDevice.setDocName(self.options['documentName'])
         elif isinstance(paintDevice, QPdfWriter ): # for PDFWriter
             paintDevice.setTitle(self.options['documentName'])
+        # forse printer resolution to platform specific DPI avoiding scaling problems
+        if isinstance(paintDevice, QPrinter):
+            if QOperatingSystemVersion.currentType() == QOperatingSystemVersion.MacOS:
+                paintDevice.setResolution(72)  # macOS uses 72 DPI
+            else:             
+                paintDevice.setResolution(96)  # Windows and Linux use 96 DPI
         # force the printer page layout to the report settings
         if not paintDevice.setPageLayout(self.pageLayout):
             w = self.pageLayout.fullRect().size().width()
@@ -1245,15 +1247,11 @@ class Report():
                 raise ReportPrintError(f"Unable to set page layout ( {u} {w} x {h} ) to paint device")
         # Coordinate system to selected unit of report definition (converted to Points)
         rect = self.pageLayout.paintRect(self.pageLayout.units()).toRect()
-        #print("Width", rect.width(), "Height", rect.height(), "Unit", list(Unit.keys())[list(Unit.values()).index(self.pageLayout.units())])
         rect.moveTo(0, 0)
         painter = QPainter(paintDevice)
         painter.setWindow(rect)
         painter.setViewport(0, 0, paintDevice.width(), paintDevice.height())
-        #print("Painter window", painter.window().width(), painter.window().height())
-        #print("Painter viewport", painter.viewport().width(), painter.viewport().height())
-        #print("Painter trasform", painter.viewTransformEnabled())
-
+        
         if isinstance(paintDevice, QPrinter):
             fromPage = paintDevice.fromPage() or 1
             toPage = paintDevice.toPage() or len(self.pages)

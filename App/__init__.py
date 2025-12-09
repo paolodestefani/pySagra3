@@ -32,22 +32,22 @@ from collections import defaultdict
 from PySide6.QtGui import QIcon
 
 # constants, language indipendent
-APPNAME = 'pySagra'
+APPNAME         = 'pySagra'
 APPVERSIONMAJOR = 1
 APPVERSIONMINOR = 0
 APPVERSIONPATCH = 0
 APPVERSIONTAG   = 'Alpha' #'"A new world"'
-AUTHOR = 'Paolo De Stefani'
-EMAIL = 'info@paolodestefani.it'
-ORGANIZATION = 'PDS Software'
-WEBSITE = 'www.paolodestefani.it'
+AUTHOR          = 'Paolo De Stefani'
+EMAIL           = 'info@paolodestefani.it'
+ORGANIZATION    = 'PDS Software'
+WEBSITE         = 'www.paolodestefani.it'
 
 # minumum required version
-MRV_PYTHON = "3.10.0"
-MRV_PYSIDE = "6.9.0"
-MRV_QT = "6.9.0"
+MRV_PYTHON  = "3.10.0"
+MRV_PYSIDE  = "6.9.0"
+MRV_QT      = "6.9.0"
 MRV_PSYCOPG = "3.0.0"
-MRV_PGSQL = 130000  # postgres minimum compatible version
+MRV_PGSQL   = 130000  # postgres minimum compatible version
 
 # key for encoding/decoding stored database user and password
 ENCKEY = "WgqvuDSWuW909HX9Cb0tNpo0IaINHRdsRkqxfImxYGQ="

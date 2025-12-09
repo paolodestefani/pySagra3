@@ -35,11 +35,6 @@ import traceback
 import logging
 import argparse
 
-# Windows font scaling fix, no effect on MacOS (as of PySide6 6.10.1)
-# Set this environment variable BEFORE creating QApplication
-os.environ["QT_ENABLE_HIGHDPI_SCALING"] = "0" 
-os.environ["QT_SCALE_FACTOR"] = "1"
-
 # check component version modules
 from platform import python_version
 from psycopg import __version__ as psycopg_version
@@ -52,7 +47,6 @@ from PySide6.QtCore import Qt
 from PySide6.QtCore import QLocale
 from PySide6.QtCore import QTranslator
 from PySide6.QtGui import QIcon
-from PySide6.QtGui import QFont
 from PySide6.QtWidgets import QApplication
 from PySide6.QtWidgets import QMessageBox
 from PySide6.QtWidgets import QDialog
@@ -137,7 +131,7 @@ if __name__ == "__main__":
               f"rel. {qVersion()}")
         sys.exit(0)
         
-    # parse command line arguments
+    # parse command line arguments for logging
     parser = argparse.ArgumentParser()
     parser.add_argument("-l", "--loglevel",
                         default="CRITICAL",
@@ -199,8 +193,6 @@ if __name__ == "__main__":
     # l10n
     logging.info('Setting up QLocale to system locale')
     lang = QLocale.system().name()[:2]  # = system language
-    #print('Systen', QLocale.system())
-    #print('Langs', QLocale().uiLanguages(QLocale.TagSeparator.Underscore)[-1])
     # on macos system locale is not correct
     if QOperatingSystemVersion.currentType() == QOperatingSystemVersion.OSType.MacOS:
         lang = QLocale().uiLanguages(QLocale.TagSeparator.Underscore)[-1]

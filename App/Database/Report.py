@@ -105,7 +105,7 @@ LEFT JOIN (
 		(11, 'ORDER_COVER'),
 		(12, 'ORDER_LIST'), 
 		(13, 'STOCK_UNLOAD'),
-		(14, 'INCOME_SUMMARY'), 
+		(14, 'CASH_SUMMARY'), 
 		(15, 'STATISTICS'),
 		(16, 'STATSVIEW')
 		) v(i, c)) v 
