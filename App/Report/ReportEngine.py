@@ -1237,7 +1237,7 @@ class Report():
             if QOperatingSystemVersion.currentType() == QOperatingSystemVersion.MacOS:
                 paintDevice.setResolution(72)  # macOS uses 72 DPI
             else:             
-                paintDevice.setResolution(96)  # Windows and Linux use 96 DPI
+                paintDevice.setResolution(96)  # Windows and Linux use 96 DPI 
         # force the printer page layout to the report settings
         if not paintDevice.setPageLayout(self.pageLayout):
             w = self.pageLayout.fullRect().size().width()
