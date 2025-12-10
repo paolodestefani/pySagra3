@@ -187,17 +187,34 @@ class ButtonList(QPushButton):
         self.setText(self.caption)
         self.id = None
         self.sc = None # boolean stock control
-        self.level = None
         self.price = None
         self.hasVariants = False
         self.setAutoFillBackground(True)
         self.setFont(QFont(setting['order_list_font_family'], setting['order_list_font_size'], QFont.Bold))
         self.setMinimumWidth(65)
+        # color palettes
+        self.normalPalette = self.palette()
+        self.normalPalette.setColor(QPalette.ColorRole.Button, QColor(self.backgroundColor))
+        self.normalPalette.setColor(QPalette.ColorRole.ButtonText, QColor(self.textColor))
+        self.warningPalette = self.palette()
+        self.warningPalette.setColor(QPalette.ColorRole.Button, QColor(setting['warning_background_color'])) 
+        self.warningPalette.setColor(QPalette.ColorRole.ButtonText, QColor(setting['warning_text_color']))   
+        self.criticalPalette = self.palette()
+        self.criticalPalette.setColor(QPalette.ColorRole.Button, QColor(setting['critical_background_color'])) 
+        self.criticalPalette.setColor(QPalette.ColorRole.ButtonText, QColor(setting['critical_text_color'])) 
+        self.disabledPalette = self.palette()
+        self.disabledPalette.setColor(QPalette.ColorRole.Button, QColor(setting['disabled_background_color']))
+        self.disabledPalette.setColor(QPalette.ColorRole.ButtonText, QColor(setting['disabled_text_color']))
+        # for variants indicator
         self.path = QPainterPath()
         self.path.moveTo(self.rect().x() + 4, self.rect().y() + 4)
         self.path.lineTo(self.rect().x() + 4, self.rect().y() + 4)
         self.path.lineTo(self.rect().x() + 18, self.rect().y() + 4)
         self.path.lineTo(self.rect().x() + 4, self.rect().y() + 18)
+        ###
+        self.setPalette(self.normalPalette)
+        ### must be after palette setting
+        self.level = None
 
     def __setattr__(self, name, value):
         super().__setattr__(name, value)
@@ -211,21 +228,26 @@ class ButtonList(QPushButton):
                     self.setText(self.caption + f"\n({self.level})")
                 # normal level
                 if value >= setting['warning_stock_level']:
-                    ss = f"background-color: {self.backgroundColor}; color: {self.textColor}"
+                    self.setPalette(self.normalPalette)
+                    #ss = f"background-color: {self.backgroundColor}; color: {self.textColor}"
                 # warning level
                 elif setting['critical_stock_level'] < value < setting['warning_stock_level']:
-                    ss = f"background-color: {setting['warning_background_color']}; color: {setting['warning_text_color']}"
+                    self.setPalette(self.warningPalette)
+                    #ss = f"background-color: {setting['warning_background_color']}; color: {setting['warning_text_color']}"
                 # critical level
                 elif 0 < value <= setting['critical_stock_level']:
-                    ss = f"background-color: {setting['critical_background_color']}; color: {setting['critical_text_color']}"
+                    self.setPalette(self.criticalPalette)
+                    #ss = f"background-color: {setting['critical_background_color']}; color: {setting['critical_text_color']}"
                 # disabled: value = 0
                 else:
-                    ss = f"background-color: {setting['disabled_background_color']}; color: {setting['disabled_text_color']}"
+                    self.setPalette(self.disabledPalette)
+                    #ss = f"background-color: {setting['disabled_background_color']}; color: {setting['disabled_text_color']}"
                     self.setDisabled(True)
             else:
-                # no level control -> always normal
-                ss = f"background-color: {self.backgroundColor}; color: {self.textColor}"
-            self.setStyleSheet(ss)
+                self.setPalette(self.normalPalette)
+                 # no level control -> always normal
+                 #ss = f"background-color: {self.backgroundColor}; color: {self.textColor}"
+            #self.setStyleSheet(ss)
 
     def paintEvent(self, event=None):
         QPushButton.paintEvent(self, event)
@@ -334,7 +356,12 @@ class BaseOrderDialog(QDialog):
         for tt, tr, tc, ttc, tbc in table_list():
             b = QPushButton(tt, self) # item description
             b.setFont(QFont(setting['table_list_font_family'], setting['table_list_font_size'], QFont.Bold))
-            b.setStyleSheet(f"color: {ttc}; background-color: {tbc};")
+            p = b.palette()
+            p.setColor(QPalette.ColorRole.ButtonText, QColor(ttc))
+            p.setColor(QPalette.ColorRole.Button, QColor(tbc))
+            b.setAutoFillBackground(True)
+            b.setPalette(p)
+            #b.setStyleSheet(f"color: {ttc}; background-color: {tbc};")
             b.setMinimumWidth(50)
             b.setMinimumHeight(40)
             b.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)

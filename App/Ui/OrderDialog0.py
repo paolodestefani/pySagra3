@@ -41,6 +41,7 @@ class Ui_OrderDialog0(object):
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
         self.groupBoxDeliver = QGroupBox(OrderDialog0)
         self.groupBoxDeliver.setObjectName(u"groupBoxDeliver")
+        self.groupBoxDeliver.setFlat(False)
         self.verticalLayout_6 = QVBoxLayout(self.groupBoxDeliver)
         self.verticalLayout_6.setObjectName(u"verticalLayout_6")
         self.verticalLayout_6.setContentsMargins(2, 2, 2, 2)
@@ -65,6 +66,7 @@ class Ui_OrderDialog0(object):
 
         self.groupBoxTableNum = QGroupBox(OrderDialog0)
         self.groupBoxTableNum.setObjectName(u"groupBoxTableNum")
+        self.groupBoxTableNum.setFlat(False)
         self.verticalLayout_8 = QVBoxLayout(self.groupBoxTableNum)
         self.verticalLayout_8.setObjectName(u"verticalLayout_8")
         self.verticalLayout_8.setContentsMargins(2, 2, 2, 2)
@@ -78,6 +80,7 @@ class Ui_OrderDialog0(object):
 
         self.groupBoxCovers = QGroupBox(OrderDialog0)
         self.groupBoxCovers.setObjectName(u"groupBoxCovers")
+        self.groupBoxCovers.setFlat(False)
         self.verticalLayout_9 = QVBoxLayout(self.groupBoxCovers)
         self.verticalLayout_9.setObjectName(u"verticalLayout_9")
         self.verticalLayout_9.setContentsMargins(2, 2, 2, 2)
@@ -93,6 +96,7 @@ class Ui_OrderDialog0(object):
 
         self.groupBoxCustomerName = QGroupBox(OrderDialog0)
         self.groupBoxCustomerName.setObjectName(u"groupBoxCustomerName")
+        self.groupBoxCustomerName.setFlat(False)
         self.verticalLayout_10 = QVBoxLayout(self.groupBoxCustomerName)
         self.verticalLayout_10.setObjectName(u"verticalLayout_10")
         self.verticalLayout_10.setContentsMargins(2, 2, 2, 2)
@@ -106,6 +110,7 @@ class Ui_OrderDialog0(object):
 
         self.groupBoxCustomerContact = QGroupBox(OrderDialog0)
         self.groupBoxCustomerContact.setObjectName(u"groupBoxCustomerContact")
+        self.groupBoxCustomerContact.setFlat(False)
         self.verticalLayout_17 = QVBoxLayout(self.groupBoxCustomerContact)
         self.verticalLayout_17.setObjectName(u"verticalLayout_17")
         self.verticalLayout_17.setContentsMargins(2, 2, 2, 2)
@@ -119,6 +124,7 @@ class Ui_OrderDialog0(object):
 
         self.groupBoxWebOrderInput = QGroupBox(OrderDialog0)
         self.groupBoxWebOrderInput.setObjectName(u"groupBoxWebOrderInput")
+        self.groupBoxWebOrderInput.setFlat(False)
         self.verticalLayout_11 = QVBoxLayout(self.groupBoxWebOrderInput)
         self.verticalLayout_11.setObjectName(u"verticalLayout_11")
         self.verticalLayout_11.setContentsMargins(2, 2, 2, 2)
@@ -147,6 +153,7 @@ class Ui_OrderDialog0(object):
         self.pushButtonTablesSwitch.setMinimumSize(QSize(120, 0))
         self.pushButtonTablesSwitch.setStyleSheet(u"text-align: left")
         self.pushButtonTablesSwitch.setIconSize(QSize(48, 48))
+        self.pushButtonTablesSwitch.setFlat(False)
 
         self.horizontalLayout_4.addWidget(self.pushButtonTablesSwitch)
 
@@ -158,7 +165,7 @@ class Ui_OrderDialog0(object):
         sizePolicy1.setHeightForWidth(self.lcdNumberTime.sizePolicy().hasHeightForWidth())
         self.lcdNumberTime.setSizePolicy(sizePolicy1)
         self.lcdNumberTime.setMinimumSize(QSize(250, 0))
-        self.lcdNumberTime.setFrameShape(QFrame.Shape.NoFrame)
+        self.lcdNumberTime.setFrameShape(QFrame.Shape.StyledPanel)
         self.lcdNumberTime.setSmallDecimalPoint(False)
         self.lcdNumberTime.setDigitCount(17)
         self.lcdNumberTime.setMode(QLCDNumber.Mode.Dec)
@@ -198,6 +205,7 @@ class Ui_OrderDialog0(object):
 
         self.groupBox_10 = QGroupBox(self.Order)
         self.groupBox_10.setObjectName(u"groupBox_10")
+        self.groupBox_10.setFlat(False)
         self.verticalLayout_2 = QVBoxLayout(self.groupBox_10)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.verticalLayout_2.setContentsMargins(5, 5, 5, 5)
@@ -237,6 +245,7 @@ class Ui_OrderDialog0(object):
 
         self.groupBox = QGroupBox(self.groupBox_10)
         self.groupBox.setObjectName(u"groupBox")
+        self.groupBox.setFlat(False)
         self.verticalLayout = QVBoxLayout(self.groupBox)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
@@ -312,6 +321,7 @@ class Ui_OrderDialog0(object):
         sizePolicy4.setHeightForWidth(self.groupBox_2.sizePolicy().hasHeightForWidth())
         self.groupBox_2.setSizePolicy(sizePolicy4)
         self.groupBox_2.setMinimumSize(QSize(478, 0))
+        self.groupBox_2.setFlat(False)
         self.verticalLayout_3 = QVBoxLayout(self.groupBox_2)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
@@ -326,6 +336,7 @@ class Ui_OrderDialog0(object):
         sizePolicy5.setHeightForWidth(self.pushButtonDepartmentNote1.sizePolicy().hasHeightForWidth())
         self.pushButtonDepartmentNote1.setSizePolicy(sizePolicy5)
         self.pushButtonDepartmentNote1.setMinimumSize(QSize(80, 0))
+        self.pushButtonDepartmentNote1.setFlat(False)
 
         self.horizontalLayout_5.addWidget(self.pushButtonDepartmentNote1)
 
@@ -335,6 +346,7 @@ class Ui_OrderDialog0(object):
         sizePolicy5.setHeightForWidth(self.pushButtonDepartmentNote2.sizePolicy().hasHeightForWidth())
         self.pushButtonDepartmentNote2.setSizePolicy(sizePolicy5)
         self.pushButtonDepartmentNote2.setMinimumSize(QSize(80, 0))
+        self.pushButtonDepartmentNote2.setFlat(False)
 
         self.horizontalLayout_5.addWidget(self.pushButtonDepartmentNote2)
 
@@ -344,6 +356,7 @@ class Ui_OrderDialog0(object):
         sizePolicy5.setHeightForWidth(self.pushButtonDepartmentNote3.sizePolicy().hasHeightForWidth())
         self.pushButtonDepartmentNote3.setSizePolicy(sizePolicy5)
         self.pushButtonDepartmentNote3.setMinimumSize(QSize(80, 0))
+        self.pushButtonDepartmentNote3.setFlat(False)
 
         self.horizontalLayout_5.addWidget(self.pushButtonDepartmentNote3)
 
@@ -353,6 +366,7 @@ class Ui_OrderDialog0(object):
         sizePolicy5.setHeightForWidth(self.pushButtonDepartmentNote4.sizePolicy().hasHeightForWidth())
         self.pushButtonDepartmentNote4.setSizePolicy(sizePolicy5)
         self.pushButtonDepartmentNote4.setMinimumSize(QSize(80, 0))
+        self.pushButtonDepartmentNote4.setFlat(False)
 
         self.horizontalLayout_5.addWidget(self.pushButtonDepartmentNote4)
 
@@ -362,6 +376,7 @@ class Ui_OrderDialog0(object):
         sizePolicy5.setHeightForWidth(self.pushButtonDepartmentNote5.sizePolicy().hasHeightForWidth())
         self.pushButtonDepartmentNote5.setSizePolicy(sizePolicy5)
         self.pushButtonDepartmentNote5.setMinimumSize(QSize(80, 0))
+        self.pushButtonDepartmentNote5.setFlat(False)
 
         self.horizontalLayout_5.addWidget(self.pushButtonDepartmentNote5)
 
@@ -377,6 +392,7 @@ class Ui_OrderDialog0(object):
         self.groupBox_3.setSizePolicy(sizePolicy4)
         self.groupBox_3.setMinimumSize(QSize(478, 0))
         self.groupBox_3.setMaximumSize(QSize(478, 16777215))
+        self.groupBox_3.setFlat(False)
         self.verticalLayout_4 = QVBoxLayout(self.groupBox_3)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.verticalLayout_4.setContentsMargins(5, 5, 5, 5)
@@ -474,6 +490,7 @@ class Ui_OrderDialog0(object):
         self.pushButtonConfirm.setSizePolicy(sizePolicy7)
         self.pushButtonConfirm.setFont(font5)
         self.pushButtonConfirm.setIconSize(QSize(32, 32))
+        self.pushButtonConfirm.setFlat(False)
 
         self.horizontalLayout_6.addWidget(self.pushButtonConfirm)
 
@@ -485,6 +502,7 @@ class Ui_OrderDialog0(object):
         font6.setPointSize(12)
         self.pushButtonCancel.setFont(font6)
         self.pushButtonCancel.setIconSize(QSize(32, 32))
+        self.pushButtonCancel.setFlat(False)
 
         self.horizontalLayout_6.addWidget(self.pushButtonCancel)
 

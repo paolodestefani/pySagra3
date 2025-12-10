@@ -222,7 +222,7 @@ class Ui_ReportWidget(object):
         self.label_4.setText(QCoreApplication.translate("ReportWidget", u"Description", None))
         self.groupBox_5.setTitle(QCoreApplication.translate("ReportWidget", u"XML report definition", None))
         self.label_5.setText(QCoreApplication.translate("ReportWidget", u"Font", None))
-        self.pushButtonInsertImage.setText(QCoreApplication.translate("ReportWidget", u"Insert image to clipboard", None))
+        self.pushButtonInsertImage.setText(QCoreApplication.translate("ReportWidget", u"Insert image from file to clipboard", None))
         self.pushButtonDeleteAll.setText(QCoreApplication.translate("ReportWidget", u"Delete All", None))
         self.pushButtonDownload.setText(QCoreApplication.translate("ReportWidget", u"Download ...", None))
         self.pushButtonUpload.setText(QCoreApplication.translate("ReportWidget", u"Upload ...", None))

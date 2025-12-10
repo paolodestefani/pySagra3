@@ -68,7 +68,7 @@ from App.OrderArchive import orderArchive
 from App.StockInventory import stockInventory
 from App.OrderProgress import orderProgress
 from App.Settings import settings
-from App.Order import orderEntry
+from App.OrderEntry import orderEntry
 from App.Statistics import statisticsSales, statisticsConsumption, statisticsExport
 from App.StockUnload import stockUnload
 from App.IncomeSummary import incomeSummary

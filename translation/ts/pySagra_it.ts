@@ -85,97 +85,97 @@
         <translation>NESSUNA IMMAGINE</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="666"/>
+        <location filename="../../App/Widget/Control.py" line="670"/>
         <source>Transparent</source>
         <translation>Trasparente</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="667"/>
+        <location filename="../../App/Widget/Control.py" line="671"/>
         <source>Black</source>
         <translation>Nero</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="668"/>
+        <location filename="../../App/Widget/Control.py" line="672"/>
         <source>Red</source>
         <translation>Rosso</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="669"/>
+        <location filename="../../App/Widget/Control.py" line="673"/>
         <source>Dark red</source>
         <translation>Rosso scuro</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="670"/>
+        <location filename="../../App/Widget/Control.py" line="674"/>
         <source>Green</source>
         <translation>Verde</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="671"/>
+        <location filename="../../App/Widget/Control.py" line="675"/>
         <source>Dark green</source>
         <translation>Verde scuro</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="672"/>
+        <location filename="../../App/Widget/Control.py" line="676"/>
         <source>Blue</source>
         <translation>Blu</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="673"/>
+        <location filename="../../App/Widget/Control.py" line="677"/>
         <source>Dark blue</source>
         <translation>Blu scuro</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="674"/>
+        <location filename="../../App/Widget/Control.py" line="678"/>
         <source>Cyan</source>
         <translation>Ciano</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="675"/>
+        <location filename="../../App/Widget/Control.py" line="679"/>
         <source>Dark cyan</source>
         <translation>Ciano scuro</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="676"/>
+        <location filename="../../App/Widget/Control.py" line="680"/>
         <source>Magenta</source>
         <translation>Magenta</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="677"/>
+        <location filename="../../App/Widget/Control.py" line="681"/>
         <source>Dark magenta</source>
         <translation>Magenta scuro</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="678"/>
+        <location filename="../../App/Widget/Control.py" line="682"/>
         <source>Yellow</source>
         <translation>Giallo</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="679"/>
+        <location filename="../../App/Widget/Control.py" line="683"/>
         <source>Dark yellow</source>
         <translation>Giallo scuro</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="680"/>
+        <location filename="../../App/Widget/Control.py" line="684"/>
         <source>Gray</source>
         <translation>Grigio</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="681"/>
+        <location filename="../../App/Widget/Control.py" line="685"/>
         <source>Dark gray</source>
         <translation>Grigio scuro</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="682"/>
+        <location filename="../../App/Widget/Control.py" line="686"/>
         <source>Light gray</source>
         <translation>Grigio chiaro</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="683"/>
+        <location filename="../../App/Widget/Control.py" line="687"/>
         <source>Whyte</source>
         <translation>Bianco</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="940"/>
+        <location filename="../../App/Widget/Control.py" line="944"/>
         <source>Are you sure to clear all the text ?</source>
         <translation>Sei sicuro di voler cancellare tutto il testo ?</translation>
     </message>
@@ -367,58 +367,58 @@
 <context>
     <name>Editor</name>
     <message>
-        <location filename="../../App/Widget/Control.py" line="844"/>
+        <location filename="../../App/Widget/Control.py" line="848"/>
         <source>Get/set the text font family</source>
         <translation>Mostra/imposta la famiglia del font</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="851"/>
+        <location filename="../../App/Widget/Control.py" line="855"/>
         <source>Get/set the text font size</source>
         <translation>Mostra/imposta la dimensione del font</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="855"/>
+        <location filename="../../App/Widget/Control.py" line="859"/>
         <source>Text color</source>
         <translation>Colore del testo</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="859"/>
+        <location filename="../../App/Widget/Control.py" line="863"/>
         <source>Text background color
 Black = Transparent</source>
         <translation>Coloro dello sfondo Nero = Trasparente</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="864"/>
+        <location filename="../../App/Widget/Control.py" line="868"/>
         <source>Format text as bold</source>
         <translation>Formatta come grassetto</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="871"/>
+        <location filename="../../App/Widget/Control.py" line="875"/>
         <source>Format text as italic</source>
         <translation>Formatta come corsivo</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="878"/>
+        <location filename="../../App/Widget/Control.py" line="882"/>
         <source>Format text as underline</source>
         <translation>Formatta come sottolineato</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="885"/>
+        <location filename="../../App/Widget/Control.py" line="889"/>
         <source>Align text left</source>
         <translation>Allinea a sinistra</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="892"/>
+        <location filename="../../App/Widget/Control.py" line="896"/>
         <source>Align text center</source>
         <translation>Allinea al centro</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="899"/>
+        <location filename="../../App/Widget/Control.py" line="903"/>
         <source>Align text right</source>
         <translation>Allinea a destra</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Control.py" line="906"/>
+        <location filename="../../App/Widget/Control.py" line="910"/>
         <source>Justify text</source>
         <translation>Giustifica</translation>
     </message>
@@ -694,7 +694,7 @@ Black = Transparent</source>
         <location filename="../../App/System/Report.py" line="250"/>
         <location filename="../../App/System/Scripting.py" line="252"/>
         <location filename="../../App/System/User.py" line="248"/>
-        <location filename="../../App/Widget/Control.py" line="939"/>
+        <location filename="../../App/Widget/Control.py" line="943"/>
         <location filename="../../App/Widget/Dialog.py" line="2014"/>
         <location filename="../../App/Widget/Dialog.py" line="2207"/>
         <location filename="../../App/Widget/Form.py" line="194"/>
@@ -836,82 +836,82 @@ Black = Transparent</source>
 <context>
     <name>Preferences</name>
     <message>
-        <location filename="../../App/System/Preferences.py" line="107"/>
+        <location filename="../../App/System/Preferences.py" line="108"/>
         <source>System default</source>
         <translation>Predefinito di sistema</translation>
     </message>
     <message>
-        <location filename="../../App/System/Preferences.py" line="105"/>
+        <location filename="../../App/System/Preferences.py" line="106"/>
         <source>Light</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../App/System/Preferences.py" line="106"/>
+        <location filename="../../App/System/Preferences.py" line="107"/>
         <source>Dark</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../App/System/Preferences.py" line="109"/>
+        <location filename="../../App/System/Preferences.py" line="110"/>
         <source>Oxygen</source>
         <translation>Oxygen</translation>
     </message>
     <message>
-        <location filename="../../App/System/Preferences.py" line="110"/>
+        <location filename="../../App/System/Preferences.py" line="111"/>
         <source>Tango</source>
         <translation>Tango</translation>
     </message>
     <message>
-        <location filename="../../App/System/Preferences.py" line="111"/>
+        <location filename="../../App/System/Preferences.py" line="112"/>
         <source>Crystal Clear</source>
         <translation>Crystal Clear</translation>
     </message>
     <message>
-        <location filename="../../App/System/Preferences.py" line="113"/>
+        <location filename="../../App/System/Preferences.py" line="114"/>
         <source>Icon only</source>
         <translation>Solo icone</translation>
     </message>
     <message>
-        <location filename="../../App/System/Preferences.py" line="114"/>
+        <location filename="../../App/System/Preferences.py" line="115"/>
         <source>Text only</source>
         <translation>Solo testo</translation>
     </message>
     <message>
-        <location filename="../../App/System/Preferences.py" line="115"/>
+        <location filename="../../App/System/Preferences.py" line="116"/>
         <source>Text beside icon</source>
         <translation>Testo sopra le icone</translation>
     </message>
     <message>
-        <location filename="../../App/System/Preferences.py" line="116"/>
+        <location filename="../../App/System/Preferences.py" line="117"/>
         <source>Text under icon</source>
         <translation>Testo sotto le icone</translation>
     </message>
     <message>
-        <location filename="../../App/System/Preferences.py" line="117"/>
+        <location filename="../../App/System/Preferences.py" line="118"/>
         <source>Follow style</source>
         <translation>Segue lo stile</translation>
     </message>
     <message>
-        <location filename="../../App/System/Preferences.py" line="119"/>
+        <location filename="../../App/System/Preferences.py" line="120"/>
         <source>Tabs above the pages</source>
         <translation>Linguette soprale pagine</translation>
     </message>
     <message>
-        <location filename="../../App/System/Preferences.py" line="120"/>
+        <location filename="../../App/System/Preferences.py" line="121"/>
         <source>Tabs below the pages</source>
         <translation>Testo sotto le pagine</translation>
     </message>
     <message>
-        <location filename="../../App/System/Preferences.py" line="121"/>
+        <location filename="../../App/System/Preferences.py" line="122"/>
         <source>Tabs to the left of the pages</source>
         <translation>Testo a sinistra delle pagine</translation>
     </message>
     <message>
-        <location filename="../../App/System/Preferences.py" line="122"/>
+        <location filename="../../App/System/Preferences.py" line="123"/>
         <source>Tabs to the right of the pages</source>
         <translation>Testo a destra delle pagine</translation>
     </message>
     <message>
-        <location filename="../../App/System/Preferences.py" line="129"/>
+        <location filename="../../App/System/Preferences.py" line="130"/>
         <source>Error loading user preferences</source>
         <translation>Errore in caricamento delle preferenze utente</translation>
     </message>
@@ -1280,7 +1280,7 @@ Black = Transparent</source>
 <context>
     <name>controls</name>
     <message>
-        <location filename="../../App/Widget/Control.py" line="647"/>
+        <location filename="../../App/Widget/Control.py" line="651"/>
         <source>Type the password here</source>
         <translation>Inserire la password</translation>
     </message>
