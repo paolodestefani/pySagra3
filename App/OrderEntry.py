@@ -207,18 +207,12 @@ class ButtonList(QPushButton):
         self.disabledPalette.setColor(self.backgroundRole(), QColor(setting['disabled_background_color']))
         self.disabledPalette.setColor(self.foregroundRole(), QColor(setting['disabled_text_color']))
         # for variants indicator
-        self.path = QPainterPath()
-        #self.path.moveTo(self.rect().x() + 4, self.rect().y() + 4)
-        #self.path.lineTo(self.rect().x() + 4, self.rect().y() + 4)
-        #self.path.lineTo(self.rect().x() + 18, self.rect().y() + 4)
-        #self.path.lineTo(self.rect().x() + 4, self.rect().y() + 18)
-        #self.path.addRoundedRect(QRectF(10, 10, 100, 50), 10, 10)
-        self.path.addEllipse(QRectF(5, 5, 15, 15))
+        self.variantIndicatorColor = currentIcon['view_star'].pixmap(20, 20)
         ###
         self.setPalette(self.normalPalette)
         ### must be after palette setting
         self.level = None
-
+        
     def __setattr__(self, name, value):
         super().__setattr__(name, value)
         if name == 'level':
@@ -249,12 +243,9 @@ class ButtonList(QPushButton):
     def paintEvent(self, event=None):
         QPushButton.paintEvent(self, event)
         if self.hasVariants:
-            # draw a small rect indicator for variants presence with fixed color
             painter = QPainter(self)
             painter.setRenderHints(QPainter.Antialiasing)
-            painter.drawPixmap(5, 5, currentIcon['view_star'].pixmap(20, 20))
-            #painter.drawEllipse(5, 5, 15, 15)
-            #painter.fillPath(self.path, Qt.GlobalColor.yellow)
+            painter.drawPixmap(5, 5, self.variantIndicatorColor)
             painter.end()
 
     def showLevel(self):
