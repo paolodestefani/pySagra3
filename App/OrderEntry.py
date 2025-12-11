@@ -34,11 +34,12 @@ import decimal
 
 # PySide6
 from PySide6.QtCore import Qt
-from PySide6.QtCore import QObject
+#from PySide6.QtCore import QObject
 from PySide6.QtCore import QTimer
 from PySide6.QtCore import QDateTime
 from PySide6.QtCore import QSettings
 from PySide6.QtCore import Slot
+from PySide6.QtCore import QRectF
 from PySide6.QtGui import QPalette
 from PySide6.QtGui import QColor
 from PySide6.QtGui import QPainter
@@ -194,23 +195,25 @@ class ButtonList(QPushButton):
         self.setMinimumWidth(65)
         # color palettes
         self.normalPalette = self.palette()
-        self.normalPalette.setColor(QPalette.ColorRole.Button, QColor(self.backgroundColor))
-        self.normalPalette.setColor(QPalette.ColorRole.ButtonText, QColor(self.textColor))
+        self.normalPalette.setColor(self.backgroundRole(), QColor(self.backgroundColor))
+        self.normalPalette.setColor(self.foregroundRole(), QColor(self.textColor))
         self.warningPalette = self.palette()
-        self.warningPalette.setColor(QPalette.ColorRole.Button, QColor(setting['warning_background_color'])) 
-        self.warningPalette.setColor(QPalette.ColorRole.ButtonText, QColor(setting['warning_text_color']))   
+        self.warningPalette.setColor(self.backgroundRole(), QColor(setting['warning_background_color'])) 
+        self.warningPalette.setColor(self.foregroundRole(), QColor(setting['warning_text_color']))   
         self.criticalPalette = self.palette()
-        self.criticalPalette.setColor(QPalette.ColorRole.Button, QColor(setting['critical_background_color'])) 
-        self.criticalPalette.setColor(QPalette.ColorRole.ButtonText, QColor(setting['critical_text_color'])) 
+        self.criticalPalette.setColor(self.backgroundRole(), QColor(setting['critical_background_color'])) 
+        self.criticalPalette.setColor(self.foregroundRole(), QColor(setting['critical_text_color'])) 
         self.disabledPalette = self.palette()
-        self.disabledPalette.setColor(QPalette.ColorRole.Button, QColor(setting['disabled_background_color']))
-        self.disabledPalette.setColor(QPalette.ColorRole.ButtonText, QColor(setting['disabled_text_color']))
+        self.disabledPalette.setColor(self.backgroundRole(), QColor(setting['disabled_background_color']))
+        self.disabledPalette.setColor(self.foregroundRole(), QColor(setting['disabled_text_color']))
         # for variants indicator
         self.path = QPainterPath()
-        self.path.moveTo(self.rect().x() + 4, self.rect().y() + 4)
-        self.path.lineTo(self.rect().x() + 4, self.rect().y() + 4)
-        self.path.lineTo(self.rect().x() + 18, self.rect().y() + 4)
-        self.path.lineTo(self.rect().x() + 4, self.rect().y() + 18)
+        #self.path.moveTo(self.rect().x() + 4, self.rect().y() + 4)
+        #self.path.lineTo(self.rect().x() + 4, self.rect().y() + 4)
+        #self.path.lineTo(self.rect().x() + 18, self.rect().y() + 4)
+        #self.path.lineTo(self.rect().x() + 4, self.rect().y() + 18)
+        #self.path.addRoundedRect(QRectF(10, 10, 100, 50), 10, 10)
+        self.path.addEllipse(QRectF(5, 5, 15, 15))
         ###
         self.setPalette(self.normalPalette)
         ### must be after palette setting
@@ -229,34 +232,29 @@ class ButtonList(QPushButton):
                 # normal level
                 if value >= setting['warning_stock_level']:
                     self.setPalette(self.normalPalette)
-                    #ss = f"background-color: {self.backgroundColor}; color: {self.textColor}"
                 # warning level
                 elif setting['critical_stock_level'] < value < setting['warning_stock_level']:
                     self.setPalette(self.warningPalette)
-                    #ss = f"background-color: {setting['warning_background_color']}; color: {setting['warning_text_color']}"
                 # critical level
                 elif 0 < value <= setting['critical_stock_level']:
                     self.setPalette(self.criticalPalette)
-                    #ss = f"background-color: {setting['critical_background_color']}; color: {setting['critical_text_color']}"
                 # disabled: value = 0
                 else:
                     self.setPalette(self.disabledPalette)
-                    #ss = f"background-color: {setting['disabled_background_color']}; color: {setting['disabled_text_color']}"
                     self.setDisabled(True)
             else:
                 self.setPalette(self.normalPalette)
                  # no level control -> always normal
-                 #ss = f"background-color: {self.backgroundColor}; color: {self.textColor}"
-            #self.setStyleSheet(ss)
 
     def paintEvent(self, event=None):
         QPushButton.paintEvent(self, event)
         if self.hasVariants:
             # draw a small rect indicator for variants presence with fixed color
             painter = QPainter(self)
-            painter.setRenderHint(QPainter.Antialiasing)
-            painter.setRenderHint(QPainter.TextAntialiasing)
-            painter.fillPath(self.path, Qt.yellow)
+            painter.setRenderHints(QPainter.Antialiasing)
+            painter.drawPixmap(5, 5, currentIcon['view_star'].pixmap(20, 20))
+            #painter.drawEllipse(5, 5, 15, 15)
+            #painter.fillPath(self.path, Qt.GlobalColor.yellow)
             painter.end()
 
     def showLevel(self):
@@ -361,7 +359,6 @@ class BaseOrderDialog(QDialog):
             p.setColor(QPalette.ColorRole.Button, QColor(tbc))
             b.setAutoFillBackground(True)
             b.setPalette(p)
-            #b.setStyleSheet(f"color: {ttc}; background-color: {tbc};")
             b.setMinimumWidth(50)
             b.setMinimumHeight(40)
             b.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
@@ -631,7 +628,7 @@ class BaseOrderDialog(QDialog):
         # clear notes
         self.ui.depnote.clear()
         for button in self.ui.bgnotes.buttons():
-            button.setStyleSheet("")
+            button.setIcon(currentIcon['empty'])
         # idle control
         if setting['check_inactivity']:
             self.idleTimer.start()
@@ -739,9 +736,9 @@ class BaseOrderDialog(QDialog):
         if ok:
             self.ui.depnote[bid] = text or None
         if self.ui.depnote.get(bid):
-            button.setStyleSheet("color: black; background-color: yellow;")  # rgb(200, 200, 230)
+            button.setIcon(currentIcon['view_note'])
         else:
-            button.setStyleSheet("")
+            button.setIcon(currentIcon['empty'])
 
     #def importWebOrder(self):
         #"Import weborder data from QR Code identifier"

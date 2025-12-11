@@ -21,7 +21,6 @@
   <qresource prefix="/icon/oxygen">
     <file alias="system_changecompany">icon/oxygen/system_changecompany.png</file>
     <file alias="system_password">icon/oxygen/system_password.png</file>
-    <file alias="system_backup">icon/oxygen/system_backup.png</file>
     <file alias="system_preferences">icon/oxygen/system_preferences.png</file>
     <file alias="system_connections">icon/oxygen/system_connections.png</file>
     <file alias="system_connectionshistory">icon/oxygen/system_connectionshistory.png</file>
@@ -53,7 +52,6 @@
 	<file alias="edit_add_child">icon/oxygen/edit_add_child.png</file>
     <file alias="edit_remove">icon/oxygen/edit_remove.png</file>
     <file alias="edit_filter">icon/oxygen/edit_filter.png</file>
-    <file alias="view_change">icon/oxygen/view_change.png</file>
     <file alias="edit_print">icon/oxygen/edit_print.png</file>
     <file alias="edit_export">icon/oxygen/edit_export.png</file>
     <file alias="file_events">icon/oxygen/file_events.png</file>
@@ -81,7 +79,9 @@
 	<file alias="print_printer">icon/oxygen/print_printer.png</file>
     <file alias="print_direct">icon/oxygen/print_direct.png</file>
     <file alias="print_pdf">icon/oxygen/print_pdf.png</file>
-    <file alias="print_email">icon/oxygen/print_email.png</file>
+    <file alias="view_change">icon/oxygen/view_change.png</file>
+    <file alias="view_note">icon/oxygen/view_note.png</file>
+    <file alias="view_star">icon/oxygen/view_star.png</file>
     <file alias="view_goprevious">icon/oxygen/view_goprevious.png</file>
 	<file alias="view_gonext">icon/oxygen/view_gonext.png</file>
 	<file alias="view_layout">icon/oxygen/view_layout.png</file>
@@ -95,7 +95,6 @@
 	<file alias="menu_menu">icon/oxygen/menu_menu.png</file>
 	<file alias="menu_separator">icon/oxygen/menu_separator.png</file>
 	<file alias="menu_action">icon/oxygen/menu_action.png</file>
-    <file alias="email_new">icon/oxygen/email_new.png</file>
     <file alias="setting_update">icon/oxygen/setting_update.png</file>
     <file alias="record_delete">icon/oxygen/record_delete.png</file>
     <file alias="dialog_switch">icon/oxygen/dialog_switch.png</file>
