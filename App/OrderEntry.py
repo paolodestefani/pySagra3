@@ -148,7 +148,7 @@ class VariantCheckBox(QCheckBox):
     def __init__(self, parent, desc, priced):
         super().__init__(parent)
         self.setText(desc)
-        self.pricedelta = priced
+        self.priceDelta = priced
 
 class ChooseVariantDialog(QDialog):
     "Dialog for item variants selection"
@@ -167,12 +167,12 @@ class ChooseVariantDialog(QDialog):
     def getVariants(self):
         "Rwturn a string of variants ad a price delta"
         variants = []
-        pricedelta = 0
+        priceDelta = 0
         for i in self.ui.bg.buttons():
             if i.isChecked():
                 variants.append(i.text())
-                pricedelta += i.pricedelta
-        return " ".join(variants), pricedelta
+                priceDelta += i.priceDelta
+        return " ".join(variants), priceDelta
 
 # a button of the list. It's a push button subclass with some more attribute
 
@@ -281,8 +281,6 @@ class BaseOrderDialog(QDialog):
         self.ui.pushButtonTablesSwitch.setIcon(currentIcon['dialog_switch'])
         self.ui.pushButtonConfirm.setIcon(currentIcon['dialog_ok'])
         self.ui.pushButtonCancel.setIcon(currentIcon['dialog_cancel'])
-        #self.ui.pushButtonVariants.setIcon(currentIcon['dialog_variants'])
-        #self.ui.pushButtonShowLevel.setIcon(currentIcon['file_stockinventory'])
         self.ui.pushButtonTablesSwitch.setText(_tr('OrderDialog', 'Order'))
         # idle time control
         if setting['check_inactivity']:
@@ -363,10 +361,7 @@ class BaseOrderDialog(QDialog):
                     #w.setMinimumWidth(5)
                     w.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
                     gl.addWidget(w, r, c)
-        #sa = QScrollArea(self)
-        #sa.setLayout(gl)
         self.ui.frameTables.setLayout(gl)
-        #self.stackedWidgetTableOrder.widget(TABLE).setLayout(gl)
         # list button group
         self.ui.bgt.buttonClicked.connect(self.tableButtonClicked)
         # signal/slot
@@ -381,8 +376,6 @@ class BaseOrderDialog(QDialog):
         self.ui.doubleSpinBoxDiscount.valueChanged.connect(self.recalcTotals)
         self.ui.doubleSpinBoxCash.valueChanged.connect(self.recalcTotals)
         self.ui.lineEditBarCode.editingFinished.connect(self.processWebOrder)
-        #self.lineEditBarCode.returnPressed.connect(self.processReturn)
-        #self.ui.pushButtonCashDeskDescription.clicked.connect(self.setCashDeskDescription)
         # add change date/event dialog shortcut
         ced = QAction('Change Event and date', self)
         ced.setShortcut('Ctrl+F12')
