@@ -207,7 +207,7 @@ class ButtonList(QPushButton):
         self.disabledPalette.setColor(self.backgroundRole(), QColor(setting['disabled_background_color']))
         self.disabledPalette.setColor(self.foregroundRole(), QColor(setting['disabled_text_color']))
         # for variants indicator
-        self.variantIndicatorColor = currentIcon['view_star'].pixmap(20, 20)
+        self.variantIndicatorColor = currentIcon['view_flash'].pixmap(25, 25)
         ###
         self.setPalette(self.normalPalette)
         ### must be after palette setting
