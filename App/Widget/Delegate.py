@@ -55,9 +55,12 @@ from PySide6.QtWidgets import QStyledItemDelegate
 from PySide6.QtWidgets import QItemDelegate
 from PySide6.QtWidgets import QAbstractItemView
 from PySide6.QtWidgets import QComboBox
+from PySide6.QtWidgets import QCheckBox
 from PySide6.QtWidgets import QSpinBox
 from PySide6.QtWidgets import QDoubleSpinBox
 from PySide6.QtWidgets import QLineEdit
+from PySide6.QtWidgets import QDateEdit
+from PySide6.QtWidgets import QDateTimeEdit
 from PySide6.QtWidgets import QDialog
 from PySide6.QtWidgets import QStyleOptionButton
 from PySide6.QtWidgets import QStyleOptionViewItem
@@ -75,6 +78,115 @@ from App.Widget.Control import ColorComboBox
 from App.Widget.Control import RelationalComboBox
 from App.Widget.Dialog import SelectImageDialog
 
+
+
+class GenericDelegate(QStyledItemDelegate):
+    "Delegate for view"
+
+    def paint(self, painter, option, index):
+        value = index.model().data(index, Qt.DisplayRole)
+        styleOption = QStyleOptionViewItem(option)
+        self.initStyleOption(styleOption, index)
+
+        if isinstance(value, bool):
+            styleOption = QStyleOptionButton()
+            styleOption.state |= QStyle.State_On if value else QStyle.State_Off
+            styleOption.rect = self.getCheckBoxRect(option)
+            #style.drawControl(QStyle.CE_CheckBox,
+            #                    styleOption,
+            #                   painter)
+        elif isinstance(value, int):
+            styleOption.text = str(value)
+            styleOption.displayAlignment = Qt.AlignRight | Qt.AlignVCenter
+        elif isinstance(value, (QDate, QDateTime)):
+            styleOption.text = session['qlocale'].toString(value, QLocale.ShortFormat)
+            styleOption.displayAlignment = Qt.AlignLeft | Qt.AlignVCenter
+        elif isinstance(value, Decimal):
+            styleOption.text = session['qlocale'].toString(float(value or 0.0), 'f', 2)
+            styleOption.displayAlignment = Qt.AlignRight | Qt.AlignVCenter
+        else:
+            styleOption.text = str(value or '')  # for null values
+            styleOption.displayAlignment = Qt.AlignLeft | Qt.AlignVCenter
+
+        font = index.model().data(index, Qt.FontRole)
+        if font:
+            styleOption.font = font
+        painter.save()
+        if option.state & QStyle.State_Selected:  # selected
+            if option.state & QStyle.State_Active:  # selected active
+                styleOption.backgroundBrush = option.palette.highlight()
+
+        QApplication.style().drawControl(QStyle.CE_ItemViewItem,
+                                         styleOption,
+                                         painter)
+        painter.restore()
+
+    def getCheckBoxRect(self, option):
+        check_box_style_option = QStyleOptionButton()
+        check_box_rect = QApplication.style().subElementRect(QStyle.SE_CheckBoxIndicator, check_box_style_option, None)
+        check_box_point = QPoint(option.rect.x() +
+                                 option.rect.width() / 2 -
+                                 check_box_rect.width() / 2,
+                                 option.rect.y() +
+                                 option.rect.height() / 2 -
+                                 check_box_rect.height() / 2)
+        return QRect(check_box_point, check_box_rect.size())
+
+    def createEditor(self, parent, option, index):
+        fieldType = index.model().columns[index.column()][3]
+        if fieldType == 'bool':  # must be checked before int (bool is subclass of int)
+            widget = QCheckBox(parent)
+        elif fieldType == 'int':
+            widget = QSpinBox(parent)
+            widget.setRange(0, 999999999)
+        elif fieldType == 'date':
+            widget = QDateEdit(parent)
+            #widget.setToolTip('Inserire 01/01/0001 per indicare nessuna data')
+            #widget.setDateRange(QDate(1, 1, 1), QDate(3000, 12, 31))
+            #widget.setDisplayFormat('dd/MM/yyyy')
+            #widget.setSpecialValueText(' ')
+            # widget.setCalendarPopup(True)
+        elif fieldType == 'datetime':
+            widget = QDateTimeEdit(parent)
+            # widget.setDisplayFormat('dd.MM.yyyy')
+            #widget.setDateRange(QDate(2000, 1, 1), QDate(3000, 12, 31))
+            # widget.setCalendarPopup(True)
+        elif fieldType == 'decimal':
+            widget = QDoubleSpinBox(parent)
+            widget.setDecimals(2)
+        else: # all remaining types are considered stings
+            widget = QLineEdit(parent)
+        return widget
+
+    def setEditorData(self, editor, index):
+        if not index.data():
+            return
+        if isinstance(editor, QCheckBox):
+            editor.setChecked(index.data())
+        elif isinstance(editor, QSpinBox):
+            editor.setValue(index.data())
+        elif isinstance(editor, QDateEdit):
+            editor.setDate(index.data())
+        elif isinstance(editor, QDoubleSpinBox):
+            editor.setValue(index.data())
+        else:
+            editor.setText(str(index.data()))
+
+    def setModelData(self, editor, model, index):
+        if isinstance(editor, QCheckBox):
+            model.setData(index, editor.isChecked())
+        elif isinstance(editor, QSpinBox):
+            model.setData(index, editor.value())
+        elif isinstance(editor, QDateEdit):
+            #date = editor.date()
+            #if date == QDate(1, 1, 1):
+                #date = None
+            model.setData(index, editor.date())
+        elif isinstance(editor, QDoubleSpinBox):
+            model.setData(index, editor.value())
+        else:
+            model.setData(index, editor.text())
+            
 
 class ColorDelegate(QStyledItemDelegate):
     "Color delegate"
@@ -186,64 +298,6 @@ class ImageDelegate(QStyledItemDelegate):
 
     def setEditorData(self, editor, index):
         QStyledItemDelegate.setEditorData(self, editor, index)
-
-
-
-#class PMapperDelegate(QStyledItemDelegate):
-    #"Custom item delegate for datawidgetmapper"
-
-    #def __init__(self, parent):
-        #"Initialize"
-        #super().__init__(parent)
-        #self.nullDateTime = QDateTime(QDate(1800, 1, 1), QTime())
-
-    #def setEditorData(self, editor, index):
-        ##print("Property for:", editor.objectName(), "Value:", editor.property('hasImage'))
-        ## Set image on QLabel
-        #if isinstance(editor, QLabel) and editor.property('hasImage') == True:
-            #pix = QPixmap()
-            #if index.data():
-                #pix.loadFromData(index.data())
-            #editor.setPixmap(pix)
-            #return
-        ## QComboBox for foreign keys, display the value of the second column based on the first
-        ## containting the index (model of the combobox)
-        #if isinstance(editor, QComboBox) and editor.property('isRelational') == True:
-            #model = editor.model()
-            ##print(index.data(), index.row())
-            ##items = model.findItems(index.data(), Qt.MatchExactly, 0)
-            ##if not items:
-                ##return
-            ##row = items[0].row()
-            ##text = model.data(model.index(row, 1))
-            ##editor.setCurrentText(text)
-            #editor.setCurrentIndex(index.row())
-            #return
-        ## QDateTimeEdit NULL value
-        #if isinstance(editor, QDateTimeEdit):
-            #if index.data() is None:
-                #editor.setDateTime(self.nullDateTime)
-                #return
-        #super().setEditorData(editor, index)
-
-    #def setModelData (self, editor, model, index):
-        #if isinstance(editor, QLabel):
-            #ba = QByteArray()
-            #buf = QBuffer(ba)
-            #buf.open(QIODevice.WriteOnly)
-            #if editor.pixmap():
-                #editor.pixmap().save(buf, "PNG")
-                #model.setData(index, buf.data(), Qt.EditRole)
-            #else: # empty image
-                #model.setData(index, None, Qt.EditRole)
-            #return
-        #if isinstance(editor, QComboBox) and editor.property('isRelational') == True:
-            #row = editor.currentIndex()
-            ##text = editor.model().data(editor.model().index(row, 0))
-            #text = editor.model().index(row, 0).data()
-            #model.setData(index, text, Qt.EditRole)
-            #return
-        #super().setModelData(editor, model, index)
 
 
 class HideTextDelegate(QStyledItemDelegate):
@@ -743,22 +797,6 @@ class BoldDelegate(QStyledItemDelegate):
         option.displayAlignment = Qt.AlignRight | Qt.AlignVCenter
         option.font.setWeight(QFont.Bold)
         super().paint(painter, option, index)
-
-
-# class KeySequenceDelegate(QStyledItemDelegate):
-#     "Key sequence edit delegate"
-
-#     def createEditor(self, parent, option, index):
-#         kse = QKeySequenceEdit(parent)
-#         return kse
-
-#     def setEditorData(self, editor, index):
-#         if not index.data():
-#             return
-#         editor.setKeySequence(QKeySequence(index.data()))
-
-#     def setModelData(self, editor, model, index):
-#         model.setData(index, editor.keySequence().toString(), Qt.EditRole)
 
 
 class ActionDelegate(QStyledItemDelegate):

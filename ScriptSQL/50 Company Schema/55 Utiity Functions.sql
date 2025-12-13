@@ -80,9 +80,8 @@ RETURNS VOID AS
 $$
 DECLARE
     odr RECORD; -- order detail dep record
-    ity char; -- item tpe
     ipr integer; -- item part
-    qty numeric(12, 2); -- quantity
+    qty numeric(12, 2); -- quantity for item part
 BEGIN
     -- clear stock inventory and stock unload
     UPDATE company.stock_inventory 
@@ -92,20 +91,26 @@ BEGIN
     WHERE event_id = in_event; -- event include company
     -- loop trough details deps records
     FOR odr IN
-        SELECT company_id, event_id, event_date, day_part, item_id, quantity
-        FROM company.order_line_department
-        WHERE event_id = in_event -- event include company
+        SELECT 
+            d.company_id,
+            d.event_id,
+            d.event_date,
+            d.day_part,
+            d.item_id,
+            i.item_type,
+            d.quantity
+        FROM company.order_line_department d
+        JOIN company.item i ON d.item_id = i.item_id -- item include company
+        WHERE d.event_id = in_event -- event include company
     LOOP
-        -- find item type and item unload control
-        SELECT item_type INTO ity 
-        FROM company.item 
-        WHERE item_id = odr.item_id; -- item include company
         -- for kit items
-        IF ity = 'K' THEN 
+        IF odr.item_type = 'K' THEN 
             FOR ipr, qty IN 
-                SELECT ip.part_id, ip.quantity
-                FROM company.item_part ip
-                WHERE ip.item_id = odr.item_id -- don't need to check item type as an item id can not be kit and menu 
+                SELECT 
+                    part_id,
+                    quantity
+                FROM company.item_part
+                WHERE item_id = odr.item_id -- don't need to check item type as an item id can not be kit and menu 
             LOOP
                 -- stock inventory
                 UPDATE company.stock_inventory 
@@ -172,10 +177,6 @@ CREATE FUNCTION numbering_rebuild(in_event int)
 RETURNS VOID AS
 $$
 DECLARE 
-    odh         RECORD; -- order header record
-    num         int;
-    lunch_time  time;
-    dinner_time time;  
     i           integer; 
 BEGIN
     -- clear old values
@@ -184,46 +185,22 @@ BEGIN
     -- update identity
 	i := (SELECT coalesce(max(numbering_id), 0) + 1 FROM company.numbering);
 	EXECUTE format('ALTER TABLE company.numbering ALTER COLUMN numbering_id RESTART WITH %s', i);
-    -- loop trough details deps records
-    FOR odh IN
-        SELECT company_id, event_id, order_number, stat_order_date, stat_order_day_part
-        FROM company.order_header
-        WHERE event_id = in_event
-    LOOP
-        -- update current order number if > of the previous, create a record if not present
-        num := (SELECT current_value 
-                FROM company.numbering 
-                WHERE sequence_type = 'ORDERNUM' 
-                AND event_id = in_event);
-        IF num IS NULL THEN
-            INSERT INTO company.numbering (company_id, sequence_type, event_id, current_value) 
-            VALUES (odh.company_id, 'ORDERNUM', odh.event_id, 0);
-            num := 0;
-        END IF;
-        IF odh.order_number > num THEN
-            UPDATE company.numbering 
-            SET current_value = odh.order_number 
-            WHERE sequence_type = 'ORDERNUM' 
-                AND event_id = in_event;
-        END IF;
-        -- update/insert orders count
-        /*IF NOT EXISTS(  SELECT current_value 
-                        FROM company.numbering 
-                        WHERE sequence_type = 'ORDERS' 
-                            AND event_id = in_event 
-                            AND event_date = odh.stat_order_date 
-                            AND day_part = odh.stat_order_day_part) THEN
-            INSERT INTO company.numbering (company_id, sequence_type, event_id, event_date, day_part, current_value) 
-            VALUES (odh.company_id, 'ORDERS', odh.event_id, odh.stat_order_date, odh.stat_order_day_part, 1);
-        ELSE 
-            UPDATE company.numbering 
-            SET current_value = current_value + 1 
-            WHERE sequence_type = 'ORDERS' 
-                AND event_id = odh.event_id 
-                AND event_date = odh.stat_order_date 
-                AND day_part = odh.stat_order_day_part;
-        END IF;*/
-    END LOOP;
+    -- update numbering table
+    INSERT INTO company.numbering (
+		company_id,
+		event_id,
+		event_date,
+		day_part,
+		current_value)
+	SELECT
+		company_id,
+		event_id,
+		stat_order_date,
+		stat_order_day_part,
+		max(order_number) AS current_value
+	FROM company.order_header
+	WHERE event_id = in_event
+	GROUP BY company_id, event_id, stat_order_date, stat_order_day_part;
 END;
 $$ 
 LANGUAGE plpgsql;

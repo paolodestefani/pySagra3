@@ -103,6 +103,12 @@ class SettingsDialog(QDialog):
             self.ui.radioButtonElectronic.setChecked(True)
         else:
             self.ui.radioButtonCash.setChecked(True)
+        if self.setting['order_number_based_on'] == 'E':
+            self.ui.radioButtonEventBased.setChecked(True)
+        elif self.setting['order_number_based_on'] == 'D':
+            self.ui.radioButtonDayBased.setChecked(True)
+        else:
+            self.ui.radioButtonDayPartBased.setChecked(True) # day (P)art based 
         for i, j in [('N', _tr('Setting', 'North')),
                      ('S', _tr('Setting', 'South')),
                      ('E', _tr('Setting', 'East')),
@@ -127,9 +133,6 @@ class SettingsDialog(QDialog):
         self.ui.colorComboBoxBackground.setCurrentColor(self.setting['normal_background_color'])
         self.ui.colorComboBoxText.setColorList(COLORS)
         self.ui.colorComboBoxText.setCurrentColor(self.setting['normal_text_color'])
-        #self.ui.pushButtonNB.setStyleSheet(f"background-color: {self.ui.pushButtonNB.color};")
-        #self.ui.pushButtonNT.color = self.setting['normal_text_color']
-        #self.ui.pushButtonNT.setStyleSheet(f"background-color: {self.ui.pushButtonNT.color};")
         self.ui.pushButtonWB.color = self.setting['warning_background_color']
         self.ui.pushButtonWB.setStyleSheet(f"background-color: {self.ui.pushButtonWB.color};")
         self.ui.pushButtonWT.color = self.setting['warning_text_color']
@@ -238,22 +241,6 @@ class SettingsDialog(QDialog):
         if value < self.ui.horizontalSliderLunch.value():
             self.ui.horizontalSliderLunch.setValue(value)
 
-    # def selectNormalBackground(self) -> None:
-    #     color = QColorDialog.getColor(QColor(self.ui.pushButtonNB.color), self)
-    #     if not color.isValid():
-    #         return
-    #     self.ui.pushButtonNB.color = color.name()
-    #     self.ui.pushButtonNB.setStyleSheet(f"background-color: {self.ui.pushButtonNB.color};")
-    #     self.updateExampleButtons()
-
-    # def selectNormalText(self) -> None:
-    #     color = QColorDialog.getColor(QColor(self.ui.pushButtonNT.color), self)
-    #     if not color.isValid():
-    #         return
-    #     self.ui.pushButtonNT.color = color.name()
-    #     self.ui.pushButtonNT.setStyleSheet(f"background-color: {self.ui.pushButtonNT.color};")
-    #     self.updateExampleButtons()
-
     def selectWarningBackground(self) -> None:
         color = QColorDialog.getColor(QColor(self.ui.pushButtonWB.color), self)
         if not color.isValid():
@@ -337,6 +324,12 @@ class SettingsDialog(QDialog):
             self.setting['default_payment_type'] = 'E'
         else:
             self.setting['default_payment_type'] = 'C'
+        if self.ui.radioButtonEventBased.isChecked():
+            self.setting['order_number_based_on'] = 'E'
+        elif self.ui.radioButtonDayBased.isChecked():
+            self.setting['order_number_based_on'] = 'D'
+        else:
+            self.setting['order_number_based_on'] = 'P' # day (P)art based
         self.setting['order_entry_ui'] = self.ui.comboBoxOrderUI.currentIndex()
         self.setting['order_list_tab_position'] = self.ui.comboBoxTabPosition.currentData()
         self.setting['warning_stock_level'] = self.ui.spinBoxWarningLevel.value()

@@ -65,9 +65,11 @@ from App.Event import event
 from App.UpdateWebOrderServer import updateWebOrderServer
 from App.WebOrder import webOrder
 from App.OrderArchive import orderArchive
+from App.OrderNumbering import orderNumbering
+from App.Settings import settings
 from App.StockInventory import stockInventory
 from App.OrderProgress import orderProgress
-from App.Settings import settings
+
 from App.OrderEntry import orderEntry
 from App.Statistics import statisticsSales, statisticsConsumption, statisticsExport
 from App.StockUnload import stockUnload
@@ -96,7 +98,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Change company'),
         mw.changeCompany,
         False,
-        'system_changecompany',
+        'system_change_company',
         QKeySequence.Open,
         _tr("Action", 'Change company'),
         _tr("Action", 'Switch to another company'),
@@ -140,7 +142,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Connections history'),
         connectionHistory,
         False,
-        'system_connectionshistory',
+        'system_connections_history',
         None,
         _tr("Action", 'Connections history'),
         _tr("Action", 'Show connections history'),
@@ -158,11 +160,11 @@ def createActionDictionary(mw):
         _tr("Action", 'Manage companies'),
         QAction.TextHeuristicRole)
     
-    actionDefinition['sys_profile'] = (
+    actionDefinition['sys_profil'] = (
         _tr("Action", 'Profiles'),
         profile,
         False,
-        'system_profiles',
+        'system_profile',
         None,
         _tr("Action", 'Profiles management'),
         _tr("Action", 'Profiles management'),
@@ -173,7 +175,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Users'),
         user,
         False,
-        'system_users',
+        'system_user',
         None,
         _tr("Action", 'Users management'),
         _tr("Action", 'Users management'),
@@ -184,7 +186,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Menus'),
         menu,
         False,
-        'system_menus',
+        'system_menu',
         None,
         _tr("Action", 'Menus management'),
         _tr("Action", 'Menus management'),
@@ -195,7 +197,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Toolbars'),
         toolbar,
         False,
-        'system_toolbars',
+        'system_toolbar',
         None,
         _tr("Action", 'Toolbars management'),
         _tr("Action", 'Toolbars management'),
@@ -206,7 +208,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Reports'),
         report,
         False,
-        'system_reports',
+        'system_report',
         None,
         _tr("Action", 'Create/Edit reports'),
         _tr("Action", 'Create/Edit reports'),
@@ -228,7 +230,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Customizations'),
         customization,
         False,
-        'system_customizations',
+        'system_customization',
         None,
         _tr("Action", 'Import/Export customizations'),
         _tr("Action", 'Import/Export customizations'),
@@ -396,7 +398,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Help'),
         help,
         False,
-        'help_contents',
+        'help_content',
         QKeySequence.HelpContents,
         _tr("Action", 'Help'),
         _tr("Action", 'Help index'),
@@ -430,7 +432,7 @@ def createActionDictionary(mw):
         _tr("Action", 'About Qt'),
         aboutQt,
         False,
-        'help_aboutqt',
+        'help_about_qt',
         None,
         _tr("Action", 'About Qt'),
         _tr("Action", 'About Qt'),
@@ -441,7 +443,7 @@ def createActionDictionary(mw):
         _tr("Action", 'System informations'),
         systemInfo,
         False,
-        'help_systeminfo',
+        'help_system_info',
         QKeySequence('CTRL+F1'),
         _tr("Action", 'System information'),
         _tr("Action", 'System information'),
@@ -451,6 +453,128 @@ def createActionDictionary(mw):
     # APPLICATION SPECIFIC ACTIONS
 
     # file actions
+    
+    actionDefinition['app_file_cash_desk'] = (
+        _tr("Action", 'Cash desk'),
+        cashDesk,
+        False,
+        'file_cash_desk',
+        None,
+        _tr("Action", 'Cash desk'),
+        _tr("Action", 'Manage cash desk names and parameters'),
+        _tr("Action", 'Cash desk'),
+        QAction.TextHeuristicRole)
+    
+    actionDefinition['app_file_printer'] = (
+        _tr("Action", 'Printers'),
+        printer,
+        False,
+        'file_printer',
+        None,
+        _tr("Action", 'Printer classes'),
+        _tr("Action", 'Manage printer classes'),
+        _tr("Action", 'Printer classes'),
+        QAction.TextHeuristicRole)
+
+    actionDefinition['app_file_event'] = (
+        _tr("Action", 'Events'),
+        event,
+        False,
+        'file_event',
+        None,
+        _tr("Action", 'Events'),
+        _tr("Action", 'Events'),
+        _tr("Action", 'Events'),
+        QAction.TextHeuristicRole)
+    
+    actionDefinition['app_file_update_wo_server'] = (
+        _tr("Action", 'Update W.O.Server'),
+        updateWebOrderServer,
+        False,
+        'file_update_web_order',
+        None,
+        _tr("Action", 'Update W.O.Server'),
+        _tr("Action", 'Update W.O.Server'),
+        _tr("Action", 'Update W.O.Server'),
+        QAction.TextHeuristicRole)
+
+    actionDefinition['app_file_department'] = (
+        _tr("Action", 'Departments'),
+        department,
+        False,
+        'file_department',
+        None,
+        _tr("Action", 'Departments'),
+        _tr("Action", 'Departments'),
+        _tr("Action", 'Departments'),
+        QAction.TextHeuristicRole)
+
+    actionDefinition['app_file_table'] = (
+        _tr("Action", 'Tables'),
+        table,
+        False,
+        'file_table',
+        None,
+        _tr("Action", 'Tables'),
+        _tr("Action", 'Tables'),
+        _tr("Action", 'Tables'),
+        QAction.TextHeuristicRole)
+
+    actionDefinition['app_file_item'] = (
+        _tr("Action", 'Items'),
+        item,
+        False,
+        'file_item',
+        None,
+        _tr("Action", 'Items'),
+        _tr("Action", 'Items'),
+        _tr("Action", 'Items'),
+        QAction.TextHeuristicRole)
+
+    actionDefinition['app_file_price_list'] = (
+        _tr("Action", 'Price list'),
+        priceList,
+        False,
+        'file_price_list',
+        None,
+        _tr("Action", 'Price list'),
+        _tr("Action", 'Price list'),
+        _tr("Action", 'Price list'),
+        QAction.TextHeuristicRole)
+
+    actionDefinition['app_file_order'] = (
+        _tr("Action", 'Orders'),
+        orderArchive,
+        False,
+        'file_order',
+        None,
+        _tr("Action", 'Orders'),
+        _tr("Action", 'Orders'),
+        _tr("Action", 'Orders'),
+        QAction.TextHeuristicRole)
+
+    actionDefinition['app_file_web_order'] = (
+        _tr("Action", 'Web orders'),
+        webOrder,
+        False,
+        'file_web_order',
+        None,
+        _tr("Action", 'Web orders'),
+        _tr("Action", 'Web orders'),
+        _tr("Action", 'Web orders'),
+        QAction.TextHeuristicRole)
+    
+    actionDefinition['app_file_order_number'] = (
+        _tr("Action", 'Order numbers'),
+        orderNumbering,
+        False,
+        'file_order_number',
+        None,
+        _tr("Action", 'Order numbers'),
+        _tr("Action", 'Manage order number current values'),
+        _tr("Action", 'Order numbers'),
+        QAction.TextHeuristicRole)
+    
     actionDefinition['app_file_setting'] = (
         _tr("Action", 'Settings'),
         settings,
@@ -462,122 +586,12 @@ def createActionDictionary(mw):
         _tr("Action", 'Settings'),
         QAction.NoRole)
 
-    actionDefinition['app_file_cash_desk'] = (
-        _tr("Action", 'Cash desk'),
-        cashDesk,
-        False,
-        'file_cash_desks',
-        None,
-        _tr("Action", 'Cash desk'),
-        _tr("Action", 'Manage cash desk names and parameters'),
-        _tr("Action", 'Cash desk'),
-        QAction.TextHeuristicRole)
-    
-    actionDefinition['app_file_printer'] = (
-        _tr("Action", 'Printers'),
-        printer,
-        False,
-        'file_printers',
-        None,
-        _tr("Action", 'Printer classes'),
-        _tr("Action", 'Manage printer classes'),
-        _tr("Action", 'Printer classes'),
-        QAction.TextHeuristicRole)
-
-    actionDefinition['app_file_event'] = (
-        _tr("Action", 'Events'),
-        event,
-        False,
-        'file_events',
-        None,
-        _tr("Action", 'Events'),
-        _tr("Action", 'Events'),
-        _tr("Action", 'Events'),
-        QAction.TextHeuristicRole)
-    
-    actionDefinition['app_file_update_wo_server'] = (
-        _tr("Action", 'Update W.O.Server'),
-        updateWebOrderServer,
-        False,
-        'file_events',
-        None,
-        _tr("Action", 'Update W.O.Server'),
-        _tr("Action", 'Update W.O.Server'),
-        _tr("Action", 'Update W.O.Server'),
-        QAction.TextHeuristicRole)
-
-    actionDefinition['app_file_department'] = (
-        _tr("Action", 'Departments'),
-        department,
-        False,
-        'file_departments',
-        None,
-        _tr("Action", 'Departments'),
-        _tr("Action", 'Departments'),
-        _tr("Action", 'Departments'),
-        QAction.TextHeuristicRole)
-
-    actionDefinition['app_file_table'] = (
-        _tr("Action", 'Tables'),
-        table,
-        False,
-        'file_tables',
-        None,
-        _tr("Action", 'Tables'),
-        _tr("Action", 'Tables'),
-        _tr("Action", 'Tables'),
-        QAction.TextHeuristicRole)
-
-    actionDefinition['app_file_item'] = (
-        _tr("Action", 'Items'),
-        item,
-        False,
-        'file_items',
-        None,
-        _tr("Action", 'Items'),
-        _tr("Action", 'Items'),
-        _tr("Action", 'Items'),
-        QAction.TextHeuristicRole)
-
-    actionDefinition['app_file_price_list'] = (
-        _tr("Action", 'Price list'),
-        priceList,
-        False,
-        'file_prices',
-        None,
-        _tr("Action", 'Price list'),
-        _tr("Action", 'Price list'),
-        _tr("Action", 'Price list'),
-        QAction.TextHeuristicRole)
-
-    actionDefinition['app_file_order'] = (
-        _tr("Action", 'Orders'),
-        orderArchive,
-        False,
-        'file_orders',
-        None,
-        _tr("Action", 'Orders'),
-        _tr("Action", 'Orders'),
-        _tr("Action", 'Orders'),
-        QAction.TextHeuristicRole)
-
-    actionDefinition['app_file_web_order'] = (
-        _tr("Action", 'Web orders'),
-        webOrder,
-        False,
-        'file_weborders',
-        None,
-        _tr("Action", 'Web orders'),
-        _tr("Action", 'Web orders'),
-        _tr("Action", 'Web orders'),
-        QAction.TextHeuristicRole)
-
     # activities actions
     actionDefinition['app_activity_order_entry'] = (
         _tr("Action", 'Order entry'),
         orderEntry,
         False,
-        'activities_orders',
+        'activities_order',
         None,
         _tr("Action", 'Order entry'),
         _tr("Action", 'Order entry'),
@@ -588,7 +602,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Stock Inventory'),
         stockInventory,
         False,
-        'activities_stockinventory',
+        'activities_stock_inventory',
         None,
         _tr("Action", 'Stock Inventory'),
         _tr("Action", 'Stock Inventory'),
@@ -599,7 +613,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Order progress'),
         orderProgress,
         False,
-        'activities_orderprogress',
+        'activities_order_progress',
         None,
         _tr("Action", 'Order progress'),
         _tr("Action", 'Order progress'),
@@ -610,7 +624,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Stock unload'),
         stockUnload,
         False,
-        'activities_stockunload',
+        'activities_stock_unload',
         None,
         _tr("Action", 'Stock unload'),
         _tr("Action", 'Stock unload'),
@@ -621,7 +635,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Income summary'),
         incomeSummary,
         False,
-        'activities_incomesummary',
+        'activities_income_summary',
         None,
         _tr("Action", 'Income summary'),
         _tr("Action", 'Income summary'),

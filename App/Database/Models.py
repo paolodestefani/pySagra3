@@ -1223,6 +1223,36 @@ class PriceListItemModel(TableModel):
             self.dataSet.sort(key=lambda x: self.itemDescription[x[2]], reverse=True)
         # notify about changes
         self.dataChanged.emit(self.index(0, 0), self.index(self.rowCount(), self.columnCount()))
+        
+        
+class OrderNumberingModel(TableModel):
+
+    def __init__(self, parent: QObject = None) -> None:
+        super().__init__(parent)
+        self.table = "company.numbering"
+        # model columns: (field, description, readonly, type), tuple of tuples
+        # available types: int, bool, decimal2, str, date, datetime, None = no filter
+        self.columns = (("numbering_id", _tr('Models', 'ID'), True, 'int'),
+                        ("event_id", _tr('Models', 'Event id'), False, 'int'),
+                        ("event_date", _tr('Models', 'Event date'), False, 'date'),
+                        ("day_part", _tr('Models', 'Day part'), False, 'str'),
+                        ("current_value", _tr('Models', 'Current value'), False, 'int'),
+                        ("created_by", _tr('Models', 'User Ins'), True, 'str'),
+                        ("created_at", _tr('Models', 'Date Ins'), True, 'date'),
+                        ("updated_by", _tr('Models', 'User Update'), True, 'str'),
+                        ("updated_at", _tr('Models', 'Date Update'), True, 'date'))
+        # True if is a company table
+        self.isCompanyTable = True
+        # primary key fields, tuple or list
+        self.primaryKey = ("numbering_id",)
+        self.automaticPKey = True
+        # master/detail relation {table field: reference field}
+        #self.foreignKey = {'class_id': 'id'}
+        # sql order by clause, plain sql string without ORDER BY
+        self.addOrderBy("numbering_id")
+        #self.newRecordDefault = {'is_obsolete': False,
+        #                         'is_not_managed': False,
+        #                         'is_for_takeaway': True}
 
 
 class StockInventoryModel(TableModel):
@@ -1265,7 +1295,7 @@ SELECT
     item_description,
     quantity
 FROM company.item_availability_detail
-WHERE company_id = pa_current_company()
+WHERE company_id = system.pa_current_company()
     AND item_type = 'K' 
     AND event_id = %(event)s
 ORDER BY item_description;"""
@@ -1286,7 +1316,7 @@ SELECT
     item_description,
     quantity
 FROM item_availability_detail
-WHERE company_id = pa_current_company()
+WHERE company_id = system.pa_current_company()
     AND item_type = 'M' 
     AND event_id = %(event)s
 ORDER BY item_description;"""

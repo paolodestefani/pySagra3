@@ -861,12 +861,10 @@ DECLARE
 i int;
 BEGIN
 
-DELETE FROM company.numbering WHERE company_id = 30;
-
-FOR i IN 	SELECT event_id 
-			FROM company.event 
-			WHERE company_id = 30
-			ORDER BY event_id
+	FOR i IN 	SELECT event_id 
+				FROM company.event 
+				WHERE company_id = 30
+				ORDER BY event_id
 	LOOP
 		PERFORM company.numbering_rebuild(i);
 		PERFORM company.unload_rebuild(i);

@@ -70,7 +70,7 @@ SELECT
     i.has_unload_control        AS has_unload_control,
     i.has_variants              AS has_variants,
     COALESCE(s.quantity, 0.00)  AS quantity, -- from stock_inventory
-	i.is_web_available          AS web_available,
+	i.is_web_available          AS is_web_available,
 	i.web_sorting				AS web_sorting,
     CASE i.has_stock_control
 		WHEN true AND s.quantity > 0 THEN true

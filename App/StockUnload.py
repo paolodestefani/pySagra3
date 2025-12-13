@@ -148,7 +148,7 @@ class StockUnloadForm(FormViewManager):
         self.eventParams = (event, eventDate, dayPart)  # used on printing
         model = self.ui.tableView.model()
         model.whereCondition.clear()
-        model.addWhere('i.has_stock_management = %s', True)
+        model.addWhere('i.has_stock_control = %s', True)
         model.addWhere('s.event_id = %s', event)
         model.addWhere('s.event_date = %s', eventDate)
         model.addWhere('s.day_part = %s', dayPart)

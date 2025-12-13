@@ -86,7 +86,7 @@ SELECT
     coalesce(action, '')
 FROM system.menu_toolbar m
 WHERE
-    company_id = pa_current_company()
+    company_id = system.pa_current_company()
     parent = %s
 ORDER BY sorting;"""
     try:

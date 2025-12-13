@@ -49,42 +49,80 @@ from App.Database.Event import get_event_from_date
 
 
 
-def get_order_number(event_id):
+def get_order_number(event_id, event_date=None, day_part=None):
     "Returns the next available order number"
     # actually we don't need to filter company_id as event_id is unique across companies
     script = """
-SELECT 
-    current_value + 1 
-FROM company.numbering 
-WHERE 
-    company_id = pa_current_company()
-    AND sequence_type = 'ORDERNUM'
-    AND event_id = %s;"""
-    # numbering table is updated by a trigger
+SELECT
+    order_number_based_on
+FROM setting
+WHERE company_id = system.pa_current_company();"""
     try:
         with appconn.cursor() as cur:
-            cur.execute(script, (event_id,))
-            if cur.rowcount:
-                number = cur.fetchone()[0]
-            else:
-                number = 1
-            return number
+            cur.execute(script)
+            mode = cur.fetchone()[0]
     except psycopg.Error as er:
         raise PyAppDBError(er.diag.sqlstate, str(er))
+    
+    # event based numbering
+    if mode == 'E':
+        script = """
+SELECT max(coalesce(current_value, 0)) + 1 
+FROM numbering 
+WHERE company_id = system.pa_current_company()
+    AND event_id = %s;"""
+        try:
+            with appconn.cursor() as cur:
+                cur.execute(script, (event_id,))
+                number = cur.fetchone()[0] or 1
+                return number
+        except psycopg.Error as er:
+            raise PyAppDBError(er.diag.sqlstate, str(er))
+
+    # day based numbering
+    if mode == 'D':
+        script = """
+SELECT max(coalesce(current_value, 0)) + 1 
+FROM numbering 
+WHERE company_id = system.pa_current_company()
+    AND event_id = %s
+    AND event_date = %s"""
+        try:
+            with appconn.cursor() as cur:
+                cur.execute(script, (event_id, event_date))
+                number = cur.fetchone()[0] or 1
+                return number
+        except psycopg.Error as er:
+            raise PyAppDBError(er.diag.sqlstate, str(er))
+    
+    if mode == 'P':
+        script = """
+SELECT max(coalesce(current_value, 0)) + 1 
+FROM numbering 
+WHERE company_id = system.pa_current_company()
+    AND event_id = %s
+    AND event_date = %s
+    AND day_part = %s;"""
+        try:
+            with appconn.cursor() as cur:
+                cur.execute(script, (event_id, event_date, day_part))
+                number = cur.fetchone()[0] or 1
+                return number
+        except psycopg.Error as er:
+            raise PyAppDBError(er.diag.sqlstate, str(er))
 
 
 def get_orders_issued(event_id, date, day_part):
-    "Returns the issued number of orders for day and day part"
+    "Returns the issued number of orders for event, day and day part"
      # actually we don't need to filter company_id as event_id is unique across companies
     script = """
-SELECT current_value
-FROM company.numbering
+SELECT count(*)
+FROM order_header
 WHERE 
-    company_id = pa_current_company()
-    AND sequence_type = 'ORDERS' 
+    company_id = system.pa_current_company()
     AND event_id = %s 
-    AND event_date = %s 
-    AND day_part = %s;"""
+    AND stat_order_date = %s
+    AND stat_order_day_part = %s;"""
     try:
         with appconn.cursor() as cur:
             cur.execute(script, (event_id, date, day_part))
@@ -113,12 +151,12 @@ SELECT
     ohd.department_id,
     dep.description,
     ohd.fullfillment_date
-FROM company.order_header_department ohd
-JOIN company.order_header oh ON ohd.header_id = oh.id
-JOIN company.department dep ON ohd.department_id = dep.id
+FROM order_header_department ohd
+JOIN order_header oh ON ohd.order_header_department_id = oh.order_header_id
+JOIN department dep ON ohd.department_id = dep.department_id
 WHERE 
-    company_id = pa_current_company()
-    AND ohd.id = %s;"""
+    company_id = system.pa_current_company()
+    AND ohd.order_header_department_id = %s;"""
     try:
         with appconn.cursor() as cur:
             cur.execute(script, (order_id,))
@@ -128,22 +166,22 @@ WHERE
 
 
 def update_order_header_department_status(order_id, mark=True):
-    "Set to true processed flag of given order header department_id"
+    "Set to true processed flag of given order header department id"
     # actually we don't need to filter company_id as order_id is unique across companies
     if mark:  # set datetime or null to unmark
         script = """
-UPDATE company.order_header_department
+UPDATE order_header_department
 SET fullfillment_date = CURRENT_TIMESTAMP
 WHERE
-    company_id = pa_current_company()
-    AND id = %s;"""
+    company_id = system.pa_current_company()
+    AND order_header_department_id = %s;"""
     else:
         script = """
-UPDATE company.order_header_department
+UPDATE order_header_department
 SET fullfillment_date = Null
 WHERE
-    company_id = pa_current_company()
-    AND id = %s;"""
+    company_id = system.pa_current_company()
+    AND order_header_department_id = %s;"""
     try:
         with appconn.transaction():
             with appconn.cursor() as cur:
@@ -153,18 +191,18 @@ WHERE
 
 
 class Order():
-    "A order header and details"
+    "A order header and lines"
 
     def __init__(self):
-        self.header = Record('company.order_header', ('id',))
-        self.details = RecordSet('company.order_detail', ('id',))
+        self.header = Record('order_header', ('order_header_id',))
+        self.lines = RecordSet('order_line', ('order_line_id',))
         self.depnote = {} # dict(dep: note)
         
     def out_of_stock(self):
         "Returns a list of out of stock items"
         event_id = get_event_from_date(self.header['date_time'])[0]
         out_of_stock = []
-        for i in self.details:
+        for i in self.lines:
             if has_stock_management(i['item_id']):
                 if get_item_stock_level(event_id, i['item_id']) - i['quantity'] < 0:
                     out_of_stock.append(get_item_desc(i['item_id']))
@@ -172,15 +210,36 @@ class Order():
 
     def insert(self):
         "Insert everything after completed the order"
-        headersdep = RecordSet('company.order_header_department', ('id',))
-        detailsdep = RecordSet('company.order_detail_department', ('id',))
-        # set event and order number on header
+        headersdep = RecordSet('order_header_department', ('order_header_department_id',))
+        linesdep = RecordSet('order_line_department', ('order_line_department_id',))
+        # set event
         self.header['event_id'] = get_event_from_date(self.header['date_time'])[0]
-        self.header['order_number'] = get_order_number(self.header['event_id'])
-        # from details create an intermediate detail list resolving menu items
+        # order date and time set in insert for management of event date changes
+        self.header['order_date'] = self.header['date_time'].date()
+        self.header['order_time'] = self.header['date_time'].time()
+        # set date, statistical date and date part
+        setting = SettingClass()
+        # if time between 0.0.0 and lunch start time stat date is the day before date part is dinner
+        if QTime(0, 0) <= self.header['order_time'] < QTime(setting['lunch_start_time'], 0):
+            # dinner of the day before
+            self.header['stat_order_date'] = self.header['order_date'].addDays(-1)
+            self.header['stat_order_day_part'] = 'D'
+        elif QTime(setting['lunch_start_time'], 0) <= self.header['order_time'] < QTime(setting['dinner_start_time'], 0):
+            # lunch
+            self.header['stat_order_date'] = self.header['order_date']
+            self.header['stat_order_day_part'] = 'L'
+        else:
+            # dinner of the current date
+            self.header['stat_order_date'] = self.header['order_date']
+            self.header['stat_order_day_part'] = 'D'
+        # obtain order number
+        self.header['order_number'] = get_order_number(self.header['event_id'], 
+                                                       self.header['stat_order_date'],
+                                                       self.header['stat_order_day_part'])
+        # from lines create an intermediate detail list resolving menu items
         # resolve menu
         intermediate = []
-        for i in self.details: # also have to remove price and amount
+        for i in self.lines: # also have to remove price and amount
             if is_menu(i['item_id']):
                 for p, q in get_menu_items(i['item_id']):
                     r = dict()
@@ -211,8 +270,8 @@ class Order():
             r['item_id'] = i['item_id']
             r['variants'] = i['variants']
             r['quantity'] = i['quantity']
-            detailsdep.append(r)
-        # generate headersdep and detailsdep
+            linesdep.append(r)
+        # generate headersdep and linesdep
         # compute used departments set and create headersdep
         used_dep = {get_item_dep(i['item_id']) for i in detail} # set
         used_dep_desc = [department_desc(i) for i in used_dep]
@@ -227,24 +286,7 @@ class Order():
             else:
                 r['other_departments'] = None
             headersdep.append(r)
-        # set date, statistical date and date part
-        setting = SettingClass()
-        # order date and time set in insert for for management of event date change
-        self.header['order_date'] = self.header['date_time'].date()
-        self.header['order_time'] = self.header['date_time'].time()
-        # if time between 0.0.0 and lunch start time stat date is the day before date part is dinner
-        if QTime(0, 0) <= self.header['order_time'] < QTime(setting['lunch_start_time'], 0):
-            # dinner of the day before
-            self.header['stat_order_date'] = self.header['order_date'].addDays(-1)
-            self.header['stat_order_day_part'] = 'D'
-        elif QTime(setting['lunch_start_time'], 0) <= self.header['order_time'] < QTime(setting['dinner_start_time'], 0):
-            # lunch
-            self.header['stat_order_date'] = self.header['order_date']
-            self.header['stat_order_day_part'] = 'L'
-        else:
-            # dinner of the current date
-            self.header['stat_order_date'] = self.header['order_date']
-            self.header['stat_order_day_part'] = 'D'
+        
         # set status and fullfillment date if required
         if not setting['manage_order_progress']:
             self.header['status'] = 'P'  # set as already processed
@@ -254,20 +296,20 @@ class Order():
         # insert
         try:
             self.header.insert_record()
-            t = self.header['id']
+            t = self.header['order_header_id']
             ev = self.header['event_id']
             for i in headersdep:
-                i['header_id'] = t
-            for i in self.details:
-                i['header_id'] = t
-            for i in detailsdep:
-                i['header_id'] = t
+                i['order_header_id'] = t
+            for i in self.lines:
+                i['order_header_id'] = t
+            for i in linesdep:
+                i['order_header_id'] = t
                 i['event_id'] = ev
                 i['event_date'] = self.header['stat_order_date']
                 i['day_part'] = self.header['stat_order_day_part']
             headersdep.insert_records()
-            self.details.insert_records()
-            detailsdep.insert_records()
+            self.lines.insert_records()
+            linesdep.insert_records()
         except PyAppDBError as er:
             appconn.rollback()
             raise PyAppDBError(er)

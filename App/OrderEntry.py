@@ -88,6 +88,7 @@ from App.Database.WebOrder import set_web_order_processed
 from App.Database.Order import Order
 from App.Database.Order import get_orders_issued
 from App.Report.Order import printOrderReport
+from App.Report.Order import printOrderCoverReport
 from App.Report.Order import printOrderDepartmentReport
 from App.Report.Order import printStockUnloadReport
 from App.System.Utility import _tr
@@ -436,7 +437,7 @@ class BaseOrderDialog(QDialog):
             self.ui.lineEditTable.setDisabled(True)
             self.ui.spinBoxCovers.setDisabled(True)
             self.ui.pushButtonTablesSwitch.setDisabled(True)
-            self.ui.lineEditCustomerName.setFocus(True)
+            self.ui.lineEditCustomerName.setFocus()
             self.ui.stackedWidgetTableOrder.setCurrentIndex(0)
             depta = department_takeaway_list()
             for i in range(self.ui.tabWidgetList.count()):
@@ -834,9 +835,9 @@ class BaseOrderDialog(QDialog):
 
     def accept(self):
         "Generate, save and print the order"
-        #-------------------#
-        #-- SANITY CHECKS --#
-        #-------------------#
+        #-------------------------#
+        #-- SANITY CHECKS FIRST --#
+        #-------------------------#
         # no items selected
         if self.ui.tabWidgetOrder.rowCount() == 0:
             msg = _tr('OrderDialog', "No item inserted!")
@@ -922,6 +923,7 @@ class BaseOrderDialog(QDialog):
         order.header['is_from_web'] =  self.ui.checkBoxWebOrder.isChecked()
         order.header['table_num'] = self.ui.lineEditTable.text().strip() or None
         order.header['customer_name'] = self.ui.lineEditCustomerName.text() or None
+        order.header['customer_contact'] = self.ui.lineEditCustomerContact.text() or None
         order.header['covers'] = int(self.ui.spinBoxCovers.value())
         order.header['total_amount'] = decimal.Decimal(self.ui.doubleSpinBoxSubTotal.value())
         order.header['discount'] = decimal.Decimal(self.ui.doubleSpinBoxDiscount.value())
@@ -934,7 +936,7 @@ class BaseOrderDialog(QDialog):
             line['quantity'] = int(self.ui.tabWidgetOrder.item(i, QTY).data(Qt.DisplayRole))
             line['price'] = fromCurrency(self.ui.tabWidgetOrder.item(i, PRICE).data(Qt.DisplayRole))
             line['amount'] = fromCurrency(self.ui.tabWidgetOrder.item(i, AMOUNT).data(Qt.DisplayRole))
-            order.details.append(line)
+            order.lines.append(line)
         # check out of stock item
         ofsi = order.out_of_stock()
         if ofsi:
@@ -960,30 +962,22 @@ class BaseOrderDialog(QDialog):
         # customer copy
         if setting['print_customer_copy']:
             printer = get_printer_name(setting['customer_printer_class'], session['hostname'])
-            #if not printer:
-                #QMessageBox.warning(self,
-                                    #_tr('MessageDialog', "Warning"),
-                                    #_tr('OrderDialog', "No customer copy printer set for this computer\n"
-                                        #"Generating a print preview"))
-            printOrderReport(setting['customer_report'],
-                             session['l10n'],
-                             ti,
-                             printer,
-                             setting['customer_copies'])
-
+            try:
+                printOrderReport(ti, printer)
+            except Exception as er:
+                QMessageBox.critical(self,
+                                     _tr("MessageDialog", "Critical"),
+                                     _tr('OrderDialog', "Unable to print order customer copy:\n{}").format(er))   
         # covers copy
         if setting['print_cover_copy'] and order.header['delivery'] == 'T':
             printer = get_printer_name(setting['cover_printer_class'], session['hostname'])
-            #if not printer:
-                #QMessageBox.warning(self,
-                                    #_tr('MessageDialog', "Warning"),
-                                    #_tr('OrderDialog', "No cover copy printer set for this computer\n"
-                                        #"Generating a print preview"))
-            printOrderReport(setting['cover_report'],
-                             session['l10n'],
-                             ti,
-                             printer,
-                             setting['cover_copies'])
+            try:
+                printOrderCoverReport(ti, printer)
+            except Exception as er:
+                QMessageBox.critical(self,
+                                     _tr("MessageDialog", "Critical"),
+                                     _tr('OrderDialog', "Unable to print order cover copy:\n{}").format(er))   
+                
         # departments copies
         if setting['print_department_copy']:
             for i in used_dep:
@@ -991,38 +985,34 @@ class BaseOrderDialog(QDialog):
                 if not prncls:
                     continue
                 printer = get_printer_name(prncls, session['hostname'])
-                #if not printer:
-                    #QMessageBox.warning(self,
-                                        #_tr('MessageDialog', "Warning"),
-                                        #_tr('OrderDialog', "No department copy printer set for this computer\n"
-                                            #"Generating a print preview"))
-                printOrderDepartmentReport(setting['department_report'],
-                                           session['l10n'],
-                                           ti,
-                                           printer,
-                                           i,
-                                           setting['department_copies'])
+                try:
+                    printOrderDepartmentReport(ti, i, printer)
+                except Exception as er:
+                    QMessageBox.critical(self,
+                                         _tr("MessageDialog", "Critical"),
+                                         _tr('OrderDialog', "Unable to print order department copy:\n{}").format(er)) 
         # check stock unload report
         if setting['print_stock_unload_report']:
             # get orders issued in the half day from last inserted order header
-            n = get_orders_issued(order.header['event'],
+            n = get_orders_issued(order.header['event_id'],
                                   order.header['stat_order_date'],
                                   order.header['stat_order_day_part'])
             if n >= setting['num_orders_for_start_stock_unload']:
                 if n % setting['num_orders_for_next_stock_unload'] == 0:
                     printer = get_printer_name(setting['stock_unload_printer_class'], session['hostname'])
-                    #if not printer:
-                        #QMessageBox.warning(self,
-                                            #_tr('MessageDialog', "Warning"),
-                                            #_tr('OrderDialog', "No stock unload report printer set for this computer\n"
-                                                #"Generating a print preview"))
-                    printStockUnloadReport(setting['stock_unload_report'],
-                                           session['l10n'],
-                                           printer,
-                                           setting['stock_unload_copies'],
-                                           order.header['event'],
-                                           order.header['stat_order_date'],
-                                           order.header['stat_order_day_part'])
+                    try:
+                        printStockUnloadReport(setting['stock_unload_report'],
+                                               session['l10n'],
+                                               printer,
+                                               setting['stock_unload_copies'],
+                                               order.header['event'],
+                                               order.header['stat_order_date'],
+                                               order.header['stat_order_day_part'])
+                    except Exception as er:
+                        QMessageBox.critical(self,
+                                             _tr("MessageDialog", "Critical"),
+                                             _tr('OrderDialog', "Unable to print stock unload report:\n{}").format(er)) 
+                        
         # clear order list before reset otherwise save + reset = reset
         for i in range(self.ui.tabWidgetOrder.rowCount(), -1, -1):
             self.ui.tabWidgetOrder.removeRow(i)

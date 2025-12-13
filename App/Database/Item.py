@@ -42,8 +42,8 @@ def get_variants(item_id):
 SELECT 
     variant_description,
     price_delta
-FROM company.item_variant
-WHERE company_id = pa_current_company() 
+FROM item_variant
+WHERE company_id = system.pa_current_company() 
     AND item_id = %s
 ORDER BY sorting;"""
     try:
@@ -71,7 +71,7 @@ SELECT
     quantity
 FROM item_availability_detail
 WHERE 
-    company_id = pa_current_company() 
+    company_id = system.pa_current_company() 
     AND is_salable IS true 
     AND event_id = %(event_id)s 
     AND department_id = %(department_id)s;"""
@@ -94,9 +94,9 @@ SELECT
     has_variants
 FROM item_availability_detail
 WHERE 
-    company_id = pa_current_company() 
+    company_id = system.pa_current_company() 
     AND is_salable IS true 
-    AND web_available IS true 
+    AND is_web_available IS true 
     AND event_id = %(event_id)s 
     AND department_id = %(department_id)s
 ORDER BY web_sorting;"""
@@ -111,10 +111,10 @@ def is_menu(item_id):
     "Return True if item is a menu type item"
     # actually we don't need to filter company_id as item_id is unique across companies
     script = """
-SELECT id 
-FROM company.item 
+SELECT item_id 
+FROM item 
 WHERE 
-    company_id = pa_current_company() 
+    company_id = system.pa_current_company() 
     AND item_id = %s 
     AND item_type = 'M';"""
     try:
@@ -128,10 +128,10 @@ def is_kit(item_id):
     "Return True if item is a kit type item"
     # actually we don't need to filter company_id as item_id is unique across companies
     script = """
-SELECT id 
-FROM company.item 
+SELECT item_id 
+FROM item 
 WHERE
-    company_id = pa_current_company()
+    company_id = system.pa_current_company()
     AND item_id = %s 
     AND item_type = 'K';"""
     try:
@@ -145,11 +145,11 @@ def is_for_takeaway(item_id):
     "Return True if item is available for takeaway, based on department's flag"
     # actually we don't need to filter company_id as item_id is unique across companies
     script = """
-SELECT i.id
-FROM company.item i
-JOIN company.department d on i.department_id = d.id
+SELECT i.item_id
+FROM item i
+JOIN department d on i.department_id = d.department_id
 WHERE 
-    i.company_id = pa_current_company()
+    i.company_id = system.pa_current_company()
     AND i.item_id = %s 
     AND d.is_for_takeaway IS True;"""
     try:
@@ -165,9 +165,9 @@ def has_stock_management(item_id):
     script = """
 SELECT 
     has_stock_control 
-FROM company.item 
+FROM item 
 WHERE
-    company_id = pa_current_company()
+    company_id = system.pa_current_company()
     AND item_id = %s;"""
     try:
         with appconn.cursor() as cur:
@@ -183,9 +183,9 @@ def get_menu_items(item_id):
 SELECT 
     part_id,
     quantity
-FROM company.item_part
+FROM item_part
 WHERE
-    company_id = pa_current_company()
+    company_id = system.pa_current_company()
     AND item_id = %s;"""
     try:
         with appconn.cursor() as cur:
@@ -201,9 +201,9 @@ def get_item_dep(item_id):
     script = """
 SELECT 
     department_id
-FROM company.item
+FROM item
 WHERE 
-    company_id = pa_current_company()
+    company_id = system.pa_current_company()
     AND item_id = %s;"""
     try:
         with appconn.cursor() as cur:
@@ -219,9 +219,9 @@ def get_item_desc(item_id):
     script = """
 SELECT 
     description 
-FROM company.item 
+FROM item 
 WHERE 
-    company_id = pa_current_company()
+    company_id = system.pa_current_company()
     AND item_id = %s;"""
     try:
         with appconn.cursor() as cur:
@@ -237,9 +237,9 @@ def get_item_stock_level(event_id, item_id):
     script = """
 SELECT 
     quantity 
-FROM company.item_availability_detail 
+FROM item_availability_detail 
 WHERE
-    company_id = pa_current_company()
+    company_id = system.pa_current_company()
     AND event_id = %s 
     AND item_id = %s;"""
     try:
@@ -258,9 +258,9 @@ SELECT
     item_id,
     item_description,
     quantity
-FROM company.item_availability_detail
+FROM item_availability_detail
 WHERE
-    company_id = pa_current_company()
+    company_id = system.pa_current_company()
     AND item_type = 'K' 
     AND event_id = %(event_id)s;"""
     try:
@@ -275,9 +275,9 @@ def menu_availability(event_id):
 SELECT 
     item_id
     quantity
-FROM company.item_availability_detail
+FROM item_availability_detail
 WHERE
-    company_id = pa_current_company()
+    company_id = system.pa_current_company()
     AND item_type = 'M' 
     AND event_id = %(event_id)s;"""
     try:

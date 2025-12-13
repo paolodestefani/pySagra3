@@ -47,7 +47,7 @@ SELECT
     user_password,
     file_name
 FROM web_order_server
-WHERE company_id = pa_current_company();"""
+WHERE company_id = system.pa_current_company();"""
     try:
         with appconn.cursor() as cur:
             cur.execute(script)

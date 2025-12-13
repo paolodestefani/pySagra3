@@ -187,7 +187,7 @@ BEGIN
     WHERE user_code = system.pa_current_user();
 
     -- set search_path
-    PERFORM set_config('search_path', 'system, common, company', false);
+    PERFORM set_config('search_path', 'common, company', false);
 
     -- return user session parameters (not connected to a company yet)
     RETURN QUERY

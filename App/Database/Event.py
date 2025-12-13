@@ -82,7 +82,7 @@ SELECT
     description
 FROM event
 WHERE
-    company_id = pa_current_company()
+    company_id = system.pa_current_company()
     AND start_date <= %s AND end_date >= %s;"""
     try:
         with appconn.cursor() as cur:

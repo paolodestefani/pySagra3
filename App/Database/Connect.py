@@ -293,7 +293,7 @@ SELECT
     image
 FROM company.event
 WHERE 
-    company_id = pa_current_company()
+    company_id = system.pa_current_company()
     AND %s BETWEEN start_date AND end_date"""
     try:
         with appconn.cursor() as cur:

@@ -29,7 +29,7 @@ class Ui_SettingsDialog(object):
         if not SettingsDialog.objectName():
             SettingsDialog.setObjectName(u"SettingsDialog")
         SettingsDialog.setWindowModality(Qt.WindowModality.ApplicationModal)
-        SettingsDialog.resize(768, 576)
+        SettingsDialog.resize(722, 569)
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -403,8 +403,8 @@ class Ui_SettingsDialog(object):
         self.tabWidget.addTab(self.tab1, "")
         self.tab2 = QWidget()
         self.tab2.setObjectName(u"tab2")
-        self.verticalLayout_9 = QVBoxLayout(self.tab2)
-        self.verticalLayout_9.setObjectName(u"verticalLayout_9")
+        self.verticalLayout_22 = QVBoxLayout(self.tab2)
+        self.verticalLayout_22.setObjectName(u"verticalLayout_22")
         self.horizontalLayout_5 = QHBoxLayout()
         self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
         self.groupBox_6 = QGroupBox(self.tab2)
@@ -516,14 +516,14 @@ class Ui_SettingsDialog(object):
         self.horizontalLayout_5.addLayout(self.verticalLayout_7)
 
 
-        self.verticalLayout_9.addLayout(self.horizontalLayout_5)
+        self.verticalLayout_22.addLayout(self.horizontalLayout_5)
 
-        self.horizontalLayout_13 = QHBoxLayout()
-        self.horizontalLayout_13.setObjectName(u"horizontalLayout_13")
+        self.horizontalLayout = QHBoxLayout()
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.label_20 = QLabel(self.tab2)
         self.label_20.setObjectName(u"label_20")
 
-        self.horizontalLayout_13.addWidget(self.label_20)
+        self.horizontalLayout.addWidget(self.label_20)
 
         self.spinBoxMaxCovers = QSpinBox(self.tab2)
         self.spinBoxMaxCovers.setObjectName(u"spinBoxMaxCovers")
@@ -536,45 +536,12 @@ class Ui_SettingsDialog(object):
         self.spinBoxMaxCovers.setMaximum(999)
         self.spinBoxMaxCovers.setValue(0)
 
-        self.horizontalLayout_13.addWidget(self.spinBoxMaxCovers)
+        self.horizontalLayout.addWidget(self.spinBoxMaxCovers)
 
         self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
-        self.horizontalLayout_13.addItem(self.horizontalSpacer)
+        self.horizontalLayout.addItem(self.horizontalSpacer)
 
-
-        self.verticalLayout_9.addLayout(self.horizontalLayout_13)
-
-        self.groupBox_5 = QGroupBox(self.tab2)
-        self.groupBox_5.setObjectName(u"groupBox_5")
-        self.verticalLayout_8 = QVBoxLayout(self.groupBox_5)
-        self.verticalLayout_8.setObjectName(u"verticalLayout_8")
-        self.verticalLayout_8.setContentsMargins(5, 5, 5, 5)
-        self.checkBoxUseTableList = QCheckBox(self.groupBox_5)
-        self.checkBoxUseTableList.setObjectName(u"checkBoxUseTableList")
-
-        self.verticalLayout_8.addWidget(self.checkBoxUseTableList)
-
-        self.checkBoxShowInventory = QCheckBox(self.groupBox_5)
-        self.checkBoxShowInventory.setObjectName(u"checkBoxShowInventory")
-
-        self.verticalLayout_8.addWidget(self.checkBoxShowInventory)
-
-        self.checkBoxAutoVariants = QCheckBox(self.groupBox_5)
-        self.checkBoxAutoVariants.setObjectName(u"checkBoxAutoVariants")
-
-        self.verticalLayout_8.addWidget(self.checkBoxAutoVariants)
-
-        self.checkBoxMandatoryTableNumber = QCheckBox(self.groupBox_5)
-        self.checkBoxMandatoryTableNumber.setObjectName(u"checkBoxMandatoryTableNumber")
-
-        self.verticalLayout_8.addWidget(self.checkBoxMandatoryTableNumber)
-
-
-        self.verticalLayout_9.addWidget(self.groupBox_5)
-
-        self.horizontalLayout = QHBoxLayout()
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.checkBoxInactivity = QCheckBox(self.tab2)
         self.checkBoxInactivity.setObjectName(u"checkBoxInactivity")
 
@@ -599,11 +566,75 @@ class Ui_SettingsDialog(object):
         self.horizontalLayout.addItem(self.horizontalSpacer_6)
 
 
-        self.verticalLayout_9.addLayout(self.horizontalLayout)
+        self.verticalLayout_22.addLayout(self.horizontalLayout)
+
+        self.horizontalLayout_9 = QHBoxLayout()
+        self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
+        self.groupBox_5 = QGroupBox(self.tab2)
+        self.groupBox_5.setObjectName(u"groupBox_5")
+        self.verticalLayout_8 = QVBoxLayout(self.groupBox_5)
+        self.verticalLayout_8.setObjectName(u"verticalLayout_8")
+        self.checkBoxUseTableList = QCheckBox(self.groupBox_5)
+        self.checkBoxUseTableList.setObjectName(u"checkBoxUseTableList")
+
+        self.verticalLayout_8.addWidget(self.checkBoxUseTableList)
+
+        self.checkBoxShowInventory = QCheckBox(self.groupBox_5)
+        self.checkBoxShowInventory.setObjectName(u"checkBoxShowInventory")
+
+        self.verticalLayout_8.addWidget(self.checkBoxShowInventory)
+
+        self.checkBoxAutoVariants = QCheckBox(self.groupBox_5)
+        self.checkBoxAutoVariants.setObjectName(u"checkBoxAutoVariants")
+
+        self.verticalLayout_8.addWidget(self.checkBoxAutoVariants)
+
+        self.checkBoxMandatoryTableNumber = QCheckBox(self.groupBox_5)
+        self.checkBoxMandatoryTableNumber.setObjectName(u"checkBoxMandatoryTableNumber")
+
+        self.verticalLayout_8.addWidget(self.checkBoxMandatoryTableNumber)
+
+
+        self.horizontalLayout_9.addWidget(self.groupBox_5)
+
+        self.groupBox = QGroupBox(self.tab2)
+        self.groupBox.setObjectName(u"groupBox")
+        self.verticalLayout_9 = QVBoxLayout(self.groupBox)
+        self.verticalLayout_9.setObjectName(u"verticalLayout_9")
+        self.horizontalLayout_6 = QHBoxLayout()
+        self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
+        self.radioButtonEventBased = QRadioButton(self.groupBox)
+        self.radioButtonEventBased.setObjectName(u"radioButtonEventBased")
+        self.radioButtonEventBased.setChecked(True)
+
+        self.horizontalLayout_6.addWidget(self.radioButtonEventBased)
+
+        self.radioButtonDayBased = QRadioButton(self.groupBox)
+        self.radioButtonDayBased.setObjectName(u"radioButtonDayBased")
+
+        self.horizontalLayout_6.addWidget(self.radioButtonDayBased)
+
+        self.radioButtonDayPartBased = QRadioButton(self.groupBox)
+        self.radioButtonDayPartBased.setObjectName(u"radioButtonDayPartBased")
+
+        self.horizontalLayout_6.addWidget(self.radioButtonDayPartBased)
+
+
+        self.verticalLayout_9.addLayout(self.horizontalLayout_6)
+
+        self.verticalSpacer_6 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.verticalLayout_9.addItem(self.verticalSpacer_6)
+
+
+        self.horizontalLayout_9.addWidget(self.groupBox)
+
+
+        self.verticalLayout_22.addLayout(self.horizontalLayout_9)
 
         self.verticalSpacer_5 = QSpacerItem(20, 130, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
-        self.verticalLayout_9.addItem(self.verticalSpacer_5)
+        self.verticalLayout_22.addItem(self.verticalSpacer_5)
 
         self.tabWidget.addTab(self.tab2, "")
         self.tab3 = QWidget()
@@ -1088,13 +1119,17 @@ class Ui_SettingsDialog(object):
         self.radioButtonCash.setText(QCoreApplication.translate("SettingsDialog", u"Cash", None))
         self.radioButtonElectronic.setText(QCoreApplication.translate("SettingsDialog", u"Electronic", None))
         self.label_20.setText(QCoreApplication.translate("SettingsDialog", u"Max covers value", None))
+        self.checkBoxInactivity.setText(QCoreApplication.translate("SettingsDialog", u"Check inactivity after", None))
+        self.labelInactivity.setText(QCoreApplication.translate("SettingsDialog", u"Seconds", None))
         self.groupBox_5.setTitle(QCoreApplication.translate("SettingsDialog", u"Form parameters", None))
         self.checkBoxUseTableList.setText(QCoreApplication.translate("SettingsDialog", u"Use table list", None))
         self.checkBoxShowInventory.setText(QCoreApplication.translate("SettingsDialog", u"Always show inventory", None))
         self.checkBoxAutoVariants.setText(QCoreApplication.translate("SettingsDialog", u"Show variants automatically", None))
         self.checkBoxMandatoryTableNumber.setText(QCoreApplication.translate("SettingsDialog", u"Mandatory table number", None))
-        self.checkBoxInactivity.setText(QCoreApplication.translate("SettingsDialog", u"Inactivity check after", None))
-        self.labelInactivity.setText(QCoreApplication.translate("SettingsDialog", u"Seconds", None))
+        self.groupBox.setTitle(QCoreApplication.translate("SettingsDialog", u"Order number based on", None))
+        self.radioButtonEventBased.setText(QCoreApplication.translate("SettingsDialog", u"Event", None))
+        self.radioButtonDayBased.setText(QCoreApplication.translate("SettingsDialog", u"Day", None))
+        self.radioButtonDayPartBased.setText(QCoreApplication.translate("SettingsDialog", u"Day part", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab2), QCoreApplication.translate("SettingsDialog", u"Order entry control", None))
         self.groupBox_4.setTitle(QCoreApplication.translate("SettingsDialog", u"Order printing settings", None))
         self.labelCopy_4.setText(QCoreApplication.translate("SettingsDialog", u"Report", None))
