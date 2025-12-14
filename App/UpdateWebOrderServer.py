@@ -144,6 +144,7 @@ class UpdateWebOrderServerDialog(QDialog):
                                  _tr("Weborder server", "Error on writing XML file"),
                                 str(er),
                                 QMessageBox.StandardButton.Ok)
+            return
         else:
             logging.info('XML file %s created successfully', filename)
 
@@ -157,10 +158,17 @@ class UpdateWebOrderServerDialog(QDialog):
         password = self.ui.lineEditPassword.text()
         filename = self.ui.lineEditFileName.text()
         # Connect FTP Server
-        ftp_server = ftplib.FTP(server, user, password)
-
-        # force encoding
-        ftp_server.encoding = encoding
+        try:
+            ftp_server = ftplib.FTP(server, user, password)
+            # force encoding
+            ftp_server.encoding = encoding
+        except Exception as er:
+            logging.error('Error connecting to ftp server: %s', str(er))
+            QMessageBox.critical(self,
+                                 _tr("Weborder server", "Ftp connection error"),
+                                str(er),
+                                QMessageBox.StandardButton.Ok)
+            return
 
         # Read file in binary mode
         with open(filename, "rb") as file:

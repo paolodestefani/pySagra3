@@ -48,7 +48,7 @@ SELECT
     end_date,
     price_list_id
 FROM event
-WHERE id = %s;"""
+WHERE event_id = %s;"""
     try:
         with appconn.cursor() as cur:
             cur.execute(sql, (event,))

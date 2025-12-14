@@ -324,5 +324,6 @@ class OrderForm(FormIndexManager):
                     except ReportException as er:
                         QMessageBox.critical(self,
                                              _tr('MessageDialog', "Critical"),
-                                             _tr('OrderArchive', "Report exception: {}".format(er)))
+                                             str(er),
+                                             QMessageBox.StandardButton.Ok)
                     self.depCopy[i].setChecked(False)

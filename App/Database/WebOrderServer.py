@@ -81,14 +81,14 @@ INSERT INTO web_order_server (
     user_password,
     file_name)
 VALUES (
-        pa_current_company(),
+        system.pa_current_company(),
         %s,
         %s,
         %s,
         %s,
         %s,
         %s)
-ON CONFLICT ON CONSTRAINT web_order_server_pkey DO 
+ON CONFLICT ON CONSTRAINT web_order_server_pk DO 
 UPDATE SET server_address = EXCLUDED.server_address,
     port_number = EXCLUDED.port_number,
     user_name = EXCLUDED.user_name,
