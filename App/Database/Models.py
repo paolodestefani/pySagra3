@@ -40,7 +40,7 @@ from PySide6.QtCore import QTime
 from PySide6.QtCore import QDateTime
 from PySide6.QtCore import Signal
 #from PyQt5.QtCore import QAbstractItemModel
-#from PyQt5.QtCore import QAbstractTableModel
+from PySide6.QtCore import QAbstractTableModel
 from PySide6.QtCore import QModelIndex
 from PySide6.QtGui import QFont
 
@@ -52,6 +52,8 @@ from App.Database.Connect import appconn
 from App.Database.AbstractModels.TableModel import QueryModel
 from App.Database.AbstractModels.TableModel import QueryWithParamsModel
 from App.Database.AbstractModels.TableModel import TableModel
+from App.Database.AbstractModels.TableModel import PandasModel
+from App.Database.AbstractModels.TreeModel import TreeQueryModel
 from App.Database.AbstractModels.TreeModel import TreeModel
 from App.Database.Company import company_is_in_use
 from App.Database.Statistics import statistics_configuration
@@ -92,6 +94,7 @@ class MenuItemTreeModel(TreeModel):
         self.parentFieldColumn = 0
         self.childField = "child"
         self.childFieldColumn = 1
+        self.repr = 'Menu item tree model'
         # sql order by clause, plain sql string without ORDER BY
         # self.addOrderBy("parent")
         # self.addOrderBy("sorting")
@@ -122,6 +125,7 @@ class ToolbarItemTreeModel(TreeModel):
         self.parentFieldColumn = 0
         self.childField = "child"
         self.childFieldColumn = 1
+        self.repr = 'Toolbar item tree model'
         # sql order by clause, plain sql string without ORDER BY
         # self.addOrderBy("parent")
         # self.addOrderBy("sorting")
@@ -159,7 +163,7 @@ LEFT JOIN system.company b ON a.company_id = b.company_id;"""
                         ("a.profile_code", _tr('Models', 'Profile'), True, 'str'))
         # True if is a company table
         self.isCompanyTable = False
-        self.setRepr('Connection model')
+        self.repr = 'Connection query model'
         self.addOrderBy('a.access_date DESC')
 
 
@@ -193,7 +197,7 @@ FROM system.connection_history;"""
                         ("profile_code", _tr('Models', 'Profile'), True, 'str'))
         # True if is a company table
         self.isCompanyTable = False
-        self.setRepr('Connection history model')
+        self.repr = 'Connection history query model'
         self.addOrderBy(('login_datetime DESC', 'session_id'))
         
 
@@ -224,7 +228,7 @@ FROM system.company;"""
                         ("updated_at", _tr('Models', 'Date Update'), True, 'date'))
         # True if is a company table
         self.isCompanyTable = False
-        self.setRepr('Company index model')
+        self.repr = 'Company index query model'
         self.addOrderBy('company_id ASC')
         
 
@@ -249,6 +253,7 @@ class CompanyModel(TableModel):
         self.primaryKey = ("company_id",)
         # sql order by clause, plain sql string without ORDER BY
         self.addOrderBy('company_id')
+        self.repr = 'Company table model'
         
     def submitAll(self) -> None:
         # check if delete request of a in use company
@@ -302,7 +307,7 @@ FROM system.app_user;"""
                         ("updated_at", _tr('Models', 'Date Update'), True, 'date'))
         # True if is a company table
         self.isCompanyTable = False
-        self.setRepr('User index model')
+        self.repr = 'User index query model'
         self.addOrderBy('user_code ASC')
         
 
@@ -338,6 +343,7 @@ class UserModel(TableModel):
         # sql order by clause, plain sql string without ORDER BY
         self.addOrderBy("is_system_object DESC")
         self.addOrderBy("user_code")
+        self.repr = 'User table model'
 
 
 class UserCompanyModel(TableModel):
@@ -363,6 +369,7 @@ class UserCompanyModel(TableModel):
         # sql order by clause, plain sql string without ORDER BY
         self.addOrderBy("company_id")
         self.addOrderBy("app_user_code")
+        self.repr = 'User company table model'
 
 
 class UserCompanyModelReferenceCompany(UserCompanyModel):
@@ -371,6 +378,7 @@ class UserCompanyModelReferenceCompany(UserCompanyModel):
         super().__init__(parent)
         # master/detail relation {table column: reference field}
         self.foreignKey = {'company_id': 'company_id'}
+        self.repr = 'User company model by company'
 
 
 class UserCompanyModelReferenceUser(UserCompanyModel):
@@ -379,6 +387,7 @@ class UserCompanyModelReferenceUser(UserCompanyModel):
         super().__init__(parent)
         # master/detail relation {table column: reference field}
         self.foreignKey = {'app_user_code': 'app_user_code'}
+        self.repr = 'User company model by user'
 
 
 class ProfileIndexModel(QueryModel):
@@ -406,7 +415,7 @@ FROM system.profile;"""
                         ("updated_at", _tr('Models', 'Date Update'), True, 'date'))
         # True if is a company table
         self.isCompanyTable = False
-        self.setRepr('Profile index model')
+        self.repr = 'Profile index query model'
         self.addOrderBy('profile_code ASC')
         
 
@@ -437,6 +446,7 @@ class ProfileModel(TableModel):
                                  'created_at': None,
                                  'updated_by': '',
                                  'updated_at': None}
+        self.repr = 'Profile table model'
 
 
 class ProfileActionModel(TableModel):
@@ -461,6 +471,7 @@ class ProfileActionModel(TableModel):
         self.foreignKey = {'profile_code': 'profile_code'}
         # sql order by clause, plain sql string without ORDER BY
         self.addOrderBy("action")
+        self.repr = 'Profile action table model'
 
 
 class MenuIndexModel(QueryModel):
@@ -488,7 +499,7 @@ FROM system.menu;"""
                         ("updated_at", _tr('Models', 'Date Update'), True, 'date'))
         # True if is a company table
         self.isCompanyTable = False
-        self.setRepr('Menu index model')
+        self.repr = 'Menu index query model'
         self.addOrderBy('menu_code ASC')
         
 
@@ -514,6 +525,7 @@ class MenuModel(TableModel):
         #self.sqlWhere = ''
         # sql order by clause, plain sql string without ORDER BY
         self.addOrderBy("menu_code")
+        self.repr = 'Menu table model'
         
 
 class ToolbarIndexModel(QueryModel):
@@ -541,7 +553,7 @@ FROM system.toolbar;"""
                         ("updated_at", _tr('Models', 'Date Update'), True, 'date'))
         # True if is a company table
         self.isCompanyTable = False
-        self.setRepr('Toolbar index model')
+        self.repr = 'Toolbar index querymodel'
         self.addOrderBy('toolbar_code ASC')
         
 
@@ -567,6 +579,7 @@ class ToolbarModel(TableModel):
         #self.sqlWhere = ''
         # sql order by clause, plain sql string without ORDER BY
         self.addOrderBy("toolbar_code")
+        self.repr = 'Toolbar table model'
 
 
 class ReportIndexModel(QueryModel):
@@ -601,7 +614,7 @@ FROM system.report;"""
             ("updated_at", _tr('Models', 'Date Update'), True, 'date'))
         # True if is a company table
         self.isCompanyTable = False
-        self.setRepr('Report index model')
+        self.repr = 'Report index query model'
         # sql order by clause, plain sql string without ORDER BY
         self.addOrderBy("report_id, report_code, l10n")
         
@@ -631,6 +644,7 @@ class ReportModel(TableModel):
         self.automaticPKey = True
         # sql order by clause, plain sql string without ORDER BY
         #self.addOrderBy(("code, l10n"))
+        self.repr = 'Report table model'
 
 
 class ScriptingIndexModel(QueryModel):
@@ -669,7 +683,7 @@ FROM system.python_scripting;"""
             ("updated_at", _tr('Models', 'Date Update'), True, 'date'))
         # True if is a company table
         self.isCompanyTable = False
-        self.setRepr('Scripting index model')
+        self.repr = 'Scripting index query model'
         # sql order by clause, plain sql string without ORDER BY
         self.addOrderBy(("class_name DESC", "method_name", "trigger"))
         
@@ -701,6 +715,7 @@ class ScriptingModel(TableModel):
         self.automaticPKey = True
         # sql order by clause, plain sql string without ORDER BY
         self.addOrderBy("class_name, method_name, trigger")
+        self.repr = 'Scripting table model'
         
 
 class EventIndexModel(QueryModel):
@@ -734,7 +749,7 @@ FROM company.event;"""
                         ("updated_at", _tr('Models', 'Date Update'), True, 'date'))
         # True if is a company table
         self.isCompanyTable = True
-        self.setRepr('Event index model')
+        self.repr = 'Event index query model'
         # sql order by clause, plain sql string without ORDER BY
         self.addOrderBy("event_id")
 
@@ -763,6 +778,7 @@ class EventModel(TableModel):
         self.automaticPKey = True
         # sql order by clause, plain sql string without ORDER BY
         self.addOrderBy("start_date DESC")
+        self.repr = 'Event table model'
 
 
 class CashDeskModel(TableModel):
@@ -792,6 +808,7 @@ class CashDeskModel(TableModel):
         #self.newRecordDefault = {'is_obsolete': False,
         #                         'is_not_managed': False,
         #                         'is_for_takeaway': True}
+        self.repr = 'Cash desk table model'
         
 
 class PrinterIndexModel(QueryModel):
@@ -816,7 +833,7 @@ FROM company.printer_class;"""
                         ("updated_at", _tr('Models', 'Date Update'), True, 'date'))
         # True if is a company table
         self.isCompanyTable = True
-        self.setRepr('Printer index model')    
+        self.repr = 'Printer index query model'
         # sql order by clause, plain sql string without ORDER BY
         self.addOrderBy("printer_class_id")
         
@@ -840,6 +857,7 @@ class PrinterModel(TableModel):
         self.automaticPKey = True
         # sql order by clause, plain sql string without ORDER BY
         self.addOrderBy("printer_class_id")
+        self.repr = 'Printer table model'
         
 
 class PrinterDetailModel(TableModel):
@@ -864,6 +882,7 @@ class PrinterDetailModel(TableModel):
         self.foreignKey = {'printer_class_id': 'printer_class_id'}
         # sql order by clause, plain sql string without ORDER BY
         self.addOrderBy("printer_class_printer_id")
+        self.repr = 'Printer detail table model'
         
 
 class DepartmentModel(TableModel):
@@ -896,6 +915,7 @@ class DepartmentModel(TableModel):
         #self.newRecordDefault = {'is_obsolete': False,
         #                         'is_not_managed': False,
         #                         'is_for_takeaway': True}
+        self.repr = 'Department table model'
         
 
 class StandTableModel(TableModel):
@@ -923,6 +943,7 @@ class StandTableModel(TableModel):
         self.automaticPKey = True
         # sql order by clause, plain sql string without ORDER BY
         self.addOrderBy("stand_table_id")
+        self.repr = 'Stand table table model'
 
 
 class ItemIndexModel(QueryModel):
@@ -940,8 +961,8 @@ SELECT
     pos_column,
     normal_text_color,
     normal_background_color,
-    has_stock_control,
-    has_unload_control,
+    has_inventory_control,
+    has_delivered_control,
     has_variants,
     is_kit_part,
     is_menu_part,
@@ -964,8 +985,8 @@ FROM company.item;"""
                         ("pos_column", _tr('Models', 'Column'), False, 'int'),
                         ("normal_text_color", _tr('Models', 'Text color'), False, 'str'),
                         ("normal_background_color", _tr('Models', 'Background color'), False, 'str'),
-                        ("has_stock_control", _tr('Models', 'Stock control'), False, 'bool'),
-                        ("has_unload_control", _tr('Models', 'Unload control'), False, 'bool'),
+                        ("has_inventory_control", _tr('Models', 'Inventory control'), False, 'bool'),
+                        ("has_delivered_control", _tr('Models', 'Delivered control'), False, 'bool'),
                         ("has_variants", _tr('Models', 'Variants'), False, 'bool'),
                         ("is_kit_part", _tr('Models', 'Kit part'), False, 'bool'),
                         ("is_menu_part", _tr('Models', 'Menu part'), False, 'bool'),
@@ -979,7 +1000,7 @@ FROM company.item;"""
                         ("updated_at", _tr('Models', 'Date Update'), True, 'date'))
         # True if is a company table
         self.isCompanyTable = True
-        self.setRepr('Item index model')
+        self.repr = 'Item index query model'
         # sql order by clause, plain sql string without ORDER BY
         self.addOrderBy(("item_id", "item_type", "description"))
 
@@ -1001,8 +1022,8 @@ class ItemModel(TableModel):
                         ("pos_column", _tr('Models', 'Column'), False, 'int'),
                         ("normal_text_color", _tr('Models', 'Text color'), False, 'str'),
                         ("normal_background_color", _tr('Models', 'Background color'), False, 'str'),
-                        ("has_stock_control", _tr('Models', 'Stock control'), False, 'bool'),
-                        ("has_unload_control", _tr('Models', 'Unload control'), False, 'bool'),
+                        ("has_inventory_control", _tr('Models', 'Inventory control'), False, 'bool'),
+                        ("has_delivered_control", _tr('Models', 'Delivered control'), False, 'bool'),
                         ("has_variants", _tr('Models', 'Variants'), False, 'bool'),
                         ("is_kit_part", _tr('Models', 'Kit part'), False, 'bool'),
                         ("is_menu_part", _tr('Models', 'Menu part'), False, 'bool'),
@@ -1023,6 +1044,7 @@ class ItemModel(TableModel):
         self.addOrderBy("item_id")
         # reference fields dictionary
         self.reference = {'department': department_cdl}
+        self.repr = 'Item table model'
 
 
 class ItemVariantModel(TableModel):
@@ -1051,6 +1073,7 @@ class ItemVariantModel(TableModel):
         # sql order by clause, plain sql string without ORDER BY
         self.addOrderBy("item_variant_id")
         self.addOrderBy("sorting")
+        self.repr = 'Item variant table model'
 
 
 class KitPartModel(TableModel):
@@ -1078,6 +1101,7 @@ class KitPartModel(TableModel):
         self.foreignKey = {'item_id': 'id', 'part_id': 'id'}
         # sql order by clause, plain sql string without ORDER BY
         self.addOrderBy("item_part_id")
+        self.repr = 'Kit part table model'
 
 
 class MenuPartModel(TableModel):
@@ -1105,32 +1129,33 @@ class MenuPartModel(TableModel):
         self.foreignKey = {'item_id': 'id', 'part_id': 'id'}
         # sql order by clause, plain sql string without ORDER BY
         self.addOrderBy("item_part_id")
+        self.repr = 'Menu part table model'
 
 
-class PriceListItemModel(TableModel):
+# class PriceListItemModel(TableModel):
 
-    def __init__(self, parent: QObject = None) -> None:
-        super().__init__(parent)
-        self.table = "company.price_list_item"
-        # model columns: (field, description, readonly, type), tuple of tuples
-        # available types: int, bool, decimal2, str, date, datetime, None = no filter
-        self.columns = (("price_list_item_id", _tr('Models', 'ID'), False, 'int'),
-                        ("price_list_id", _tr('Models', 'Price list'), False, 'int'),
-                        ("item_id", _tr('Models', 'Item'), False, 'int'),
-                        ("price", _tr('Models', 'Price'), False, 'decimal2'),
-                        ("created_by", _tr('Models', 'User Ins'), True, 'str'),
-                        ("created_at", _tr('Models', 'Date Ins'), True, 'date'),
-                        ("updated_by", _tr('Models', 'User Update'), True, 'str'),
-                        ("updated_at", _tr('Models', 'Date Update'), True, 'date'))
-        # True if is a company table
-        self.isCompanyTable = True
-        # primary key fields, tuple or list
-        self.primaryKey = ("price_list_item_id",)
-        self.automaticPKey = True
-        # master/detail relation {table field: reference field}
-        self.foreignKey = {'item_id': 'id', 'price_list_id': 'id'}
-        # sql order by clause, plain sql string without ORDER BY
-        self.addOrderBy("price_list_item_id")
+#     def __init__(self, parent: QObject = None) -> None:
+#         super().__init__(parent)
+#         self.table = "company.price_list_item"
+#         # model columns: (field, description, readonly, type), tuple of tuples
+#         # available types: int, bool, decimal2, str, date, datetime, None = no filter
+#         self.columns = (("price_list_item_id", _tr('Models', 'ID'), False, 'int'),
+#                         ("price_list_id", _tr('Models', 'Price list'), False, 'int'),
+#                         ("item_id", _tr('Models', 'Item'), False, 'int'),
+#                         ("price", _tr('Models', 'Price'), False, 'decimal2'),
+#                         ("created_by", _tr('Models', 'User Ins'), True, 'str'),
+#                         ("created_at", _tr('Models', 'Date Ins'), True, 'date'),
+#                         ("updated_by", _tr('Models', 'User Update'), True, 'str'),
+#                         ("updated_at", _tr('Models', 'Date Update'), True, 'date'))
+#         # True if is a company table
+#         self.isCompanyTable = True
+#         # primary key fields, tuple or list
+#         self.primaryKey = ("price_list_item_id",)
+#         self.automaticPKey = True
+#         # master/detail relation {table field: reference field}
+#         self.foreignKey = {'item_id': 'id', 'price_list_id': 'id'}
+#         # sql order by clause, plain sql string without ORDER BY
+#         self.addOrderBy("price_list_item_id")
 
 
 class PriceListIndexModel(QueryModel):
@@ -1155,7 +1180,7 @@ FROM company.price_list;"""
                         ("updated_at", _tr('Models', 'Date Update'), True, 'date'))
         # True if is a company table
         self.isCompanyTable = True
-        self.setRepr('Price list index model')
+        self.repr = 'Price list index query model'
         # sql order by clause, plain sql string without ORDER BY
         self.addOrderBy("price_list_id")
 
@@ -1180,6 +1205,7 @@ class PriceListModel(TableModel):
         self.automaticPKey = True
         # sql order by clause, plain sql string without ORDER BY
         self.addOrderBy("price_list_id")
+        self.repr = 'Price list table model'
 
 
 class PriceListItemModel(TableModel):
@@ -1210,6 +1236,7 @@ class PriceListItemModel(TableModel):
         self.reference = {'item': item_salable_cdl}
         # list of items for sorting by description
         self.itemDescription = {k:v for k, v in item_all_cdl()}
+        self.repr = 'Price list item table model'
 
     def sort(self, column, order=Qt.AscendingOrder):
         "Custom inplace sorting of the model for item description"
@@ -1253,22 +1280,25 @@ class OrderNumberingModel(TableModel):
         #self.newRecordDefault = {'is_obsolete': False,
         #                         'is_not_managed': False,
         #                         'is_for_takeaway': True}
+        self.repr = 'Order numbering table model'
 
 
-class StockInventoryModel(TableModel):
+class ItemsInventoryModel(TableModel):
 
     def __init__(self, parent: QObject = None) -> None:
         super().__init__(parent)
-        self.table = "company.stock_inventory"
+        self.table = "company.items_inventory"
         # model columns: (field, description, readonly, type), tuple of tuples
         # available types: int, bool, decimal2, str, date, datetime, None = no filter
-        self.columns = (("stock_inventory_id", _tr('Models', 'ID'), True, 'int'),
+        self.columns = (("items_inventory_id", _tr('Models', 'ID'), True, 'int'),
                         ("event_id", _tr('Models', 'event'), False, 'int'),
                         ("item_id", _tr('Models', 'Item'), False, 'int'),
                         ("loaded", _tr('Models', 'Load'), False, 'decimal2'),
                         ("unloaded", _tr('Models', 'Unload'), True, 'decimal2'),
-                        ("balance", _tr('Models', 'Balance'), True, 'decimal2'),
-                        # (None, _tr('Models', 'New stock'), False, 'decimal2'),
+                        ("stock", _tr('Models', 'Stock'), True, 'decimal2'),
+                        ("ordered", _tr('Models', 'Ordered'), True, 'decimal2'),
+                        ("available", _tr('Models', 'Available'), True, 'decimal2'),
+                        (None, _tr('Models', 'New stock'), False, 'decimal2'),
                         ("created_by", _tr('Models', 'User Ins'), True, 'str'),
                         ("created_at", _tr('Models', 'Date Ins'), True, 'date'),
                         ("updated_by", _tr('Models', 'User Update'), True, 'str'),
@@ -1276,13 +1306,15 @@ class StockInventoryModel(TableModel):
         # True if is a company table
         self.isCompanyTable = True
         # primary key fields, tuple or list
-        self.primaryKey = ("stock_inventory_id",)
+        self.primaryKey = ("items_inventory_id",)
         self.automaticPKey = True
         # sql order by clause, plain sql string without ORDER BY
-        self.addOrderBy("stock_inventory_id")
+        self.addOrderBy("items_inventory_id")
         self.newRecordDefault = {'loaded': 0,
                                  'unloaded': 0,
-                                 'balance': 0}
+                                 'stock': 0,
+                                 'ordered': 0}
+        self.repr = 'Items inventory table model'
 
 
 class KitAvailabilityModel(QueryWithParamsModel):
@@ -1293,8 +1325,8 @@ class KitAvailabilityModel(QueryWithParamsModel):
 SELECT 
     item_id,
     item_description,
-    quantity
-FROM company.item_availability_detail
+    available
+FROM company.vw_item_availability
 WHERE company_id = system.pa_current_company()
     AND item_type = 'K' 
     AND event_id = %(event)s
@@ -1303,7 +1335,8 @@ ORDER BY item_description;"""
         # available types: int, bool, float, str, date, datetime, None = no filter
         self.columns = (("item", _tr('Models', 'Kit ID'), True, 'int'),
                         ("description", _tr('Models', 'Kit description'), True, 'str'),
-                        ("quantity", _tr('Models', 'Quantity'), True, 'int'))
+                        ("available", _tr('Models', 'Available'), True, 'decimal2'))
+        self.repr = 'Kit availability query with params model'
         
 
 class MenuAvailabilityModel(QueryWithParamsModel):
@@ -1314,8 +1347,8 @@ class MenuAvailabilityModel(QueryWithParamsModel):
 SELECT 
     item_id,
     item_description,
-    quantity
-FROM item_availability_detail
+    available
+FROM company.vw_item_availability
 WHERE company_id = system.pa_current_company()
     AND item_type = 'M' 
     AND event_id = %(event)s
@@ -1324,10 +1357,11 @@ ORDER BY item_description;"""
         # available types: int, bool, float, str, date, datetime, None = no filter
         self.columns = (("item", _tr('Models', 'Menu ID'), True, 'int'),
                         ("description", _tr('Models', 'Menu description'), True, 'str'),
-                        ("quantity", _tr('Models', 'Quantity'), True, 'int'))
+                        ("available", _tr('Models', 'Available'), True, 'decimal2'))
+        self.repr = 'Menu availability query with params model'
 
 
-class StockUnloadModel(QueryModel):
+class ItemsOrderedDeliveredModel(QueryModel):
 
     def __init__(self, parent: QObject = None) -> None:
         super().__init__(parent)
@@ -1338,8 +1372,9 @@ SELECT
     s.day_part,
     s.item_id,
     i.description,
-    s.unloaded
-FROM stock_unload s
+    s.ordered,
+    s.delivered
+FROM items_ordered_delivered s
 JOIN item i ON s.item_id = i.item_id;"""
         # model columns: (field, description, readonly, type), tuple of tuples
         # available types: int, bool, decimal2, str, date, datetime, None = no filter
@@ -1348,10 +1383,93 @@ JOIN item i ON s.item_id = i.item_id;"""
                         ("s.day_part", _tr('Models', 'L/D'), True, 'str'),
                         ("s.item_id", _tr('Models', 'Item'), False, 'int'),
                         ("i.description", _tr('Models', 'Item description'), True, 'str'),
-                        ("s.unloaded", _tr('Models', 'Unloaded'), True, 'decimal2'))
+                        ("s.ordered", _tr('Models', 'Ordered'), True, 'decimal2'),
+                        ("s.delivered", _tr('Models', 'Delivered'), True, 'decimal2'))
         self.isCompanyTable = True
         self.companyField = 's.company_id'
-        self.setRepr('Stock unload read-nly model')
+        # reference fields dictionary
+        self.reference = {'s.event_id': event_cdl}
+        self.repr = 'Items ordered/delivered query model'
+
+
+class OrderStatusModel(QueryModel):
+
+    def __init__(self, parent: QObject = None) -> None:
+        super().__init__(parent)
+        self.selectQuery = """
+SELECT
+	company_id,
+	company_description,
+	event_id,
+	event_description,
+	order_header_id,
+	order_date,
+    stat_order_date,
+	stat_order_day_part,
+	order_time,
+	order_number,
+	delivery,
+	table_number,
+	customer_name,
+	covers,
+	status,
+	fullfillment_date,
+    cash_desk,
+    user_ins,
+	from_web,
+	department1,
+	fullfillment1,
+	department2,
+	fullfillment2,
+	department3,
+	fullfillment3,
+	department4,
+	fullfillment4,
+	department5,
+	fullfillment5,
+	department6,
+	fullfillment6   
+FROM company.vw_order_status;"""
+        # model columns: (field, description, readonly, type), tuple of tuples
+        self.columns = (("company_id", _tr('Models', 'Company ID'), False, 'int'),
+                        ("company_description", _tr('Models', 'Company description'), False, 'str'),
+                        ("event_id", _tr('Models', 'Event ID'), False, 'int'),
+                        ("event_description", _tr('Models', 'Event description'), False, 'str'),
+                        ("order_header_id", _tr('Models', 'Header ID'), False, 'int'),
+                        ("order_date", _tr('Models', 'Order date'), False, 'date'),
+                        ("stat_order_date", _tr('Models', 'Stat order date'), False, 'date'),
+                        ("stat_order_day_part", _tr('Models', 'Stat day part'), False, 'str'),
+                        ("order_time", _tr('Models', 'Order time'), False, 'time'),
+                        ("order_number", _tr('Models', 'Order number'), False, 'int'),
+                        ("delivery", _tr('Models', 'Delivery'), False, 'str'),
+                        ("table_number", _tr('Models', 'Table'), False, 'str'),
+                        ("customer_name", _tr('Models', 'Customer name'), False, 'str'),
+                        ("covers", _tr('Models', 'Covers'), False, 'int'),
+                        ("status", _tr('Models', 'Status'), False, 'str'),
+                        ("fullfillment_date", _tr('Models', 'Fullfillment date'), False, 'date'),
+                        ("cash_desk", _tr('Models', 'Cash desk'), False, 'str'),
+                        ("user_ins", _tr('Models', 'User ins'), False, 'str'),
+                        ("from_web", _tr('Models', 'From web'), False, 'bool'),
+                        ("department1", _tr('Models', 'Department 1'), False, 'str'),
+                        ("fullfillment1", _tr('Models', 'Fullfillment 1'), False, 'date'),
+                        ("department2", _tr('Models', 'Department 2'), False, 'str'),
+                        ("fullfillment2", _tr('Models', 'Fullfillment 2'), False, 'date'),
+                        ("department3", _tr('Models', 'Department 3'), False, 'str'),
+                        ("fullfillment3", _tr('Models', 'Fullfillment 3'), False, 'date'),
+                        ("department4", _tr('Models', 'Department 4'), False, 'str'),
+                        ("fullfillment4", _tr('Models', 'Fullfillment 4'), False, 'date'),
+                        ("department5", _tr('Models', 'Department 5'), False, 'str'),
+                        ("fullfillment5", _tr('Models', 'Fullfillment 5'), False, 'date'),
+                        ("department6", _tr('Models', 'Department 6'), False, 'str'),
+                        ("fullfillment6", _tr('Models', 'Fullfillment 6'), False, 'date'))
+                        
+        # True if is a company table
+        self.isCompanyTable = True
+        self.repr = 'Order status query model'
+        # reference fields dictionary
+        self.reference = {'event_id': event_cdl}
+        # sql order by clause, plain sql string without ORDER BY
+        self.addOrderBy(("event_id", "order_date", "order_time"))
 
 
 class IncomeSummaryModel(QueryWithParamsModel):
@@ -1390,7 +1508,7 @@ class IncomeSummaryModel(QueryWithParamsModel):
             amount_lunch - discount_lunch AS total_lunch,
             amount_dinner - discount_dinner AS total_dinner,
             amount_lunch + amount_dinner - discount_lunch - discount_dinner AS total
-        FROM income_summary
+        FROM vw_income_summary
         WHERE event_id = %(event_id)s;
         """
         # model columns: (field, description, readonly, type), tuple of tuples
@@ -1425,6 +1543,7 @@ class IncomeSummaryModel(QueryWithParamsModel):
                         ("total_lunch", _tr('Models', 'Total L'), True, 'decimal2'),
                         ("total_dinner", _tr('Models', 'Total D'), True, 'decimal2'),
                         ("total", _tr('Models', 'Total'), True, 'decimal2'))
+        self.repr = 'Income summary query with params model'
         
     def rowCount(self, index=QModelIndex()):
         # add 1 row for totals
@@ -1508,7 +1627,7 @@ FROM company.order_header;"""
         # True if is a company table
         self.isCompanyTable = True
         # class representation
-        self.setRepr('Order header index query model')      
+        self.repr = 'Order header index query model'
         # primary key fields, tuple or list
         self.primaryKey = ("order_header_id",)
         self.automaticPKey = True
@@ -1539,8 +1658,10 @@ class OrderHeaderModel(TableModel):
                         ("cash_desk", _tr('Models', 'Cash desk'), False, 'str'),
                         ("delivery", _tr('Models', 'Delivery'), False, 'str'),
                         ("is_electronic_payment", _tr('Models', 'EP'), False, 'bool'),
+                        ("is_from_web", _tr('Models', 'FW'), False, 'bool'),
                         ("table_num", _tr('Models', 'Table'), False, 'str'),
                         ("customer_name", _tr('Models', 'Customer name'), False, 'str'),
+                        ("customer_contact", _tr('Models', 'Customer contact'), False, 'str'),
                         ("covers", _tr('Models', 'Covers'), False, 'int'),
                         ("total_amount", _tr('Models', 'Total amount'), False, 'decimal2'),
                         ("discount", _tr('Models', 'Discount'), False, 'decimal2'),
@@ -1557,10 +1678,12 @@ class OrderHeaderModel(TableModel):
         # primary key fields, tuple or list
         self.primaryKey = ("order_header_id",)
         self.automaticPKey = True
+        # class representation
+        self.repr = 'Order header table model'
         # sql order by clause, plain sql string without ORDER BY
         self.addOrderBy("order_header_id")
         # reference fields dictionary
-        #self.reference = {'event': event_cdl}
+        self.reference = {'event': event_cdl}
 
 
 class OrderHeaderDepartmentModel(TableModel):
@@ -1575,6 +1698,7 @@ class OrderHeaderDepartmentModel(TableModel):
                         ("department_id", _tr('Models', 'Department'), False, 'int'),
                         ("note", _tr('Models', 'Notes'), False, 'str'),
                         ("other_departments", _tr('Models', 'Other departments'), False, 'str'),
+                        ("barcode", _tr('Models', 'Barcode'), False, 'str'),
                         ("fullfillment_date", _tr('Models', 'Fullfillment date'), False, 'date'),
                         ("created_by", _tr('Models', 'User Ins'), True, 'str'),
                         ("created_at", _tr('Models', 'Date Ins'), True, 'date'),
@@ -1585,6 +1709,8 @@ class OrderHeaderDepartmentModel(TableModel):
         # primary key fields, tuple or list
         self.primaryKey = ("order_header_department_id",)
         self.automaticPKey = True
+        # class representation
+        self.repr = 'Order header department table model'
         # master/detail relation {table field: reference field}
         self.foreignKey = {'order_header_id': 'order_header_id'}
         # sql order by clause, plain sql string without ORDER BY
@@ -1614,6 +1740,8 @@ class OrderLineModel(TableModel):
         # primary key fields, tuple or list
         self.primaryKey = ("order_line_id",)
         self.automaticPKey = True
+        # class representation
+        self.repr = 'Order line table model'
         # master/detail relation {table field: reference field}
         self.foreignKey = {'order_header_id': 'order_header_id'}
         # sql order by clause, plain sql string without ORDER BY
@@ -1628,11 +1756,10 @@ class OrderLineDepartmentModel(TableModel):
         # model columns: (field, description, readonly, type), tuple of tuples
         # available types: int, bool, decimal2, str, date, datetime, None = no filter
         self.columns = (("order_line_department_id", _tr('Models', 'ID'), False, 'int'),
-                        ("order_header_id", _tr('Models', 'ID header'), False, 'int'),
+                        ("order_header_department_id", _tr('Models', 'ID header'), False, 'int'),
                         ("event_id", _tr('Models', 'Event'), False, 'int'),
                         ("event_date", _tr('Models', 'Event date'), False, 'date'),
                         ("day_part", _tr('Models', 'Day part'), False, 'str'),
-                        ("department_id", _tr('Models', 'Department'), False, 'int'),
                         ("item_id", _tr('Models', 'Item'), False, 'int'),
                         ("variants", _tr('Models', 'Variants'), False, 'str'),
                         ("quantity", _tr('Models', 'Quantity'), False, 'decimal2'),
@@ -1645,10 +1772,59 @@ class OrderLineDepartmentModel(TableModel):
         # primary key fields, tuple or list
         self.primaryKey = ("order_line_department_id",)
         self.automaticPKey = True
+        # class representation
+        self.repr = 'Order line department table model'  
         # master/detail relation {table field: reference field}
-        self.foreignKey = {'order_header_id': 'order_header_id'}
+        self.foreignKey = {'order_header_department_id': 'order_header_department_id'}
         # sql order by clause, plain sql string without ORDER BY
-        self.addOrderBy("department_id")
+        #self.addOrderBy("department_id")
+        
+        
+class OrderDepartmentTreeModel(TreeQueryModel):
+
+    def __init__(self, parent: QObject = None) -> None:
+        super().__init__(parent)
+        self.script = [
+    """
+	SELECT 
+		d.description                   AS department,
+		Null                            AS item,
+		Null                            AS variants,
+		Null                            AS quantity,
+        h.order_header_id               AS parent,
+		h.order_header_department_id    AS child
+	FROM order_header_department h
+	JOIN department d ON h.department_id = d.department_id
+	WHERE h.order_header_id = %s;""",
+    """
+	SELECT
+		Null                            AS department,
+		i.description                   AS item,
+		l.variants                      AS variants,
+		l.quantity                      AS quantity,
+        l.order_header_department_id    AS parent,
+		l.order_line_department_id      AS child
+	FROM order_line_department l
+	JOIN item i ON l.item_id = i.item_id
+    WHERE l.order_header_department_id = %s;""",
+    """
+    SELECT Null
+    WHERE Null = %s;"""]
+        # model columns: (field, description, readonly, type), tuple of tuples
+        # available types: int, bool, decimal2, str, date, datetime, None = no filter
+        self.columns = (("department", _tr('Models', 'Department'), False, 'str'),
+                        ("item", _tr('Models', 'Item'), False, 'str'),
+                        ("variants", _tr('Models', 'Variants'), False, 'str'),
+                        ("quantity", _tr('Models', 'Quantity'), False, 'decimal'),
+                        ("parent", _tr('Models', 'Header ID'), True, 'int'),
+                        ("child", _tr('Models', 'Header department ID'), True, 'int'))
+        self.parentField = "parent"
+        self.parentFieldColumn = 4
+        self.childField = "child"
+        self.childFieldColumn = 5
+        # class representation
+        self.repr = 'Order department tree query model'  
+    
 
 
 class WebOrderHeaderModel(QueryModel):
@@ -1682,6 +1858,7 @@ class WebOrderHeaderModel(QueryModel):
         self.addOrderBy('web_order_header_id ASC')
         # row id for master/detail filtering
         self.primaryKey = ("web_order_header_id",)
+        self.repr = 'Web order header query model'
 
 
 class WebOrderLineModel(QueryModel):
@@ -1712,313 +1889,69 @@ class WebOrderLineModel(QueryModel):
         self.foreignKey = {'web_order_header_id': 'web_order_header_id'}
         # sql order by clause, plain sql string without ORDER BY
         self.addOrderBy("web_order_line_id")
+        self.repr = 'Web order line query model'
 
 
-class StatisticConfigurationModel(TableModel):
-
-    def __init__(self, parent: QObject = None) -> None:
+class OrderHeaderPandasModel(PandasModel):
+    
+    def __init__(self, parent: QObject = None) -> None: 
         super().__init__(parent)
-        self.table = "common.statistics_configuration"
-        # model columns: (field, description, readonly, type), tuple of tuples
+        self.table = "company.bi_order_header"
+        # model columns: {field: (description, pivot value, pivot axis, type)}, dict
         # available types: int, bool, decimal2, str, date, datetime, None = no filter
-        self.columns = (("code", _tr('Models', 'Code'), False, 'str'),
-                        ("description", _tr('Models', 'Description'), False, 'str'),
-                        ("active", _tr('Models', 'Active'), False, 'bool'),
-                        ("sorting", _tr('Models', 'Sorting'), False, 'int'),
-                        ("sql_query", _tr('Models', 'SQL Query'), False, 'str'),
-                        ("sql_group_by", _tr('Models', 'SQL Group By'), False, 'str'),
-                        ("report_code", _tr('Models', 'Report'), False, 'str'),
-                        ("totals_row", _tr('Models', 'Totals row'), False, 'bool'),
-                        ("total_label_column", _tr('Models', 'Label column'), False, 'int'),
-                        ("user_ins", _tr('Models', 'User Ins'), True, 'str'),
-                        ("date_ins", _tr('Models', 'Date Ins'), True, 'datetime'),
-                        ("user_upd", _tr('Models', 'User Update'), True, 'str'),
-                        ("date_upd", _tr('Models', 'Date Update'), True, 'datetime'))
-        # True if is a company table
-        self.isCompanyTable = False
-        # primary key fields, tuple or list
-        self.primaryKey = ("code",)
-        self.automaticPKey = False
-        # sql order by clause, plain sql string without ORDER BY
-        self.addOrderBy("sorting")
-
-
-class StatisticConfigurationColumnModel(TableModel):
-
-    def __init__(self, parent: QObject = None) -> None:
-        super().__init__(parent)
-        self.table = "common.statistics_configuration_column"
-        # model columns: (field, description, readonly, type), tuple of tuples
-        # available types: int, bool, decimal2, str, date, datetime, None = no filter
-        self.columns = (("configuration_code", _tr('Models', 'Configuration code'), False, 'str'),
-                        ("definition", _tr('Models', 'Definition'), False, 'str'),
-                        ("description", _tr('Models', 'Description'), False, 'str'),
-                        ("column_type", _tr('Models', 'Column type'), False, 'str'),
-                        ("total_required", _tr('Models', 'Total'), False, 'bool'),
-                        ("sorting", _tr('Models', 'Sorting'), False, 'int'),
-                        ("user_ins", _tr('Models', 'User Ins'), True, 'str'),
-                        ("date_ins", _tr('Models', 'Date Ins'), True, 'datetime'),
-                        ("user_upd", _tr('Models', 'User Update'), True, 'str'),
-                        ("date_upd", _tr('Models', 'Date Update'), True, 'datetime'))
-        # True if is a company table
-        self.isCompanyTable = False
-        # primary key fields, tuple or list
-        self.primaryKey = ("configuration_code", "definition")
-        self.automaticPKey = False
-        # master/detail relation {table field: reference field}
-        self.foreignKey = {'configuration_code': 'code'}
-        # sql order by clause, plain sql string without ORDER BY
-        self.addOrderBy("sorting")
-
-
-class StatisticSales1(QueryModel):
-
-    def __init__(self, parent: QObject = None) -> None:
-        super().__init__(parent)
-        self.selectQuery = """
-        -- total sales by event/day/day part/department/item
-        SELECT 
-            sls.event AS event,
-            ev.description AS event_description,
-            sls.day AS day,
-            it.department AS department,
-            dp.description AS department_description,
-            sls.item AS item,
-            it.description AS item_description,
-            it.has_stock_management AS stock_management,
-            sls.quantity_lunch AS quantity_lunch,
-            sls.quantity_dinner AS quantity_dinner,
-            sls.quantity AS quantity_total,
-            sls.amount_lunch AS amount_lunch,
-            sls.amount_dinner AS amount_dinner,
-            sls.amount AS amount_total
-        FROM (
-                SELECT  
-                    oh.event AS event,
-                    oh.stat_order_date AS day,
-                    od.item AS item,
-                    sum(CASE WHEN oh.stat_order_day_part = 'L' THEN od.quantity ELSE 0 END) AS quantity_lunch,
-                    sum(CASE WHEN oh.stat_order_day_part = 'D' THEN od.quantity ELSE 0 END) AS quantity_dinner,
-                    sum(od.quantity) AS quantity,
-                    sum(CASE WHEN oh.stat_order_day_part = 'L' THEN od.amount ELSE 0 END) AS amount_lunch,
-                    sum(CASE WHEN oh.stat_order_day_part = 'D' THEN od.amount ELSE 0 END) AS amount_dinner,
-                    sum(od.amount) AS amount
-                FROM order_detail od
-                JOIN order_header oh ON od.id_header = oh.id
-                GROUP BY oh.event, oh.stat_order_date, od.item
-            ) sls
-        JOIN event ev ON sls.event = ev.id
-        JOIN item it ON sls.item = it.id
-        JOIN department dp ON it.department = dp.id;
-        """
-        # model columns: (field, description, readonly, type), tuple of tuples
-        # available types: int, bool, decimal2, str, date, datetime, None = no filter
-        self.columns = (("sls.event", _tr('Models', 'Event'), True, 'int'),
-                        ("ev.description", _tr('Models', 'Event description'), True, 'str'),
-                        ("sls.day", _tr('Models', 'Day'), True, 'date'),
-                        ("it.department", _tr('Models', 'Department'), True, 'int'),
-                        ("dp.description", _tr('Models', 'Department description'), True, 'str'),
-                        ("sls.item", _tr('Models', 'Item'), True, 'int'),
-                        ("it.description", _tr('Models', 'Item description'), True, 'str'),
-                        ("it.has_stock_management", _tr('Models', 'SC'), True, 'bool'),
-                        #("it.has_unload_control", _tr('Models', 'UC'), True, 'bool'),
-                        ("sls.quantity_lunch", _tr('Models', 'Quantity lunch'), True, 'int'),
-                        ("sls.quantity_dinner", _tr('Models', 'Quantity dinner'), True, 'int'),
-                        ("sls.quantity", _tr('Models', 'Quantity total'), True, 'int'),
-                        ("sls.amount_lunch", _tr('Models', 'Amount lunch'), True, 'decimal2'),
-                        ("sls.amount_dinner", _tr('Models', 'Amount dinner'), True, 'decimal2'),
-                        ("sls.amount", _tr('Models', 'Amount total'), True, 'decimal2'))
+        self.columns = {#"company_id": (_tr('Models', 'Company ID'), False, 'int'),
+                        "event": (_tr('Models', 'Event'), False, True, 'str'),
+                        "order_number": (_tr('Models', 'Order number'), False, True, 'int'),
+                        "order_date": (_tr('Models', 'Order date'), False, True, 'date'),
+                        "order_time": (_tr('Models', 'Order time'), False, True, 'time'),
+                        "order_date_time": (_tr('Models', 'Order date time'), False, True, 'datetime'),
+                        "fullfillment_date": (_tr('Models', 'Fullfilment date'), False, True, 'datetime'),
+                        #"difference": (_tr('Models', 'Difference'), True, False, 'datetime'),
+                        "stat_order_date": (_tr('Models', 'Stat order date'), False, True, 'date'),
+                        "stat_order_day_part": (_tr('Models', 'Stat order day part'), False, True, 'str'),
+                        "cash_desk": (_tr('Models', 'Cash desk'), False, True, 'str'),
+                        "delivery": (_tr('Models', 'Delivery'), False, True, 'str'),
+                        "payment": (_tr('Models', 'Payment'), False, True, 'str'),
+                        "web_order": (_tr('Models', 'Web order'), False, True, 'bool'),
+                        "table_num": (_tr('Models', 'Table number'), False, True, 'str'),
+                        "customer_name": (_tr('Models', 'Customer name'), False, True, 'str'),
+                        "customer_contact": (_tr('Models', 'Customer contact'), False, True, 'str'),
+                        "covers": (_tr('Models', 'Covers'), True, False, 'int'),
+                        "total_amount": (_tr('Models', 'Total amount'), True, False, 'decimal2'),
+                        "discount": (_tr('Models', 'Discount'), True, False, 'decimal2'),
+                        "cash": (_tr('Models', 'Cash'), True, False, 'decimal2')}
         # True if is a company table
         self.isCompanyTable = True
-        self.hasTotalsRow = True
+        self.repr = 'Order header pandas model'
+        
 
-    def rowCount(self, index=QModelIndex()):
-        # add 1 row for totals
-        return QueryModel.rowCount(self) + 1
-
-    def data(self, index, role=Qt.DisplayRole):
-        if index.row() == QueryModel.rowCount(self):  # last row
-            if role == Qt.FontRole:
-                font = QFont()
-                font.setBold(True)
-                return font
-            if role == Qt.TextAlignmentRole:
-                return Qt.AlignRight | Qt.AlignVCenter
-            if role == Qt.DisplayRole:
-                if index.column() == 6:
-                    return _tr('Models', "TOTAL")
-                elif 9 <= index.column() <= 14:
-                    s = sum([self.dataSet[i, index.column()] for i in range(index.row())])
-                    return s
-        else:
-            return QueryModel.data(self, index, role)
-
-
-class StatisticUnloaded1(QueryModel):
-
-    def __init__(self, parent: QObject = None) -> None:
+class OrderLinePandasModel(PandasModel):
+    
+    def __init__(self, parent: QObject = None) -> None: 
         super().__init__(parent)
-        self.selectQuery = """
-        -- total unloads by event/department/item
-        SELECT su.event AS event,
-            ev.description AS event_description,
-            dp.id AS department,
-            dp.description AS department_description,
-            su.item AS item,
-            it.description AS item_description,
-            it.has_stock_control AS stock_control,
-            it.has_unload_control AS unload_control,
-            su.unloaded AS unloaded
-        FROM (
-	        SELECT 
-                event AS event,
-                item AS item,
-                sum(unloaded) AS unloaded
-	        FROM stock_unload
-	        GROUP BY event, item
-            ) su
-        JOIN event ev ON su.event = ev.id
-        JOIN item it ON su.item = it.id
-        JOIN department dp ON it.department = dp.id;
-        """
-        # model columns: (field, description, readonly, type), tuple of tuples
+        self.table = "company.bi_order_line"
+        # model columns: {field: (description, pivot value, type)}, dict
         # available types: int, bool, decimal2, str, date, datetime, None = no filter
-        self.columns = (("su.event", _tr('Models', 'Event'), True, 'int'),
-                        ("ev.description", _tr('Models', 'Event description'), True, 'str'),
-                        ("dp.id", _tr('Models', 'Department'), True, 'date'),
-                        ("dp.description", _tr('Models', 'Department description'), True, 'str'),
-                        ("su.item", _tr('Models', 'Item'), True, 'int'),
-                        ("it.description", _tr('Models', 'Item description'), True, 'str'),
-                        ("it.has_stock_control", _tr('Models', 'SC'), True, 'bool'),
-                        ("it.has_unload_control", _tr('Models', 'UC'), True, 'bool'),
-                        ("su.unloaded", _tr('Models', 'Unloaded'), True, 'str'))
+        self.columns = {#"company_id": (_tr('Models', 'Company ID'), False, 'int'),
+                        "event": (_tr('Models', 'Event description'), False, True, 'str'),
+                        "order_number": (_tr('Models', 'Order number'), False, True, 'int'),
+                        "order_date": (_tr('Models', 'Order date'), False, True, 'date'),
+                        "order_time": (_tr('Models', 'Order time'), False, True, 'time'),
+                        "stat_order_date": (_tr('Models', 'Stat order date'), False, True, 'date'),
+                        "stat_order_day_part": (_tr('Models', 'Stat order day part'), False, True, 'str'),
+                        "delivery": (_tr('Models', 'Delivery'), False, True, 'str'),
+                        "payment": (_tr('Models', 'Payment'), False, True, 'str'),
+                        "table_number": (_tr('Models', 'Table number'), False, True, 'str'),
+                        "customer_name": (_tr('Models', 'Customer name'), False, True, 'str'),
+                        "department": (_tr('Models', 'Department'), False, True, 'str'),
+                        "item_type": (_tr('Models', 'Item type'), False, True, 'str'),
+                        "item": (_tr('Models', 'Item'), False, True, 'str'),
+                        "variants": (_tr('Models', 'Variants'), False, True, 'str'),
+                        "item_with_variants": (_tr('Models', 'Item with variants'), False, True, 'str'),
+                        "quantity": (_tr('Models', 'Quantity'), True, False, 'int'),
+                        "price": (_tr('Models', 'Price'), True, False, 'decimal2'),
+                        "amount": (_tr('Models', 'Amount'), True, False, 'decimal2')}
         # True if is a company table
         self.isCompanyTable = True
-        self.hasTotalsRow = True
-
-    def rowCount(self, index=QModelIndex()):
-        # add 1 row for totals
-        return QueryModel.rowCount(self) + 1
-
-    def data(self, index, role=Qt.DisplayRole):
-        if index.row() == QueryModel.rowCount(self):  # last row
-            if role == Qt.FontRole:
-                font = QFont()
-                font.setBold(True)
-                return font
-            if role == Qt.TextAlignmentRole:
-                return Qt.AlignRight | Qt.AlignVCenter
-            if role == Qt.DisplayRole:
-                if index.column() == 5:
-                    return _tr('Models', "TOTAL")
-                elif index.column() == 8:
-                    s = sum([self.dataSet[i, index.column()] for i in range(index.row())])
-                    return s
-        else:
-            return QueryModel.data(self, index, role)
-
-
-class StatisticQueryModel(QueryModel):
-    "A model that fit to a dynamic sql query"
-
-    def __init__(self, parent: QObject = None) -> None:
-        super().__init__(parent)
-        self.selectQuery = None
-        # model columns: (field, description, readonly, type), tuple of tuples
-        # available types: int, bool, decimal2, str, date, datetime, None = no filter
-        self.columns = None
-        self.hasTotalsRow = False
-        self.totalsLabelRow = 0
-
-    def setStatistic(self, code):
-        "Update query and parameter for provided statistics code"
-        #test = statisticsConfiguration(code)
-        cd, ds, qy, gb, tr, tl = statistics_configuration(code)
-        self.selectQuery = qy
-        self.groupByExpression = gb
-        self.hasTotalsRow = tr
-        self.totalsLabelRow = tl
-        self.columns = statistics_configuration_columns(code)
-        self.totalsColumns = []
-        for f in statistics_configuration_totals_columns(code):
-            for c in self.columns:
-                if c[0] == f:
-                    self.totalsColumns.append(self.columns.index(c))
-        self.filterCondition.clear()
-        self.whereConditions.clear()
-        self.havingConditions.clear()
-        self.orderByExpressions.clear()
-
-    def rowCount(self, index=QModelIndex()):
-        # add 1 row for totals
-        return QueryModel.rowCount(self) + (1 if self.hasTotalsRow else 0)
-
-    def data(self, index, role=Qt.DisplayRole):
-        if index.row() == QueryModel.rowCount(self):  # last row
-            if role == Qt.FontRole:
-                font = QFont()
-                font.setBold(True)
-                return font
-            if role == Qt.TextAlignmentRole:
-                return Qt.AlignRight | Qt.AlignVCenter
-            if role == Qt.DisplayRole:
-                if index.column() == self.totalsLabelRow:  # total label
-                    return _tr('Models', "TOTAL")
-                elif index.column() in self.totalsColumns:  # total columns
-                    s = sum([self.dataSet[i, index.column()] for i in range(index.row())])
-                    return s
-        else:
-            return QueryModel.data(self, index, role)
-
-
-class Statistic(QueryModel):
-    "A model that fit to a dynamic sql query"
-
-    def __init__(self, parent: QObject = None) -> None:
-        super().__init__(parent)
-        self.selectQuery = None
-        # model columns: (field, description, readonly, type), tuple of tuples
-        # available types: int, bool, decimal2, str, date, datetime, None = no filter
-        self.columns = None
-        self.hasTotalsRow = False
-        self.totalsLabelRow = 0
-
-    def setStatistic(self, code):
-        "Update query and parameter for provided statistics code"
-        #test = statisticsConfiguration(code)
-        cd, ds, qy, tr, tl = statistics_configuration(code)
-        self.selectQuery = qy
-        self.hasTotalsRow = tr
-        self.totalsLabelRow = tl
-        self.columns = statistics_configuration_columns(code)
-        self.totalsColumns = []
-        for f in statistics_configuration_totals_columns(code):
-            for c in self.columns:
-                if c[0] == f:
-                    self.totalsColumns.append(self.columns.index(c))
-        self.filterCondition.clear()
-        self.whereConditions.clear()
-        self.havingConditions.clear()
-        self.orderByExpressions.clear()
-
-    def rowCount(self, index=QModelIndex()):
-        # add 1 row for totals
-        return QueryModel.rowCount(self) + (1 if self.hasTotalsRow else 0)
-
-    def data(self, index, role=Qt.DisplayRole):
-        if index.row() == QueryModel.rowCount(self):  # last row
-            if role == Qt.FontRole:
-                font = QFont()
-                font.setBold(True)
-                return font
-            if role == Qt.TextAlignmentRole:
-                return Qt.AlignRight | Qt.AlignVCenter
-            if role == Qt.DisplayRole:
-                if index.column() == self.totalsLabelRow:  # total label
-                    return _tr('Models', "TOTAL")
-                elif index.column() in self.totalsColumns:  # total columns
-                    s = sum([self.dataSet[i, index.column()] for i in range(index.row())])
-                    return s
-        else:
-            return QueryModel.data(self, index, role)
+        self.repr = 'Order line pandas model'
         

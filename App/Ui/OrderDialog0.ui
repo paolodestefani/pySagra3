@@ -230,6 +230,9 @@
          <property name="enabled">
           <bool>true</bool>
          </property>
+         <property name="focusPolicy">
+          <enum>Qt::FocusPolicy::StrongFocus</enum>
+         </property>
          <property name="toolTip">
           <string>Checked if this order was imported from an web order QRC or number</string>
          </property>
@@ -914,6 +917,9 @@
                 </item>
                 <item row="1" column="3" alignment="Qt::AlignmentFlag::AlignHCenter">
                  <widget class="QCheckBox" name="checkBoxElectronicPayment">
+                  <property name="focusPolicy">
+                   <enum>Qt::FocusPolicy::StrongFocus</enum>
+                  </property>
                   <property name="text">
                    <string/>
                   </property>

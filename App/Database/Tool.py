@@ -37,7 +37,7 @@ from App.Database.Connect import appconn
 
 
 
-def delete_order(event_id):
+def delete_event_order(event_id):
     "Delete all orders of the given event"
     try:
         with appconn.transaction():
@@ -46,12 +46,21 @@ def delete_order(event_id):
     except psycopg.Error as er:
         raise PyAppDBError(er.diag.sqlstate, str(er))
 
-def unload_rebuild(event_id):
-    "Unload rebuild for the given event"
+def inventory_rebuild(event_id):
+    "Inventory rebuild for the given event"
     try:
         with appconn.transaction():
             with appconn.cursor() as cur:
-                cur.execute('SELECT company.unload_rebuild(%s);', (event_id,))
+                cur.execute('SELECT company.inventory_rebuild(%s);', (event_id,))
+    except psycopg.Error as er:
+        raise PyAppDBError(er.diag.sqlstate, str(er))
+    
+def ordered_delivered_rebuild(event_id):
+    "Ordered delivered rebuild for the given event"
+    try:
+        with appconn.transaction():
+            with appconn.cursor() as cur:
+                cur.execute('SELECT company.ordered_delivered_rebuild(%s);', (event_id,))
     except psycopg.Error as er:
         raise PyAppDBError(er.diag.sqlstate, str(er))
 
@@ -64,22 +73,14 @@ def numbering_rebuild(event_id):
     except psycopg.Error as er:
         raise PyAppDBError(er.diag.sqlstate, str(er))
 
-def mark_order_as_processed(event_id):
-    "Mark all unprocessed orders as processed ad order date"
+def set_order_as_processed(event_id):
+    "Set all unprocessed orders as processed ad order date"
     # order headers are updated by the trigger
     # no need to filter by company id as event_id is unique per company
-    script = """
-UPDATE order_header_department
-SET fullfillment_date = oh.date_time
-FROM order_header_department ohd
-JOIN order_header oh ON ohd.order_header_id = oh.order_header_id
-WHERE 
-    oh.event_id = %s 
-    AND ohd.fullfillment_date is null;"""
     try:
         with appconn.transaction():
             with appconn.cursor() as cur:
-                cur.execute(script, (event_id,))
+                cur.execute('SELECT company.set_order_as_processed(%s);', (event_id,))
     except psycopg.Error as er:
         raise PyAppDBError(er.diag.sqlstate, str(er))
     

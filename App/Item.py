@@ -295,7 +295,7 @@ class ItemForm(FormIndexManager):
             self.ui.tableViewMenuItems.setDisabled(True)
             self.ui.tabWidget.setCurrentIndex(1)
             self.ui.checkBoxUnloadControl.setChecked(False)
-            self.ui.checkBoxUnloadControl.setDisabled(True)
+            self.ui.checkBoxUnloadControl.setDisabled(False)
             self.ui.checkBoxKitPart.setChecked(False)
             self.ui.checkBoxKitPart.setDisabled(True)
             self.ui.checkBoxMenuPart.setEnabled(True)

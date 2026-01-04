@@ -70,6 +70,9 @@
                <layout class="QVBoxLayout" name="verticalLayout_5">
                 <item>
                  <widget class="RelationalComboBox" name="comboBoxL10n">
+                  <property name="focusPolicy">
+                   <enum>Qt::FocusPolicy::StrongFocus</enum>
+                  </property>
                   <property name="editable">
                    <bool>false</bool>
                   </property>
@@ -94,6 +97,9 @@
              </item>
              <item>
               <widget class="QCheckBox" name="checkBoxIsAdmin">
+               <property name="focusPolicy">
+                <enum>Qt::FocusPolicy::StrongFocus</enum>
+               </property>
                <property name="text">
                 <string>Administrator</string>
                </property>
@@ -114,6 +120,9 @@
              </item>
              <item>
               <widget class="QCheckBox" name="checkBoxCanEditViews">
+               <property name="focusPolicy">
+                <enum>Qt::FocusPolicy::StrongFocus</enum>
+               </property>
                <property name="text">
                 <string>Can edit views</string>
                </property>
@@ -121,6 +130,9 @@
              </item>
              <item>
               <widget class="QCheckBox" name="checkBoxCanEditSortFilters">
+               <property name="focusPolicy">
+                <enum>Qt::FocusPolicy::StrongFocus</enum>
+               </property>
                <property name="text">
                 <string>Can edit sort/filters</string>
                </property>
@@ -128,6 +140,9 @@
              </item>
              <item>
               <widget class="QCheckBox" name="checkBoxCanEditReports">
+               <property name="focusPolicy">
+                <enum>Qt::FocusPolicy::StrongFocus</enum>
+               </property>
                <property name="text">
                 <string>Can edit reports</string>
                </property>
@@ -373,6 +388,9 @@
                 </item>
                 <item>
                  <widget class="QCheckBox" name="checkBoxForcePasswordChange">
+                  <property name="focusPolicy">
+                   <enum>Qt::FocusPolicy::StrongFocus</enum>
+                  </property>
                   <property name="text">
                    <string>Force password change</string>
                   </property>

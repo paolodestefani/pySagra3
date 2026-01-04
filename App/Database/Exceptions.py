@@ -56,4 +56,4 @@ class PyAppDBConcurrencyError(PyAppDBError):
     "Error on row modified before update/delete"
 
     def __init__(self):
-        super().__init__(0, 'Row modified before update/delete')
+        super().__init__('CCER', 'Row modified before update/delete')

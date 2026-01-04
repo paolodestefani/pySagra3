@@ -67,12 +67,12 @@ from App.WebOrder import webOrder
 from App.OrderArchive import orderArchive
 from App.OrderNumbering import orderNumbering
 from App.Settings import settings
-from App.StockInventory import stockInventory
+from App.ItemsInventory import itemsInventory
 from App.OrderProgress import orderProgress
 
 from App.OrderEntry import orderEntry
-from App.Statistics import statisticsSales, statisticsConsumption, statisticsExport
-from App.StockUnload import stockUnload
+from App.Statistics import statisticsAnalysis, statisticsPrint, statisticsExport
+from App.ItemsOrderedDelivered import orderedDelivered
 from App.IncomeSummary import incomeSummary
 from App.Tool import eventBasedTool
 from App.Tool import deleteTool
@@ -160,7 +160,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Manage companies'),
         QAction.TextHeuristicRole)
     
-    actionDefinition['sys_profil'] = (
+    actionDefinition['sys_profile'] = (
         _tr("Action", 'Profiles'),
         profile,
         False,
@@ -598,15 +598,15 @@ def createActionDictionary(mw):
         _tr("Action", 'Order entry'),
         QAction.TextHeuristicRole)
 
-    actionDefinition['app_activity_stock_inventory'] = (
-        _tr("Action", 'Stock Inventory'),
-        stockInventory,
+    actionDefinition['app_activity_items_inventory'] = (
+        _tr("Action", 'Items Inventory'),
+        itemsInventory,
         False,
-        'activities_stock_inventory',
+        'activities_items_inventory',
         None,
-        _tr("Action", 'Stock Inventory'),
-        _tr("Action", 'Stock Inventory'),
-        _tr("Action", 'Stock Inventory'),
+        _tr("Action", 'Items Inventory'),
+        _tr("Action", 'Items Inventory'),
+        _tr("Action", 'Items Inventory'),
         QAction.TextHeuristicRole)
 
     actionDefinition['app_activity_order_progress'] = (
@@ -620,15 +620,15 @@ def createActionDictionary(mw):
         _tr("Action", 'Order progress'),
         QAction.TextHeuristicRole)
 
-    actionDefinition['app_activity_stock_unload'] = (
-        _tr("Action", 'Stock unload'),
-        stockUnload,
+    actionDefinition['app_activity_ordered_delivered'] = (
+        _tr("Action", 'Ordered delivered'),
+        orderedDelivered,
         False,
-        'activities_stock_unload',
+        'activities_ordered_delivered',
         None,
-        _tr("Action", 'Stock unload'),
-        _tr("Action", 'Stock unload'),
-        _tr("Action", 'Stock unload'),
+        _tr("Action", 'Ordered delivered'),
+        _tr("Action", 'Ordered delivered'),
+        _tr("Action", 'Ordered delivered'),
         QAction.TextHeuristicRole)
 
     actionDefinition['app_activity_income_summary'] = (
@@ -643,37 +643,37 @@ def createActionDictionary(mw):
         QAction.TextHeuristicRole)
 
     # statistics
-    actionDefinition['app_statistics_sales'] = (
-        _tr("Action", 'Statistics sales'),
-        statisticsSales,
+    actionDefinition['app_statistics_analysis'] = (
+        _tr("Action", 'Pivot table analysis'),
+        statisticsAnalysis,
         False,
         'activities_statistics',
         None,
-        _tr("Action", 'Statistics sales'),
-        _tr("Action", 'Statistics sales'),
-        _tr("Action", 'Statistics sales'),
+        _tr("Action", 'Pivot table analysis'),
+        _tr("Action", 'Pivot table analysis'),
+        _tr("Action", 'Pivot table analysis'),
         QAction.TextHeuristicRole)
 
-    actionDefinition['app_statistics_consumption'] = (
-        _tr("Action", 'Statistics consumption'),
-        statisticsConsumption,
+    actionDefinition['app_statistics_print'] = (
+        _tr("Action", 'Print statistics'),
+        statisticsPrint,
         False,
         'activities_statistics',
         None,
-        _tr("Action", 'Statistics consumption'),
-        _tr("Action", 'Statistics consumption'),
-        _tr("Action", 'Statistics consumption'),
+        _tr("Action", 'Print statistics'),
+        _tr("Action", 'Print statistics'),
+        _tr("Action", 'Print statistics'),
         QAction.TextHeuristicRole)
 
     actionDefinition['app_statistics_export'] = (
-        _tr("Action", 'Statistics export'),
+        _tr("Action", 'Export statistic data'),
         statisticsExport,
         False,
         'activities_statistics',
         None,
-        _tr("Action", 'Statistics export'),
-        _tr("Action", 'Statistics export'),
-        _tr("Action", 'Statistics export'),
+        _tr("Action", 'Export statistic data'),
+        _tr("Action", 'Export statistic data'),
+        _tr("Action", 'Export statistic data'),
         QAction.TextHeuristicRole)
 
     # tools actions

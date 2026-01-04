@@ -60,7 +60,7 @@ class Ui_ReportWidget(object):
 
         self.comboBoxL10n = RelationalComboBox(self.form)
         self.comboBoxL10n.setObjectName(u"comboBoxL10n")
-        self.comboBoxL10n.setEnabled(False)
+        self.comboBoxL10n.setEnabled(True)
         self.comboBoxL10n.setEditable(False)
 
         self.gridLayout.addWidget(self.comboBoxL10n, 0, 3, 1, 1)

@@ -72,8 +72,8 @@ CREATE TABLE item (
     normal_text_color       char(7) DEFAULT '#FFFFFF',
     -- price numeric(12, 2) NOT NULL DEFAULT 0,
     has_variants            boolean NOT NULL DEFAULT false,
-    has_stock_control       boolean NOT NULL DEFAULT true,
-    has_unload_control      boolean NOT NULL DEFAULT false,
+    has_inventory_control   boolean NOT NULL DEFAULT true,
+    has_delivered_control   boolean NOT NULL DEFAULT false,
     is_kit_part             boolean NOT NULL DEFAULT false,
     is_menu_part            boolean NOT NULL DEFAULT false,
     is_salable              boolean NOT NULL DEFAULT false, -- = present in order dialog

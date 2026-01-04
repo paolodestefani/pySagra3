@@ -8,8 +8,9 @@
 -- 2 Create users (in script) from user_ins of order_header
 -- 3 Create a specific company (in script) numeber 40
 -- 4 Set default profile/medu/toolbar to all user for the company 40
--- 5 Import data
---
+-- 5 Import data disabling triggers for faster execution
+-- 6 Update inventory, ordered delivered and numbering
+-- 7 Reindex tables
 
 SET search_path = system, common, company;
 
@@ -132,11 +133,16 @@ ALTER TABLE company.item_variant DISABLE TRIGGER t99_update_company_user_date;
 ALTER TABLE company.item_part DISABLE TRIGGER t99_update_company_user_date;
 ALTER TABLE company.price_list DISABLE TRIGGER t99_update_company_user_date;
 ALTER TABLE company.price_list_item DISABLE TRIGGER t99_update_company_user_date;
+ALTER TABLE company.order_header DISABLE TRIGGER t10_update_numbering;
 ALTER TABLE company.order_header DISABLE TRIGGER t99_update_company_user_date;
+ALTER TABLE company.order_header_department DISABLE TRIGGER t10_update_order_header_department;
 ALTER TABLE company.order_header_department DISABLE TRIGGER t99_update_company_user_date;
 ALTER TABLE company.order_line DISABLE TRIGGER t99_update_company_user_date;
-ALTER TABLE company.order_line_department DISABLE TRIGGER t10_order_line_to_unloaded;
+ALTER TABLE company.order_line_department DISABLE TRIGGER t10_order_line_to_inventory;
+ALTER TABLE company.order_line_department DISABLE TRIGGER t20_order_line_to_ordered_delivered;
 ALTER TABLE company.order_line_department DISABLE TRIGGER t99_update_company_user_date;
+ALTER TABLE company.items_inventory DISABLE TRIGGER t10_items_inventory_balance;
+ALTER TABLE company.items_inventory DISABLE TRIGGER t99_update_company_user_date;
 
 
 --
@@ -215,18 +221,18 @@ INSERT INTO company.printer_class_printer (
 	updated_at,
 	object_version)
 SELECT 
-	i.id,				-- external_code
+	l.id,				-- external_code
 	40,					-- company_id
 	c.printer_class_id,	-- class_id
-	i.computer,			-- computer
-	i.printer,			-- printer
-	i.user_ins,			-- created_by
-	i.date_ins,			-- created_at
-	i.user_upd,			-- updated_by
-	i.date_upd,			-- updated_at
+	l.computer,			-- computer
+	l.printer,			-- printer
+	l.user_ins,			-- created_by
+	l.date_ins,			-- created_at
+	l.user_upd,			-- updated_by
+	l.date_upd,			-- updated_at
 	0					-- object_version
-FROM lovadina.printer_class_printer i
-JOIN company.printer_class c ON i.class_id = c.external_code AND c.company_id = 40;
+FROM lovadina.printer_class_printer l
+JOIN company.printer_class c ON l.class_id = c.external_code AND c.company_id = 40;
 
 DO $$ BEGIN RAISE NOTICE '% Imported printer class printer', clock_timestamp(); END; $$;
 
@@ -238,65 +244,65 @@ DO $$ BEGIN RAISE NOTICE '% Imported printer class printer', clock_timestamp(); 
 WITH par AS (
 	SELECT 
 		40 AS company_id,
-		i.lunch_start_time,
-		i.dinner_start_time,
-		i.normal_background_color,
-		i.normal_text_color,
-		i.warning_background_color,
-		i.warning_text_color,
-		i.warning_stock_level,
-		i.critical_background_color,
-		i.critical_text_color,
-		i.critical_stock_level,
-		i.disabled_background_color,
-		i.disabled_text_color,
-		i.default_delivery_type,
-		-- i.default_payment_type,
-		i.order_list_tab_position,
-		i.order_list_rows,
-		i.order_list_columns,
-		i.order_list_spacing,
-		i.order_list_font_family,
-		i.order_list_font_size,
-		i.print_customer_copy,
-		i.print_department_copy,
-		i.print_cover_copy,
-		i.customer_copies,
-		i.department_copies,
-		i.cover_copies,
-		i.customer_report,
-		i.department_report,
-		i.cover_report,
+		l.lunch_start_time,
+		l.dinner_start_time,
+		l.normal_background_color,
+		l.normal_text_color,
+		l.warning_background_color,
+		l.warning_text_color,
+		l.warning_stock_level,
+		l.critical_background_color,
+		l.critical_text_color,
+		l.critical_stock_level,
+		l.disabled_background_color,
+		l.disabled_text_color,
+		l.default_delivery_type,
+		-- l.default_payment_type,
+		l.order_list_tab_position,
+		l.order_list_rows,
+		l.order_list_columns,
+		l.order_list_spacing,
+		l.order_list_font_family,
+		l.order_list_font_size,
+		l.print_customer_copy,
+		l.print_department_copy,
+		l.print_cover_copy,
+		l.customer_copies,
+		l.department_copies,
+		l.cover_copies,
+		l.customer_report,
+		l.department_report,
+		l.cover_report,
 		c1.printer_class_id AS customer_printer_class,
 		c2.printer_class_id AS cover_printer_class,
-		i.max_covers,
-		i.manage_order_progress,
-		i.automatic_show_variants,
-		i.always_show_stock_inventory,
-		i.mandatory_table_number,
-		i.use_table_list,
-		i.table_list_rows,
-		i.table_list_columns,
-		i.table_list_spacing,
-		i.table_list_font_family,
-		i.table_list_font_size,
-		i.check_inactivity,
-		i.inactivity_time,
-		i.stock_unload_automatic_update,
-		i.stock_unload_update_interval,
-		i.print_stock_unload_report,
-		i.stock_unload_copies,
-		i.stock_unload_report,
+		l.max_covers,
+		l.manage_order_progress,
+		l.automatic_show_variants,
+		l.always_show_stock_inventory,
+		l.mandatory_table_number,
+		l.use_table_list,
+		l.table_list_rows,
+		l.table_list_columns,
+		l.table_list_spacing,
+		l.table_list_font_family,
+		l.table_list_font_size,
+		l.check_inactivity,
+		l.inactivity_time,
+		l.stock_unload_automatic_update,
+		l.stock_unload_update_interval,
+		l.print_stock_unload_report,
+		l.stock_unload_copies,
+		l.stock_unload_report,
 		c3.printer_class_id AS stock_unload_printer_class,
-		i.num_orders_for_start_stock_unload,
-		i.num_orders_for_next_stock_unload,
-		i.quantity_decimal_places,
-		i.currency_symbol
-	FROM lovadina.setting i
-	LEFT JOIN company.printer_class c1 ON i.customer_printer_class = c1.external_code AND c1.company_id = 40
-	LEFT JOIN company.printer_class c2 ON i.cover_printer_class = c2.external_code AND c2.company_id = 40
-	LEFT JOIN company.printer_class c3 ON i.stock_unload_printer_class = c3.external_code AND c3.company_id = 40
-	WHERE i.id IS true
+		l.num_orders_for_start_stock_unload,
+		l.num_orders_for_next_stock_unload,
+		l.quantity_decimal_places,
+		l.currency_symbol
+	FROM lovadina.setting l
+	LEFT JOIN company.printer_class c1 ON l.customer_printer_class = c1.external_code AND c1.company_id = 40
+	LEFT JOIN company.printer_class c2 ON l.cover_printer_class = c2.external_code AND c2.company_id = 40
+	LEFT JOIN company.printer_class c3 ON l.stock_unload_printer_class = c3.external_code AND c3.company_id = 40
+	WHERE l.id IS true
 )
 UPDATE company.setting
 SET lunch_start_time = par.lunch_start_time,
@@ -343,14 +349,12 @@ SET lunch_start_time = par.lunch_start_time,
 	table_list_font_size = par.table_list_font_size,
 	check_inactivity = par.check_inactivity,
 	inactivity_time = par.inactivity_time,
-	stock_unload_automatic_update = par.stock_unload_automatic_update,
-	stock_unload_update_interval = par.stock_unload_update_interval,
-	print_stock_unload_report = par.print_stock_unload_report,
-	stock_unload_copies = par.stock_unload_copies,
-	stock_unload_report = par.stock_unload_report,
-	stock_unload_printer_class = par.stock_unload_printer_class,
-	num_orders_for_start_stock_unload = par.num_orders_for_start_stock_unload,
-	num_orders_for_next_stock_unload = par.num_orders_for_next_stock_unload,
+	ordered_delivered_automatic_update = par.stock_unload_automatic_update,
+	ordered_delivered_update_interval = par.stock_unload_update_interval,
+	print_ordered_delivered_report = par.print_stock_unload_report,
+	ordered_delivered_copies = par.stock_unload_copies,
+	ordered_delivered_report = par.stock_unload_report,
+	ordered_delivered_printer_class = par.stock_unload_printer_class,
 	quantity_decimal_places = par.quantity_decimal_places,
 	currency_symbol = par.currency_symbol
 FROM par
@@ -378,21 +382,21 @@ INSERT INTO company.department (
 	updated_at,
 	object_version)
 SELECT 
-	i.id, 				-- external_code
+	l.id, 				-- external_code
 	40,					-- company_id
-	i.description,		-- description
-	i.sorting,			-- sorting
+	l.description,		-- description
+	l.sorting,			-- sorting
 	p.printer_class_id,	-- printer_class
-	i.is_obsolete,		-- is_obsolete
-	i.is_not_managed,	-- is_menu_container
-	i.is_for_takeaway, 	-- is_for_takeaway
-	i.user_ins, 		-- created_by
-	i.date_ins,			-- created_at
-	i.user_upd,			-- updated_by
-	i.date_upd,			-- updated_at
+	l.is_obsolete,		-- is_obsolete
+	l.is_not_managed,	-- is_menu_container
+	l.is_for_takeaway, 	-- is_for_takeaway
+	l.user_ins, 		-- created_by
+	l.date_ins,			-- created_at
+	l.user_upd,			-- updated_by
+	l.date_upd,			-- updated_at
 	0					-- object_version
-FROM lovadina.department i
-JOIN company.printer_class p ON i.printer_class = p.external_code AND p.company_id = 40;
+FROM lovadina.department l
+JOIN company.printer_class p ON l.printer_class = p.external_code AND p.company_id = 40;
 
 -- add a temporary department used for items that not have a department
 -- set created/delete/etc because trigger are disabled
@@ -476,8 +480,8 @@ INSERT INTO company.item (
 	normal_background_color,
 	normal_text_color,
 	has_variants,
-	has_stock_control,
-	has_unload_control,
+	has_inventory_control,
+	has_delivered_control,
 	is_kit_part,
 	is_menu_part,
 	is_salable,
@@ -490,33 +494,33 @@ INSERT INTO company.item (
 	updated_at,
 	object_version)
 SELECT 
-	i.id,						-- external_code
+	l.id,						-- external_code
 	40, 						-- company_id
-	i.item_type,				-- item_type
-	i.description,				-- description
-	i.customer_description,		-- customer_description
+	l.item_type,				-- item_type
+	l.description,				-- description
+	l.customer_description,		-- customer_description
 	coalesce(d.department_id, m.department_id),		-- department_id
-	i.sorting,					-- sorting
-	i.pos_row,					-- pos_row
-	i.pos_column,				-- pos_column
-	i.normal_background_color,	-- normal_background_color
-	i.normal_text_color,		-- normal_text_color
-	i.has_variants,				-- has_variants
-	i.has_stock_control,		-- has_stock_control
-	i.has_unload_control,		-- has_unload_control
-	i.is_kit_part,				-- is_kit_part
-	i.is_menu_part,				-- is_menu_part
-	i.is_salable,				-- is_salable
-	i.is_web_available,			-- is_web_available
-	i.web_sorting,				-- web_sorting
-	i.is_obsolete,				-- is_obsolete
-	i.user_ins,					-- created_by
-	i.date_ins,					-- created_at
-	i.user_upd,					-- updated_by
-	i.date_upd,					-- updated_at
+	l.sorting,					-- sorting
+	l.pos_row,					-- pos_row
+	l.pos_column,				-- pos_column
+	upper(l.normal_background_color),		-- normal_background_color
+	upper(l.normal_text_color),				-- normal_text_color
+	l.has_variants,				-- has_variants
+	l.has_stock_control,		-- has_stock_control
+	l.has_unload_control,		-- has_unload_control
+	l.is_kit_part,				-- is_kit_part
+	l.is_menu_part,				-- is_menu_part
+	l.is_salable,				-- is_salable
+	l.is_web_available,			-- is_web_available
+	l.web_sorting,				-- web_sorting
+	l.is_obsolete,				-- is_obsolete
+	l.user_ins,					-- created_by
+	l.date_ins,					-- created_at
+	l.user_upd,					-- updated_by
+	l.date_upd,					-- updated_at
 	0							-- object_version
-FROM lovadina.item i
-LEFT JOIN company.department d ON i.department = d.external_code AND d.company_id = 40
+FROM lovadina.item l
+LEFT JOIN company.department d ON l.department = d.external_code AND d.company_id = 40
 CROSS JOIN (
 	SELECT department_id
 	FROM company.department 
@@ -543,19 +547,19 @@ INSERT INTO company.item_variant (
 	updated_at,
 	object_version)
 SELECT 
-	i.id,					-- external_code
+	l.id,					-- external_code
 	40, 					-- company_id
-	y.item_id,				-- item_id
-	i.variant_description,	-- variant_description
-	i.sorting,				-- sorting
-	i.price_delta,			-- price_delta
-	i.user_ins,				-- created_by
-	i.date_ins,				-- created_at
-	i.user_upd,				-- updated_by
-	i.date_upd,				-- updated_at
+	i.item_id,				-- item_id
+	l.variant_description,	-- variant_description
+	l.sorting,				-- sorting
+	l.price_delta,			-- price_delta
+	l.user_ins,				-- created_by
+	l.date_ins,				-- created_at
+	l.user_upd,				-- updated_by
+	l.date_upd,				-- updated_at
 	0						-- object_version
-FROM lovadina.item_variant i
-LEFT JOIN company.item y ON i.item = y.external_code AND y.company_id = 40;
+FROM lovadina.item_variant l
+LEFT JOIN company.item i ON l.item = i.external_code AND i.company_id = 40;
 
 DO $$ BEGIN RAISE NOTICE '% Imported item variants', clock_timestamp(); END; $$;
 
@@ -577,20 +581,20 @@ INSERT INTO company.item_part (
 	updated_at,
 	object_version)
 SELECT
-	i.id,			-- external_code
+	l.id,			-- external_code
 	40,				-- company_id
-	i.item_type,	-- item_type
-	y1.item_id,		-- item_id
-	y2.item_id,		-- part_id
-	i.quantity,		-- quantity
-	i.user_ins,		-- created_by
-	i.date_ins,		-- created_at
-	i.user_upd,		-- updated_by
-	i.date_upd,		-- updated_at
+	l.item_type,	-- item_type
+	i1.item_id,		-- item_id
+	i2.item_id,		-- part_id
+	l.quantity,		-- quantity
+	l.user_ins,		-- created_by
+	l.date_ins,		-- created_at
+	l.user_upd,		-- updated_by
+	l.date_upd,		-- updated_at
 	0				-- object_version
-FROM lovadina.item_part i
-LEFT JOIN company.item y1 ON i.item = y1.external_code AND y1.company_id = 40
-LEFT JOIN company.item y2 ON i.part = y2.external_code AND y2.company_id = 40;
+FROM lovadina.item_part l
+LEFT JOIN company.item i1 ON l.item = i1.external_code AND i1.company_id = 40
+LEFT JOIN company.item i2 ON l.part = i2.external_code AND i2.company_id = 40;
 
 DO $$ BEGIN RAISE NOTICE '% Imported item parts', clock_timestamp(); END; $$;
 
@@ -638,21 +642,54 @@ INSERT INTO company.price_list_item (
 	updated_at,
 	object_version)
 SELECT
-    i.id,				-- external_code
+    l.id,				-- external_code
 	40, 				-- company_id
-	l.price_list_id,	-- price_list_id
-	y.item_id,	 		-- item_id
-    i.price,			-- price
-    i.user_ins,			-- created_by
-    i.date_ins,			-- created_at
-    i.user_upd,			-- updated_by
-    i.date_upd,			-- updated_at
+	p.price_list_id,	-- price_list_id
+	i.item_id,	 		-- item_id
+    l.price,			-- price
+    l.user_ins,			-- created_by
+    l.date_ins,			-- created_at
+    l.user_upd,			-- updated_by
+    l.date_upd,			-- updated_at
     0 					-- object_version
-FROM lovadina.price_list_detail i
-LEFT JOIN company.price_list l ON i.id_price_list = l.external_code AND l.company_id = 40
-LEFT JOIN company.item y ON i.item = y.external_code AND y.company_id = 40;
+FROM lovadina.price_list_detail l
+LEFT JOIN company.price_list p ON l.id_price_list = p.external_code AND p.company_id = 40
+LEFT JOIN company.item i ON l.item = i.external_code AND i.company_id = 40;
 
 DO $$ BEGIN RAISE NOTICE '% Imported price list items', clock_timestamp(); END; $$;
+
+
+--
+-- Import inventory
+--
+
+INSERT INTO company.items_inventory (
+	external_code,
+	company_id,
+	event_id, 
+	item_id, 
+	loaded,
+	created_by,
+	created_at,
+	updated_by,
+	updated_at,
+	object_version)
+SELECT
+    l.id,				-- external_code
+	40, 				-- company_id
+	e.event_id,			-- event_id
+	i.item_id,	 		-- item_id
+    l.loaded,			-- loaded
+    l.user_ins,			-- created_by
+    l.date_ins,			-- created_at
+    l.user_upd,			-- updated_by
+    l.date_upd,			-- updated_at
+    0 					-- object_version
+FROM lovadina.stock_inventory l
+LEFT JOIN company.event e ON l.event = e.external_code AND e.company_id = 40
+LEFT JOIN company.item i ON l.item = i.external_code AND i.company_id = 40;
+
+DO $$ BEGIN RAISE NOTICE '% Imported items inventory', clock_timestamp(); END; $$;
 
 
 -- 
@@ -689,75 +726,36 @@ INSERT INTO company.order_header (
 	updated_at,
 	object_version)
 SELECT 
-	i.id, 					-- external_code,
+	l.id, 					-- external_code,
 	40, 					-- company_id,
 	e.event_id, 			-- event_id,
-	i.date_time,			-- date_time
-	i.order_number,			-- order_number
-	i.order_date,			-- order_date
-	i.order_time,			-- order_time
-	i.stat_order_date,		-- stat_order_date
-	i.stat_order_day_part,	-- stat_order_day_part
-	i.cash_desk,			-- cash_desk
-	i.delivery,				-- delivery
-	i.table_num,			-- table_num
-	i.customer_name,		-- customer_name
-	i.covers,				-- covers
-	i.total_amount,			-- total_amount
-	i.discount,				-- discount
-	i.cash,					-- cash
-	i.change,				-- change
+	l.date_time,			-- date_time
+	l.order_number,			-- order_number
+	l.order_date,			-- order_date
+	l.order_time,			-- order_time
+	l.stat_order_date,		-- stat_order_date
+	l.stat_order_day_part,	-- stat_order_day_part
+	l.cash_desk,			-- cash_desk
+	l.delivery,				-- delivery
+	l.table_num,			-- table_num
+	l.customer_name,		-- customer_name
+	l.covers,				-- covers
+	l.total_amount,			-- total_amount
+	l.discount,				-- discount
+	l.cash,					-- cash
+	l.change,				-- change
 	--is_electronic_payment, -- is_electronic_payment
-	i.status,				-- status
-	i.fullfillment_date,	-- fullfillment_date
-	i.user_ins,				-- created_by
-	i.date_ins,				-- created_at
-	i.user_upd,				-- updated_by
-	i.date_upd,				-- updated_at
+	l.status,				-- status
+	l.fullfillment_date,	-- fullfillment_date
+	l.user_ins,				-- created_by
+	l.date_ins,				-- created_at
+	l.user_upd,				-- updated_by
+	l.date_upd,				-- updated_at
 	0 						-- object_version
-FROM lovadina.order_header i
-LEFT JOIN company.event e ON i.event = e.external_code AND e.company_id=40;
+FROM lovadina.order_header l
+LEFT JOIN company.event e ON l.event = e.external_code AND e.company_id=40;
 
 DO $$ BEGIN RAISE NOTICE '% END Import order headers', clock_timestamp(); END; $$;
-
-
---
--- Import order header department
---
-
-DO $$ BEGIN RAISE NOTICE '% BEGIN Import order header departments', clock_timestamp(); END; $$;
-
-INSERT INTO company.order_header_department (
-	external_code,
-	company_id,
-	order_header_id, 
-	department_id,
-	note,
-	other_departments,
-	fullfillment_date,
-	created_by,
-	created_at,
-	updated_by,
-	updated_at,
-	object_version)
-SELECT 
-	i.id, 					-- external_code
-	40, 					-- company_id
-	h.order_header_id,		-- header_id 
-	d.department_id, 		-- department_id
-	i.note,					-- note
-	i.other_departments, 	-- other_departments
-	i.fullfillment_date, 	-- fullfillment_date
-	i.user_ins,				-- created_by
-	i.date_ins,				-- created_at
-	i.user_upd,				-- updated_by
-	i.date_upd,				-- updated_at
-	0						-- object_version
-FROM lovadina.order_header_department i
-LEFT JOIN company.order_header h ON i.id_header = h.external_code AND h.company_id = 40
-LEFT JOIN company.department d ON i.department = d.external_code AND d.company_id = 40;
-
-DO $$ BEGIN RAISE NOTICE '% END Import order header departments', clock_timestamp(); END; $$;
 
 
 --
@@ -781,24 +779,92 @@ INSERT INTO company.order_line (
 	updated_at,
 	object_version)
 SELECT 
-	i.id, 				-- external_code
+	l.id, 				-- external_code
 	40,					-- company_id
 	h.order_header_id, 	-- header_id
-	y.item_id,			-- item_id
-	i.variants,			-- variants
-	i.quantity,			-- quantity
-	i.price,			-- price
-	i.amount,			-- amount
-	i.user_ins,			-- created_by
-	i.date_ins,			-- created_at
-	i.user_upd,			-- updated_by
-	i.date_upd,			-- updated_at 
+	i.item_id,			-- item_id
+	l.variants,			-- variants
+	l.quantity,			-- quantity
+	l.price,			-- price
+	l.amount,			-- amount
+	l.user_ins,			-- created_by
+	l.date_ins,			-- created_at
+	l.user_upd,			-- updated_by
+	l.date_upd,			-- updated_at 
 	0 					-- object_version
-FROM lovadina.order_detail i
-LEFT JOIN company.order_header h ON i.id_header = h.external_code AND h.company_id = 40
-LEFT JOIN company.item y ON i.item = y.external_code AND y.company_id = 40;
+FROM lovadina.order_detail l
+LEFT JOIN company.order_header h ON l.id_header = h.external_code AND h.company_id = 40
+LEFT JOIN company.item i ON l.item = i.external_code AND i.company_id = 40;
 
 DO $$ BEGIN RAISE NOTICE '% END Import order lines', clock_timestamp(); END; $$;
+
+
+--
+-- Create an order_header_department record from order_line_department
+--
+
+DO $$ BEGIN RAISE NOTICE '% BEGIN Create order header department', clock_timestamp(); END; $$;
+
+INSERT INTO company.order_header_department (
+	external_code,
+	company_id,
+	order_header_id, 
+	department_id,
+	note,
+	other_departments,
+	fullfillment_date,
+	created_by,
+	created_at,
+	updated_by,
+	updated_at,
+	object_version)
+SELECT
+	Null, 					-- external_code
+	40, 					-- company_id
+	h.order_header_id,		-- header_id 
+	d.department_id, 		-- department_id
+	Null,					-- note
+	Null,				 	-- other_departments
+	coalesce(h.fullfillment_date, h.date_time), 	-- fullfillment_date
+	h.created_by,			-- created_by
+	h.created_at,			-- created_at
+	h.updated_by,			-- updated_by
+	h.updated_at,			-- updated_at
+	0						-- object_version
+FROM (
+	SELECT DISTINCT
+		id_header,
+		department
+	FROM lovadina.order_detail_department
+	) x
+LEFT JOIN company.order_header h ON x.id_header = h.external_code AND h.company_id = 40
+LEFT JOIN company.department d ON x.department = d.external_code AND d.company_id = 40;
+
+-- update from old order_header_department
+
+WITH cte AS (
+	SELECT 
+		p.order_header_department_id,
+		l.note,
+		l.other_departments,
+		l.fullfillment_date,
+		l.id
+	FROM company.order_header_department p
+	JOIN company.order_header h ON p.order_header_id = h.order_header_id
+	JOIN company.department d ON p.department_id = d.department_id
+	JOIN lovadina.order_header_department l ON 
+		(l.id_header = h.external_code AND h.company_id = 40)
+		AND (l.department = d.external_code AND d.company_id = 40)
+	)
+UPDATE company.order_header_department i
+SET note 				= cte.note,
+	other_departments	= cte.other_departments,
+	fullfillment_date	= coalesce(cte.fullfillment_date, i.fullfillment_date),
+	external_code		= cte.id
+FROM cte
+WHERE i.order_header_department_id = cte.order_header_department_id;
+
+DO $$ BEGIN RAISE NOTICE '% END Create order header department', clock_timestamp(); END; $$;
 
 
 --
@@ -810,11 +876,10 @@ DO $$ BEGIN RAISE NOTICE '% BEGIN Import order line departments', clock_timestam
 INSERT INTO company.order_line_department (
 	external_code,
 	company_id,
-	order_header_id, 
+	order_header_department_id, 
 	event_id, 
 	event_date, 
 	day_part, 
-	department_id, 
 	item_id, 
 	variants,
 	quantity,
@@ -824,26 +889,26 @@ INSERT INTO company.order_line_department (
 	updated_at,
 	object_version)
 SELECT 
-	i.id,				-- external_code
+	l.id,				-- external_code
 	40,					-- company_id
-	h.order_header_id,	-- header_id
+	x.order_header_department_id,	-- order_header_department_id
 	e.event_id,			-- event_id
-	i.event_date,		-- event_date
-	i.day_part,			-- day_part
-	d.department_id,	-- department_id
-	y.item_id,			-- item_id
-	i.variants,			-- variants
-	i.quantity,			-- quantity
-	i.user_ins,			-- created_by
-	i.date_ins, 		-- created_at
-	i.user_upd, 		-- updated_by
-	i.date_upd, 		-- updated_at
+	l.event_date,		-- event_date
+	l.day_part,			-- day_part
+	i.item_id,			-- item_id
+	l.variants,			-- variants
+	l.quantity,			-- quantity
+	l.user_ins,			-- created_by
+	l.date_ins, 		-- created_at
+	l.user_upd, 		-- updated_by
+	l.date_upd, 		-- updated_at
 	0 					-- object_version
-FROM lovadina.order_detail_department i
-LEFT JOIN company.order_header h ON i.id_header = h.external_code AND h.company_id = 40
-LEFT JOIN company.event e ON i.event = e.external_code AND e.company_id = 40
-LEFT JOIN company.department d ON i.department = d.external_code AND d.company_id = 40
-LEFT JOIN company.item y ON i.item = y.external_code AND y.company_id = 40;
+FROM lovadina.order_detail_department l
+LEFT JOIN company.order_header h ON l.id_header = h.external_code AND h.company_id = 40
+LEFT JOIN company.event e ON l.event = e.external_code AND e.company_id = 40
+LEFT JOIN company.department d ON l.department = d.external_code AND d.company_id = 40
+LEFT JOIN company.order_header_department x ON h.order_header_id = x.order_header_id AND d.department_id = x.department_id
+LEFT JOIN company.item i ON l.item = i.external_code AND i.company_id = 40;
 
 DO $$ BEGIN RAISE NOTICE '% END Import order line departments', clock_timestamp(); END; $$;
 
@@ -854,29 +919,30 @@ DO $$ BEGIN RAISE NOTICE '% END Import order line departments', clock_timestamp(
 -- update unloads and numbering
 --
 
-DO $$ BEGIN RAISE NOTICE '% BEGIN Update unloads and numbering', clock_timestamp(); END; $$;
+DO $$ BEGIN RAISE NOTICE '% BEGIN Update inventory, ordered delivered and numbering', clock_timestamp(); END; $$;
 
 DO $$
 DECLARE
 i int;
 BEGIN
 
-DELETE FROM company.numbering WHERE company_id = 40;
-
-FOR i IN 	SELECT event_id 
-			FROM company.event 
-			WHERE company_id = 40 
-			ORDER BY event_id
+	FOR i IN 	SELECT event_id 
+				FROM company.event 
+				WHERE company_id = 30
+				ORDER BY event_id
 	LOOP
+		RAISE NOTICE '% BEGIN    Event %', clock_timestamp(), i;
 		PERFORM company.numbering_rebuild(i);
-		PERFORM company.unload_rebuild(i);
+		PERFORM company.inventory_rebuild(i);
+		PERFORM company.ordered_delivered_rebuild(i);
+		RAISE NOTICE '% END      Event %', clock_timestamp(), i;
 	END LOOP;
 	
 END;
 $$
 language plpgsql;
 
-DO $$ BEGIN RAISE NOTICE '% END Update unloads and numbering', clock_timestamp(); END; $$;
+DO $$ BEGIN RAISE NOTICE '% END Update inventory, ordered delivered and numbering', clock_timestamp(); END; $$;
 
 
 --
@@ -893,11 +959,17 @@ ALTER TABLE company.item_variant ENABLE TRIGGER t99_update_company_user_date;
 ALTER TABLE company.item_part ENABLE TRIGGER t99_update_company_user_date;
 ALTER TABLE company.price_list ENABLE TRIGGER t99_update_company_user_date;
 ALTER TABLE company.price_list_item ENABLE TRIGGER t99_update_company_user_date;
+ALTER TABLE company.order_header ENABLE TRIGGER t10_update_numbering;
 ALTER TABLE company.order_header ENABLE TRIGGER t99_update_company_user_date;
+ALTER TABLE company.order_header_department ENABLE TRIGGER t10_update_order_header_department;
 ALTER TABLE company.order_header_department ENABLE TRIGGER t99_update_company_user_date;
 ALTER TABLE company.order_line ENABLE TRIGGER t99_update_company_user_date;
-ALTER TABLE company.order_line_department ENABLE TRIGGER t10_order_line_to_unloaded;
+ALTER TABLE company.order_line_department ENABLE TRIGGER t10_order_line_to_inventory;
+ALTER TABLE company.order_line_department ENABLE TRIGGER t20_order_line_to_ordered_delivered;
 ALTER TABLE company.order_line_department ENABLE TRIGGER t99_update_company_user_date;
+ALTER TABLE company.items_inventory ENABLE TRIGGER t10_items_inventory_balance;
+ALTER TABLE company.items_inventory ENABLE TRIGGER t99_update_company_user_date;
+
 
 --
 -- rebuild main index

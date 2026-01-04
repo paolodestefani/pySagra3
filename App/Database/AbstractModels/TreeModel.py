@@ -90,7 +90,7 @@ class TreeItem():
     "A row in the tree model"
     ovField = 'object_version'
 
-    def __init__(self, data: str, parent: QModelIndex = QModelIndex()) -> None:
+    def __init__(self, data: dict, parent: QModelIndex = QModelIndex()) -> None:
         self.parentItem = parent
         self.itemData = data  # dict of column:value values
         self.childItems = []
@@ -171,8 +171,135 @@ class TreeItem():
     #def parentFieldValue(self):
         #return self.itemData[0]
 
-    def childFieldValue(self) -> str:
-        return self.itemData[1]
+    def childFieldValue(self, fieldColumn) -> str:
+        return self.itemData[fieldColumn]
+    
+    
+
+class TreeQueryModel(QAbstractItemModel):
+    "A tree model from a fixed number on nestet query"
+    
+    def __init__(self, parent: QModelIndex = None) -> None:
+        super().__init__(parent)
+        self.isEditable = False
+        self.rootItem = None
+        self.orderByExpressions = []
+        self.repr = 'Generic tree query model' # printable representation of the object
+        self.script = [] # in subclasses the definition and number of sql script
+        self.currentLevel = 0
+        
+    def __repr__(self) -> str:
+        "Model representation"
+        return self.repr
+
+    def setRepr(self, text: str) -> None:
+        "Change the object representation text"
+        self.repr = text
+
+    def filter(self, column: int, value) -> None:
+        self.clear()
+        self.rootItem = TreeItem({i: None for i, c in enumerate(self.columns)})
+        self.rootItem.itemData[self.childFieldColumn] = value 
+        self.beginResetModel()
+        self._walk(self.rootItem)
+        self.endResetModel()
+
+    def _walk(self, parentItem):
+        try:
+            with appconn.cursor() as cur:
+                x = parentItem.childFieldValue(self.childFieldColumn)
+                cur.execute(self.script[self.currentLevel], (x,))
+                for record in cur:
+                    itemData = dict()
+                    # selected fields
+                    for i in range(len(self.columns)):
+                        itemData[i] = record[i]
+                    n = TreeItem(itemData, parentItem)
+                    parentItem.appendChild(n)
+                    self.currentLevel += 1
+                    self._walk(n)
+                    self.currentLevel -= 1
+        except psycopg.Error as er:
+            raise PyAppDBError(er.diag.sqlstate, er)
+
+    def rowCount(self, parent=QModelIndex()):
+        parentItem = self.getItem(parent)
+        if parentItem:
+            return parentItem.childCount()
+        return 0
+
+    def columnCount(self, parent=QModelIndex()):
+        return len(self.columns)
+
+    def data(self, index, role=Qt.DisplayRole):
+        if not index.isValid():
+            return None
+        if role not in (Qt.DisplayRole, Qt.EditRole, Qt.DecorationRole):
+            return None
+        item = self.getItem(index)
+        return item.itemData[index.column()]
+
+    def flags(self, index):
+        if not index.isValid():
+            return Qt.ItemIsEnabled
+        #flags = Qt.ItemFlags(QAbstractItemModel.flags(self, index) | Qt.ItemIsEditable)
+        #if self.columns[index.column()][2]:
+            #flags = flags ^ Qt.ItemIsEditable
+        #return flags
+        return Qt.ItemIsEnabled|Qt.ItemIsEditable|Qt.ItemIsSelectable
+
+    def getItem(self, index):
+        if index.isValid():
+            item = index.internalPointer()
+            if item:
+                return item
+        return self.rootItem
+
+    def headerData(self, section, orientation, role=Qt.DisplayRole):
+        if orientation == Qt.Horizontal and role == Qt.DisplayRole:
+            return self.columns[section][0]
+        return None
+
+    def index(self, row, column, parent=QModelIndex()):
+        if parent.isValid() and parent.column() != 0:
+            return QModelIndex()
+        parentItem = self.getItem(parent)
+        if not parentItem:
+            return QModelIndex()
+        childItem = parentItem.child(row)
+        if childItem:
+            return self.createIndex(row, column, childItem)
+        else:
+            return QModelIndex()
+
+    def parent(self, index):
+        if not index.isValid():
+            return QModelIndex()
+        childItem = self.getItem(index)
+        parentItem = childItem.parent()
+        if parentItem == self.rootItem:
+            return QModelIndex()
+        return self.createIndex(parentItem.childNumber(), 0, parentItem)
+
+    def addOrderBy(self, expression):
+        self.orderByExpressions.append(expression)
+
+    def setHeaderData(self, section, orientation, value, role=Qt.EditRole):
+        if role != Qt.EditRole or orientation != Qt.Horizontal:
+            return False
+        result = self.rootItem.setData(section, value)
+        if result:
+            self.headerDataChanged.emit(orientation, section, section)
+        return result
+
+    def clear(self):
+        "Delete all model items"
+        if self.rootItem:
+            self.rootItem.childItems.clear()
+            
+    def submitAll(self):
+        pass
+
 
 
 class TreeModel(QAbstractItemModel):
@@ -185,6 +312,11 @@ class TreeModel(QAbstractItemModel):
         self.rootItem = None
         self.toDelete = []
         self.orderByExpressions = []
+        self.repr = 'Generic tree model' # printable representation of the object
+        
+    def __repr__(self) -> str:
+        "Model representation"
+        return self.repr
 
     def select(self) -> None:
         "Create the tree model from database select"
@@ -205,7 +337,7 @@ class TreeModel(QAbstractItemModel):
         #if not referenceKey:
             #return
         self.clear()
-        self.rootItem = TreeItem({i: c[1] for i, c in enumerate(self.columns)})
+        self.rootItem = TreeItem({i: None for i, c in enumerate(self.columns)})
         #f = {i+1: c[1] for i, c in enumerate(self.columns)}
         #f.update({0:None})
         #self.rootItem = TreeItem(f)
@@ -225,9 +357,10 @@ class TreeModel(QAbstractItemModel):
         try:
             with appconn.cursor() as cur:
                 #print("Mogrify",cur.mogrify(script, args))
-                x = parentItem.childFieldValue()
+                x = parentItem.childFieldValue(self.childFieldColumn)
                 cur.execute(self._script, (x,))
                 for record in cur:
+                    print("Rec", record)
                     itemData = dict()
                     # selected fields
                     for i in range(len(self.columns)):

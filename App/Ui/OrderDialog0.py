@@ -139,6 +139,7 @@ class Ui_OrderDialog0(object):
         self.checkBoxWebOrder = QCheckBox(OrderDialog0)
         self.checkBoxWebOrder.setObjectName(u"checkBoxWebOrder")
         self.checkBoxWebOrder.setEnabled(True)
+        self.checkBoxWebOrder.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
         self.checkBoxWebOrder.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
 
         self.horizontalLayout_4.addWidget(self.checkBoxWebOrder)
@@ -471,6 +472,7 @@ class Ui_OrderDialog0(object):
 
         self.checkBoxElectronicPayment = QCheckBox(self.groupBox_3)
         self.checkBoxElectronicPayment.setObjectName(u"checkBoxElectronicPayment")
+        self.checkBoxElectronicPayment.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
         self.gridLayout.addWidget(self.checkBoxElectronicPayment, 1, 3, 1, 1, Qt.AlignmentFlag.AlignHCenter)
 

@@ -66,11 +66,12 @@
     <file alias="file_order_number">icon/oxygen/file_order_number.png</file>
     <file alias="file_settings">icon/oxygen/file_settings.png</file>
     <file alias="activities_order">icon/oxygen/activities_order.png</file>
-    <file alias="activities_stock_inventory">icon/oxygen/activities_stock_inventory.png</file>
+    <file alias="activities_items_inventory">icon/oxygen/activities_items_inventory.png</file>
 	<file alias="activities_order_progress">icon/oxygen/activities_order_progress.png</file>
-    <file alias="activities_stock_unload">icon/oxygen/activities_stock_unload.png</file>
+    <file alias="activities_ordered_delivered">icon/oxygen/activities_ordered_delivered.png</file>
     <file alias="activities_income_summary">icon/oxygen/activities_income_summary.png</file>
     <file alias="activities_statistics">icon/oxygen/activities_statistics.png</file>
+    <file alias="activities_statistics2">icon/oxygen/activities_statistics2.png</file>
     <file alias="tools_tool">icon/oxygen/tools_tool.png</file>
     <file alias="help_content">icon/oxygen/help_content.png</file>
     <file alias="help_faq">icon/oxygen/help_faq.png</file>

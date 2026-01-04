@@ -231,8 +231,8 @@ VALUES
 -- DEMO COMPANY
 -- create demo company
 SELECT
-system.pa_company_create(10, 'Prima azienda dimostrativa', true, Null),
-system.pa_company_create(20, 'Seconda azienda dimostrativa', true, Null);
+system.pa_company_create(10, 'First demo company / Prima azienda dimostrativa', true, Null),
+system.pa_company_create(20, 'Second demo company / Seconda azienda dimostrativa', true, Null);
 
 -- USERS
 -- create application users

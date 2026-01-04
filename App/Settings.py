@@ -36,6 +36,7 @@ from PySide6.QtCore import QObject
 from PySide6.QtCore import QSettings
 from PySide6.QtGui import QColor
 from PySide6.QtGui import QFont
+from PySide6.QtGui import QPalette
 from PySide6.QtWidgets import QWidget
 from PySide6.QtWidgets import QMessageBox
 from PySide6.QtWidgets import QColorDialog
@@ -115,7 +116,9 @@ class SettingsDialog(QDialog):
                      ('W', _tr('Setting', 'West'))]:
             self.ui.comboBoxTabPosition.addItem(j, i)
         self.ui.comboBoxTabPosition.setCurrentIndex(self.ui.comboBoxTabPosition.findData(self.setting['order_list_tab_position']))
+        self.ui.spinBoxWarningLevel.setDecimals(self.setting['quantity_decimal_places'])
         self.ui.spinBoxWarningLevel.setValue(self.setting['warning_stock_level'])
+        self.ui.spinBoxCriticalLevel.setDecimals(self.setting['quantity_decimal_places'])
         self.ui.spinBoxCriticalLevel.setValue(self.setting['critical_stock_level'])
         self.ui.spinBoxOrderListRows.setValue(self.setting['order_list_rows'])
         self.ui.spinBoxOrderListColumns.setValue(self.setting['order_list_columns'])
@@ -129,6 +132,7 @@ class SettingsDialog(QDialog):
         self.ui.spinBoxTableListFontSize.setValue(self.setting['table_list_font_size'])
         self.ui.checkBoxUseTableList.setChecked(self.setting['use_table_list'])
         # colors
+        # for many problems with platform themes i use stylesheet for setting colors
         self.ui.colorComboBoxBackground.setColorList(COLORS)
         self.ui.colorComboBoxBackground.setCurrentColor(self.setting['normal_background_color'])
         self.ui.colorComboBoxText.setColorList(COLORS)
@@ -170,16 +174,17 @@ class SettingsDialog(QDialog):
         self.ui.checkBoxMandatoryTableNumber.setChecked(self.setting['mandatory_table_number'])
         self.ui.checkBoxInactivity.setChecked(self.setting['check_inactivity'])
         self.ui.spinBoxInactivityTime.setValue(self.setting['inactivity_time'])
-        self.ui.groupBoxAutomaticUpdate.setChecked(self.setting['stock_unload_automatic_update'])
-        self.ui.spinBoxAutomaticUpdateInterval.setValue(self.setting['stock_unload_update_interval'])
-        self.ui.groupBoxStockUnloadReport.setChecked(self.setting['print_stock_unload_report'])
-        self.ui.spinBoxStockUnloadCopies.setValue(self.setting['stock_unload_copies'] or 1)
-        self.ui.comboBoxStockUnloadReport.setFunction(stock_unload_report_cdl)
-        self.ui.comboBoxStockUnloadReport.setCurrentIndex(self.ui.comboBoxStockUnloadReport.findData(self.setting['stock_unload_report']))
-        self.ui.comboBoxStockUnloadPrinterClass.setFunction(printer_class_cdl)
-        self.ui.comboBoxStockUnloadPrinterClass.setCurrentIndex(self.ui.comboBoxStockUnloadPrinterClass.findData(self.setting['stock_unload_printer_class']))
-        self.ui.spinBoxOrdersStartLevel.setValue(self.setting['num_orders_for_start_stock_unload'] or 30)
-        self.ui.spinBoxOrdersNextLevel.setValue(self.setting['num_orders_for_next_stock_unload'] or 10)
+        self.ui.groupBoxOrderedDeliveredReport.setChecked(self.setting['print_ordered_delivered_report'])
+        self.ui.spinBoxOrderedDeliveredCopies.setValue(self.setting['ordered_delivered_copies'] or 1)
+        self.ui.comboBoxOrderedDeliveredReport.setFunction(stock_unload_report_cdl)
+        self.ui.comboBoxOrderedDeliveredReport.setCurrentIndex(self.ui.comboBoxOrderedDeliveredReport.findData(self.setting['ordered_delivered_report']))
+        self.ui.comboBoxOrderedDeliveredPrinterClass.setFunction(printer_class_cdl)
+        self.ui.comboBoxOrderedDeliveredPrinterClass.setCurrentIndex(self.ui.comboBoxOrderedDeliveredPrinterClass.findData(self.setting['ordered_delivered_printer_class']))
+        # items inventory
+        self.ui.spinBoxInventoryWarningLevel.setDecimals(self.setting['quantity_decimal_places'])
+        self.ui.spinBoxInventoryWarningLevel.setValue(self.setting['inventory_warning_stock_level'])
+        self.ui.spinBoxInventoryCriticalLevel.setDecimals(self.setting['quantity_decimal_places'])
+        self.ui.spinBoxInventoryCriticalLevel.setValue(self.setting['inventory_critical_stock_level'])
         self.ui.spinBoxQuantityDecimals.setValue(self.setting['quantity_decimal_places'])
         self.ui.lineEditCurrencySymbol.setText(self.setting['currency_symbol'])
         # set initial default for linked params
@@ -242,7 +247,7 @@ class SettingsDialog(QDialog):
             self.ui.horizontalSliderLunch.setValue(value)
 
     def selectWarningBackground(self) -> None:
-        color = QColorDialog.getColor(QColor(self.ui.pushButtonWB.color), self)
+        color = QColorDialog.getColor(QColor(self.ui.pushButtonWB.palette().color(self.ui.pushButtonWB.backgroundRole())), self)
         if not color.isValid():
             return
         self.ui.pushButtonWB.color = color.name()
@@ -373,14 +378,14 @@ class SettingsDialog(QDialog):
         self.setting['mandatory_table_number'] = self.ui.checkBoxMandatoryTableNumber.isChecked()
         self.setting['check_inactivity'] = self.ui.checkBoxInactivity.isChecked()
         self.setting['inactivity_time'] = self.ui.spinBoxInactivityTime.value()
-        self.setting['stock_unload_automatic_update'] = self.ui.groupBoxAutomaticUpdate.isChecked()
-        self.setting['stock_unload_update_interval'] = self.ui.spinBoxAutomaticUpdateInterval.value()
-        self.setting['print_stock_unload_report'] = self.ui.groupBoxStockUnloadReport.isChecked()
-        self.setting['stock_unload_copies'] = self.ui.spinBoxStockUnloadCopies.value() if self.ui.spinBoxStockUnloadCopies.isEnabled() else None
-        self.setting['stock_unload_report'] = self.ui.comboBoxStockUnloadReport.currentData() if self.ui.comboBoxStockUnloadReport.isEnabled() else None
-        self.setting['stock_unload_printer_class'] = self.ui.comboBoxStockUnloadPrinterClass.currentData() if self.ui.comboBoxStockUnloadPrinterClass.isEnabled() else None
-        self.setting['num_orders_for_start_stock_unload'] = self.ui.spinBoxOrdersStartLevel.value() if self.ui.spinBoxOrdersStartLevel.isEnabled() else None
-        self.setting['num_orders_for_next_stock_unload'] = self.ui.spinBoxOrdersNextLevel.value() if self.ui.spinBoxOrdersNextLevel.isEnabled() else None
+        self.setting['ordered_delivered_automatic_update'] = self.ui.groupBoxAutomaticUpdate.isChecked()
+        self.setting['ordered_delivered_update_interval'] = self.ui.spinBoxAutomaticUpdateInterval.value()
+        self.setting['print_ordered_delivered_report'] = self.ui.groupBoxOrderedDeliveredReport.isChecked()
+        self.setting['ordered_delivered_copies'] = self.ui.spinBoxOrderedDeliveredCopies.value() if self.ui.spinBoxOrderedDeliveredCopies.isEnabled() else None
+        self.setting['ordered_delivered_report'] = self.ui.comboBoxOrderedDeliveredReport.currentData() if self.ui.comboBoxOrderedDeliveredReport.isEnabled() else None
+        self.setting['ordered_delivered_printer_class'] = self.ui.comboBoxOrderedDeliveredPrinterClass.currentData() if self.ui.comboBoxOrderedDeliveredPrinterClass.isEnabled() else None
+        self.setting['inventory_warning_stock_level'] = self.ui.spinBoxInventoryWarningLevel.value()
+        self.setting['inventory_critical_stock_level'] = self.ui.spinBoxInventoryCriticalLevel.value()
         self.setting['quantity_decimal_places'] = self.ui.spinBoxQuantityDecimals.value()
         self.setting['currency_symbol'] = self.ui.lineEditCurrencySymbol.text()
         # sanity checks

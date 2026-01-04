@@ -29,6 +29,10 @@
 import operator
 import decimal
 import logging
+from pyexpat import model
+
+# pandas
+import pandas as pd
 
 # psycopg
 import psycopg
@@ -47,6 +51,7 @@ from PySide6.QtCore import QModelIndex
 from App import session
 from App.Database import ovfield
 from App.Database.Exceptions import PyAppDBError
+from App.Database.Exceptions import PyAppDBConcurrencyError
 from App.Database.Psycopg import DEFAULT
 from App.Database.Connect import appconn
 from App.Database.Company import company_is_in_use
@@ -93,10 +98,6 @@ class QueryModel(QAbstractTableModel):
     def __repr__(self) -> str:
         "Model representation"
         return self.repr
-
-    def setRepr(self, text: str) -> None:
-        "Change the object representation text"
-        self.repr = text
         
     def flags(self, index: QModelIndex) -> int:
         "Always return readonly flag"
@@ -111,7 +112,8 @@ class QueryModel(QAbstractTableModel):
             or index.column() > self.columnCount()):
             return None
         if role == Qt.DisplayRole:
-            return self.dataSet[index.row(), index.column()]
+            if (index.row(), index.column()) in self.dataSet:
+                return self.dataSet[index.row(), index.column()]
         elif role == Qt.TextAlignmentRole:
             # numbers aligned right anything else aligned left
             if isinstance(index.data(), (int, decimal.Decimal, QDate, QDateTime)):
@@ -293,10 +295,6 @@ class QueryWithParamsModel(QAbstractTableModel):
     def __repr__(self) -> str:
         "Model representation"
         return self.repr
-
-    def setRepr(self, text: str) -> None:
-        "Change the object representation text"
-        self.repr = text
         
     def flags(self, index: QModelIndex) -> int:
         "Always return readonly flag"
@@ -311,7 +309,8 @@ class QueryWithParamsModel(QAbstractTableModel):
             or index.column() > self.columnCount()):
             return None
         if role == Qt.DisplayRole:
-            return self.dataSet[index.row(), index.column()]
+            if (index.row(), index.column()) in self.dataSet:
+                return self.dataSet[index.row(), index.column()]
         elif role == Qt.TextAlignmentRole:
             # numbers aligned right anything else aligned left
             if isinstance(index.data(), (int, decimal.Decimal, QDate, QDateTime)):
@@ -445,15 +444,11 @@ class TableModel(QAbstractTableModel):
         self.limitCondition = None
         self.isDirty = False # setted on data changed
         self.isEditable = True # used in forms
-        self.repr = 'Generic editable table model' # printable representation of the object,
+        self.repr = 'Generic editable table model' # printable representation of the object
         
     def __repr__(self) -> str:
         "Model representation"
         return self.repr
-
-    def setRepr(self, text: str) -> None:
-        "Change the object representation text"
-        self.repr = text
 
     def flags(self, index: QModelIndex) -> int:
         "Return standard flags or readonly for some columns"
@@ -533,20 +528,13 @@ class TableModel(QAbstractTableModel):
             for row in self.dataSet:
                 row[column] = value
 
-        cols = len([i[FIELD] for i in self.columns]) # only column of master table need insert/update/delete
+        cols = len([i[FIELD] for i in self.columns if i[FIELD]]) # only column of master table need insert/update/delete
         pkcols = range(cols, cols + len(self.primaryKey))
         ovcol = cols + len(self.primaryKey)
-        # construct sql check statement, don't need alias here    
-        #if self.isCompanyTable:
-        #    where += [(f'company_id = %s', session['current_company'])]
-        if self.isCompanyTable:
-            checkCondition = ("company_id",) + self.primaryKey + (ovfield,)
-        else:
-            checkCondition = self.primaryKey + (ovfield,)
         self.sqlCheck = (f"SELECT {', '.join(self.primaryKey)}\n"
                          f"FROM {self.table}\n"
                          f"WHERE {' AND '.join(
-                             [f'{i} = %({i})s' for i in checkCondition])};")
+                             [f'{i} = %({i})s' for i in self.primaryKey + (ovfield,)])};")
         try:
             with appconn.cursor() as cur: # manual submit, no commit (form can save multiple table models)
 
@@ -557,46 +545,37 @@ class TableModel(QAbstractTableModel):
                     # check if record was already modified
                     pkey = self.dataSet[row]['pkey'].copy() # primary key is unchanged on update
                     args = pkey.copy()
-                    if self.isCompanyTable:
-                        args['company_id'] = session['current_company']
+                    #if self.isCompanyTable:
+                    #    args['company_id'] = session['current_company']
                     args[ovfield] = self.dataSet[row][ovfield]
                     logging.info(f"**** {self.repr} SELECT CHECK script ****\n{self.sqlCheck}")
                     logging.info(f"**** {self.repr} SELECT CHEK  args   ****\n{args}")
                     cur.execute(self.sqlCheck, args)
                     if cur.rowcount == 0:
-                        pgerror = _tr("Model", "Row modified before update")
-                        logging.error(f"EEEEE {self.repr} row modified before update EEEEE")
-                        raise PyAppDBError(0, pgerror)
+                        logging.error(f"**** {self.repr}: row modified before update ****")
+                        raise PyAppDBConcurrencyError()
                     # update record
                     fields = ", ".join([f"{self.columns[i][FIELD]} = %({self.columns[i][FIELD]})s" for i in self.toModify[row]])
                     if not fields: # no real fields need update
                         continue
                     where = " AND ".join([f"{i} = %({i})s" for i in pkey])
+                    fieldsback = ", ".join([i[FIELD] for i in self.columns if i[FIELD]] + [ovfield])
                     script = (f"UPDATE {self.table}\n"
                               f"SET {fields}\n"
-                              f"WHERE {where};")
-                    args = {self.columns[i][FIELD]: self.dataSet[row][i] for i in self.toModify[row]}
+                              f"WHERE {where}\n"
+                              f"RETURNING {fieldsback};")
+                    args = {self.columns[i][FIELD]: self.dataSet[row][i] for i in self.toModify[row] if self.columns[i][FIELD]}
                     args.update({k: pkey[k] for k in pkey})
-                    logging.info(f"**** {self.repr} SELECT UPDATE script ****\n{script}")
-                    logging.info(f"**** {self.repr} SELECT UPDATE args   ****\n{args}")
+                    logging.info(f"**** {self.repr} UPDATE script ****\n{script}")
+                    logging.info(f"**** {self.repr} UPDATE args   ****\n{args}")
                     cur.execute(script, args)
                     # repopulate the modified row
-                    fields = ", ".join([f"{i[FIELD]}" for i in self.columns] +
-                           [f"{i}" for i in self.primaryKey] +
-                           [f"{ovfield}"])
-                    where = " AND ".join([f'{k} = %({k})s' for k in self.primaryKey])
-                    script = f"SELECT {fields}\nFROM {self.table}"
-                    script += f"\nWHERE {where};"
-                    args = pkey #{k.split('.')[1]: pkey[k] for k in pkey} #{k: v for k, v in zip(self.sqlPrimaryKey, pkey)}
-                    logging.info(f"**** {self.repr} SELECT UPDATE repopulate script ****\n{script}")
-                    logging.info(f"**** {self.repr} SELECT UPDATE repopulate args   ****\n{args}")
-                    cur.execute(script, args)
                     for record in cur:
                         # selected fields
                         for index in range(self.cols):
                             self.dataSet[row][index] = record[index]
-                        # row timestamp
-                        self.dataSet[row][ovfield] = record[ovcol]
+                        # row object version
+                        self.dataSet[row][ovfield] = record[-1] # ovfield is always the last onefield
                     self.dataChanged.emit(self.createIndex(row, 0),
                                           self.createIndex(row, cols),
                                           [Qt.DisplayRole, Qt.EditRole]) # if any trigger modify de record
@@ -615,23 +594,24 @@ class TableModel(QAbstractTableModel):
                     logging.info(f"**** {self.repr} SELECT CHEK  args   ****\n{args}")
                     cur.execute(self.sqlCheck, args)
                     if cur.rowcount == 0:
-                        self.pgError = _tr("Model", "Row modified before delete")
-                        logging.error(f"EEEEE {self.repr} row modified before update EEEEE")
-                        raise PyAppDBError(0, pgerror)
+                        logging.error(f"**** {self.repr} row modified before update ****")
+                        raise PyAppDBConcurrencyError()
                     # delete record
                     where = " AND ".join([f"{i} = %({i})s" for i in pkey])
                     script = (f"DELETE FROM {self.table}\n"
                               f"WHERE {where};")
                     args.update({k: pkey[k] for k in pkey})
-                    logging.info(f"**** {self.repr} SELECT DELETE script ****\n{script}")
-                    logging.info(f"**** {self.repr} SELECT DELETE args   ****\n{args}")
+                    logging.info(f"**** {self.repr} DELETE script ****\n{script}")
+                    logging.info(f"**** {self.repr} DELETE args   ****\n{args}")
                     cur.execute(script, args)
                 # clear deleted record list
                 self.toDelete.clear()
 
                 # *** INSERT ***
                 for row in self.toInsert:
-                    fieldList = [i[FIELD]for i in self.columns if i[FIELD] and not i[RO]]
+                    fieldList = [i[FIELD]for i in self.columns if i[FIELD] and not i[RO]] 
+                    # calculated fields have None as field name
+                    # read only fields can not be inserted
                     if self.automaticPKey:
                         # remove primary key fields if present
                         for i in self.primaryKey:
@@ -643,8 +623,8 @@ class TableModel(QAbstractTableModel):
                         valueList += [f"'{self.recordType[i]}'" for i in self.recordType]  # record type must be string
                     fields = ", ".join(fieldList)
                     values = ", ".join(valueList)
-                    fieldsback = ", ".join(list(self.primaryKey))
-                    args = {i: self.dataSet[row][self.fieldColumn(i)] for i in fieldList}
+                    fieldsback = ", ".join([i[FIELD] or 'Null' for i in self.columns] + list(self.primaryKey) + [ovfield])
+                    args = {c[FIELD]: self.dataSet[row][i] for i, c in enumerate(self.columns) if c[FIELD] and not c[RO]}
                     if self.recordType:
                         for i in self.recordType:
                             args[i] = self.recordType[i]
@@ -657,33 +637,32 @@ class TableModel(QAbstractTableModel):
                               f"({fields})\n"
                               f"VALUES ({values})\n"
                               f"RETURNING {fieldsback};")
-                    logging.info(f"**** {self.repr} SELECT INSERT script ****\n{script}")
-                    logging.info(f"**** {self.repr} SELECT INSERT args   ****\n{args}")
+                    logging.info(f"**** {self.repr} INSERT script ****\n{script}")
+                    logging.info(f"**** {self.repr} INSERT args   ****\n{args}")
                     try:
                         cur.execute(script, args)
                     except psycopg.Warning as er:
                         raise PyAppDBError(0, str(er))
                     # repopulate the inserted row
-                    # get the actual primary key
-                    for record in cur: # must be one record
-                        pkey = record
-                    where = " AND ".join([f'{k} = %({k})s' for k in self.primaryKey])
-                    args = {k: v for k, v in zip(self.primaryKey, pkey)}
-                    fields = ", ".join([f"{i[FIELD]}" for i in self.columns] +
-                           [f"{i}" for i in self.primaryKey] +
-                           [ovfield])
-                    script = f"SELECT {fields}\nFROM {self.table}"
-                    script += f"\nWHERE {where};"
-                    logging.info(f"**** {self.repr} SELECT INSERT repopulate script ****\n{script}")
-                    logging.info(f"**** {self.repr} SELECT INSERT repopulate args   ****\n{args}")
-                    cur.execute(script, args)
+                    #for record in cur: # must be one record
+                    #    pkey = record
+                    #where = " AND ".join([f'{k} = %({k})s' for k in self.primaryKey])
+                    #args = {k: v for k, v in zip(self.primaryKey, pkey)}
+                    #fields = ", ".join([f"{i[FIELD]}" for i in self.columns] +
+                    #       [f"{i}" for i in self.primaryKey] +
+                    #       [ovfield])
+                    #script = f"SELECT {fields}\nFROM {self.table}"
+                    #script += f"\nWHERE {where};"
+                    #logging.info(f"**** {self.repr} SELECT INSERT repopulate script ****\n{script}")
+                    #logging.info(f"**** {self.repr} SELECT INSERT repopulate args   ****\n{args}")
+                    #cur.execute(script, args)
                     for record in cur:
                         # selected fields
                         for index in range(self.cols):
                             self.dataSet[row][index] = record[index]
                         # primary key
                         self.dataSet[row]['pkey'] = {self.primaryKey[i - cols]: record[i] for i in pkcols}
-                        # row timestamp
+                        # object version
                         self.dataSet[row][ovfield] = record[ovcol]
                     self.dataChanged.emit(self.createIndex(row, 0),
                                           self.createIndex(row, cols),
@@ -859,7 +838,8 @@ class TableModel(QAbstractTableModel):
     def select(self, column: int|None = None, value: str|int|float|QDate|QDateTime|None = None) -> None:
         "Fetch rows from DB creating the sql select statement and filling the dataset"
         # select fields + primary key fields + object version field
-        fields = ", ".join([f"{i[FIELD]}" for i in self.columns]
+        # None fields (usually calculated fields) are converted to Null string
+        fields = ", ".join([f"{i[FIELD] or 'Null'}" for i in self.columns]
                            + [f"{i}" for i in self.primaryKey]
                            + [ovfield])
 
@@ -920,3 +900,149 @@ class TableModel(QAbstractTableModel):
                               [Qt.DisplayRole, Qt.EditRole])
         self.layoutChanged.emit()
         self.rowCountChanged.emit(self.rows)
+        
+       
+class PandasModel(QAbstractTableModel):
+    """A read-only model to interface a database view with pandas pivot dataframe"""
+
+    def __init__(self,parent=None):
+        QAbstractTableModel.__init__(self, parent)
+        self._dataframe = None
+        self._pivot = None
+        self.table = None # table or view name - string, subclass must define this
+        self.isCompanyTable = False # True if is a company table, subclass must define this
+        self.columns = None # model columns definition, subclass must define this
+        # Number of rows needed for column headers
+        #self.col_levels = dataframe.columns.nlevels if hasattr(dataframe.columns, 'nlevels') else 1
+        self.col_levels = 0
+        # Number of columns needed for row headers (index)
+        self.row_levels = 0 # updated by createPivot
+        
+    def select(self) -> None:
+        "Fetch rows from DB creating the sql select statement and filling the dataset"
+        # create a reverse dictionary for columns translation
+        self.trcolumns = {self.columns[i][0]: i for i in self.columns}
+        #print("Columns translation:", self.trcolumns)
+        script = f"SELECT {', '.join(self.columns.keys())}\nFROM {self.table}"
+        if self.isCompanyTable:
+            script += "\nWHERE company_id = system.pa_current_company();"
+        else:
+            script += ";"
+        print("**** PandasModel SELECT script ****\n", script)
+        try:
+            with appconn.cursor() as cur:
+                cur.execute(script)
+                df = pd.DataFrame(cur.fetchall(),
+                                  columns=[self.columns[i[0]][0] for i in cur.description])
+                #print(df.head())
+        except psycopg.Error as er:
+            raise PyAppDBError(er.diag.sqlstate, str(er))   
+        self._dataframe = df
+        # Number of columns needed for row headers (index)
+        #self.row_levels = df.index.nlevels if hasattr(df.index, 'nlevels') else 1
+        #print('Columns:', self._dataframe.columns)
+        
+    def filterEvent(self, value: str) -> None:
+        "Filter dataframe for a specific event description"
+        # re-generate dataframe from DB, undo previous filters
+        self.select()
+        if self._dataframe is None:
+            return
+        self._dataframe = self._dataframe[self._dataframe[self.columns['event'][0]] == value]
+        
+    def filterLike(self, column: str, value: str) -> None:
+        "Filter dataframe for a specific column value using like operator"
+        if self._dataframe is None:
+            return
+        if column not in self._dataframe.columns:
+            return
+        self._dataframe = self._dataframe[self._dataframe[column].astype(str).str.contains(value, na=False, case=False)]
+        
+    def getEvents(self) -> list:
+        "Return a list of distinct events description"
+        if self._dataframe is None:
+            return []
+        c = (self.columns.get('event') or (None,))[0] # index are translated for pivot use
+        return self._dataframe[c].dropna().unique().tolist()
+
+    def createPivot(self, rows: list, columns: list, values: list, aggfunc: dict, totals: bool) -> None:
+        "Create a pivot table from the dataframe"
+        if self._dataframe is None:
+            return
+        #print(self._dataframe.head())
+        self._pivot = pd.pivot_table(self._dataframe,
+                                    index=rows,
+                                    columns=columns,
+                                    values=values,
+                                    aggfunc=aggfunc,
+                                    fill_value=0.0,
+                                    margins=totals,
+                                    margins_name=_tr('Statistics','Totale Generale'))
+        logging.info(f"Pivot table created with {len(self._pivot)} rows and {len(self._pivot.columns)} columns")
+        print(self._pivot.head())
+        print(self._pivot.columns)
+        print(self._pivot.index.names)
+        #print(self._pivot.info())
+        # update col_levels
+        #self.col_levels = self._pivot.columns.nlevels if hasattr(self._pivot.columns, 'nlevels') else 1
+        #self.col_levels += totals
+        # update row_levels
+        self.row_levels = self._pivot.index.nlevels if hasattr(self._pivot.index, 'nlevels') else 1
+        self.row_levels += totals
+
+    def rowCount(self, parent: QModelIndex = QModelIndex()) -> int:
+        return self._pivot.shape[0] + self.col_levels
+
+    def columnCount(self, parent: QModelIndex = QModelIndex()) -> int:
+        return self._pivot.shape[1] + self.row_levels
+
+    def data(self, index: QModelIndex, role=Qt.DisplayRole):
+        if not index.isValid():
+            return None
+        header = self.headerData(index.column(), Qt.Horizontal, Qt.DisplayRole)
+        header = header.split('\n')[0]  # in case of multi-line header
+        dt = self.columns[self.trcolumns[header]][3]  # (name, type)
+        if role == Qt.TextAlignmentRole:
+            if dt in ('int', 'float', 'decimal2'):   
+                return Qt.AlignRight | Qt.AlignVCenter
+            return Qt.AlignLeft | Qt.AlignVCenter
+        
+        if role == Qt.DisplayRole:
+            r, c = index.row(), index.column()
+            # CASE 1: Top-Left Empty Corner
+            if r < self.col_levels and c < self.row_levels:
+                return ""
+            # CASE 2: Column Headers (Top rows)
+            if r < self.col_levels:
+                label = self._pivot.columns[c - self.row_levels]
+                return str(label[r]) if isinstance(label, tuple) else str(label)
+            # CASE 3: Row Headers (Left columns)
+            if c < self.row_levels:
+                label = self._pivot.index[r - self.col_levels]
+                return str(label[c]) if isinstance(label, tuple) else str(label)
+            # CASE 4: Actual Data Values
+            if dt == 'int':
+                return session['qlocale'].toString(int(self._pivot.iloc[r - self.col_levels, c - self.row_levels]))
+            elif dt in ('float', 'decimal2'):
+                return session['qlocale'].toString(float(self._pivot.iloc[r - self.col_levels, c - self.row_levels] or 0.0), 'f', 2)
+                #return f"{self._pivot.iloc[r - self.col_levels, c - self.row_levels]:.2f}"
+            else:
+                return str(self._pivot.iloc[r - self.col_levels, c - self.row_levels])
+        
+        return None
+
+    def headerData(self, section, orientation, role=Qt.DisplayRole):
+        if role == Qt.DisplayRole:
+            if orientation == Qt.Horizontal:
+                if section < self.row_levels:
+                    #print('Index;', self._pivot.index)
+                    return self._pivot.index.names[section]
+                # Column Names
+                col_label = self._pivot.columns[section - self.row_levels]
+                # If MultiIndex, join levels
+                return "\n".join(map(str, col_label)) if isinstance(col_label, tuple) else str(col_label)
+            
+            if orientation == Qt.Vertical:
+                return None
+        return None
+

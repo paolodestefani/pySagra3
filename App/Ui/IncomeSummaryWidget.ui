@@ -19,6 +19,9 @@
    </item>
    <item>
     <widget class="QCheckBox" name="checkBoxDetail">
+     <property name="focusPolicy">
+      <enum>Qt::FocusPolicy::StrongFocus</enum>
+     </property>
      <property name="text">
       <string>Show daily detail</string>
      </property>

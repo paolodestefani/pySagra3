@@ -256,15 +256,19 @@ defaultOptions = {'documentName': 'pyReportEngine document',
                   'defaultAspectRatio': 'KeepAspectRatio',
                   'quantityDecimals': 2,
                   'currencySymbol': '€',
-                  'trueSymbol': '\u25CF',   #'\u25CF'
-                  'falseSymbol': '\u25CB'   #'\u25CB'
+                  'trueSymbol': 'X',   #'\u25CF'
+                  'falseSymbol': 'O'   #'\u25CB'
                   }
 
 
 # code39 barcode characters
 CODE39CHRS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%'
 
-def code39(text, checksum=False):
+def code39encode(text, checksum=False):
+    "Calculate code39 barcode string with optional checksum"
+    # sanity check
+    if not text:
+        return
     chkchar = ''
     # sanity checks
     for i in text:
@@ -280,6 +284,40 @@ def code39(text, checksum=False):
                 raise ReportException('Not valid code39 chars')
         chkchar = CODE39CHRS[chknum % 43]
     return '*' + text + chkchar + '*'
+
+
+# Source - https://stackoverflow.com/a
+# Posted by Mark Ransom, modified by community. See post 'Timeline' for change history
+# Retrieved 2026-01-03, License - CC BY-SA 4.0
+
+def code128encode(s):
+    ''' Code 128 conversion for a font as described at
+        https://en.wikipedia.org/wiki/Code_128 and downloaded
+        from http://www.barcodelink.net/barcode-font.php
+        Only encodes ASCII characters, does not take advantage of
+        FNC4 for bytes with the upper bit set.
+        It does not attempt to optimize the length of the string,
+        Code B is the default to prefer lower case over control characters.
+        Coded for https://stackoverflow.com/q/52710760/5987
+    '''
+    s = s.encode('ascii').decode('ascii')
+    if s.isdigit() and len(s) % 2 == 0:
+        # use Code 128C, pairs of digits
+        codes = [105]
+        for i in range(0, len(s), 2):
+            codes.append(int(s[i:i+2], 10))
+    else:
+        # use Code 128B and shift for Code 128A
+        mapping = dict((chr(c), [98, c + 64] if c < 32 else [c - 32]) for c in range(128))
+        codes = [104]
+        for c in s:
+            codes.extend(mapping[c])
+    check_digit = (codes[0] + sum(i * x for i,x in enumerate(codes))) % 103
+    codes.append(check_digit)
+    codes.append(106) # stop code
+    chars = (b'\xd4' + bytes(range(33,126+1)) + bytes(range(200,211+1))).decode('latin-1')
+    return ''.join(chars[x] for x in codes)
+
 
 
 
@@ -317,49 +355,86 @@ class BaseRenderer():
 
     def textFormat(self):
         "Format text for check height and painting"
-        if isinstance(self.value, bool):
-            #text = '\u2713' if self.value else '\u2717'
-            #text = '\u2714' if self.value else '\u2718'
-            #text = '\u2705' if self.value else '\u274C'
-            #text = '\u25C9' if self.value else '\u25CB'
-            #text = '\u26AB' if self.value else '\u26AA'
-            #text = '\u25FC' if self.value else '\u25FB'
-            #text = '\u25CF' if self.value else '\u25CB'
-            text = self.trueSymbol if self.value else self.falseSymbol
-        elif isinstance(self.value, (int, float, decimal.Decimal)):
-            if self.fieldFormat:
-                if self.fieldFormat == 'currency':
-                    text = session['qlocale'].toCurrencyString(float(self.value),
-                                                               self.currencySymbol) # looks like int/decimal require a float conversion before currency string
-                elif self.fieldFormat == 'decimal2':
-                    text = session['qlocale'].toString(float(self.value),
-                                                       'f',
-                                                       2)
-                elif self.fieldFormat == 'quantity':
-                    text = session['qlocale'].toString(float(self.value),
-                                                       'f',
-                                                       self.quantityDecimals)
+        match self.value:
+            case bool():
+                text = self.trueSymbol if self.value else self.falseSymbol
+            case int() | float() | decimal.Decimal():
+                if self.fieldFormat:
+                    if self.fieldFormat == 'currency':
+                        text = session['qlocale'].toCurrencyString(float(self.value),
+                                                                   self.currencySymbol) # looks like int/decimal require a float conversion before currency string
+                    elif self.fieldFormat == 'decimal2':
+                        text = session['qlocale'].toString(float(self.value),
+                                                           'f',
+                                                           2)
+                    elif self.fieldFormat == 'quantity':
+                        text = session['qlocale'].toString(float(self.value),
+                                                           'f',
+                                                           self.quantityDecimals)
+                    else:
+                        # python string format for numbers f.e. '{0:.2f}'
+                        text = self.fieldFormat.format(self.value)
                 else:
-                    # python string format for numbers f.e. '{0:.2f}'
-                    text = self.fieldFormat.format(self.value)
-            else:
-                if isinstance(self.value, decimal.Decimal): # decimal without format
-                    text = session['qlocale'].toString(float(self.value), 'f', 2)
-                else: # qlocale format for numbers
-                    text = session['qlocale'].toString(self.value)
-        elif isinstance(self.value, (QDate, QDateTime, QTime)):
-            #print(session['qlocale'])
-            if self.fieldFormat: # qt string format f.e. 'dd.MM.yyyy'
-                text = self.value.toString(self.fieldFormat)
-            else:
-                text = session['qlocale'].toString(self.value, QLocale.FormatType.ShortFormat)
-        elif self.value is None:
-            text = ' ' # for painter.boundingRect a string NOT empty is required
-        else:
-            text = str(self.value)
-        if self.barcode == 'Code39':  # code39 format mmust be applied after any other text format
-            text = code39(text)
+                    if isinstance(self.value, decimal.Decimal): # decimal without format
+                        text = session['qlocale'].toString(float(self.value), 'f', 2)
+                    else: # qlocale format for numbers
+                        text = session['qlocale'].toString(self.value)
+            case QDate() | QDateTime() | QTime():
+                if self.fieldFormat: # qt string format f.e. 'dd.MM.yyyy'
+                    text = self.value.toString(self.fieldFormat)
+                else:
+                    text = session['qlocale'].toString(self.value, QLocale.FormatType.ShortFormat)
+            case str() if self.barcode == 'Code39':
+                text = code39encode(self.value) # None value, not an empty string, for barcode for print nothing 
+            case str() if self.barcode == 'Code128':
+                text = code128encode(self.value) # None value, not an empty string, for barcode for print nothing               
+            case _:
+                text = str(self.value or '') # None for string print empty string
+                
         return text
+    
+        # if isinstance(self.value, bool):
+        #     #text = '\u2713' if self.value else '\u2717'
+        #     #text = '\u2714' if self.value else '\u2718'
+        #     #text = '\u2705' if self.value else '\u274C'
+        #     #text = '\u25C9' if self.value else '\u25CB'
+        #     #text = '\u26AB' if self.value else '\u26AA'
+        #     #text = '\u25FC' if self.value else '\u25FB'
+        #     #text = '\u25CF' if self.value else '\u25CB'
+        #     text = self.trueSymbol if self.value else self.falseSymbol
+        # elif isinstance(self.value, (int, float, decimal.Decimal)):
+        #     if self.fieldFormat:
+        #         if self.fieldFormat == 'currency':
+        #             text = session['qlocale'].toCurrencyString(float(self.value),
+        #                                                        self.currencySymbol) # looks like int/decimal require a float conversion before currency string
+        #         elif self.fieldFormat == 'decimal2':
+        #             text = session['qlocale'].toString(float(self.value),
+        #                                                'f',
+        #                                                2)
+        #         elif self.fieldFormat == 'quantity':
+        #             text = session['qlocale'].toString(float(self.value),
+        #                                                'f',
+        #                                                self.quantityDecimals)
+        #         else:
+        #             # python string format for numbers f.e. '{0:.2f}'
+        #             text = self.fieldFormat.format(self.value)
+        #     else:
+        #         if isinstance(self.value, decimal.Decimal): # decimal without format
+        #             text = session['qlocale'].toString(float(self.value), 'f', 2)
+        #         else: # qlocale format for numbers
+        #             text = session['qlocale'].toString(self.value)
+        # elif isinstance(self.value, (QDate, QDateTime, QTime)):
+        #     #print(session['qlocale'])
+        #     if self.fieldFormat: # qt string format f.e. 'dd.MM.yyyy'
+        #         text = self.value.toString(self.fieldFormat)
+        #     else:
+        #         text = session['qlocale'].toString(self.value, QLocale.FormatType.ShortFormat)
+        # elif self.barcode == 'Code39':
+        #     text = code39encode(self.value) # None value, not an empty string, for barcode print nothing
+        # else:
+        #     #text = str(self.value or '')
+        #     text = self.value
+        # return text
 
     def checkHeight(self, bandOffset, bandHeight):
         "Returns the new band height if band can grow"
@@ -379,7 +454,7 @@ class BaseRenderer():
         # check text elements
         painter.save()
         painter.setFont(QFont(self.fontName, self.fontSize, self.fontWeight, self.fontItalic))
-        text = self.textFormat()
+        text = self.textFormat() or ' '  # for painter.boundingRect a string NOT empty is required
         flags = self.textAlign
         if self.canGrow:
             flags |= Qt.TextWordWrap
@@ -1611,12 +1686,13 @@ print(report.parameter['stringExample'])
         AElFTkSuQmCC</image>
     </pageBackground>
     <pageHeader>
-        <band height="80.0">
+        <band height="180.0">
             <special left="0.0" top="0.0" width="40.0" height="40.0">eventImage</special>
             <label left="460.0" top="4.0" width="30.0" height="16.0" textAlign="AlignLeft">Date:</label>
             <special left="480.0" top="4.0" width="70.0" height="16.0" textAlign="AlignRight">printDate</special>
-            <label left="0.0" top="20.0" width="550.0" height="38.0" color="blue" fontName="Impact" fontWeight="Bold" fontItalic="True" fontSize="24" textAlign="AlignHCenter">Ordered list of items</label>
-            <label left="280.0" top="0.0" width="120.0" height="20.0" fontName="Archon Code 39 Barcode" fontSize="12" textAlign="AlignHCenter" barcodeType="Code39">ABCDE1234</label>
+            <label left="0.0" top="40.0" width="550.0" height="38.0" color="blue" fontName="Impact" fontWeight="Bold" fontItalic="True" fontSize="24" textAlign="AlignHCenter">Ordered list of items</label>
+            <label left="280.0" top="0.0" width="200.0" height="60.0" fontName="Archon Code 39 Barcode" fontSize="36" textAlign="AlignHCenter" barcodeType="Code39">ABCD12345</label>
+            <label left="0.0" top="0.0" width="200.0" height="60.0" fontName="Code 128" fontSize="36" textAlign="AlignHCenter" barcodeType="Code128">ABCD12345</label>
             <label left="0.0" top="62.0" width="30.0" height="15.0" fontWeight="Bold">R.N.</label>
             <label left="30.0" top="62.0" width="100.0" height="15.0" fontWeight="Bold">Code</label>
             <label left="100.0" top="62.0" width="150.0" height="15.0" fontWeight="Bold">Description</label>

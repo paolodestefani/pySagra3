@@ -131,6 +131,7 @@ class Ui_OrderDialog2(object):
         self.checkBoxWebOrder = QCheckBox(OrderDialog2)
         self.checkBoxWebOrder.setObjectName(u"checkBoxWebOrder")
         self.checkBoxWebOrder.setEnabled(True)
+        self.checkBoxWebOrder.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
         self.checkBoxWebOrder.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
 
         self.horizontalLayout_4.addWidget(self.checkBoxWebOrder)
@@ -473,6 +474,7 @@ class Ui_OrderDialog2(object):
 
         self.checkBoxElectronicPayment = QCheckBox(self.groupBox_3)
         self.checkBoxElectronicPayment.setObjectName(u"checkBoxElectronicPayment")
+        self.checkBoxElectronicPayment.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
         self.gridLayout.addWidget(self.checkBoxElectronicPayment, 1, 3, 1, 1, Qt.AlignmentFlag.AlignHCenter)
 
@@ -543,7 +545,7 @@ class Ui_OrderDialog2(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollAreaWidgetContents = QWidget()
         self.scrollAreaWidgetContents.setObjectName(u"scrollAreaWidgetContents")
-        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 74, 16))
+        self.scrollAreaWidgetContents.setGeometry(QRect(0, 0, 98, 28))
         self.verticalLayout_19 = QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_19.setObjectName(u"verticalLayout_19")
         self.verticalLayout_19.setContentsMargins(0, 0, 0, 0)

@@ -37,14 +37,15 @@ from PySide6.QtCore import QTime
 from App.Database.Exceptions import PyAppDBError
 from App.Database.Utility import Record, RecordSet
 from App.Database.Connect import appconn
-from App.Database.Setting import SettingClass
+from App.Database.Setting import Setting
 from App.Database.Item import is_menu
 from App.Database.Item import get_menu_items
 from App.Database.Item import get_item_dep
 from App.Database.Item import has_stock_management
 from App.Database.Item import get_item_stock_level
 from App.Database.Item import get_item_desc
-from App.Database.Department import department_desc
+from App.Database.Department import get_department_desc
+from App.Database.Department import get_department_barcode
 from App.Database.Event import get_event_from_date
 
 
@@ -135,13 +136,13 @@ WHERE
         raise PyAppDBError(er.diag.sqlstate, str(er))
 
 
-def get_order_header_department_details(order_id):
-    "Returns params of the given order header department"
+def get_order_header_department_details(barcode):
+    "Returns params of the given order header department barcode"
     # actually we don't need to filter company_id as event_id is unique across companies
     script = """
 SELECT 
-    ohd.id,
-    oh.id,
+    ohd.order_header_department_id,
+    oh.order_header_id,
     oh.order_number,
     oh.order_date,
     oh.order_time,
@@ -152,21 +153,21 @@ SELECT
     dep.description,
     ohd.fullfillment_date
 FROM order_header_department ohd
-JOIN order_header oh ON ohd.order_header_department_id = oh.order_header_id
+JOIN order_header oh ON ohd.order_header_id = oh.order_header_id
 JOIN department dep ON ohd.department_id = dep.department_id
 WHERE 
-    company_id = system.pa_current_company()
-    AND ohd.order_header_department_id = %s;"""
+    ohd.company_id = system.pa_current_company()
+    AND ohd.barcode = %s;"""
     try:
         with appconn.cursor() as cur:
-            cur.execute(script, (order_id,))
+            cur.execute(script, (barcode,))
             return cur.fetchone()
     except psycopg.Error as er:
         raise PyAppDBError(er.diag.sqlstate, str(er))
 
 
 def update_order_header_department_status(order_id, mark=True):
-    "Set to true processed flag of given order header department id"
+    "Set to processed the given order header department id"
     # actually we don't need to filter company_id as order_id is unique across companies
     if mark:  # set datetime or null to unmark
         script = """
@@ -218,7 +219,7 @@ class Order():
         self.header['order_date'] = self.header['date_time'].date()
         self.header['order_time'] = self.header['date_time'].time()
         # set date, statistical date and date part
-        setting = SettingClass()
+        setting = Setting()
         # if time between 0.0.0 and lunch start time stat date is the day before date part is dinner
         if QTime(0, 0) <= self.header['order_time'] < QTime(setting['lunch_start_time'], 0):
             # dinner of the day before
@@ -262,25 +263,17 @@ class Order():
                         detail[n]['quantity'] += i['quantity']
             else:
                 detail.append(i.copy())
-        # assign department
-        for i in detail:
-            r = dict()
-            r['event_id'] = self.header['event_id']
-            r['department_id'] = get_item_dep(i['item_id'])
-            r['item_id'] = i['item_id']
-            r['variants'] = i['variants']
-            r['quantity'] = i['quantity']
-            linesdep.append(r)
         # generate headersdep and linesdep
         # compute used departments set and create headersdep
-        used_dep = {get_item_dep(i['item_id']) for i in detail} # set
-        used_dep_desc = [department_desc(i) for i in used_dep]
+        used_dep = {get_item_dep(i['item_id']) for i in detail}
+        used_dep_desc = [get_department_desc(i) for i in used_dep]
         for i in used_dep:
+            # dep header
             r = dict()
             r['department_id'] = i
             r['note'] = self.depnote.get(i)
             others = list(used_dep_desc)
-            others.remove(department_desc(i))
+            others.remove(get_department_desc(i))
             if others:
                 r['other_departments'] = ", ".join(others)
             else:
@@ -298,17 +291,35 @@ class Order():
             self.header.insert_record()
             t = self.header['order_header_id']
             ev = self.header['event_id']
-            for i in headersdep:
-                i['order_header_id'] = t
-            for i in self.lines:
-                i['order_header_id'] = t
-            for i in linesdep:
-                i['order_header_id'] = t
-                i['event_id'] = ev
-                i['event_date'] = self.header['stat_order_date']
-                i['day_part'] = self.header['stat_order_day_part']
-            headersdep.insert_records()
+            for r in headersdep:
+                r['order_header_id'] = t
+                # set barcode on header department if required
+                if setting['manage_order_progress']:
+                    # as we don't know header_department_id yet, we will create a unique barcode
+                    # based on department barcode + order_header_id padded to 9 digits
+                    r['barcode'] = f"{get_department_barcode(r['department_id'])}{t:09}"
+            for r in self.lines:
+                r['order_header_id'] = t
             self.lines.insert_records()
+            headersdep.insert_records()
+            for h in headersdep:
+                for i in detail:
+                    if get_item_dep(i['item_id']) == h['department_id']:
+                        r = dict()
+                        r['order_header_department_id'] = h['order_header_department_id']
+                        r['event_id'] = self.header['event_id']
+                        r['event_date'] = self.header['stat_order_date']
+                        r['day_part'] = self.header['stat_order_day_part']
+                        r['item_id'] = i['item_id']
+                         #[j['order_header_department_id'] for j in headersdep 
+                                                        #if j['department_id'] == get_item_dep(r['item_id'])][0]
+                        r['variants'] = i['variants']
+                        r['quantity'] = i['quantity']
+                        if setting['manage_order_progress']:
+                            r['ordered_quantity'] = i['quantity']
+                        else:
+                            r['delivered_quantity'] = i['quantity']
+                        linesdep.append(r)
             linesdep.insert_records()
         except PyAppDBError as er:
             appconn.rollback()

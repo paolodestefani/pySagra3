@@ -76,12 +76,26 @@ WHERE
     except psycopg.Error as er:
         raise PyAppDBError(er.diag.sqlstate, str(er))
 
-def department_desc(dep):
+def get_department_desc(dep):
     "Returns department description of given department id"
     script = """
 SELECT description 
 FROM department 
 WHERE department_id = %s;"""
+    try:
+        with appconn.cursor() as cur:
+            cur.execute(script, (dep,))
+            return cur.fetchone()[0]
+    except psycopg.Error as er:
+        raise PyAppDBError(er.diag.sqlstate, str(er))
+    
+def get_department_barcode(dep):
+    "Returns department barcode of given department id"
+    script = """
+SELECT chr(cast(count(*) + 64 as integer)) AS n 
+FROM company.department 
+WHERE department_id <= %s
+    AND company_id = system.pa_current_company();"""
     try:
         with appconn.cursor() as cur:
             cur.execute(script, (dep,))

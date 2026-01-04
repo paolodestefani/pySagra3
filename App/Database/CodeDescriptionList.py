@@ -163,7 +163,7 @@ def item_with_stock_control_cdl():
     "Items with stock control"
     return generic_cdl('item_id', 'description', 'item', 
                         ["item_type = 'I'", 
-                         "has_stock_control IS true", 
+                         "has_inventory_control IS true", 
                          "is_obsolete is false",
                          'company_id = system.pa_current_company()'])
 

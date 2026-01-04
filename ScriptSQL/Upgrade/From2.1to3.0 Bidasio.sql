@@ -6,10 +6,11 @@
 --
 -- 1 Clean previous import
 -- 2 Create users (in script) from user_ins of order_header
--- 3 Create a specific company (in script) numeber 30
+-- 3 Create a specific company (in script) number 30
 -- 4 Set default profile/medu/toolbar to all user for the company 30
--- 5 Import data
---
+-- 5 Import data disabling triggers for faster execution
+-- 6 Update inventory, ordered delivered and numbering
+-- 7 Reindex tables
 
 SET search_path = system, common, company;
 
@@ -117,7 +118,6 @@ ON CONFLICT DO NOTHING;
 DO $$ BEGIN RAISE NOTICE '% Set profile/menu/toolbar for users on company 30', clock_timestamp(); END; $$;
 
 
-
 --
 -- DISABLE TRIGGERS
 --
@@ -132,11 +132,16 @@ ALTER TABLE company.item_variant DISABLE TRIGGER t99_update_company_user_date;
 ALTER TABLE company.item_part DISABLE TRIGGER t99_update_company_user_date;
 ALTER TABLE company.price_list DISABLE TRIGGER t99_update_company_user_date;
 ALTER TABLE company.price_list_item DISABLE TRIGGER t99_update_company_user_date;
+ALTER TABLE company.order_header DISABLE TRIGGER t10_update_numbering;
 ALTER TABLE company.order_header DISABLE TRIGGER t99_update_company_user_date;
+ALTER TABLE company.order_header_department DISABLE TRIGGER t10_update_order_header_department;
 ALTER TABLE company.order_header_department DISABLE TRIGGER t99_update_company_user_date;
 ALTER TABLE company.order_line DISABLE TRIGGER t99_update_company_user_date;
-ALTER TABLE company.order_line_department DISABLE TRIGGER t10_order_line_to_unloaded;
+ALTER TABLE company.order_line_department DISABLE TRIGGER t10_order_line_to_inventory;
+ALTER TABLE company.order_line_department DISABLE TRIGGER t20_order_line_to_ordered_delivered;
 ALTER TABLE company.order_line_department DISABLE TRIGGER t99_update_company_user_date;
+ALTER TABLE company.items_inventory DISABLE TRIGGER t10_items_inventory_balance;
+ALTER TABLE company.items_inventory DISABLE TRIGGER t99_update_company_user_date;
 
 
 --
@@ -218,12 +223,12 @@ SELECT
 	b.id,				-- external_code
 	30,					-- company_id
 	c.printer_class_id,	-- class_id
-	computer,			-- computer
-	printer,			-- printer
-	user_ins,			-- created_by
-	date_ins,			-- created_at
-	user_upd,			-- updated_by
-	date_upd,			-- updated_at
+	b.computer,			-- computer
+	b.printer,			-- printer
+	b.user_ins,			-- created_by
+	b.date_ins,			-- created_at
+	b.user_upd,			-- updated_by
+	b.date_upd,			-- updated_at
 	0					-- object_version
 FROM bidasio.printer_class_printer b
 JOIN company.printer_class c ON b.class_id = c.external_code AND c.company_id = 30;
@@ -343,14 +348,12 @@ SET lunch_start_time = par.lunch_start_time,
 	table_list_font_size = par.table_list_font_size,
 	check_inactivity = par.check_inactivity,
 	inactivity_time = par.inactivity_time,
-	stock_unload_automatic_update = par.stock_unload_automatic_update,
-	stock_unload_update_interval = par.stock_unload_update_interval,
-	print_stock_unload_report = par.print_stock_unload_report,
-	stock_unload_copies = par.stock_unload_copies,
-	stock_unload_report = par.stock_unload_report,
-	stock_unload_printer_class = par.stock_unload_printer_class,
-	num_orders_for_start_stock_unload = par.num_orders_for_start_stock_unload,
-	num_orders_for_next_stock_unload = par.num_orders_for_next_stock_unload,
+	ordered_delivered_automatic_update = par.stock_unload_automatic_update,
+	ordered_delivered_update_interval = par.stock_unload_update_interval,
+	print_ordered_delivered_report = par.print_stock_unload_report,
+	ordered_delivered_copies = par.stock_unload_copies,
+	ordered_delivered_report = par.stock_unload_report,
+	ordered_delivered_printer_class = par.stock_unload_printer_class,
 	quantity_decimal_places = par.quantity_decimal_places,
 	currency_symbol = par.currency_symbol
 FROM par
@@ -476,8 +479,8 @@ INSERT INTO company.item (
 	normal_background_color,
 	normal_text_color,
 	has_variants,
-	has_stock_control,
-	has_unload_control,
+	has_inventory_control,
+	has_delivered_control,
 	is_kit_part,
 	is_menu_part,
 	is_salable,
@@ -499,8 +502,8 @@ SELECT
 	b.sorting,					-- sorting
 	b.pos_row,					-- pos_row
 	b.pos_column,				-- pos_column
-	b.normal_background_color,	-- normal_background_color
-	b.normal_text_color,		-- normal_text_color
+	upper(b.normal_background_color),		-- normal_background_color
+	upper(b.normal_text_color),				-- normal_text_color
 	b.has_variants,				-- has_variants
 	b.has_stock_control,		-- has_stock_control
 	b.has_unload_control,		-- has_unload_control
@@ -653,6 +656,39 @@ LEFT JOIN company.price_list l ON b.id_price_list = l.external_code AND l.compan
 LEFT JOIN company.item i ON b.item = i.external_code AND i.company_id = 30;
 
 DO $$ BEGIN RAISE NOTICE '% Imported price list items', clock_timestamp(); END; $$;
+
+
+--
+-- Import inventory
+--
+
+INSERT INTO company.items_inventory (
+	external_code,
+	company_id,
+	event_id, 
+	item_id, 
+	loaded,
+	created_by,
+	created_at,
+	updated_by,
+	updated_at,
+	object_version)
+SELECT
+    b.id,				-- external_code
+	30, 				-- company_id
+	e.event_id,			-- event_id
+	i.item_id,	 		-- item_id
+    b.loaded,			-- loaded
+    b.user_ins,			-- created_by
+    b.date_ins,			-- created_at
+    b.user_upd,			-- updated_by
+    b.date_upd,			-- updated_at
+    0 					-- object_version
+FROM bidasio.stock_inventory b
+LEFT JOIN company.event e ON b.event = e.external_code AND e.company_id = 30
+LEFT JOIN company.item i ON b.item = i.external_code AND i.company_id = 30;
+
+DO $$ BEGIN RAISE NOTICE '% Imported items inventory', clock_timestamp(); END; $$;
 
 
 -- 
@@ -810,11 +846,10 @@ DO $$ BEGIN RAISE NOTICE '% BEGIN Import order line departments', clock_timestam
 INSERT INTO company.order_line_department (
 	external_code,
 	company_id,
-	order_header_id, 
+	order_header_department_id, 
 	event_id, 
 	event_date, 
 	day_part, 
-	department_id, 
 	item_id, 
 	variants,
 	quantity,
@@ -826,11 +861,10 @@ INSERT INTO company.order_line_department (
 SELECT 
 	b.id,				-- external_code
 	30,					-- company_id
-	h.order_header_id,	-- header_id
+	x.order_header_department_id,	-- order_header_department_id
 	e.event_id,			-- event_id
 	b.event_date,		-- event_date
 	b.day_part,			-- day_part
-	d.department_id,	-- department_id
 	i.item_id,			-- item_id
 	b.variants,			-- variants
 	b.quantity,			-- quantity
@@ -843,6 +877,7 @@ FROM bidasio.order_detail_department b
 LEFT JOIN company.order_header h ON b.id_header = h.external_code AND h.company_id = 30
 LEFT JOIN company.event e ON b.event = e.external_code AND e.company_id = 30
 LEFT JOIN company.department d ON b.department = d.external_code AND d.company_id = 30
+LEFT JOIN company.order_header_department x ON h.order_header_id = x.order_header_id AND d.department_id = x.department_id
 LEFT JOIN company.item i ON b.item = i.external_code AND i.company_id = 30;
 
 DO $$ BEGIN RAISE NOTICE '% END Import order line departments', clock_timestamp(); END; $$;
@@ -851,10 +886,10 @@ DO $$ BEGIN RAISE NOTICE '% END Import order line departments', clock_timestamp(
 
 
 --
--- update unloads and numbering
+-- update inventory, ordered delivered and numbering
 --
 
-DO $$ BEGIN RAISE NOTICE '% BEGIN Update unloads and numbering', clock_timestamp(); END; $$;
+DO $$ BEGIN RAISE NOTICE '% BEGIN Update inventory, ordered delivered and numbering', clock_timestamp(); END; $$;
 
 DO $$
 DECLARE
@@ -866,15 +901,18 @@ BEGIN
 				WHERE company_id = 30
 				ORDER BY event_id
 	LOOP
+		RAISE NOTICE '% BEGIN    Event %', clock_timestamp(), i;
 		PERFORM company.numbering_rebuild(i);
-		PERFORM company.unload_rebuild(i);
+		PERFORM company.inventory_rebuild(i);
+		PERFORM company.ordered_delivered_rebuild(i);
+		RAISE NOTICE '% END      Event %', clock_timestamp(), i;
 	END LOOP;
 	
 END;
 $$
 language plpgsql;
 
-DO $$ BEGIN RAISE NOTICE '% END Update unloads and numbering', clock_timestamp(); END; $$;
+DO $$ BEGIN RAISE NOTICE '% END Update inventory, ordered delivered and numbering', clock_timestamp(); END; $$;
 
 
 --
@@ -891,11 +929,26 @@ ALTER TABLE company.item_variant ENABLE TRIGGER t99_update_company_user_date;
 ALTER TABLE company.item_part ENABLE TRIGGER t99_update_company_user_date;
 ALTER TABLE company.price_list ENABLE TRIGGER t99_update_company_user_date;
 ALTER TABLE company.price_list_item ENABLE TRIGGER t99_update_company_user_date;
+ALTER TABLE company.order_header ENABLE TRIGGER t10_update_numbering;
 ALTER TABLE company.order_header ENABLE TRIGGER t99_update_company_user_date;
+ALTER TABLE company.order_header_department ENABLE TRIGGER t10_update_order_header_department;
 ALTER TABLE company.order_header_department ENABLE TRIGGER t99_update_company_user_date;
 ALTER TABLE company.order_line ENABLE TRIGGER t99_update_company_user_date;
-ALTER TABLE company.order_line_department ENABLE TRIGGER t10_order_line_to_unloaded;
+ALTER TABLE company.order_line_department ENABLE TRIGGER t10_order_line_to_inventory;
+ALTER TABLE company.order_line_department ENABLE TRIGGER t20_order_line_to_ordered_delivered;
 ALTER TABLE company.order_line_department ENABLE TRIGGER t99_update_company_user_date;
+ALTER TABLE company.items_inventory ENABLE TRIGGER t10_items_inventory_balance;
+ALTER TABLE company.items_inventory ENABLE TRIGGER t99_update_company_user_date;
+
+
+--
+-- rebuild main index
+--
+
+REINDEX TABLE company.order_header;
+REINDEX TABLE company.order_header_department;
+REINDEX TABLE company.order_line;
+REINDEX TABLE company.order_line_department;
 
 -- END
 

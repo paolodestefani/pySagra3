@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AnalysisWidget</class>
+ <widget class="QWidget" name="AnalysisWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>765</width>
+    <height>517</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_6">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,1">
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QGroupBox" name="groupBoxValues">
+         <property name="title">
+          <string>Values</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <layout class="QGridLayout" name="gridLayout_3">
+            <item row="0" column="1">
+             <widget class="QComboBox" name="comboBoxFunction1"/>
+            </item>
+            <item row="0" column="0">
+             <widget class="QComboBox" name="comboBoxValue1"/>
+            </item>
+            <item row="2" column="2">
+             <widget class="QComboBox" name="comboBoxSort2"/>
+            </item>
+            <item row="0" column="2">
+             <widget class="QComboBox" name="comboBoxSort1"/>
+            </item>
+            <item row="2" column="1">
+             <widget class="QComboBox" name="comboBoxFunction2"/>
+            </item>
+            <item row="2" column="0">
+             <widget class="QComboBox" name="comboBoxValue2"/>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBoxRow">
+         <property name="title">
+          <string>Row</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <layout class="QGridLayout" name="gridLayout_2">
+            <item row="0" column="0">
+             <widget class="QComboBox" name="comboBoxRow1"/>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLineEdit" name="lineEditRow1"/>
+            </item>
+            <item row="1" column="0">
+             <widget class="QComboBox" name="comboBoxRow2"/>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLineEdit" name="lineEditRow2"/>
+            </item>
+            <item row="2" column="0">
+             <widget class="QComboBox" name="comboBoxRow3"/>
+            </item>
+            <item row="2" column="1">
+             <widget class="QLineEdit" name="lineEditRow3"/>
+            </item>
+            <item row="3" column="0">
+             <widget class="QComboBox" name="comboBoxRow4"/>
+            </item>
+            <item row="3" column="1">
+             <widget class="QLineEdit" name="lineEditRow4"/>
+            </item>
+            <item row="4" column="0">
+             <widget class="QComboBox" name="comboBoxRow5"/>
+            </item>
+            <item row="4" column="1">
+             <widget class="QLineEdit" name="lineEditRow5"/>
+            </item>
+            <item row="5" column="0">
+             <widget class="QComboBox" name="comboBoxRow6"/>
+            </item>
+            <item row="5" column="1">
+             <widget class="QLineEdit" name="lineEditRow6"/>
+            </item>
+            <item row="6" column="0">
+             <widget class="QComboBox" name="comboBoxRow7"/>
+            </item>
+            <item row="6" column="1">
+             <widget class="QLineEdit" name="lineEditRow7"/>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Orientation::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>36</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <item>
+        <widget class="QGroupBox" name="groupBoxColumn">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="title">
+          <string>Column</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <item>
+             <layout class="QGridLayout" name="gridLayout">
+              <item row="0" column="0">
+               <widget class="QComboBox" name="comboBoxColumn1"/>
+              </item>
+              <item row="0" column="1">
+               <widget class="QComboBox" name="comboBoxColumn2"/>
+              </item>
+              <item row="0" column="2">
+               <widget class="QComboBox" name="comboBoxColumn3"/>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLineEdit" name="lineEditColumn1"/>
+              </item>
+              <item row="1" column="1">
+               <widget class="QLineEdit" name="lineEditColumn2"/>
+              </item>
+              <item row="1" column="2">
+               <widget class="QLineEdit" name="lineEditColumn3"/>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer">
+              <property name="orientation">
+               <enum>Qt::Orientation::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>38</width>
+                <height>17</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="EnhancedTableView" name="tableView"/>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QPushButton" name="pushButtonShowApply">
+       <property name="font">
+        <font>
+         <italic>false</italic>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton#pushButtonShowApply {
+	border: 2px solid blue;
+	border-radius: 5px;
+	padding: 4px 8px;
+}</string>
+       </property>
+       <property name="text">
+        <string>Apply/Refresh</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Analysis</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="comboBoxAnalysis"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Event:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="comboBoxEvent"/>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="checkBoxTotal">
+       <property name="text">
+        <string>Totals</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>EnhancedTableView</class>
+   <extends>QTableView</extends>
+   <header>App.Widget.View</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

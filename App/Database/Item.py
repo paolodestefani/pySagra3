@@ -63,13 +63,13 @@ SELECT
     price,
     pos_row,
     pos_column,
-    has_stock_control,
-    has_unload_control,
+    has_inventory_control,
+    has_delivered_control,
     normal_text_color,
     normal_background_color,
     has_variants,
-    quantity
-FROM item_availability_detail
+    available
+FROM vw_item_availability
 WHERE 
     company_id = system.pa_current_company() 
     AND is_salable IS true 
@@ -92,7 +92,7 @@ SELECT
     price,
     is_available,
     has_variants
-FROM item_availability_detail
+FROM vw_item_availability
 WHERE 
     company_id = system.pa_current_company() 
     AND is_salable IS true 
@@ -164,7 +164,7 @@ def has_stock_management(item_id):
     # actually we don't need to filter company_id as item_id is unique across companies
     script = """
 SELECT 
-    has_stock_control 
+    has_inventory_control 
 FROM item 
 WHERE
     company_id = system.pa_current_company()
@@ -236,8 +236,8 @@ def get_item_stock_level(event_id, item_id):
     # actually we don't need to filter company_id as event_id and item_id are unique across companies
     script = """
 SELECT 
-    quantity 
-FROM item_availability_detail 
+    available 
+FROM vw_item_availability 
 WHERE
     company_id = system.pa_current_company()
     AND event_id = %s 
@@ -257,8 +257,8 @@ def kit_availability(event_id):
 SELECT 
     item_id,
     item_description,
-    quantity
-FROM item_availability_detail
+    available
+FROM vw_item_availability
 WHERE
     company_id = system.pa_current_company()
     AND item_type = 'K' 
@@ -273,9 +273,9 @@ WHERE
 def menu_availability(event_id):
     script = """
 SELECT 
-    item_id
-    quantity
-FROM item_availability_detail
+    item_id,
+    available
+FROM vw_item_availability
 WHERE
     company_id = system.pa_current_company()
     AND item_type = 'M' 
@@ -286,3 +286,4 @@ WHERE
             return cur.fetchall()
     except psycopg.Error as er:
         raise PyAppDBError(er.diag.sqlstate, str(er))
+    

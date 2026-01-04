@@ -75,6 +75,7 @@ class Ui_UserWidget(object):
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
         self.comboBoxL10n = RelationalComboBox(self.groupBox_2)
         self.comboBoxL10n.setObjectName(u"comboBoxL10n")
+        self.comboBoxL10n.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
         self.comboBoxL10n.setEditable(False)
 
         self.verticalLayout_5.addWidget(self.comboBoxL10n)
@@ -96,6 +97,7 @@ class Ui_UserWidget(object):
 
         self.checkBoxIsAdmin = QCheckBox(self.page)
         self.checkBoxIsAdmin.setObjectName(u"checkBoxIsAdmin")
+        self.checkBoxIsAdmin.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
         self.horizontalLayout_2.addWidget(self.checkBoxIsAdmin)
 
@@ -105,16 +107,19 @@ class Ui_UserWidget(object):
 
         self.checkBoxCanEditViews = QCheckBox(self.page)
         self.checkBoxCanEditViews.setObjectName(u"checkBoxCanEditViews")
+        self.checkBoxCanEditViews.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
         self.horizontalLayout_2.addWidget(self.checkBoxCanEditViews)
 
         self.checkBoxCanEditSortFilters = QCheckBox(self.page)
         self.checkBoxCanEditSortFilters.setObjectName(u"checkBoxCanEditSortFilters")
+        self.checkBoxCanEditSortFilters.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
         self.horizontalLayout_2.addWidget(self.checkBoxCanEditSortFilters)
 
         self.checkBoxCanEditReports = QCheckBox(self.page)
         self.checkBoxCanEditReports.setObjectName(u"checkBoxCanEditReports")
+        self.checkBoxCanEditReports.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
         self.horizontalLayout_2.addWidget(self.checkBoxCanEditReports)
 
@@ -264,6 +269,7 @@ class Ui_UserWidget(object):
 
         self.checkBoxForcePasswordChange = QCheckBox(self.groupBox_3)
         self.checkBoxForcePasswordChange.setObjectName(u"checkBoxForcePasswordChange")
+        self.checkBoxForcePasswordChange.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
         self.verticalLayout.addWidget(self.checkBoxForcePasswordChange)
 

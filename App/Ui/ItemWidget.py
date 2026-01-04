@@ -88,26 +88,31 @@ class Ui_ItemWidget(object):
         self.gridLayout.setObjectName(u"gridLayout")
         self.checkBoxKitPart = QCheckBox(self.page)
         self.checkBoxKitPart.setObjectName(u"checkBoxKitPart")
+        self.checkBoxKitPart.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
         self.gridLayout.addWidget(self.checkBoxKitPart, 1, 0, 1, 1)
 
         self.checkBoxStockControl = QCheckBox(self.page)
         self.checkBoxStockControl.setObjectName(u"checkBoxStockControl")
+        self.checkBoxStockControl.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
         self.gridLayout.addWidget(self.checkBoxStockControl, 0, 0, 1, 1)
 
         self.checkBoxMenuPart = QCheckBox(self.page)
         self.checkBoxMenuPart.setObjectName(u"checkBoxMenuPart")
+        self.checkBoxMenuPart.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
         self.gridLayout.addWidget(self.checkBoxMenuPart, 1, 1, 1, 1)
 
         self.checkBoxUnloadControl = QCheckBox(self.page)
         self.checkBoxUnloadControl.setObjectName(u"checkBoxUnloadControl")
+        self.checkBoxUnloadControl.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
         self.gridLayout.addWidget(self.checkBoxUnloadControl, 0, 1, 1, 1)
 
         self.checkBoxObsolete = QCheckBox(self.page)
         self.checkBoxObsolete.setObjectName(u"checkBoxObsolete")
+        self.checkBoxObsolete.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
         self.gridLayout.addWidget(self.checkBoxObsolete, 0, 2, 1, 1)
 
@@ -121,6 +126,7 @@ class Ui_ItemWidget(object):
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.checkBoxSalable = QCheckBox(self.page)
         self.checkBoxSalable.setObjectName(u"checkBoxSalable")
+        self.checkBoxSalable.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
         self.horizontalLayout_3.addWidget(self.checkBoxSalable)
 
@@ -197,6 +203,7 @@ class Ui_ItemWidget(object):
 
         self.checkBoxWebAvailable = QCheckBox(self.page)
         self.checkBoxWebAvailable.setObjectName(u"checkBoxWebAvailable")
+        self.checkBoxWebAvailable.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
         self.horizontalLayout_3.addWidget(self.checkBoxWebAvailable)
 
@@ -221,6 +228,7 @@ class Ui_ItemWidget(object):
         self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
         self.checkBoxVariants = QCheckBox(self.page)
         self.checkBoxVariants.setObjectName(u"checkBoxVariants")
+        self.checkBoxVariants.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
         self.horizontalLayout_5.addWidget(self.checkBoxVariants)
 

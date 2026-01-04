@@ -46,15 +46,16 @@ from App.Database.Setting import Setting
 from App.Database.Printer import get_printer_name
 from App.Database.Department import get_department_printer_class
 from App.Database.Department import department_list
-from App.Database.Department import department_desc
+from App.Database.Department import get_department_desc
 from App.Database.Models import OrderHeaderIndexModel
 from App.Database.Models import OrderHeaderModel
 from App.Database.Models import OrderHeaderDepartmentModel
 from App.Database.Models import OrderLineModel
-from App.Database.Models import OrderLineDepartmentModel
+from App.Database.Models import OrderDepartmentTreeModel
 from App.Database.CodeDescriptionList import item_all_cdl
 from App.Database.CodeDescriptionList import department_cdl
 from App.Widget.Dialog import PrintDialog
+from App.Widget.Delegate import GenericDelegate
 from App.Widget.Delegate import QuantityDelegate
 from App.Widget.Delegate import AmountDelegate
 from App.Widget.Delegate import RelationDelegate
@@ -78,17 +79,17 @@ from App.Report.Order import printOrderDepartmentReport
 
 # model order header
 (ID, EVENT, DATETIME, NUMBER, DATE, TIME, STATDATE, STATDAYPART, CASHDESK,
- DELIVERY, EP, TABLE, CUSTOMER, COVERS, AMOUNT, DISCOUNT, CASH, CHANGE,
- STATUS, FULLFILLMENT) = range(20)
+ DELIVERY, EP, FW, TABLE, CUSTOMER, CONTACT, COVERS, AMOUNT, DISCOUNT, CASH, CHANGE,
+ STATUS, FULLFILLMENT, USER_INS, DATE_INS, USER_UPD, DATE_UPD) = range(26)
 
 # model order header department
-(P_ID, P_IDHEADER, P_DEPARTMENT, P_NOTE, P_OTHER, P_FULLFILLMENT) = range(6)
+(P_ID, P_IDHEADER, P_DEPARTMENT, P_NOTE, P_OTHER, P_BARCODE, P_FULLFILLMENT) = range(7)
 
 # model order detail
 (D_ID, D_IDHEADER, D_ITEM, D_VARIANTS, D_QUANTITY, D_PRICE, D_AMOUNT) = range(7)
 
 # model order detail department
-(M_ID, M_IDHEADER, M_EVENT, M_DATE, M_DAYPART, M_DEPARTMENT, M_ITEM, M_VARIANTS, M_QUANTITY) = range(9)
+(M_ID, M_IDHEADER, M_EVENT, M_DATE, M_DAYPART, M_ITEM, M_VARIANTS, M_QUANTITY) = range(8)
 
 
 def orderArchive(auth):
@@ -117,11 +118,12 @@ class OrderForm(FormIndexManager):
         idxModel = OrderHeaderIndexModel(self)
         modelHeaDep = OrderHeaderDepartmentModel(self)
         modelDet = OrderLineModel(self)
-        modelDetDep = OrderLineDepartmentModel(self)
+        modelTreeDep = OrderDepartmentTreeModel(self)
+        #modelTreeDep.select()
         self.setModel(model, idxModel)
         self.addDetailRelation(modelHeaDep, ID, P_IDHEADER)
         self.addDetailRelation(modelDet, ID, D_IDHEADER)
-        self.addDetailRelation(modelDetDep, ID, M_IDHEADER)
+        self.addDetailRelation(modelTreeDep, ID, 0)
         self.tabName = title
         self.helpLink = None
         # available status
@@ -150,6 +152,7 @@ class OrderForm(FormIndexManager):
         self.ui.comboBoxDelivery.setItemList((('T', _tr('OrderArchive', 'Table')),
                                               ('A', _tr('OrderArchive', 'Take-away'))))
         self.mapper.addMapping(self.ui.checkBoxElectronicPayment, EP)
+        self.mapper.addMapping(self.ui.checkBoxWebOrder, FW)
         self.mapper.addMapping(self.ui.comboBoxDelivery, DELIVERY, b"modelDataStr")
         self.mapper.addMapping(self.ui.lineEditTableNumber, TABLE)
         self.mapper.addMapping(self.ui.spinBoxCovers, COVERS)
@@ -158,6 +161,7 @@ class OrderForm(FormIndexManager):
         self.mapper.addMapping(self.ui.doubleSpinBoxCash, CASH, b"modelDataDecimal")
         self.mapper.addMapping(self.ui.doubleSpinBoxChange, CHANGE, b"modelDataDecimal")
         self.mapper.addMapping(self.ui.lineEditCustomerName, CUSTOMER)
+        self.mapper.addMapping(self.ui.lineEditCustomerContact, CONTACT)
         self.ui.comboBoxStatus.setItemList((('A', _tr('OrderArchive', 'Acquired')),
                                                 ('I', _tr('OrderArchive', 'In progress')),
                                                 ('P', _tr('OrderArchive', 'Processed'))))
@@ -171,15 +175,18 @@ class OrderForm(FormIndexManager):
         self.ui.tableViewDetails.setItemDelegateForColumn(D_PRICE, AmountDelegate(self))
         self.ui.tableViewDetails.setItemDelegateForColumn(D_AMOUNT, AmountDelegate(self))
         # details department tableView
-        self.ui.tableViewDepartmentDetails.setModel(modelDetDep)
-        self.ui.tableViewDepartmentDetails.setLayoutName('orderArchiveDepartmentDetail')
-        self.ui.tableViewDepartmentDetails.setItemDelegateForColumn(M_DEPARTMENT, RelationDelegate(self, department_cdl))
-        self.ui.tableViewDepartmentDetails.setItemDelegateForColumn(M_ITEM, RelationDelegate(self, item_all_cdl))
-        self.ui.tableViewDepartmentDetails.setItemDelegateForColumn(M_QUANTITY, QuantityDelegate(self))
+        self.ui.treeViewDepartmentDetails.setModel(modelTreeDep)
+        self.ui.treeViewDepartmentDetails.setItemDelegate(GenericDelegate(self))
+        #self.ui.treeViewDepartmentDetails.hideColumn(0)
+        #self.ui.treeViewDepartmentDetails.hideColumn(1)
+        #self.ui.tableViewDepartmentDetails.setLayoutName('orderArchiveDepartmentDetail')
+        #self.ui.tableViewDepartmentDetails.setItemDelegateForColumn(M_DEPARTMENT, RelationDelegate(self, department_cdl))
+        #self.ui.tableViewDepartmentDetails.setItemDelegateForColumn(M_ITEM, RelationDelegate(self, item_all_cdl))
+        #self.ui.tableViewDepartmentDetails.setItemDelegateForColumn(M_QUANTITY, QuantityDelegate(self))
         # header department tableView
         self.ui.tableViewDepartmentHeader.setModel(modelHeaDep)
         self.ui.tableViewDepartmentHeader.setLayoutName('orderArchiveDepartmentHeader')
-        self.ui.tableViewDepartmentHeader.setItemDelegateForColumn(P_DEPARTMENT, RelationDelegate(self, department_cdl))
+        #self.ui.tableViewDepartmentHeader.setItemDelegateForColumn(P_DEPARTMENT, RelationDelegate(self, department_cdl))
         #self.ui.tableViewDepartmentHeader.setItemDelegateForColumn(HDPRINTED, BooleanDelegate(self))
         # store setting on form creation
         self.setting = Setting()
@@ -202,6 +209,7 @@ class OrderForm(FormIndexManager):
 
     def updateDepartmentViewSpan(self):
         "Set span (aggregate department rows) for department details"
+        return
         model = self.ui.tableViewDepartmentDetails.model()
         rows = model.rowCount()
         # reset span
@@ -306,6 +314,12 @@ class OrderForm(FormIndexManager):
                 if self.depCopy[i].isChecked():
                     prncls = get_department_printer_class(i)
                     if not prncls:
+                        msg = _tr('OrderArchive',
+                                  "No printer class set for this department, skipping")
+                        QMessageBox.warning(self,
+                                            _tr('MessageDialog', "Warning"),
+                                            msg)
+                        self.depCopy[i].setChecked(False)
                         continue
                     printer = get_printer_name(prncls, session['hostname'])
                     if not printer:
@@ -314,7 +328,7 @@ class OrderForm(FormIndexManager):
                                   "and department {}\nGenerating a print preview")
                         QMessageBox.warning(self,
                                             _tr('MessageDialog', "Warning"),
-                                            msg.format(department_desc(i)))
+                                            msg.format(get_department_desc(i)))
                     try:
                         printOrderDepartmentReport(ti, i, printer)
                     except ReportNoDataError:

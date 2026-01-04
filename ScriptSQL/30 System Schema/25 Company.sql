@@ -118,13 +118,14 @@ BEGIN
         USING HINT = 'Disconnect users from this company', ERRCODE = 'PA013';
 	END IF;
 	-- delete some table first, shoul be faster
-	--DELETE FROM company.stock_unload WHERE company_id = in_company;
-	--DELETE FROM company.stock_inventory WHERE company_id = in_company;
+	DELETE FROM company.items_ordered_delivered WHERE company_id = in_company;
+	DELETE FROM company.items_inventory WHERE company_id = in_company;
 	-- disable triggers
-	ALTER TABLE company.order_line_department DISABLE TRIGGER t10_order_line_to_unloaded;
+	ALTER TABLE company.order_line_department DISABLE TRIGGER t10_order_line_to_inventory;
+    ALTER TABLE company.order_line_department DISABLE TRIGGER t20_order_line_to_ordered_delivered;
 	ALTER TABLE company.order_line_department DISABLE TRIGGER t99_update_company_user_date;
 	ALTER TABLE company.order_line DISABLE TRIGGER t99_update_company_user_date;
-	ALTER TABLE company.order_header_department DISABLE TRIGGER t10_update_order_header_status;
+	ALTER TABLE company.order_header_department DISABLE TRIGGER t10_update_order_header_department;
 	ALTER TABLE company.order_header_department DISABLE TRIGGER t99_update_company_user_date;
 	ALTER TABLE company.order_header DISABLE TRIGGER t10_update_numbering;
 	ALTER TABLE company.order_header DISABLE TRIGGER t99_update_company_user_date;
@@ -133,10 +134,11 @@ BEGIN
 	DELETE FROM system.company WHERE company_id = in_company;
 	
     -- ri-enable triggers
-	ALTER TABLE company.order_line_department ENABLE TRIGGER t10_order_line_to_unloaded;
+	ALTER TABLE company.order_line_department ENABLE TRIGGER t10_order_line_to_inventory;
+    ALTER TABLE company.order_line_department ENABLE TRIGGER t20_order_line_to_ordered_delivered;
 	ALTER TABLE company.order_line_department ENABLE TRIGGER t99_update_company_user_date;
 	ALTER TABLE company.order_line ENABLE TRIGGER t99_update_company_user_date;
-	ALTER TABLE company.order_header_department ENABLE TRIGGER t10_update_order_header_status;
+	ALTER TABLE company.order_header_department ENABLE TRIGGER t10_update_order_header_department;
 	ALTER TABLE company.order_header_department ENABLE TRIGGER t99_update_company_user_date;
 	ALTER TABLE company.order_header ENABLE TRIGGER t10_update_numbering;
 	ALTER TABLE company.order_header ENABLE TRIGGER t99_update_company_user_date;
@@ -159,8 +161,8 @@ BEGIN
 		['company.printer_class', 'printer_class_id'],
 		['company.printer_class_printer', 'printer_class_printer_id'],
 		['company.stand_table', 'stand_table_id'],
-		['company.stock_inventory', 'stock_inventory_id'],
-		['company.stock_unload', 'stock_unload_id'],
+		['company.items_inventory', 'items_inventory_id'],
+		['company.items_ordered_delivered', 'items_ordered_delivered_id'],
 		['company.web_order_header', 'web_order_header_id'],
 		['company.web_order_line', 'web_order_line_id']
 		] LOOP

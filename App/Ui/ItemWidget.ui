@@ -70,6 +70,9 @@
           <layout class="QGridLayout" name="gridLayout">
            <item row="1" column="0">
             <widget class="QCheckBox" name="checkBoxKitPart">
+             <property name="focusPolicy">
+              <enum>Qt::FocusPolicy::StrongFocus</enum>
+             </property>
              <property name="text">
               <string>Kit part</string>
              </property>
@@ -77,6 +80,9 @@
            </item>
            <item row="0" column="0">
             <widget class="QCheckBox" name="checkBoxStockControl">
+             <property name="focusPolicy">
+              <enum>Qt::FocusPolicy::StrongFocus</enum>
+             </property>
              <property name="text">
               <string>Stock control</string>
              </property>
@@ -84,6 +90,9 @@
            </item>
            <item row="1" column="1">
             <widget class="QCheckBox" name="checkBoxMenuPart">
+             <property name="focusPolicy">
+              <enum>Qt::FocusPolicy::StrongFocus</enum>
+             </property>
              <property name="text">
               <string>Menu part</string>
              </property>
@@ -91,6 +100,9 @@
            </item>
            <item row="0" column="1">
             <widget class="QCheckBox" name="checkBoxUnloadControl">
+             <property name="focusPolicy">
+              <enum>Qt::FocusPolicy::StrongFocus</enum>
+             </property>
              <property name="text">
               <string>Unload control</string>
              </property>
@@ -98,6 +110,9 @@
            </item>
            <item row="0" column="2">
             <widget class="QCheckBox" name="checkBoxObsolete">
+             <property name="focusPolicy">
+              <enum>Qt::FocusPolicy::StrongFocus</enum>
+             </property>
              <property name="text">
               <string>Obsolete</string>
              </property>
@@ -111,6 +126,9 @@
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
           <widget class="QCheckBox" name="checkBoxSalable">
+           <property name="focusPolicy">
+            <enum>Qt::FocusPolicy::StrongFocus</enum>
+           </property>
            <property name="text">
             <string>Salable</string>
            </property>
@@ -215,6 +233,9 @@
          </item>
          <item>
           <widget class="QCheckBox" name="checkBoxWebAvailable">
+           <property name="focusPolicy">
+            <enum>Qt::FocusPolicy::StrongFocus</enum>
+           </property>
            <property name="text">
             <string>Web available</string>
            </property>
@@ -245,6 +266,9 @@
         <layout class="QHBoxLayout" name="horizontalLayout_5">
          <item>
           <widget class="QCheckBox" name="checkBoxVariants">
+           <property name="focusPolicy">
+            <enum>Qt::FocusPolicy::StrongFocus</enum>
+           </property>
            <property name="text">
             <string>Has variants</string>
            </property>

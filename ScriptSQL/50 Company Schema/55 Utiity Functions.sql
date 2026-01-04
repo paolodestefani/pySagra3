@@ -56,11 +56,11 @@ BEGIN
 	DELETE FROM company.order_header 
     WHERE event_id = in_event; -- event include company
 	-- stock inventory update
-	UPDATE company.stock_inventory 
-    SET unloaded = 0 
+	UPDATE company.items_inventory 
+    SET unloaded = 0, ordered = 0 
     WHERE event_id = in_event; -- event include company
 	-- delete from stock unload
-	DELETE FROM company.stock_unload 
+	DELETE FROM company.items_ordered_delivered
     WHERE event_id = in_event; -- event include company
 	-- delte from numbering
 	DELETE FROM company.numbering 
@@ -74,101 +74,156 @@ ALTER FUNCTION delete_event_order(in_event int)
     OWNER TO {pyAppPgOwnerRole};
 
 
--- unloads rebuild on stock_inventory utility function
-CREATE FUNCTION unload_rebuild(in_event int) 
+-- set orders as processed utility function
+CREATE FUNCTION set_order_as_processed(in_event int) 
+RETURNS VOID AS
+$$
+BEGIN
+	UPDATE order_header_department
+    SET fullfillment_date = oh.date_time
+    FROM order_header_department ohd
+    JOIN order_header oh ON ohd.order_header_id = oh.order_header_id
+    WHERE ohd.fullfillment_date is null
+        AND oh.event_id = in_event; -- event include company
+END;
+$$ 
+LANGUAGE plpgsql;
+COMMENT ON FUNCTION set_order_as_processed(int) IS
+    'Function for set all orders as processed';
+ALTER FUNCTION set_order_as_processed(in_event int) 
+    OWNER TO {pyAppPgOwnerRole};
+
+
+-- rebuild items_inventory utility function
+CREATE FUNCTION inventory_rebuild(in_event int) 
 RETURNS VOID AS
 $$
 DECLARE
-    odr RECORD; -- order detail dep record
-    ipr integer; -- item part
-    qty numeric(12, 2); -- quantity for item part
+    odr         RECORD;         -- order detail dep record
+    item        integer;        -- item
+    itempart    integer;        -- item part
+    partqty     numeric(12, 2); -- quantity for item part
 BEGIN
-    -- clear stock inventory and stock unload
-    UPDATE company.stock_inventory 
-    SET unloaded = 0 
+    -- clear items inventory
+    UPDATE company.items_inventory
+    SET ordered = 0, unloaded = 0  
     WHERE event_id = in_event; -- event include company
-    DELETE FROM company.stock_unload 
-    WHERE event_id = in_event; -- event include company
-    -- loop trough details deps records
+    -- loop trough lines deps records
     FOR odr IN
         SELECT 
-            d.company_id,
-            d.event_id,
-            d.event_date,
-            d.day_part,
-            d.item_id,
+            l.company_id,
+            l.event_id,
+            l.event_date,
+            l.day_part,
+            l.item_id,
             i.item_type,
-            d.quantity
-        FROM company.order_line_department d
-        JOIN company.item i ON d.item_id = i.item_id -- item include company
-        WHERE d.event_id = in_event -- event include company
+            l.ordered_quantity,
+            l.delivered_quantity
+        FROM company.order_line_department l
+        JOIN company.order_header_department h ON l.order_header_department_id = h.order_header_department_id
+        JOIN company.item i ON l.item_id = i.item_id -- item include company
+        WHERE l.event_id = in_event -- event include company
     LOOP
-        -- for kit items
-        IF odr.item_type = 'K' THEN 
-            FOR ipr, qty IN 
+       FOR item, itempart, partqty IN 
+            SELECT 
+                i.item, 
+                i.part,
+                i.qty
+            FROM (
+                -- normal item
                 SELECT 
-                    part_id,
-                    quantity
-                FROM company.item_part
-                WHERE item_id = odr.item_id -- don't need to check item type as an item id can not be kit and menu 
-            LOOP
-                -- stock inventory
-                UPDATE company.stock_inventory 
-                SET unloaded = unloaded + odr.quantity * qty
-                WHERE event_id = in_event -- event include company
-                    AND item_id = ipr; -- don't need to check has_stock_control as only record already in table are updated
-                -- stock unload
-                -- initialize values on not present/change day/change daypart
-                IF NOT EXISTS(  SELECT stock_unload_id 
-                                FROM company.stock_unload 
-                                WHERE event_id = odr.event_id -- event include company 
-                                    AND event_date = odr.event_date 
-                                    AND day_part = odr.day_part 
-                                    AND item_id = ipr) THEN
-                    INSERT INTO company.stock_unload (company_id, event_id, event_date, day_part, item_id) 
-                    VALUES (odr.company_id, odr.event_id, odr.event_date, odr.day_part, ipr);
-                END IF;
-                -- update unload
-                UPDATE company.stock_unload
-                SET unloaded = unloaded + odr.quantity * qty
-                WHERE event_id = odr.event_id 
-                    AND event_date = odr.event_date 
-                    AND day_part = odr.day_part 
-                    AND item_id = ipr;
-            END LOOP;
-        -- for normal items
-        ELSE
-            -- stock inventory
-            UPDATE company.stock_inventory 
-            SET unloaded = unloaded + odr.quantity
-            WHERE event_id = in_event 
-                AND item_id = odr.item_id; -- don't need to check has_stock_control as only record already in table are updated
-            -- stock unload
-            -- initialize values on not present/change day/change daypart
-            IF NOT EXISTS(  SELECT stock_unload_id 
-                            FROM company.stock_unload 
-                            WHERE event_id = odr.event_id 
-                                AND event_date = odr.event_date 
-                                AND day_part = odr.day_part 
-                                AND item_id = odr.item_id) THEN
-                INSERT INTO company.stock_unload (company_id, event_id, event_date, day_part, item_id) 
-                VALUES (odr.company_id, odr.event_id, odr.event_date, odr.day_part, odr.item_id);
-            END IF;
-            -- update unload
-            UPDATE company.stock_unload
-            SET unloaded = unloaded + odr.quantity
-            WHERE event_id = odr.event_id 
-                AND event_date = odr.event_date 
-                AND day_part = odr.day_part 
-                AND item_id = odr.item_id;
-        END IF;
+                    item_id  AS item,
+                    item_id  AS part,
+                    1        AS qty
+                FROM company.item
+                WHERE item_type = 'I'
+                UNION
+                -- kit
+                SELECT 
+                    item_id  AS item,
+                    part_id  AS part,
+                    quantity AS qty 
+                FROM company.item_part 
+                WHERE item_type = 'K'
+                ) i
+            WHERE i.item = odr.item_id 
+        LOOP
+            -- update inventory
+            UPDATE company.items_inventory 
+            SET unloaded = unloaded + odr.delivered_quantity * partqty,
+                ordered = ordered + odr.ordered_quantity * partqty
+            WHERE event_id = in_event -- event include company
+                AND item_id = itempart;
+        END LOOP;
+    END LOOP;
+    -- update stock and available
+	UPDATE company.items_inventory
+	SET stock = loaded - unloaded,
+		available = loaded - unloaded - ordered
+	WHERE event_id = in_event;
+END;
+$$ 
+LANGUAGE plpgsql;
+COMMENT ON FUNCTION inventory_rebuild(int) IS
+    'Function for rebuild items_inventory';
+ALTER FUNCTION inventory_rebuild(in_event int) 
+    OWNER TO {pyAppPgOwnerRole};
+
+
+-- rebuild items_ordered_delivered utility function
+CREATE FUNCTION ordered_delivered_rebuild(in_event int) 
+RETURNS VOID AS
+$$
+DECLARE
+    odr         RECORD;             -- order detail dep record
+BEGIN
+    -- clear items_ordered_delivered
+    DELETE FROM company.items_ordered_delivered 
+    WHERE event_id = in_event; -- event include company
+    -- loop trough lines deps records
+    FOR odr IN
+        SELECT 
+            l.company_id,
+            l.event_id,
+            l.event_date,
+            l.day_part,
+            l.item_id,
+            i.item_type,
+            l.ordered_quantity,
+            l.delivered_quantity
+        FROM company.order_line_department l
+        JOIN company.order_header_department h ON l.order_header_department_id = h.order_header_department_id
+        JOIN company.item i ON l.item_id = i.item_id -- item include company
+        WHERE l.event_id = in_event -- event include company
+    LOOP
+        -- only for normal items
+		-- initialize values on not present/change day/change daypart
+		IF NOT EXISTS(  SELECT items_ordered_delivered_id 
+						FROM company.items_ordered_delivered 
+						WHERE   event_id    = odr.event_id 
+							AND event_date  = odr.event_date 
+							AND day_part    = odr.day_part 
+							AND item_id     = odr.item_id) THEN
+			IF (SELECT has_delivered_control FROM company.item WHERE item_id = odr.item_id) THEN
+				INSERT INTO company.items_ordered_delivered (company_id, event_id, event_date, day_part, item_id) 
+				VALUES (odr.company_id,	odr.event_id, odr.event_date, odr.day_part,	odr.item_id);
+			END IF;
+		END IF;
+		-- update ordered delivered
+		UPDATE company.items_ordered_delivered
+		SET ordered   = ordered + odr.ordered_quantity,
+			delivered = delivered + odr.delivered_quantity
+		WHERE   event_id    = odr.event_id 
+			AND event_date  = odr.event_date 
+			AND day_part    = odr.day_part 
+			AND item_id     = odr.item_id;
     END LOOP;
 END;
 $$ 
 LANGUAGE plpgsql;
-COMMENT ON FUNCTION unload_rebuild(int) IS
-    'Function for unload rebuild';
-ALTER FUNCTION unload_rebuild(in_event int) 
+COMMENT ON FUNCTION ordered_delivered_rebuild(int) IS
+    'Function for ordered delivered rebuild';
+ALTER FUNCTION ordered_delivered_rebuild(in_event int) 
     OWNER TO {pyAppPgOwnerRole};
 
 

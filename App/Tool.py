@@ -47,10 +47,11 @@ from App import session
 from App import currentAction
 from App.Database.Exceptions import PyAppDBError
 from App.Database.CodeDescriptionList import event_cdl
-from App.Database.Tool import delete_order
-from App.Database.Tool import unload_rebuild
+from App.Database.Tool import delete_event_order
+from App.Database.Tool import inventory_rebuild
+from App.Database.Tool import ordered_delivered_rebuild
 from App.Database.Tool import numbering_rebuild
-from App.Database.Tool import mark_order_as_processed
+from App.Database.Tool import set_order_as_processed
 from App.Database.Tool import delete_all_orders
 from App.Database.Tool import delete_all_web_orders
 from App.Database.Tool import delete_all_inventory
@@ -141,9 +142,10 @@ class EventToolDialog(QDialog):
         self.setWindowTitle(title)
         self.ui.labelIcon.setPixmap(icon.pixmap(128))
         for i, u in ((0, _tr('Utility', 'Delete Orders')),
-                     (1, _tr('Utility', 'Unload Rebuild')),
-                     (2, _tr('Utility', 'Numbering Rebuild')),
-                     (3, _tr('Utility', 'Mark Orders as Processed'))):
+                     (1, _tr('Utility', 'Inventory rebuild')),
+                     (2, _tr('Utility', 'Ordered delivered rebuild')),
+                     (3, _tr('Utility', 'Numbering Rebuild')),
+                     (4, _tr('Utility', 'Mark Orders as Processed'))):
             self.ui.comboBoxUtility.addItem(u, i)
         for i, d in event_cdl():
             self.ui.comboBoxEvent.addItem(d, i)
@@ -187,16 +189,19 @@ class EventToolDialog(QDialog):
         eventDescription = self.ui.comboBoxEvent.currentText()
         utility_id = self.ui.comboBoxUtility.currentData()
         utilities = {
-            0: [delete_order, _tr('Utility', 'Delete Orders'), 
+            0: [delete_event_order, _tr('Utility', 'Delete Orders'), 
                 _tr("Utility", "Are you sure you want to delete all orders of event\n"
                                "'{}' ?").format(eventDescription)],
-            1: [unload_rebuild, _tr('Utility', 'Unload Rebuild'), 
-                _tr("Utility", "Are you sure you want to procede with unload rebuild for event\n"
+            1: [inventory_rebuild, _tr('Utility', 'Inventory Rebuild'), 
+                _tr("Utility", "Are you sure you want to procede with inventory rebuild for event\n"
                                "'{}' ?").format(eventDescription)],
-            2: [numbering_rebuild, _tr('Utility', 'Numbering Rebuild'), 
+            2: [ordered_delivered_rebuild, _tr('Utility', 'Ordered delivered rebuild'), 
+                _tr("Utility", "Are you sure you want to procede with ordered delivered rebuild for event\n"
+                               "'{}' ?").format(eventDescription)],
+            3: [numbering_rebuild, _tr('Utility', 'Numbering Rebuild'), 
                 _tr("Utility", "Are you sure you want to procede with rebuild number sequence for event\n"
                                "'{}' ?").format(eventDescription)],
-            3: [mark_order_as_processed, _tr('Utility', 'Mark Orders as Processed'), 
+            4: [set_order_as_processed, _tr('Utility', 'Mark Orders as Processed'), 
                 _tr("Utility", "Are you sure you want to mark all orders as processed for event\n"
                                "'{}' ?").format(eventDescription)]}
         if QMessageBox.question(self,

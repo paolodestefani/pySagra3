@@ -705,7 +705,8 @@ class SortFilterDialog(QDialog):
                   ('>', _tr('Operator', '>'), 0, 'SB'),
                   ('>=', _tr('Operator', '>='), 0, 'SB'),
                   ('IN', _tr('Operator', 'In'), 0, 'LE'),
-                  ('IS NULL', _tr('Operator', 'Is Null'), 1, None)],
+                  ('IS NULL', _tr('Operator', 'Is Null'), 1, None),
+                  ('=', _tr('Operator', 'From list'), 0, 'LIST')],
             # decimal number
             'decimal': [('', '', 0, None),  # first row means no data
                   ('=', _tr('Operator', '='), 0, 'DSB'), # double spinbox
@@ -1012,7 +1013,14 @@ class SortFilterDialog(QDialog):
         # set operator alternatives
         self.ui.layoutFilters.itemAtPosition(row, OPERATOR).widget().clear()
         for o, d, r, w in self.FILTERING[ftype]:
+            if hasattr(self.model, 'reference'):
+                if field not in self.model.reference and o == 'LIST': # skip list if not required
+                    continue
             self.ui.layoutFilters.itemAtPosition(row, OPERATOR).widget().addItem(d, o)
+        # add choose from list
+        # if hasattr(self.model, 'reference'):
+        #     if field in self.model.reference:
+        #         self.ui.layoutFilters.itemAtPosition(row, OPERATOR).widget().addItem('From list', 'LIST')
 
     def operIndexChanged(self, index):
         "Create a widget for field and operator"
@@ -1039,6 +1047,10 @@ class SortFilterDialog(QDialog):
         ftype = self.fieldType[field]
         w = self.ui.layoutFilters.itemAtPosition(row, OPERAND).widget()
         wt = w.wt
+        # if hasattr(self.model, 'reference'):
+        #     if field in self.model.reference:
+        #         nwt = 'LIST'
+        # else:
         nwt = self.FILTERING[ftype][index][3]
         # change widget only when different from before
         if wt == nwt:
@@ -1085,6 +1097,10 @@ class SortFilterDialog(QDialog):
                 widget = CheckableComboBox(self)
                 widget.wt = 'CCB'
                 for k, v in get_list(self.model.columns[fi][6]):
+                    widget.addItem(v, k)
+            case 'LIST':
+                widget = QComboBox(self)
+                for k, v in self.model.reference[field]():
                     widget.addItem(v, k)
             case _: # no widget required (is null/is not null)
                 widget = QWidget(self)

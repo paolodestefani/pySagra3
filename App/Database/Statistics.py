@@ -27,6 +27,10 @@ This module provide all the facilities to manage dynamic statistics
 
 
 """
+# standard library
+
+# pandas
+import pandas as pd
 
 # psycopg
 import psycopg
@@ -34,6 +38,21 @@ import psycopg
 # application modules
 from App.Database.Exceptions import PyAppDBError
 from App.Database.Connect import appconn
+
+
+# def load_pandas_dataframe():
+#     script = """
+# SELECT * 
+# FROM company.bi_order_header
+# WHERE company = system.pa_current_company();"""
+#     try:
+#         with appconn.cursor() as cur:
+#             cur.execute(script)
+#             df = pd.DataFrame(cur.fetchall(), columns=[desc[0] for desc in cur.description])
+#             #print(df.head())
+#             return df
+#     except psycopg.Error as er:
+#         raise PyAppDBError(er.diag.sqlstate, str(er))   
 
 
 def load_statistic_bi_data(view, from_event, to_event):

@@ -862,25 +862,31 @@ class FormIndexManager(QWidget):
         try:
             self.model.submitAll()
         except PyAppDBError as er:
-            if er.code == '23000':
-                msg = _tr("Form", "Integrity constraint violation: "
-                          "unable to commit the transaction because "
-                          "a generic integrity violation occured")
-            if er.code == '23502':
-                msg = _tr("Form", "Integrity constraint violation: "
-                          "unable to commit the transaction because "
-                          "a not null error occured")
-            if er.code == '23503':
-                msg = _tr("Form", "Foreign key violation: "
-                          "unable to delete the current record because "
-                          "is still referenced from another database object")
-            if er.code == '23505':
-                msg = _tr("Form", "Duplicate key value violates unique constraint: "
-                          "Can not insert the current record because a key value "
-                          "is already present in the database table")
-            else:
-                msg = (f"Unrecognized database error code: {er.code}\n"
-                       f"For more information click on 'Show Details...'")
+            match er.code:
+                case 'CCER':
+                    msg = _tr("Form", "Row modified before update/delete: "
+                            "unable to commit the transaction because "
+                            "the row was modified before update or delete "
+                            "from unother client")
+                case '23000':
+                    msg = _tr("Form", "Integrity constraint violation: "
+                            "unable to commit the transaction because "
+                            "a generic integrity violation occured")
+                case '23502':
+                    msg = _tr("Form", "Integrity constraint violation: "
+                            "unable to commit the transaction because "
+                            "a not null error occured")
+                case '23503':
+                    msg = _tr("Form", "Foreign key violation: "
+                            "unable to delete the current record because "
+                            "is still referenced from another database object")
+                case '23505':
+                    msg = _tr("Form", "Duplicate key value violates unique constraint: "
+                            "Can not insert the current record because a key value "
+                            "is already present in the database table")
+                case _:
+                    msg = (f"Unrecognized database error code: {er.code}\n"
+                        f"For more information click on 'Show Details...'")
             mbox = QMessageBox(self)
             mbox.setIcon(QMessageBox.Critical)
             mbox.setWindowTitle(_tr("Form", "Error on model submit all"))

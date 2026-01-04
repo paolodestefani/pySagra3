@@ -85,6 +85,7 @@ class GenericDelegate(QStyledItemDelegate):
 
     def paint(self, painter, option, index):
         value = index.model().data(index, Qt.DisplayRole)
+        #print('GenericDelegate.paint:', value, type(value))
         styleOption = QStyleOptionViewItem(option)
         self.initStyleOption(styleOption, index)
 
@@ -98,7 +99,7 @@ class GenericDelegate(QStyledItemDelegate):
         elif isinstance(value, int):
             styleOption.text = str(value)
             styleOption.displayAlignment = Qt.AlignRight | Qt.AlignVCenter
-        elif isinstance(value, (QDate, QDateTime)):
+        elif isinstance(value, (QDate, QDateTime, QTime)):
             styleOption.text = session['qlocale'].toString(value, QLocale.ShortFormat)
             styleOption.displayAlignment = Qt.AlignLeft | Qt.AlignVCenter
         elif isinstance(value, Decimal):
@@ -694,10 +695,10 @@ class QuantityDelegate(DecimalDelegate):
     "Delegate for quantity values"
 
     def __init__(self, parent, bold=False):
-        Setting = SettingClass()
+        setting = SettingClass()
         super().__init__(parent,
-                         Setting['quantity_decimal_places'],
-                         maximum=999.9,
+                         setting['quantity_decimal_places'],
+                         maximum=99999.9,
                          currency=False,
                          bold=bold)
 
@@ -714,42 +715,52 @@ class AmountDelegate(DecimalDelegate):
 
 class NewStockDelegate(QuantityDelegate):
     """A delegate for insert new stock on stock_summary and recalc loads and balance
-    Loads/Unloads/Balance must be column -3/-2/-1 from newStock
     """
-
+    LOAD, UNLOAD, STOCK, ORDERED, AVAILABLE = range(3, 8)
+    
     def paint(self, painter, option, index):
         option.text = ""
         super().paint(painter, option, index)
 
-    def createEditor(self, parent, option, index):
-        dsb = QDoubleSpinBox(parent)
-        dsb.setDecimals(Setting()['quantity_decimal_places'])
-        dsb.setMaximum(999999)
-        return dsb
+    #def createEditor(self, parent, option, index):
+    #    dsb = QDoubleSpinBox(parent)
+    #    dsb.setDecimals(setting['quantity_decimal_places'])
+    #    dsb.setMaximum(999999)
+    #    return dsb
 
     def setEditorData(self, editor, index):
         model = index.model()
-        balanceIndex = model.createIndex(index.row(), index.column() - 1)
-        newLoads = model.data(balanceIndex) or 0.0
+        stockIndex = model.createIndex(index.row(), self.STOCK)
+        newLoads = model.data(stockIndex) or 0.0
         editor.setValue(newLoads)
 
     def setModelData(self, editor, model, index):
         # update loads
-        loadsIndex = model.createIndex(index.row(), index.column() - 3)
-        unloadsIndex = model.createIndex(index.row(), index.column() - 2)
+        loadsIndex = model.createIndex(index.row(), self.LOAD)
+        unloadsIndex = model.createIndex(index.row(), self.UNLOAD)
         unloads = model.data(unloadsIndex) or Decimal(0)
         model.setData(loadsIndex, Decimal(editor.value()) + unloads)
-        # update balance
-        balanceIndex = model.createIndex(index.row(), index.column() - 1)
-        model.setData(balanceIndex, Decimal(editor.value()))
+        # update stock
+        stockIndex = model.createIndex(index.row(), self.STOCK)
+        stock = Decimal(editor.value())
+        model.setData(stockIndex, stock)
+        # update available
+        orderedIndex = model.createIndex(index.row(), self.ORDERED)
+        ordered = model.data(orderedIndex) or Decimal(0)
+        availableIndex = model.createIndex(index.row(), self.AVAILABLE)
+        model.setData(availableIndex, stock - ordered)
 
 
-class StockCheckDelegate(QuantityDelegate):
+class StockLevelDelegate(QuantityDelegate):
 
     def __init__(self, parent, warning=10, critical=5):
         super().__init__(parent)
         self.warning_level = warning
         self.critical_level = critical
+        self.normalColor = QColor('Green')
+        self.warningColor = QColor('Yellow')
+        self.criticalColor = QColor('Orange')
+        self.outOfStockColor = QColor('Red')
 
     def paint(self, painter, option, index):
         option.text = session['qlocale'].toString(float(index.data() or 0.0), 'f', self.prec)  # can be null on insert row
@@ -778,12 +789,13 @@ class StockCheckDelegate(QuantityDelegate):
                 option.backgroundBrush = option.palette.base()
         # check color
         if value >= self.warning_level:
-            option.palette.setColor(QPalette.Text, Qt.darkGreen)
+            option.palette.setColor(QPalette.Text, self.normalColor)
         elif self.critical_level < value < self.warning_level:
-            option.palette.setColor(QPalette.Text, Qt.darkYellow)
-        else:
-            option.palette.setColor(QPalette.Text, Qt.red)
-
+            option.palette.setColor(QPalette.Text, self.warningColor)
+        elif 0 < value <= self.critical_level:
+            option.palette.setColor(QPalette.Text, self.criticalColor)
+        else:  # out of stock
+            option.palette.setColor(QPalette.Text, self.outOfStockColor)
         QApplication.style().drawControl(QStyle.CE_ItemViewItem,
                                          option,
                                          painter)
@@ -958,3 +970,61 @@ class TimeDelegate(QStyledItemDelegate):
         else:
             option.text = ''
         super().paint(painter, option, index)
+        
+        
+class PandasDelegate(QStyledItemDelegate):
+    "Read only delegate for a tableview with pandas model"
+
+    def paint(self, painter, option, index):
+        if index.isValid() is False:
+            return
+        model = index.model()
+        header = model.headerData(index.column(), Qt.Horizontal, Qt.DisplayRole)
+        header = header.split('\n')[0]  # in case of multi-line header
+        dt = model.columns[model.trcolumns[header]][2]  # (name, type)
+        value = index.data() # index.model().data(index, Qt.DisplayRole)
+        print("Val", value, "Type", type(value), "DT", dt)
+        #type = index.model().columns[index.column()][1]  # (name, type)
+        styleOption = QStyleOptionViewItem(option)
+        self.initStyleOption(styleOption, index)
+
+        if dt == 'decimal2':
+            styleOption.text = session['qlocale'].toString(float(value or 0.0), 'f', 2)
+            styleOption.displayAlignment = Qt.AlignRight | Qt.AlignVCenter
+        elif dt == 'int':
+            styleOption.text = str(int(float(value) or 0))
+            styleOption.displayAlignment = Qt.AlignRight | Qt.AlignVCenter
+        elif dt == 'str':
+            styleOption.text = str(value or '')  # for null values
+            styleOption.displayAlignment = Qt.AlignLeft | Qt.AlignVCenter
+        else:
+            styleOption.text = str(value or '')  # for null values
+            styleOption.displayAlignment = Qt.AlignLeft | Qt.AlignVCenter
+
+        font = index.model().data(index, Qt.FontRole)
+        if font:
+            styleOption.font = font
+        painter.save()
+        if option.state & QStyle.State_Selected:  # selected
+            if option.state & QStyle.State_Active:  # selected active
+                styleOption.backgroundBrush = option.palette.highlight()
+
+        QApplication.style().drawControl(QStyle.CE_ItemViewItem,
+                                         styleOption,
+                                         painter)
+        painter.restore()
+
+    def getCheckBoxRect(self, option):
+        check_box_style_option = QStyleOptionButton()
+        check_box_rect = QApplication.style().subElementRect(QStyle.SE_CheckBoxIndicator, check_box_style_option, None)
+        check_box_point = QPoint(option.rect.x() +
+                                 option.rect.width() / 2 -
+                                 check_box_rect.width() / 2,
+                                 option.rect.y() +
+                                 option.rect.height() / 2 -
+                                 check_box_rect.height() / 2)
+        return QRect(check_box_point, check_box_rect.size())
+
+    def createEditor(self, parent, option, index):
+        "Important, otherwise an editor is created if the user clicks in this cell."
+        return None

@@ -34,6 +34,7 @@ class Ui_IncomeSummaryWidget(object):
 
         self.checkBoxDetail = QCheckBox(IncomeSummaryWidget)
         self.checkBoxDetail.setObjectName(u"checkBoxDetail")
+        self.checkBoxDetail.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
         self.verticalLayout.addWidget(self.checkBoxDetail)
 

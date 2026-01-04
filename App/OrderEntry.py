@@ -40,7 +40,7 @@ from PySide6.QtCore import QDateTime
 from PySide6.QtCore import QSettings
 from PySide6.QtCore import Slot
 from PySide6.QtCore import QRectF
-from PySide6.QtGui import QPalette
+#from PySide6.QtGui import QPalette
 from PySide6.QtGui import QColor
 from PySide6.QtGui import QPainter
 from PySide6.QtGui import QPainterPath
@@ -74,7 +74,7 @@ from App.Database.CashDesk import get_cash_desk_description
 from App.Database.Department import department_list
 from App.Database.Department import get_department_printer_class
 from App.Database.Department import department_takeaway_list
-from App.Database.Department import department_desc
+from App.Database.Department import get_department_desc
 from App.Database.Table import table_list
 from App.Database.Table import table_exists
 from App.Database.Item import item_list
@@ -194,25 +194,28 @@ class ButtonList(QPushButton):
         self.setAutoFillBackground(True)
         self.setFont(QFont(setting['order_list_font_family'], setting['order_list_font_size'], QFont.Bold))
         self.setMinimumWidth(65)
+        #####
+        # for colors use stylesheet to avoid problem with platform themes
+        #####
         # color palettes
-        self.normalPalette = self.palette()
-        self.normalPalette.setColor(self.backgroundRole(), QColor(self.backgroundColor))
-        self.normalPalette.setColor(self.foregroundRole(), QColor(self.textColor))
-        self.warningPalette = self.palette()
-        self.warningPalette.setColor(self.backgroundRole(), QColor(setting['warning_background_color'])) 
-        self.warningPalette.setColor(self.foregroundRole(), QColor(setting['warning_text_color']))   
-        self.criticalPalette = self.palette()
-        self.criticalPalette.setColor(self.backgroundRole(), QColor(setting['critical_background_color'])) 
-        self.criticalPalette.setColor(self.foregroundRole(), QColor(setting['critical_text_color'])) 
-        self.disabledPalette = self.palette()
-        self.disabledPalette.setColor(self.backgroundRole(), QColor(setting['disabled_background_color']))
-        self.disabledPalette.setColor(self.foregroundRole(), QColor(setting['disabled_text_color']))
+        # self.normalPalette = self.palette()
+        # self.normalPalette.setColor(self.backgroundRole(), QColor(self.backgroundColor))
+        # self.normalPalette.setColor(self.foregroundRole(), QColor(self.textColor))
+        # self.warningPalette = self.palette()
+        # self.warningPalette.setColor(self.backgroundRole(), QColor(setting['warning_background_color'])) 
+        # self.warningPalette.setColor(self.foregroundRole(), QColor(setting['warning_text_color']))   
+        # self.criticalPalette = self.palette()
+        # self.criticalPalette.setColor(self.backgroundRole(), QColor(setting['critical_background_color'])) 
+        # self.criticalPalette.setColor(self.foregroundRole(), QColor(setting['critical_text_color'])) 
+        # self.disabledPalette = self.palette()
+        # self.disabledPalette.setColor(self.backgroundRole(), QColor(setting['disabled_background_color']))
+        # self.disabledPalette.setColor(self.foregroundRole(), QColor(setting['disabled_text_color']))
         # for variants indicator
         self.variantIndicatorColor = currentIcon['view_flash'].pixmap(25, 25)
         ###
-        self.setPalette(self.normalPalette)
+        #self.setPalette(self.normalPalette)
         ### must be after palette setting
-        self.level = None
+        #self.level = None
         
     def __setattr__(self, name, value):
         super().__setattr__(name, value)
@@ -226,20 +229,21 @@ class ButtonList(QPushButton):
                     self.setText(self.caption + f"\n({self.level})")
                 # normal level
                 if value >= setting['warning_stock_level']:
-                    self.setPalette(self.normalPalette)
+                    ss = f"background-color: {self.backgroundColor}; color: {self.textColor}"
                 # warning level
                 elif setting['critical_stock_level'] < value < setting['warning_stock_level']:
-                    self.setPalette(self.warningPalette)
+                    ss = f"background-color: {setting['warning_background_color']}; color: {setting['warning_text_color']}"
                 # critical level
                 elif 0 < value <= setting['critical_stock_level']:
-                    self.setPalette(self.criticalPalette)
+                    ss = f"background-color: {setting['critical_background_color']}; color: {setting['critical_text_color']}"
                 # disabled: value = 0
                 else:
-                    self.setPalette(self.disabledPalette)
+                    ss = f"background-color: {setting['disabled_background_color']}; color: {setting['disabled_text_color']}"
                     self.setDisabled(True)
             else:
-                self.setPalette(self.normalPalette)
-                 # no level control -> always normal
+                # no level control -> always normal
+                ss = f"background-color: {self.backgroundColor}; color: {self.textColor}"
+            self.setStyleSheet(ss)
 
     def paintEvent(self, event=None):
         QPushButton.paintEvent(self, event)
@@ -344,11 +348,7 @@ class BaseOrderDialog(QDialog):
         for tt, tr, tc, ttc, tbc in table_list():
             b = QPushButton(tt, self) # item description
             b.setFont(QFont(setting['table_list_font_family'], setting['table_list_font_size'], QFont.Bold))
-            p = b.palette()
-            p.setColor(QPalette.ColorRole.ButtonText, QColor(ttc))
-            p.setColor(QPalette.ColorRole.Button, QColor(tbc))
-            b.setAutoFillBackground(True)
-            b.setPalette(p)
+            b.setStyleSheet(f"color: {ttc}; background-color: {tbc};")
             b.setMinimumWidth(50)
             b.setMinimumHeight(40)
             b.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
@@ -716,7 +716,7 @@ class BaseOrderDialog(QDialog):
         txt = self.ui.depnote.get(bid)
         text, ok = QInputDialog.getMultiLineText(self,
                                                  _tr("OrderDialog", "Department note"),
-                                                 _tr("OrderDialog", "Message text for {}".format(department_desc(bid))),
+                                                 _tr("OrderDialog", "Message text for {}".format(get_department_desc(bid))),
                                                  txt)
         if ok:
             self.ui.depnote[bid] = text or None
@@ -1077,26 +1077,24 @@ class BaseOrderDialog(QDialog):
                                          _tr("MessageDialog", "Critical"),
                                          _tr('OrderDialog', "Unable to print order department copy:\n{}").format(er)) 
         # check stock unload report
-        if setting['print_stock_unload_report']:
+        if setting['print_ordered_delivered_report']:
             # get orders issued in the half day from last inserted order header
             n = get_orders_issued(order.header['event_id'],
                                   order.header['stat_order_date'],
                                   order.header['stat_order_day_part'])
-            if n >= setting['num_orders_for_start_stock_unload']:
-                if n % setting['num_orders_for_next_stock_unload'] == 0:
-                    printer = get_printer_name(setting['stock_unload_printer_class'], session['hostname'])
-                    try:
-                        printStockUnloadReport(setting['stock_unload_report'],
-                                               session['l10n'],
-                                               printer,
-                                               setting['stock_unload_copies'],
-                                               order.header['event'],
-                                               order.header['stat_order_date'],
-                                               order.header['stat_order_day_part'])
-                    except Exception as er:
-                        QMessageBox.critical(self,
-                                             _tr("MessageDialog", "Critical"),
-                                             _tr('OrderDialog', "Unable to print stock unload report:\n{}").format(er)) 
+            printer = get_printer_name(setting['ordered_delivered_printer_class'], session['hostname'])
+            try:
+                printStockUnloadReport(setting['ordered_delivered_report'],
+                                        session['l10n'],
+                                        printer,
+                                        setting['ordered_delivered_copies'],
+                                        order.header['event'],
+                                        order.header['stat_order_date'],
+                                        order.header['stat_order_day_part'])
+            except Exception as er:
+                QMessageBox.critical(self,
+                                        _tr("MessageDialog", "Critical"),
+                                        _tr('OrderDialog', "Unable to print stock unload report:\n{}").format(er)) 
                         
         # clear order list before reset otherwise save + reset = reset
         for i in range(self.ui.tabWidgetOrder.rowCount(), -1, -1):
