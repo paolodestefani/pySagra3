@@ -80,6 +80,8 @@ COMMENT ON TABLE cash_desk IS
 ALTER TABLE cash_desk 
     OWNER TO {pyAppPgOwnerRole};
 
+CREATE INDEX cash_desk_keys_idx ON cash_desk (company_id, cash_desk_id);
+
 CREATE TRIGGER t99_update_company_user_date 
     BEFORE INSERT OR UPDATE ON cash_desk 
     FOR EACH ROW EXECUTE PROCEDURE system.update_company_user_date();

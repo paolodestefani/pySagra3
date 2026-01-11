@@ -56,11 +56,11 @@ BEGIN
 	DELETE FROM company.order_header 
     WHERE event_id = in_event; -- event include company
 	-- stock inventory update
-	UPDATE company.items_inventory 
+	UPDATE company.inventory 
     SET unloaded = 0, ordered = 0 
     WHERE event_id = in_event; -- event include company
 	-- delete from stock unload
-	DELETE FROM company.items_ordered_delivered
+	DELETE FROM company.ordered_delivered
     WHERE event_id = in_event; -- event include company
 	-- delte from numbering
 	DELETE FROM company.numbering 
@@ -94,7 +94,7 @@ ALTER FUNCTION set_order_as_processed(in_event int)
     OWNER TO {pyAppPgOwnerRole};
 
 
--- rebuild items_inventory utility function
+-- rebuild inventory utility function
 CREATE FUNCTION inventory_rebuild(in_event int) 
 RETURNS VOID AS
 $$
@@ -105,7 +105,7 @@ DECLARE
     partqty     numeric(12, 2); -- quantity for item part
 BEGIN
     -- clear items inventory
-    UPDATE company.items_inventory
+    UPDATE company.inventory
     SET ordered = 0, unloaded = 0  
     WHERE event_id = in_event; -- event include company
     -- loop trough lines deps records
@@ -149,7 +149,7 @@ BEGIN
             WHERE i.item = odr.item_id 
         LOOP
             -- update inventory
-            UPDATE company.items_inventory 
+            UPDATE company.inventory 
             SET unloaded = unloaded + odr.delivered_quantity * partqty,
                 ordered = ordered + odr.ordered_quantity * partqty
             WHERE event_id = in_event -- event include company
@@ -157,7 +157,7 @@ BEGIN
         END LOOP;
     END LOOP;
     -- update stock and available
-	UPDATE company.items_inventory
+	UPDATE company.inventory
 	SET stock = loaded - unloaded,
 		available = loaded - unloaded - ordered
 	WHERE event_id = in_event;
@@ -165,20 +165,20 @@ END;
 $$ 
 LANGUAGE plpgsql;
 COMMENT ON FUNCTION inventory_rebuild(int) IS
-    'Function for rebuild items_inventory';
+    'Function for rebuild inventory';
 ALTER FUNCTION inventory_rebuild(in_event int) 
     OWNER TO {pyAppPgOwnerRole};
 
 
--- rebuild items_ordered_delivered utility function
+-- rebuild ordered_delivered utility function
 CREATE FUNCTION ordered_delivered_rebuild(in_event int) 
 RETURNS VOID AS
 $$
 DECLARE
     odr         RECORD;             -- order detail dep record
 BEGIN
-    -- clear items_ordered_delivered
-    DELETE FROM company.items_ordered_delivered 
+    -- clear ordered_delivered
+    DELETE FROM company.ordered_delivered 
     WHERE event_id = in_event; -- event include company
     -- loop trough lines deps records
     FOR odr IN
@@ -198,19 +198,19 @@ BEGIN
     LOOP
         -- only for normal items
 		-- initialize values on not present/change day/change daypart
-		IF NOT EXISTS(  SELECT items_ordered_delivered_id 
-						FROM company.items_ordered_delivered 
+		IF NOT EXISTS(  SELECT ordered_delivered_id 
+						FROM company.ordered_delivered 
 						WHERE   event_id    = odr.event_id 
 							AND event_date  = odr.event_date 
 							AND day_part    = odr.day_part 
 							AND item_id     = odr.item_id) THEN
 			IF (SELECT has_delivered_control FROM company.item WHERE item_id = odr.item_id) THEN
-				INSERT INTO company.items_ordered_delivered (company_id, event_id, event_date, day_part, item_id) 
+				INSERT INTO company.ordered_delivered (company_id, event_id, event_date, day_part, item_id) 
 				VALUES (odr.company_id,	odr.event_id, odr.event_date, odr.day_part,	odr.item_id);
 			END IF;
 		END IF;
 		-- update ordered delivered
-		UPDATE company.items_ordered_delivered
+		UPDATE company.ordered_delivered
 		SET ordered   = ordered + odr.ordered_quantity,
 			delivered = delivered + odr.delivered_quantity
 		WHERE   event_id    = odr.event_id 
@@ -246,13 +246,23 @@ BEGIN
 		event_id,
 		event_date,
 		day_part,
-		current_value)
+		current_value,
+		created_at,
+		created_by,
+		updated_at,
+		updated_by,
+		object_version)
 	SELECT
 		company_id,
 		event_id,
 		stat_order_date,
 		stat_order_day_part,
-		max(order_number) AS current_value
+		max(order_number) AS current_value,
+		now(),
+		system.pa_current_user(),
+		now(),
+		system.pa_current_user(),
+		0
 	FROM company.order_header
 	WHERE event_id = in_event
 	GROUP BY company_id, event_id, stat_order_date, stat_order_day_part;

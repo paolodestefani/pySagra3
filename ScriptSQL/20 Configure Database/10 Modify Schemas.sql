@@ -68,7 +68,7 @@ COMMENT ON SCHEMA common IS
 -- create company schema
 CREATE SCHEMA company AUTHORIZATION {pyAppPgOwnerRole};
 COMMENT ON SCHEMA company IS 
-    'Company schema for {pyAppName} database, container of objects of a specific company';
+    'Company schema for {pyAppName} database, container of company specific objects';
 
 -- create temp schema
 CREATE SCHEMA temp AUTHORIZATION {pyAppPgOwnerRole};

@@ -120,29 +120,38 @@ DO $$ BEGIN RAISE NOTICE '% Set profile/menu/toolbar for users on company 40', c
 
 
 --
--- DISABLE TRIGGERS
+-- DISABLE TRIGGERS AND REINDEX
 --
 
-ALTER TABLE company.event DISABLE TRIGGER t99_update_company_user_date;
-ALTER TABLE company.printer_class DISABLE TRIGGER t99_update_company_user_date;
-ALTER TABLE company.printer_class_printer DISABLE TRIGGER t99_update_company_user_date;
-ALTER TABLE company.department DISABLE TRIGGER t99_update_company_user_date;
-ALTER TABLE company.stand_table DISABLE TRIGGER t99_update_company_user_date;
-ALTER TABLE company.item DISABLE TRIGGER t99_update_company_user_date;
-ALTER TABLE company.item_variant DISABLE TRIGGER t99_update_company_user_date;
-ALTER TABLE company.item_part DISABLE TRIGGER t99_update_company_user_date;
-ALTER TABLE company.price_list DISABLE TRIGGER t99_update_company_user_date;
-ALTER TABLE company.price_list_item DISABLE TRIGGER t99_update_company_user_date;
-ALTER TABLE company.order_header DISABLE TRIGGER t10_update_numbering;
-ALTER TABLE company.order_header DISABLE TRIGGER t99_update_company_user_date;
-ALTER TABLE company.order_header_department DISABLE TRIGGER t10_update_order_header_department;
-ALTER TABLE company.order_header_department DISABLE TRIGGER t99_update_company_user_date;
-ALTER TABLE company.order_line DISABLE TRIGGER t99_update_company_user_date;
-ALTER TABLE company.order_line_department DISABLE TRIGGER t10_order_line_to_inventory;
-ALTER TABLE company.order_line_department DISABLE TRIGGER t20_order_line_to_ordered_delivered;
-ALTER TABLE company.order_line_department DISABLE TRIGGER t99_update_company_user_date;
-ALTER TABLE company.items_inventory DISABLE TRIGGER t10_items_inventory_balance;
-ALTER TABLE company.items_inventory DISABLE TRIGGER t99_update_company_user_date;
+DO $$ 
+DECLARE
+s text;
+t text;
+n text;
+BEGIN 
+	-- disable trigger
+	-- can't use DISABLE TRIGGER ALL because is available only for superuser
+	FOR s, t, n IN
+		SELECT DISTINCT trigger_schema, event_object_table, trigger_name
+		FROM information_schema.triggers
+		WHERE trigger_catalog = current_database() 
+			AND trigger_schema = 'company'
+	LOOP
+		EXECUTE format('ALTER TABLE %s.%s DISABLE TRIGGER %s', s, t, n);
+	END LOOP;
+
+	-- re-index
+	FOR s, t IN 	
+		SELECT table_schema, table_name
+		FROM information_schema.tables
+		WHERE table_catalog = current_database() 
+			AND table_type = 'BASE TABLE'
+			AND table_schema = 'company'
+	LOOP
+		EXECUTE format('REINDEX TABLE %s.%s', s, t);
+	END LOOP;
+END;
+$$;
 
 
 --
@@ -307,8 +316,8 @@ WITH par AS (
 UPDATE company.setting
 SET lunch_start_time = par.lunch_start_time,
 	dinner_start_time = par.dinner_start_time,
-	normal_background_color = par.normal_background_color,
-	normal_text_color = par.normal_text_color,
+	--normal_background_color = par.normal_background_color,
+	--normal_text_color = par.normal_text_color,
 	warning_background_color = par.warning_background_color,
 	warning_text_color = par.warning_text_color,
 	warning_stock_level = par.warning_stock_level,
@@ -427,10 +436,10 @@ DO $$ BEGIN RAISE NOTICE '% Imported departments', clock_timestamp(); END; $$;
 
 
 --
--- Import stand tables
+-- Import seat map
 --
 
-INSERT INTO company.stand_table (
+INSERT INTO company.seat_map (
 	external_code,
 	company_id,
 	table_code,
@@ -663,7 +672,7 @@ DO $$ BEGIN RAISE NOTICE '% Imported price list items', clock_timestamp(); END; 
 -- Import inventory
 --
 
-INSERT INTO company.items_inventory (
+INSERT INTO company.inventory (
 	external_code,
 	company_id,
 	event_id, 
@@ -912,12 +921,17 @@ LEFT JOIN company.item i ON l.item = i.external_code AND i.company_id = 40;
 
 DO $$ BEGIN RAISE NOTICE '% END Import order line departments', clock_timestamp(); END; $$;
 
--- stock_inventory will be rebuild
-
 
 --
--- update unloads and numbering
+-- update inventory, ordered delivered and numbering
 --
+
+-- this should speedup everything
+
+REINDEX TABLE company.order_header;
+REINDEX TABLE company.order_header_department;
+REINDEX TABLE company.order_line;
+REINDEX TABLE company.order_line_department;
 
 DO $$ BEGIN RAISE NOTICE '% BEGIN Update inventory, ordered delivered and numbering', clock_timestamp(); END; $$;
 
@@ -926,16 +940,21 @@ DECLARE
 i int;
 BEGIN
 
-	FOR i IN 	SELECT event_id 
-				FROM company.event 
-				WHERE company_id = 30
-				ORDER BY event_id
+	FOR i IN 	
+		SELECT event_id 
+		FROM company.event 
+		WHERE company_id = 40
+		ORDER BY event_id
 	LOOP
-		RAISE NOTICE '% BEGIN    Event %', clock_timestamp(), i;
+		RAISE NOTICE '% BEGIN Event % Rebuild numbering', clock_timestamp(), i;
 		PERFORM company.numbering_rebuild(i);
+		RAISE NOTICE '% END   Event % Rebuild numbering', clock_timestamp(), i;
+		RAISE NOTICE '% BEGIN Event % Rebuild inventory', clock_timestamp(), i;
 		PERFORM company.inventory_rebuild(i);
+		RAISE NOTICE '% END   Event % Rebuild inventory', clock_timestamp(), i;
+		RAISE NOTICE '% BEGIN Event % Rebuild ordered delivered', clock_timestamp(), i;
 		PERFORM company.ordered_delivered_rebuild(i);
-		RAISE NOTICE '% END      Event %', clock_timestamp(), i;
+		RAISE NOTICE '% END   Event % Rebuild ordered delivered', clock_timestamp(), i;
 	END LOOP;
 	
 END;
@@ -946,39 +965,38 @@ DO $$ BEGIN RAISE NOTICE '% END Update inventory, ordered delivered and numberin
 
 
 --
--- ENABLE TRIGGERS
+-- RE-ENABLE TRIGGERS AND REINDEX
 --
 
-ALTER TABLE company.event ENABLE TRIGGER t99_update_company_user_date;
-ALTER TABLE company.printer_class ENABLE TRIGGER t99_update_company_user_date;
-ALTER TABLE company.printer_class_printer ENABLE TRIGGER t99_update_company_user_date;
-ALTER TABLE company.department ENABLE TRIGGER t99_update_company_user_date;
-ALTER TABLE company.stand_table ENABLE TRIGGER t99_update_company_user_date;
-ALTER TABLE company.item ENABLE TRIGGER t99_update_company_user_date;
-ALTER TABLE company.item_variant ENABLE TRIGGER t99_update_company_user_date;
-ALTER TABLE company.item_part ENABLE TRIGGER t99_update_company_user_date;
-ALTER TABLE company.price_list ENABLE TRIGGER t99_update_company_user_date;
-ALTER TABLE company.price_list_item ENABLE TRIGGER t99_update_company_user_date;
-ALTER TABLE company.order_header ENABLE TRIGGER t10_update_numbering;
-ALTER TABLE company.order_header ENABLE TRIGGER t99_update_company_user_date;
-ALTER TABLE company.order_header_department ENABLE TRIGGER t10_update_order_header_department;
-ALTER TABLE company.order_header_department ENABLE TRIGGER t99_update_company_user_date;
-ALTER TABLE company.order_line ENABLE TRIGGER t99_update_company_user_date;
-ALTER TABLE company.order_line_department ENABLE TRIGGER t10_order_line_to_inventory;
-ALTER TABLE company.order_line_department ENABLE TRIGGER t20_order_line_to_ordered_delivered;
-ALTER TABLE company.order_line_department ENABLE TRIGGER t99_update_company_user_date;
-ALTER TABLE company.items_inventory ENABLE TRIGGER t10_items_inventory_balance;
-ALTER TABLE company.items_inventory ENABLE TRIGGER t99_update_company_user_date;
+DO $$ 
+DECLARE
+s text;
+t text;
+n text;
+BEGIN 
+	-- enable trigger
+	-- can't use DISABLE TRIGGER ALL because is available only for superuser
+	FOR s, t, n IN
+		SELECT DISTINCT trigger_schema, event_object_table, trigger_name
+		FROM information_schema.triggers
+		WHERE trigger_catalog = current_database() 
+			AND trigger_schema = 'company'
+	LOOP
+		EXECUTE format('ALTER TABLE %s.%s ENABLE TRIGGER %s', s, t, n);
+	END LOOP;
 
-
---
--- rebuild main index
---
-
-REINDEX TABLE company.order_header;
-REINDEX TABLE company.order_header_department;
-REINDEX TABLE company.order_line;
-REINDEX TABLE company.order_line_department;
+	-- re-index
+	FOR s, t IN 	
+		SELECT table_schema, table_name
+		FROM information_schema.tables
+		WHERE table_catalog = current_database() 
+			AND table_type = 'BASE TABLE'
+			AND table_schema = 'company'
+	LOOP
+		EXECUTE format('REINDEX TABLE %s.%s', s, t);
+	END LOOP;
+END;
+$$;
 
 -- END
 

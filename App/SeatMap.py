@@ -51,12 +51,12 @@ from App import currentAction
 from App.Database.Exceptions import PyAppDBError
 from App.Database.Table import table_list
 from App.Database.Table import table_delete
-from App.Database.Models import StandTableModel
+from App.Database.Models import SeatMapModel
 from App.Database.Setting import SettingClass
 from App.System.Utility import _tr
 from App.System.Utility import scriptInit
 from App.System.Utility import scriptMethod
-from App.Ui.TableWidget import Ui_TableWidget
+from App.Ui.SeatMapWidget import Ui_SeatMapWidget
 from App.Ui.GenerateTableNumbersDialog import Ui_GenerateTableNumbers
 from App.Widget.Form import  FormManager
 from App.Widget.Delegate import ColorDelegate
@@ -70,13 +70,13 @@ ID, TABLE_CODE, ROW, COLUMN, TEXT_COLOR, BACKGROUND_COLOR, IS_OBSOLETE = range(7
 EDIT, PREVIEW = range(2)
 
 
-def table() -> None:
-    "Manage numbered tables"
-    logging.info('Starting tables Form')
+def seatMap() -> None:
+    "Manage seat map"
+    logging.info('Starting seat map Form')
     mw = session['mainwin']
-    title = currentAction['app_file_table'].text()
-    auth = currentAction['app_file_table'].data()
-    tw = TableForm(mw, title, auth)
+    title = currentAction['app_file_seat_map'].text()
+    auth = currentAction['app_file_seat_map'].data()
+    tw = SeatMapForm(mw, title, auth)
     tw.reload()
     mw.addTab(title, tw)
     logging.info('Tables Form added to main window')
@@ -193,11 +193,11 @@ class GenerateTables(QDialog):
                     self.model.setData(self.model.createIndex(modelRow, IS_OBSOLETE), False)
 
 
-class TableForm(FormManager):
+class SeatMapForm(FormManager):
 
     def __init__(self, parent: QWidget, title: str, auth: str) -> None:
         super().__init__(parent, auth)
-        model = StandTableModel(self)
+        model = SeatMapModel(self)
         self.setModel(model)
         self.tabName = title
         self.helpLink = None
@@ -207,7 +207,7 @@ class TableForm(FormManager):
         # FILTER, CHANGE, REPORT, EXPORT
         self.availableStatus = (True, True, True, True, True, True, True, True,
                                 True, False, True, True)
-        self.ui = Ui_TableWidget()
+        self.ui = Ui_SeatMapWidget()
         self.ui.setupUi(self)
         self.view = self.ui.tableView  # required for formviewmanager
         self.ui.tableView.setModel(model)

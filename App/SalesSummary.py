@@ -21,9 +21,9 @@
 # You should have received a copy of the GNU General Public License
 # along with pySagra.  If not, see <http://www.gnu.org/licenses/>.
 
-"""Income summary
+"""Sales summary
 
-This module contains a custom view to display event income summary
+This module contains a custom view to display event Sales summary
 
 
 """
@@ -42,10 +42,10 @@ from PySide6.QtWidgets import QDialog
 # application modules
 from App import session
 from App import currentAction
-from App.Database.Models import IncomeSummaryModel
+from App.Database.Models import SalesSummaryModel
 from App.Database.CodeDescriptionList import event_cdl
-from App.Ui.IncomeSummaryWidget import Ui_IncomeSummaryWidget
-from App.Ui.IncomeSummaryFilterDialog import Ui_IncomeSummaryFilterDialog
+from App.Ui.SalesSummaryWidget import Ui_SalesSummaryWidget
+#from App.Ui.IncomeSummaryFilterDialog import Ui_IncomeSummaryFilterDialog
 from App.System.Utility import _tr
 from App.Widget.Delegate import AmountDelegate
 from App.Widget.Form import FormViewManager
@@ -66,22 +66,22 @@ from App.Widget.Dialog import EventFilterDialog
  TOTAL_L, TOTAL_D, TOTAL) = range(30)
 
 
-def incomeSummary(auth):
-    "Cash reconciliation"
-    logging.info('Starting income summary Form')
+def salesSummary(auth):
+    "Sales summary"
+    logging.info('Starting Sales summary Form')
     mw = session['mainwin']
-    title = currentAction['app_activity_income_summary'].text()
-    auth = currentAction['app_activity_income_summary'].data()
-    cw = IncomeSummaryForm(mw, title, auth)
+    title = currentAction['app_activity_sales_summary'].text()
+    auth = currentAction['app_activity_sales_summary'].data()
+    cw = SalesSummaryForm(mw, title, auth)
     mw.addTab(title, cw)
-    logging.info('Income summary Form added to main window')
+    logging.info('Sales summary Form added to main window')
 
 
-class IncomeSummaryForm(FormViewManager):
+class SalesSummaryForm(FormViewManager):
 
     def __init__(self, parent: QWidget, title: str, auth: str) -> None:
         super().__init__(parent, auth)
-        model = IncomeSummaryModel(self)
+        model = SalesSummaryModel(self)
         model.setParameter('event_id', session['event_id'])
         self.setModel(model)
         self.tabName = title
@@ -93,11 +93,11 @@ class IncomeSummaryForm(FormViewManager):
         # FILTER, CHANGE, REPORT, EXPORT
         self.availableStatus = (True, True, True, True, False, False, False, False,
                                 True, False, True, False)
-        self.ui = Ui_IncomeSummaryWidget()
+        self.ui = Ui_SalesSummaryWidget()
         self.ui.setupUi(self)
         self.setView(self.ui.tableView)  # required for formviewmanager
         self.view = self.ui.tableView # required for formviewmanager
-        self.ui.tableView.setLayoutName('incomeSummary')
+        self.ui.tableView.setLayoutName('salesSummary')
         self.ui.tableView.horizontalHeader().setSectionsMovable(True)
         self.ui.tableView.setItemDelegateForColumn(TAKEAWAY_L, AmountDelegate(self))
         self.ui.tableView.setItemDelegateForColumn(TAKEAWAY_D, AmountDelegate(self))
@@ -173,7 +173,7 @@ class IncomeSummaryForm(FormViewManager):
         if not event_cdl():
             QMessageBox.information(self,
                                 _tr('MessageDialog', 'Information'),
-                                _tr('IncomeSummary', 'No event available'))
+                                _tr('SalesSummary', 'No event available'))
             return
         # create filter dialog if not exists
         #if not hasattr(self, 'sortFilterDialog'):
@@ -181,12 +181,12 @@ class IncomeSummaryForm(FormViewManager):
         self.sortFilterDialog.show()
 
     def print(self):
-        "Income summary report"
-        dialog = PrintDialog(self, 'INCOME_SUMMARY')
+        "Sales summary report"
+        dialog = PrintDialog(self, 'SALES_SUMMARY')
         if not dialog.ui.layoutFilters.itemAtPosition(0, 0):
             QMessageBox.warning(self,
                                 _tr("MessageDialog", "Warning"),
-                                _tr("IncomeSummary", "A report customization for income summary is required"))
+                                _tr("SalesSummary", "A report customization for Sales summary is required"))
             return
         # set current daily detail setting
         dialog.ui.layoutParameters.itemAtPosition(0, 1).widget().setChecked(self.ui.checkBoxDetail.isChecked())

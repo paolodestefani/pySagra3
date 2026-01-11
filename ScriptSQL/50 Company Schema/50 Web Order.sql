@@ -77,6 +77,9 @@ COMMENT ON TABLE web_order_header IS
 ALTER TABLE web_order_header 
     OWNER TO {pyAppPgOwnerRole};
 
+CREATE INDEX web_order_header_keys_idx 
+    ON web_order_header (company_id, web_order_header_id);
+
 
 -- web order detail table (for customer)
 CREATE TABLE web_order_line (
@@ -110,3 +113,7 @@ COMMENT ON TABLE web_order_line IS
     'Web order line table';
 ALTER TABLE web_order_line 
     OWNER TO {pyAppPgOwnerRole};
+
+CREATE INDEX web_order_line_keys_idx 
+    ON web_order_line (company_id, web_order_line_id, web_order_header_id, item_id);
+

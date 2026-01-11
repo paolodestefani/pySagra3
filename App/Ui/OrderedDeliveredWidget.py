@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'StockUnloadWidget.ui'
+## Form generated from reading UI file 'OrderedDeliveredWidget.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.10.1
 ##
@@ -21,23 +21,23 @@ from PySide6.QtWidgets import (QApplication, QCheckBox, QDateTimeEdit, QHBoxLayo
 
 from App.Widget.View import EnhancedTableView
 
-class Ui_StockUnloadWidget(object):
-    def setupUi(self, StockUnloadWidget):
-        if not StockUnloadWidget.objectName():
-            StockUnloadWidget.setObjectName(u"StockUnloadWidget")
-        StockUnloadWidget.resize(679, 471)
-        self.verticalLayout_2 = QVBoxLayout(StockUnloadWidget)
+class Ui_OrderedDeliveredWidget(object):
+    def setupUi(self, OrderedDeliveredWidget):
+        if not OrderedDeliveredWidget.objectName():
+            OrderedDeliveredWidget.setObjectName(u"OrderedDeliveredWidget")
+        OrderedDeliveredWidget.resize(679, 471)
+        self.verticalLayout_2 = QVBoxLayout(OrderedDeliveredWidget)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.verticalLayout = QVBoxLayout()
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.tableView = EnhancedTableView(StockUnloadWidget)
+        self.tableView = EnhancedTableView(OrderedDeliveredWidget)
         self.tableView.setObjectName(u"tableView")
 
         self.verticalLayout.addWidget(self.tableView)
 
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.checkBoxAutomaticUpdate = QCheckBox(StockUnloadWidget)
+        self.checkBoxAutomaticUpdate = QCheckBox(OrderedDeliveredWidget)
         self.checkBoxAutomaticUpdate.setObjectName(u"checkBoxAutomaticUpdate")
 
         self.horizontalLayout.addWidget(self.checkBoxAutomaticUpdate)
@@ -46,12 +46,12 @@ class Ui_StockUnloadWidget(object):
 
         self.horizontalLayout.addItem(self.horizontalSpacer)
 
-        self.label = QLabel(StockUnloadWidget)
+        self.label = QLabel(OrderedDeliveredWidget)
         self.label.setObjectName(u"label")
 
         self.horizontalLayout.addWidget(self.label)
 
-        self.dateTimeEdit = QDateTimeEdit(StockUnloadWidget)
+        self.dateTimeEdit = QDateTimeEdit(OrderedDeliveredWidget)
         self.dateTimeEdit.setObjectName(u"dateTimeEdit")
         self.dateTimeEdit.setEnabled(False)
         self.dateTimeEdit.setReadOnly(True)
@@ -66,16 +66,16 @@ class Ui_StockUnloadWidget(object):
         self.verticalLayout_2.addLayout(self.verticalLayout)
 
 
-        self.retranslateUi(StockUnloadWidget)
+        self.retranslateUi(OrderedDeliveredWidget)
         self.checkBoxAutomaticUpdate.clicked["bool"].connect(self.dateTimeEdit.setEnabled)
 
-        QMetaObject.connectSlotsByName(StockUnloadWidget)
+        QMetaObject.connectSlotsByName(OrderedDeliveredWidget)
     # setupUi
 
-    def retranslateUi(self, StockUnloadWidget):
-        StockUnloadWidget.setWindowTitle(QCoreApplication.translate("StockUnloadWidget", u"Stock unload", None))
-        self.checkBoxAutomaticUpdate.setText(QCoreApplication.translate("StockUnloadWidget", u"Automatic update", None))
-        self.label.setText(QCoreApplication.translate("StockUnloadWidget", u"Last update:", None))
-        self.dateTimeEdit.setDisplayFormat(QCoreApplication.translate("StockUnloadWidget", u"MM/dd/yyyy HH:mm", None))
+    def retranslateUi(self, OrderedDeliveredWidget):
+        OrderedDeliveredWidget.setWindowTitle(QCoreApplication.translate("OrderedDeliveredWidget", u"Ordered delivered", None))
+        self.checkBoxAutomaticUpdate.setText(QCoreApplication.translate("OrderedDeliveredWidget", u"Automatic update", None))
+        self.label.setText(QCoreApplication.translate("OrderedDeliveredWidget", u"Last update:", None))
+        self.dateTimeEdit.setDisplayFormat(QCoreApplication.translate("OrderedDeliveredWidget", u"MM/dd/yyyy HH:mm", None))
     # retranslateUi
 

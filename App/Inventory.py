@@ -47,49 +47,33 @@ from App.Widget.Delegate import StockLevelDelegate
 from App.Widget.Form import FormViewManager
 from App.Widget.Dialog import EventFilterDialog
 from App.Database.CodeDescriptionList import item_with_stock_control_cdl
-from App.Database.Models import ItemsInventoryModel
+from App.Database.Models import InventoryModel
 from App.Database.Models import KitAvailabilityModel
 from App.Database.Models import MenuAvailabilityModel
-from App.Ui.StockInventoryWidget import Ui_StockInventoryWidget
+from App.Ui.InventoryWidget import Ui_InventoryWidget
 
 
 
 ID, EVENT, ITEM, LOADED, UNLOADED, STOCK, ORDERED, AVAILABLE, NEW_STOCK = range(9)
 
 
-def itemsInventory(auth):
+def inventory(auth):
     "Manage stock inventory"
-    logging.info('Starting stock inventory Form')
+    logging.info('Starting inventory Form')
     mw = session['mainwin']
-    title = currentAction['app_activity_items_inventory'].text()
-    auth = currentAction['app_activity_items_inventory'].data()
-    sw = ItemsInventoryForm(mw, title, auth)
+    title = currentAction['app_activity_inventory'].text()
+    auth = currentAction['app_activity_inventory'].data()
+    sw = InventoryForm(mw, title, auth)
     mw.addTab(title, sw)
     logging.info('Stock inventory Form added to main window')
 
-#class StockInventoryFilterDialog(QDialog, Ui_StockInventoryFilterDialog):
 
-    #def __init__(self, parent):
-        #super().__init__(parent)
-        #self.setupUi(self)
-        #self.parent = parent
-        ## fill event combobox
-        #for i, d in event_list():
-            #self.comboBoxEvent.addItem(d, i)
-        #self.comboBoxEvent.setCurrentText(session['event_description'])
-
-    #def accept(self):
-        #self.parent.selectedEvent = self.comboBoxEvent.currentData()
-        #self.parent.updateEventData()
-        #super().accept()
-
-
-class ItemsInventoryForm(FormViewManager):
+class InventoryForm(FormViewManager):
 
     def __init__(self, parent: QWidget, title: str, auth: str) -> None:
         super().__init__(parent, auth)
         setting = Setting()
-        model = ItemsInventoryModel(self)
+        model = InventoryModel(self)
         self.setModel(model)
         self.tabName = title
         self.helpLink = None
@@ -98,13 +82,13 @@ class ItemsInventoryForm(FormViewManager):
         # FILTER, CHANGE, REPORT, EXPORT
         self.availableStatus = (True, True, True, True, False, False, False, False,
                                 True, False, False, False)
-        self.ui = Ui_StockInventoryWidget()
+        self.ui = Ui_InventoryWidget()
         self.ui.setupUi(self)
         self.setView(self.ui.tableViewItem)  # required for formviewmanager
         # normal item
         #self.view = self.ui..tableViewItem
         #self.ui.tableViewItem.setModel(model)
-        self.ui.tableViewItem.setLayoutName('itemsInventory')
+        self.ui.tableViewItem.setLayoutName('Inventory')
         # self.ui.tableViewItem.horizontalHeader().setSectionsMovable(True)
         self.ui.tableViewItem.setItemDelegateForColumn(ITEM, RelationDelegate(self, item_with_stock_control_cdl))
         self.ui.tableViewItem.setItemDelegateForColumn(LOADED, QuantityDelegate(self))

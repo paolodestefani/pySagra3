@@ -79,6 +79,8 @@ COMMENT ON TABLE printer_class IS
 ALTER TABLE printer_class 
     OWNER TO {pyAppPgOwnerRole};
 
+CREATE INDEX printer_class_keys_idx ON printer_class (company_id, printer_class_id);
+
 CREATE TRIGGER t99_update_company_user_date 
     BEFORE INSERT OR UPDATE ON printer_class  
     FOR EACH ROW EXECUTE PROCEDURE system.update_company_user_date();
@@ -118,6 +120,8 @@ COMMENT ON TABLE printer_class_printer IS
     'Printer classes printer definition table';
 ALTER TABLE printer_class_printer 
     OWNER TO {pyAppPgOwnerRole};
+
+CREATE INDEX printer_class_printer_keys_idx ON printer_class_printer (company_id, printer_class_printer_id);
 
 CREATE TRIGGER t99_update_company_user_date 
     BEFORE INSERT OR UPDATE ON printer_class_printer 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>TableWidget</class>
- <widget class="QWidget" name="TableWidget">
+ <class>SeatMapWidget</class>
+ <widget class="QWidget" name="SeatMapWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -16,7 +16,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>Table</string>
+   <string>Seat Map</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_5">
    <item>
@@ -149,12 +149,6 @@
      </item>
      <item>
       <widget class="QPushButton" name="pushButtonPreview">
-       <property name="font">
-        <font>
-         <pointsize>24</pointsize>
-         <kerning>true</kerning>
-        </font>
-       </property>
        <property name="text">
         <string>Preview</string>
        </property>

@@ -84,6 +84,8 @@ COMMENT ON TABLE numbering IS
 ALTER TABLE numbering 
     OWNER TO {pyAppPgOwnerRole};
 
+CREATE INDEX numbering_keys_idx ON numbering (company_id, numbering_id, event_id);
+
 CREATE TRIGGER t99_update_company_user_date 
     BEFORE INSERT OR UPDATE ON numbering  
     FOR EACH ROW EXECUTE PROCEDURE system.update_company_user_date();
@@ -264,8 +266,7 @@ COMMENT ON TABLE order_header IS
 ALTER TABLE order_header 
     OWNER TO {pyAppPgOwnerRole};
 
-CREATE INDEX order_header_index 
-    ON company.order_header (company_id, order_header_id, event_id, order_date);
+CREATE INDEX order_header_keys_idx ON order_header (company_id, order_header_id, event_id);
 
 CREATE TRIGGER t10_update_numbering 
     AFTER INSERT OR UPDATE ON order_header 
@@ -319,8 +320,8 @@ COMMENT ON TABLE order_header_department IS
 ALTER TABLE order_header_department 
     OWNER TO {pyAppPgOwnerRole};
 
-CREATE INDEX order_header_department_index 
-    ON company.order_header_department (company_id, order_header_department_id, order_header_id, department_id);
+CREATE INDEX order_header_department_keys_idx 
+    ON order_header_department (company_id, order_header_department_id, order_header_id, department_id);
 
 CREATE TRIGGER t10_update_order_header_department
     AFTER UPDATE ON order_header_department 
@@ -372,8 +373,8 @@ COMMENT ON TABLE order_line IS
 ALTER TABLE order_line 
     OWNER TO {pyAppPgOwnerRole};
 
-CREATE INDEX order_line_index 
-    ON company.order_line (company_id, order_line_id, order_header_id);
+CREATE INDEX order_line_keys_idx 
+    ON order_line (company_id, order_line_id, order_header_id, item_id);
 
 CREATE TRIGGER t99_update_company_user_date 
     BEFORE INSERT OR UPDATE ON order_line 
@@ -424,7 +425,7 @@ BEGIN
             WHERE i.item = NEW.item_id 
         LOOP
             -- update items inventory
-            UPDATE company.items_inventory 
+            UPDATE company.inventory 
             SET unloaded = unloaded + NEW.delivered_quantity * partqty,
                 ordered  = ordered + NEW.ordered_quantity * partqty
             WHERE event_id = NEW.event_id 
@@ -459,7 +460,7 @@ BEGIN
             WHERE i.item = NEW.item_id 
         LOOP
             -- items inventory
-            UPDATE company.items_inventory 
+            UPDATE company.inventory 
             SET unloaded = unloaded - OLD.delivered_quantity * partqty + NEW.delivered_quantity * partqty, 
                 ordered  = ordered - OLD.ordered_quantity * partqty + NEW.ordered_quantity * partqty
             WHERE event_id = NEW.event_id 
@@ -495,17 +496,17 @@ BEGIN
             LOOP
                 -- for items inventory
                 -- initialize values on delete can happend if item inventory/delivered control was modified
-                IF NOT EXISTS(  SELECT items_inventory_id 
-                                FROM company.items_inventory 
+                IF NOT EXISTS(  SELECT inventory_id 
+                                FROM company.inventory 
                                 WHERE event_id = OLD.event_id  
                                     AND item_id = itempart) THEN
                     IF (SELECT has_inventory_control FROM company.item WHERE item_id = itempart) THEN
-                        INSERT INTO company.items_inventory (company_id, event_id, item_id) 
+                        INSERT INTO company.inventory (company_id, event_id, item_id) 
                         VALUES (OLD.company_id, OLD.event_id, itempart);
                     END IF;
                 END IF;
                 -- update inventory
-                UPDATE company.items_inventory 
+                UPDATE company.inventory 
                 SET unloaded = unloaded - OLD.delivered_quantity * partqty,
                     ordered  = ordered - OLD.ordered_quantity * partqty
                 WHERE event_id = OLD.event_id 
@@ -537,19 +538,19 @@ BEGIN
     CASE TG_OP
     --
     WHEN 'INSERT' THEN
-        IF NOT EXISTS(  SELECT items_ordered_delivered_id 
-                        FROM company.items_ordered_delivered 
+        IF NOT EXISTS(  SELECT ordered_delivered_id 
+                        FROM company.ordered_delivered 
                         WHERE   event_id    = NEW.event_id 
                             AND event_date  = NEW.event_date 
                             AND day_part    = NEW.day_part 
                             AND item_id     = NEW.item_id) THEN
             IF (SELECT has_delivered_control FROM company.item WHERE item_id = NEW.item_id) THEN
-                INSERT INTO company.items_ordered_delivered (company_id, event_id, event_date, day_part, item_id) 
+                INSERT INTO company.ordered_delivered (company_id, event_id, event_date, day_part, item_id) 
                 VALUES (NEW.company_id, NEW.event_id, NEW.event_date, NEW.day_part, NEW.item_id);
             END IF;
         END IF;
         -- update ordered delivered
-        UPDATE company.items_ordered_delivered
+        UPDATE company.ordered_delivered
         SET ordered   = ordered + NEW.ordered_quantity,
             delivered = delivered + NEW.delivered_quantity
         WHERE event_id = NEW.event_id 
@@ -558,19 +559,19 @@ BEGIN
             AND item_id = NEW.item_id;
 
     WHEN 'UPDATE' THEN
-        IF NOT EXISTS(  SELECT items_ordered_delivered_id 
-                    FROM company.items_ordered_delivered 
+        IF NOT EXISTS(  SELECT ordered_delivered_id 
+                    FROM company.ordered_delivered 
                     WHERE   event_id    = NEW.event_id 
                         AND event_date  = NEW.event_date 
                         AND day_part    = NEW.day_part 
                         AND item_id     = NEW.item_id) THEN
             IF (SELECT has_delivered_control FROM company.item WHERE item_id = NEW.item_id) THEN
-                INSERT INTO company.items_ordered_delivered (company_id, event_id, event_date, day_part, item_id) 
+                INSERT INTO company.ordered_delivered (company_id, event_id, event_date, day_part, item_id) 
                 VALUES (NEW.company_id, NEW.event_id, NEW.event_date, NEW.day_part, NEW.item_id);
             END IF;
         END IF;
         -- update ordered delivered
-        UPDATE company.items_ordered_delivered
+        UPDATE company.ordered_delivered
         SET ordered = ordered - OLD.ordered_quantity + NEW.ordered_quantity,
             delivered = delivered - OLD.delivered_quantity + NEW.delivered_quantity
         WHERE event_id = NEW.event_id 
@@ -579,19 +580,19 @@ BEGIN
             AND item_id = NEW.item_id;
 
     WHEN 'DELETE' THEN
-        IF NOT EXISTS(  SELECT items_ordered_delivered_id 
-                        FROM company.items_ordered_delivered 
+        IF NOT EXISTS(  SELECT ordered_delivered_id 
+                        FROM company.ordered_delivered 
                         WHERE event_id = OLD.event_id 
                             AND event_date = OLD.event_date 
                             AND day_part = OLD.day_part 
                             AND item_id = OLD.item_id) THEN
             IF (SELECT has_delivered_control FROM company.item WHERE item_id = OLD.item_id) THEN
-                INSERT INTO company.items_ordered_delivered (company_id, event_id, event_date, day_part, item_id) 
+                INSERT INTO company.ordered_delivered (company_id, event_id, event_date, day_part, item_id) 
                 VALUES (OLD.company_id, OLD.event_id, OLD.event_date, OLD.day_part, OLD.item_id);
             END IF;
         END IF;
         -- update unload
-        UPDATE company.items_ordered_delivered
+        UPDATE company.ordered_delivered
         SET ordered = ordered - OLD.ordered_quantity,
             delivered = delivered - OLD.delivered_quantity
         WHERE event_id = OLD.event_id 
@@ -660,9 +661,8 @@ COMMENT ON TABLE order_line_department IS
 ALTER TABLE order_line_department 
     OWNER TO {pyAppPgOwnerRole};
 
-CREATE INDEX order_line_department_index 
-    ON company.order_line_department (company_id, order_line_department_id,
-         order_header_department_id, event_id, event_date, day_part);
+CREATE INDEX order_line_department_keys_idx 
+    ON order_line_department (company_id, order_line_department_id, order_header_department_id, event_id);
 
 CREATE TRIGGER t99_update_company_user_date 
     BEFORE INSERT OR UPDATE ON order_line_department 

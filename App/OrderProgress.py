@@ -52,7 +52,7 @@ from App.Database.Setting import SettingClass
 from App.Database.Models import OrderStatusModel
 from App.Widget.Form import FormViewManager
 from App.Widget.Delegate import GenericDelegate
-from App.Ui.OrderProgressDialog import Ui_OrderProgressDialog
+#from App.Ui.OrderProgressDialog import Ui_OrderProgressDialog
 from App.Ui.OrderProgressWidget import Ui_OrderProgressWidget
 from App.System.Utility import _tr
 

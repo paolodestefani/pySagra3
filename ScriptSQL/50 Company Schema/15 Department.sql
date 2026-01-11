@@ -89,6 +89,8 @@ COMMENT ON TABLE department IS
 ALTER TABLE department 
     OWNER TO {pyAppPgOwnerRole};
 
+CREATE INDEX department_keys_idx ON department (company_id, department_id, printer_class_id);
+
 CREATE TRIGGER t99_update_company_user_date 
     BEFORE INSERT OR UPDATE ON department 
     FOR EACH ROW EXECUTE PROCEDURE system.update_company_user_date();

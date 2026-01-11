@@ -106,6 +106,8 @@ COMMENT ON TABLE item IS
 ALTER TABLE item 
     OWNER TO {pyAppPgOwnerRole};
 
+CREATE INDEX item_keys_idx ON item (company_id, item_id, department_id);
+
 CREATE UNIQUE INDEX item_grid_position 
     ON item(company_id, department_id, item_id, pos_row, pos_column) 
     WHERE is_salable IS true;
@@ -150,6 +152,8 @@ COMMENT ON TABLE item_variant IS
     'Item variation table definition';
 ALTER TABLE item_variant 
     OWNER TO {pyAppPgOwnerRole};
+
+CREATE INDEX item_variant_keys_idx ON item_variant (company_id, item_variant_id, item_id);
 
 CREATE TRIGGER t99_update_company_user_date 
     BEFORE INSERT OR UPDATE ON item_variant 
@@ -197,6 +201,8 @@ COMMENT ON TABLE item_part IS
     'Item part table definition';
 ALTER TABLE item_part 
     OWNER TO {pyAppPgOwnerRole};
+
+CREATE INDEX item_part_keys_idx ON item_part (company_id, item_part_id, item_id);
 
 CREATE TRIGGER t99_update_company_user_date 
     BEFORE INSERT OR UPDATE ON item_part 

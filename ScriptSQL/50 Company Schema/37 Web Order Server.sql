@@ -77,6 +77,8 @@ COMMENT ON TABLE web_order_server IS
 ALTER TABLE web_order_server 
     OWNER TO {pyAppPgOwnerRole};
 
+-- CREATE INDEX web_order_server_keys_idx ON web_order_server (company_id);
+
 CREATE TRIGGER t99_update_company_user_date 
     BEFORE INSERT OR UPDATE ON web_order_server 
     FOR EACH ROW EXECUTE PROCEDURE system.update_company_user_date();

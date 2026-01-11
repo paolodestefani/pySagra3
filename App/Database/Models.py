@@ -918,14 +918,14 @@ class DepartmentModel(TableModel):
         self.repr = 'Department table model'
         
 
-class StandTableModel(TableModel):
+class SeatMapModel(TableModel):
 
     def __init__(self, parent: QObject = None) -> None:
         super().__init__(parent)
-        self.table = "company.stand_table"
+        self.table = "company.seat_map"
         # model columns: (field, description, readonly, type), tuple of tuples
         # available types: int, bool, decimal2, str, date, datetime, None = no filter
-        self.columns = (("stand_table_id", _tr('Models', 'ID'), True, 'int'),
+        self.columns = (("seat_map_id", _tr('Models', 'ID'), True, 'int'),
                         ("table_code", _tr('Models', 'Table code'), False, 'str'),
                         ("pos_row", _tr('Models', 'Row'), False, 'int'),
                         ("pos_column", _tr('Models', 'Column'), False, 'int'),
@@ -939,11 +939,11 @@ class StandTableModel(TableModel):
         # True if is a company table
         self.isCompanyTable = True
         # primary key fields, tuple or list
-        self.primaryKey = ("stand_table_id",)
+        self.primaryKey = ("seat_map_id",)
         self.automaticPKey = True
         # sql order by clause, plain sql string without ORDER BY
-        self.addOrderBy("stand_table_id")
-        self.repr = 'Stand table table model'
+        self.addOrderBy("seat_map_id")
+        self.repr = 'Seat map table model'
 
 
 class ItemIndexModel(QueryModel):
@@ -1283,14 +1283,14 @@ class OrderNumberingModel(TableModel):
         self.repr = 'Order numbering table model'
 
 
-class ItemsInventoryModel(TableModel):
+class InventoryModel(TableModel):
 
     def __init__(self, parent: QObject = None) -> None:
         super().__init__(parent)
-        self.table = "company.items_inventory"
+        self.table = "company.inventory"
         # model columns: (field, description, readonly, type), tuple of tuples
         # available types: int, bool, decimal2, str, date, datetime, None = no filter
-        self.columns = (("items_inventory_id", _tr('Models', 'ID'), True, 'int'),
+        self.columns = (("inventory_id", _tr('Models', 'ID'), True, 'int'),
                         ("event_id", _tr('Models', 'event'), False, 'int'),
                         ("item_id", _tr('Models', 'Item'), False, 'int'),
                         ("loaded", _tr('Models', 'Load'), False, 'decimal2'),
@@ -1306,10 +1306,10 @@ class ItemsInventoryModel(TableModel):
         # True if is a company table
         self.isCompanyTable = True
         # primary key fields, tuple or list
-        self.primaryKey = ("items_inventory_id",)
+        self.primaryKey = ("inventory_id",)
         self.automaticPKey = True
         # sql order by clause, plain sql string without ORDER BY
-        self.addOrderBy("items_inventory_id")
+        self.addOrderBy("inventory_id")
         self.newRecordDefault = {'loaded': 0,
                                  'unloaded': 0,
                                  'stock': 0,
@@ -1374,7 +1374,7 @@ SELECT
     i.description,
     s.ordered,
     s.delivered
-FROM items_ordered_delivered s
+FROM ordered_delivered s
 JOIN item i ON s.item_id = i.item_id;"""
         # model columns: (field, description, readonly, type), tuple of tuples
         # available types: int, bool, decimal2, str, date, datetime, None = no filter
@@ -1472,7 +1472,7 @@ FROM company.vw_order_status;"""
         self.addOrderBy(("event_id", "order_date", "order_time"))
 
 
-class IncomeSummaryModel(QueryWithParamsModel):
+class SalesSummaryModel(QueryWithParamsModel):
 
     def __init__(self, parent: QObject = None) -> None:
         super().__init__(parent)
@@ -1508,7 +1508,7 @@ class IncomeSummaryModel(QueryWithParamsModel):
             amount_lunch - discount_lunch AS total_lunch,
             amount_dinner - discount_dinner AS total_dinner,
             amount_lunch + amount_dinner - discount_lunch - discount_dinner AS total
-        FROM vw_income_summary
+        FROM vw_sales_summary
         WHERE event_id = %(event_id)s;
         """
         # model columns: (field, description, readonly, type), tuple of tuples
@@ -1543,7 +1543,7 @@ class IncomeSummaryModel(QueryWithParamsModel):
                         ("total_lunch", _tr('Models', 'Total L'), True, 'decimal2'),
                         ("total_dinner", _tr('Models', 'Total D'), True, 'decimal2'),
                         ("total", _tr('Models', 'Total'), True, 'decimal2'))
-        self.repr = 'Income summary query with params model'
+        self.repr = 'Sales summary query with params model'
         
     def rowCount(self, index=QModelIndex()):
         # add 1 row for totals
@@ -1897,29 +1897,33 @@ class OrderHeaderPandasModel(PandasModel):
     def __init__(self, parent: QObject = None) -> None: 
         super().__init__(parent)
         self.table = "company.bi_order_header"
-        # model columns: {field: (description, pivot value, pivot axis, type)}, dict
-        # available types: int, bool, decimal2, str, date, datetime, None = no filter
-        self.columns = {#"company_id": (_tr('Models', 'Company ID'), False, 'int'),
-                        "event": (_tr('Models', 'Event'), False, True, 'str'),
-                        "order_number": (_tr('Models', 'Order number'), False, True, 'int'),
-                        "order_date": (_tr('Models', 'Order date'), False, True, 'date'),
-                        "order_time": (_tr('Models', 'Order time'), False, True, 'time'),
-                        "order_date_time": (_tr('Models', 'Order date time'), False, True, 'datetime'),
-                        "fullfillment_date": (_tr('Models', 'Fullfilment date'), False, True, 'datetime'),
-                        #"difference": (_tr('Models', 'Difference'), True, False, 'datetime'),
-                        "stat_order_date": (_tr('Models', 'Stat order date'), False, True, 'date'),
-                        "stat_order_day_part": (_tr('Models', 'Stat order day part'), False, True, 'str'),
-                        "cash_desk": (_tr('Models', 'Cash desk'), False, True, 'str'),
-                        "delivery": (_tr('Models', 'Delivery'), False, True, 'str'),
-                        "payment": (_tr('Models', 'Payment'), False, True, 'str'),
-                        "web_order": (_tr('Models', 'Web order'), False, True, 'bool'),
-                        "table_num": (_tr('Models', 'Table number'), False, True, 'str'),
-                        "customer_name": (_tr('Models', 'Customer name'), False, True, 'str'),
-                        "customer_contact": (_tr('Models', 'Customer contact'), False, True, 'str'),
-                        "covers": (_tr('Models', 'Covers'), True, False, 'int'),
-                        "total_amount": (_tr('Models', 'Total amount'), True, False, 'decimal2'),
-                        "discount": (_tr('Models', 'Discount'), True, False, 'decimal2'),
-                        "cash": (_tr('Models', 'Cash'), True, False, 'decimal2')}
+        # model columns: {field: (description, pivot value, pivot axis, type, format)}, dict
+        # available types are pandas dtype: 
+        # int64, boolean, float64, string, datetime64[ns], None (=auto/generic object)
+        # available formats:
+        # int (0 decimal, right aligned), decimal2 (2 decimals, right aligned), 
+        # str (left aligned), bool (centered), 
+        # date (locale date), datetime (locale date time), time (locale time), None = no specific format
+        self.columns = {#"company_id": (_tr('Models', 'Company ID'), False, 'int64', 'int'),
+                        "event": (_tr('Models', 'Event'), False, True, 'string', 'int'),
+                        "order_number": (_tr('Models', 'Order number'), False, True, 'int64', 'int'),
+                        "order_date": (_tr('Models', 'Order date'), False, True, 'datetime64[ns]', 'date'),
+                        "order_time": (_tr('Models', 'Order time'), False, True, 'datetime64[ns]', 'time'),
+                        "order_date_time": (_tr('Models', 'Order date time'), False, True, 'datetime64[ns]', 'datetime'),
+                        "fullfillment_date": (_tr('Models', 'Fullfilment date'), False, True, 'datetime64[ns]', 'datetime'),
+                        "stat_order_date": (_tr('Models', 'Stat order date'), False, True, 'datetime64[ns]', 'date'),
+                        "stat_order_day_part": (_tr('Models', 'Stat order day part'), False, True, 'string', 'str'),
+                        "cash_desk": (_tr('Models', 'Cash desk'), False, True, 'string', 'str'),
+                        "delivery": (_tr('Models', 'Delivery'), False, True, 'string', 'str'),
+                        "payment": (_tr('Models', 'Payment'), False, True, 'string', 'str'),
+                        "web_order": (_tr('Models', 'Web order'), False, True, 'boolean', 'bool'),
+                        "table_num": (_tr('Models', 'Table number'), False, True, 'string', 'str'),
+                        "customer_name": (_tr('Models', 'Customer name'), False, True, 'string', 'str'),
+                        "customer_contact": (_tr('Models', 'Customer contact'), False, True, 'string', 'str'),
+                        "covers": (_tr('Models', 'Covers'), True, False, 'int64', 'int'),
+                        "total_amount": (_tr('Models', 'Total amount'), True, False, 'float64', 'decimal2'),
+                        "discount": (_tr('Models', 'Discount'), True, False, 'float64', 'decimal2'),
+                        "cash": (_tr('Models', 'Cash'), True, False, 'float64')}
         # True if is a company table
         self.isCompanyTable = True
         self.repr = 'Order header pandas model'

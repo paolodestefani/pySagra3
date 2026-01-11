@@ -133,10 +133,6 @@ class SettingsDialog(QDialog):
         self.ui.checkBoxUseTableList.setChecked(self.setting['use_table_list'])
         # colors
         # for many problems with platform themes i use stylesheet for setting colors
-        self.ui.colorComboBoxBackground.setColorList(COLORS)
-        self.ui.colorComboBoxBackground.setCurrentColor(self.setting['normal_background_color'])
-        self.ui.colorComboBoxText.setColorList(COLORS)
-        self.ui.colorComboBoxText.setCurrentColor(self.setting['normal_text_color'])
         self.ui.pushButtonWB.color = self.setting['warning_background_color']
         self.ui.pushButtonWB.setStyleSheet(f"background-color: {self.ui.pushButtonWB.color};")
         self.ui.pushButtonWT.color = self.setting['warning_text_color']
@@ -187,6 +183,12 @@ class SettingsDialog(QDialog):
         self.ui.spinBoxInventoryCriticalLevel.setValue(self.setting['inventory_critical_stock_level'])
         self.ui.spinBoxQuantityDecimals.setValue(self.setting['quantity_decimal_places'])
         self.ui.lineEditCurrencySymbol.setText(self.setting['currency_symbol'])
+        
+        self.ui.colorComboBoxBackground.setColorList(COLORS)
+        self.ui.colorComboBoxBackground.setCurrentColor(self.setting['normal_background_color'])
+        self.ui.colorComboBoxText.setColorList(COLORS)
+        self.ui.colorComboBoxText.setCurrentColor(self.setting['normal_text_color'])
+        
         # set initial default for linked params
         if self.ui.checkBoxCustomerCopy.isChecked():
             self.ui.spinBoxCustomerCopies.setEnabled(True)

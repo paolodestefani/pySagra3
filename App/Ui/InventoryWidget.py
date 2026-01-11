@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'StockInventoryWidget.ui'
+## Form generated from reading UI file 'InventoryWidget.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.10.1
 ##
@@ -20,16 +20,16 @@ from PySide6.QtWidgets import (QApplication, QHBoxLayout, QHeaderView, QLabel,
 
 from App.Widget.View import EnhancedTableView
 
-class Ui_StockInventoryWidget(object):
-    def setupUi(self, StockInventoryWidget):
-        if not StockInventoryWidget.objectName():
-            StockInventoryWidget.setObjectName(u"StockInventoryWidget")
-        StockInventoryWidget.resize(640, 413)
-        self.verticalLayout_4 = QVBoxLayout(StockInventoryWidget)
+class Ui_InventoryWidget(object):
+    def setupUi(self, InventoryWidget):
+        if not InventoryWidget.objectName():
+            InventoryWidget.setObjectName(u"InventoryWidget")
+        InventoryWidget.resize(640, 413)
+        self.verticalLayout_4 = QVBoxLayout(InventoryWidget)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
-        self.splitter = QSplitter(StockInventoryWidget)
+        self.splitter = QSplitter(InventoryWidget)
         self.splitter.setObjectName(u"splitter")
-        self.splitter.setOrientation(Qt.Vertical)
+        self.splitter.setOrientation(Qt.Orientation.Vertical)
         self.splitter.setOpaqueResize(True)
         self.layoutWidget = QWidget(self.splitter)
         self.layoutWidget.setObjectName(u"layoutWidget")
@@ -42,7 +42,7 @@ class Ui_StockInventoryWidget(object):
         font = QFont()
         font.setBold(True)
         self.label_4.setFont(font)
-        self.label_4.setAlignment(Qt.AlignCenter)
+        self.label_4.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout_3.addWidget(self.label_4)
 
@@ -63,7 +63,7 @@ class Ui_StockInventoryWidget(object):
         self.label = QLabel(self.layoutWidget1)
         self.label.setObjectName(u"label")
         self.label.setFont(font)
-        self.label.setAlignment(Qt.AlignCenter)
+        self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout.addWidget(self.label)
 
@@ -80,7 +80,7 @@ class Ui_StockInventoryWidget(object):
         self.label_2 = QLabel(self.layoutWidget1)
         self.label_2.setObjectName(u"label_2")
         self.label_2.setFont(font)
-        self.label_2.setAlignment(Qt.AlignCenter)
+        self.label_2.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout_2.addWidget(self.label_2)
 
@@ -97,15 +97,15 @@ class Ui_StockInventoryWidget(object):
         self.verticalLayout_4.addWidget(self.splitter)
 
 
-        self.retranslateUi(StockInventoryWidget)
+        self.retranslateUi(InventoryWidget)
 
-        QMetaObject.connectSlotsByName(StockInventoryWidget)
+        QMetaObject.connectSlotsByName(InventoryWidget)
     # setupUi
 
-    def retranslateUi(self, StockInventoryWidget):
-        StockInventoryWidget.setWindowTitle(QCoreApplication.translate("StockInventoryWidget", u"Stock inventory", None))
-        self.label_4.setText(QCoreApplication.translate("StockInventoryWidget", u"Normal items stock inventory", None))
-        self.label.setText(QCoreApplication.translate("StockInventoryWidget", u"Kit availability", None))
-        self.label_2.setText(QCoreApplication.translate("StockInventoryWidget", u"Menu availability", None))
+    def retranslateUi(self, InventoryWidget):
+        InventoryWidget.setWindowTitle(QCoreApplication.translate("InventoryWidget", u"Inventory", None))
+        self.label_4.setText(QCoreApplication.translate("InventoryWidget", u"Normal items inventory", None))
+        self.label.setText(QCoreApplication.translate("InventoryWidget", u"Kit availability", None))
+        self.label_2.setText(QCoreApplication.translate("InventoryWidget", u"Menu availability", None))
     # retranslateUi
 

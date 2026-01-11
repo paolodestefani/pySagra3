@@ -937,7 +937,12 @@ class PandasModel(QAbstractTableModel):
                 #print(df.head())
         except psycopg.Error as er:
             raise PyAppDBError(er.diag.sqlstate, str(er))   
-        self._dataframe = df
+        # force correct data types
+        f = {self.columns[i][0]: self.columns[i][3] for i in self.columns if self.columns[i][3]}
+        self._dataframe = df.astype(f)
+        print(f"Dataframe loaded with {len(self._dataframe)} rows and {len(self._dataframe.columns)} columns")
+        print("DTypes:", self._dataframe.dtypes)
+        
         # Number of columns needed for row headers (index)
         #self.row_levels = df.index.nlevels if hasattr(df.index, 'nlevels') else 1
         #print('Columns:', self._dataframe.columns)
@@ -1001,14 +1006,15 @@ class PandasModel(QAbstractTableModel):
             return None
         header = self.headerData(index.column(), Qt.Horizontal, Qt.DisplayRole)
         header = header.split('\n')[0]  # in case of multi-line header
-        dt = self.columns[self.trcolumns[header]][3]  # (name, type)
+        fm = self.columns[self.trcolumns[header]][4]  # (name, format)
         if role == Qt.TextAlignmentRole:
-            if dt in ('int', 'float', 'decimal2'):   
+            if fm in ('int', 'float', 'decimal2'):   
                 return Qt.AlignRight | Qt.AlignVCenter
             return Qt.AlignLeft | Qt.AlignVCenter
         
         if role == Qt.DisplayRole:
             r, c = index.row(), index.column()
+            dt = self._pivot.iloc[r - self.col_levels, c - self.row_levels] if r >= self.col_levels and c >= self.row_levels else None
             # CASE 1: Top-Left Empty Corner
             if r < self.col_levels and c < self.row_levels:
                 return ""
@@ -1019,15 +1025,28 @@ class PandasModel(QAbstractTableModel):
             # CASE 3: Row Headers (Left columns)
             if c < self.row_levels:
                 label = self._pivot.index[r - self.col_levels]
-                return str(label[c]) if isinstance(label, tuple) else str(label)
+                outstr = label[c] if isinstance(label, tuple) else label
+                if fm == 'int':
+                    return session['qlocale'].toString(int(outstr or 0))
+                elif fm in ('float', 'decimal2'):
+                    return session['qlocale'].toString(float(outstr or 0.0), 'f', 2)
+                elif fm == 'date':
+                    if pd.isna(outstr):
+                        return ""
+                    return outstr.strftime('%d/%m/%Y')
+                else:
+                    return str(outstr)
             # CASE 4: Actual Data Values
-            if dt == 'int':
-                return session['qlocale'].toString(int(self._pivot.iloc[r - self.col_levels, c - self.row_levels]))
-            elif dt in ('float', 'decimal2'):
-                return session['qlocale'].toString(float(self._pivot.iloc[r - self.col_levels, c - self.row_levels] or 0.0), 'f', 2)
-                #return f"{self._pivot.iloc[r - self.col_levels, c - self.row_levels]:.2f}"
+            if fm == 'int':
+                return session['qlocale'].toString(int(dt or 0))
+            elif fm in ('float', 'decimal2'):
+                return session['qlocale'].toString(float(dt or 0.0), 'f', 2)
+            elif fm == 'date':
+                if pd.isna(dt):
+                    return ""
+                return dt.strftime('%d/%m/%Y')
             else:
-                return str(self._pivot.iloc[r - self.col_levels, c - self.row_levels])
+                return str(dt)
         
         return None
 

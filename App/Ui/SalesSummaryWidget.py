@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'IncomeSummaryWidget.ui'
+## Form generated from reading UI file 'SalesSummaryWidget.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.10.1
 ##
@@ -20,32 +20,32 @@ from PySide6.QtWidgets import (QApplication, QCheckBox, QHeaderView, QSizePolicy
 
 from App.Widget.View import EnhancedTableView
 
-class Ui_IncomeSummaryWidget(object):
-    def setupUi(self, IncomeSummaryWidget):
-        if not IncomeSummaryWidget.objectName():
-            IncomeSummaryWidget.setObjectName(u"IncomeSummaryWidget")
-        IncomeSummaryWidget.resize(640, 480)
-        self.verticalLayout = QVBoxLayout(IncomeSummaryWidget)
+class Ui_SalesSummaryWidget(object):
+    def setupUi(self, SalesSummaryWidget):
+        if not SalesSummaryWidget.objectName():
+            SalesSummaryWidget.setObjectName(u"SalesSummaryWidget")
+        SalesSummaryWidget.resize(640, 480)
+        self.verticalLayout = QVBoxLayout(SalesSummaryWidget)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.tableView = EnhancedTableView(IncomeSummaryWidget)
+        self.tableView = EnhancedTableView(SalesSummaryWidget)
         self.tableView.setObjectName(u"tableView")
 
         self.verticalLayout.addWidget(self.tableView)
 
-        self.checkBoxDetail = QCheckBox(IncomeSummaryWidget)
+        self.checkBoxDetail = QCheckBox(SalesSummaryWidget)
         self.checkBoxDetail.setObjectName(u"checkBoxDetail")
         self.checkBoxDetail.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
         self.verticalLayout.addWidget(self.checkBoxDetail)
 
 
-        self.retranslateUi(IncomeSummaryWidget)
+        self.retranslateUi(SalesSummaryWidget)
 
-        QMetaObject.connectSlotsByName(IncomeSummaryWidget)
+        QMetaObject.connectSlotsByName(SalesSummaryWidget)
     # setupUi
 
-    def retranslateUi(self, IncomeSummaryWidget):
-        IncomeSummaryWidget.setWindowTitle(QCoreApplication.translate("IncomeSummaryWidget", u"Income summary", None))
-        self.checkBoxDetail.setText(QCoreApplication.translate("IncomeSummaryWidget", u"Show daily detail", None))
+    def retranslateUi(self, SalesSummaryWidget):
+        SalesSummaryWidget.setWindowTitle(QCoreApplication.translate("SalesSummaryWidget", u"Sales summary", None))
+        self.checkBoxDetail.setText(QCoreApplication.translate("SalesSummaryWidget", u"Show daily detail", None))
     # retranslateUi
 

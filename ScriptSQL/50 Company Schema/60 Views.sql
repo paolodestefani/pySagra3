@@ -91,7 +91,7 @@ SELECT
             coalesce(s.available, 0.00) AS available
         FROM company.item i
         LEFT JOIN ( SELECT event_id, item_id, available 
-                    FROM company.items_inventory) s ON  i.item_id = s.item_id
+                    FROM company.inventory) s ON  i.item_id = s.item_id
         WHERE i.item_type = 'I'
         UNION 
         -- kit items    
@@ -109,7 +109,7 @@ SELECT
             FROM company.item_part k
             JOIN company.item pi ON k.part_id = pi.item_id
             LEFT JOIN ( SELECT event_id, item_id, available 
-                        FROM company.items_inventory 
+                        FROM company.inventory 
                         ) s ON k.part_id = s.item_id
             WHERE pi.has_inventory_control IS true 
                 AND pi.is_obsolete IS false
@@ -132,7 +132,7 @@ SELECT
                 COALESCE(s.available, 0.00) AS available
             FROM company.item i
             LEFT JOIN (	SELECT event_id, item_id, available 
-						FROM company.items_inventory) s ON i.item_id = s.item_id
+						FROM company.inventory) s ON i.item_id = s.item_id
             WHERE i.item_type = 'I'
             UNION 
             -- kit items
@@ -150,7 +150,7 @@ SELECT
                 FROM company.item_part k
                 JOIN company.item pi ON k.part_id = pi.item_id
                 LEFT JOIN (	SELECT event_id, item_id, available 
-                            FROM company.items_inventory 
+                            FROM company.inventory 
                             ) s ON k.part_id = s.item_id
                 WHERE pi.has_inventory_control IS true 
                     AND pi.is_obsolete IS false
@@ -168,8 +168,8 @@ COMMENT ON VIEW vw_item_availability IS
 ALTER VIEW vw_item_availability 
     OWNER TO {pyAppPgOwnerRole};
 
--- income summary view
-CREATE OR REPLACE VIEW vw_income_summary AS
+-- Sales summary view
+CREATE OR REPLACE VIEW vw_sales_summary AS
 SELECT 
     oh.company_id           AS company_id,
     oh.event_id             AS event_id,
@@ -270,9 +270,9 @@ SELECT
    GROUP BY oh.company_id, oh.event_id, ev.description, oh.stat_order_date
    ORDER BY oh.company_id, ev.description, oh.stat_order_date;
 
-COMMENT ON VIEW vw_income_summary IS 
-    'Income summary view';
-ALTER VIEW vw_income_summary 
+COMMENT ON VIEW vw_sales_summary IS 
+    'Sales summary view';
+ALTER VIEW vw_sales_summary 
     OWNER TO {pyAppPgOwnerRole};
 
 

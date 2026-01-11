@@ -73,6 +73,7 @@ from PySide6.QtCore import QRectF
 from PySide6.QtCore import QLineF
 from PySide6.QtCore import QMarginsF
 
+from PySide6.QtGui import QGuiApplication
 from PySide6.QtGui import QCursor
 from PySide6.QtGui import QFont
 from PySide6.QtGui import QImage
@@ -100,8 +101,8 @@ if __name__ != "__main__":
     from App import ORGANIZATION
     from App import WEBSITE
     from App import session
+    from App.Database.Setting import Setting
 
-    #from App.Database.Setting import Settings
 else:
     APPNAME = "Report Engine"
     APPVERSIONMAJOR = 0
@@ -952,7 +953,11 @@ class Report():
         # report parameters as a param: value dictionary
         self.parameter = collections.OrderedDict()
         self.summaries = []  # each summary init update this list, must be set before calling setReportDefinition
-
+        print('Modules:', sys.modules.keys())
+        if 'App.Database.Setting' in sys.modules:
+            setting = Setting()
+            defaultOptions['quantityDecimals'] = setting['quantity_decimal_places']
+            defaultOptions['currencySymbol'] = setting['currency_symbol']
         if xml_string:
             self.setReportDefinition(xml_string)
 
@@ -1899,10 +1904,10 @@ else:
         if i == xml_string0:
             r.setData([('', 'One line recordset test', 'Accounting', False, 0, QDate(2018, 3, 3))])  # test empty dataset
         # cursor wait
-        QApplication.setOverrideCursor(QCursor(Qt.WaitCursor))
+        QGuiApplication.setOverrideCursor(QCursor(Qt.WaitCursor))
         r.generate()
         # cursor restore
-        QApplication.restoreOverrideCursor()
+        QGuiApplication.restoreOverrideCursor()
         # print preview
         dialog = QPrintPreviewDialog()
         dialog.setWindowFlags(Qt.Dialog|Qt.WindowMinMaxButtonsHint|Qt.WindowCloseButtonHint)

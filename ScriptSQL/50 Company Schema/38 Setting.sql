@@ -156,6 +156,8 @@ COMMENT ON TABLE setting IS
 ALTER TABLE setting 
     OWNER TO {pyAppPgOwnerRole};
 
+-- CREATE INDEX setting_keys_idx ON setting (company_id);
+
 CREATE TRIGGER t99_update_company_user_date 
     BEFORE INSERT OR UPDATE ON company.setting 
     FOR EACH ROW EXECUTE PROCEDURE system.update_company_user_date();

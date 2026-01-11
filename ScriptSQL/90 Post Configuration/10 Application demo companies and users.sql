@@ -88,7 +88,7 @@ VALUES
 ('cashier', 'app_activity_stock_inventory', 'R'),
 ('cashier', 'app_activity_order_progress', 'R'),
 ('cashier', 'app_activity_stock_unload', 'R'),
-('cashier', 'app_activity_income_summary', 'X');
+('cashier', 'app_activity_sales_summary', 'X');
 
 -- menu
 INSERT INTO menu (menu_code, description, is_system_object) 
@@ -128,7 +128,7 @@ VALUES
 ('cac', 'cacord', Null, 1, 'A', 'app_activity_order_entry'),
 ('cac', 'cacsp1', Null, 2, 'S', Null),
 ('cac', 'cacsp2', Null, 6, 'S', Null),
-('cac', 'cacins', Null, 7, 'A', 'app_activity_income_summary');
+('cac', 'cacins', Null, 7, 'A', 'app_activity_sales_summary');
 
 -- toolbar
 INSERT INTO toolbar (toolbar_code, description, is_system_object) 

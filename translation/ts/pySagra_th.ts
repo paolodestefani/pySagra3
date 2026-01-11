@@ -415,7 +415,7 @@
     </message>
     <message>
         <location filename="App/Widgets/Actions.py" line="609"/>
-        <source>Income summary</source>
+        <source>Sales summary</source>
         <translation>สรุปรายได้</translation>
     </message>
     <message>
@@ -1855,7 +1855,7 @@ Black = Transparent</source>
     </message>
     <message>
         <location filename="App/IncomeSummary.py" line="189"/>
-        <source>A report customization for income summary is required</source>
+        <source>A report customization for Sales summary is required</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1863,7 +1863,7 @@ Black = Transparent</source>
     <name>IncomeSummaryWidget</name>
     <message>
         <location filename="App/Ui/IncomeSummaryWidget.ui" line="14"/>
-        <source>Income summary</source>
+        <source>Sales summary</source>
         <translation type="unfinished">สรุปรายได้</translation>
     </message>
     <message>

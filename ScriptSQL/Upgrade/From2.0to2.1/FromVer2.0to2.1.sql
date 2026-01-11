@@ -122,7 +122,7 @@ SELECT oh.event,
    JOIN event ev ON oh.event = ev.id
    GROUP BY oh.event, ev.description, oh.stat_order_date
    ORDER BY ev.description, oh.stat_order_date;
-COMMENT ON VIEW income_summary IS ''Income summary view'';
+COMMENT ON VIEW income_summary IS ''Sales summary view'';
 ALTER VIEW income_summary OWNER TO *pyAppPgOwnerRole*;
 
 
@@ -1061,7 +1061,7 @@ SELECT oh.event,
    JOIN event ev ON oh.event = ev.id
    GROUP BY oh.event, ev.description, oh.stat_order_date
    ORDER BY ev.description, oh.stat_order_date;
-COMMENT ON VIEW income_summary IS 'Income summary view';
+COMMENT ON VIEW income_summary IS 'Sales summary view';
 ALTER VIEW income_summary OWNER TO *pyAppPgOwnerRole*;
 
 

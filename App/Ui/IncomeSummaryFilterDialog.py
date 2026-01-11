@@ -83,7 +83,7 @@ class Ui_IncomeSummaryFilterDialog(object):
     # setupUi
 
     def retranslateUi(self, IncomeSummaryFilterDialog):
-        IncomeSummaryFilterDialog.setWindowTitle(QCoreApplication.translate("IncomeSummaryFilterDialog", u"Income summary filter dialog", None))
+        IncomeSummaryFilterDialog.setWindowTitle(QCoreApplication.translate("IncomeSummaryFilterDialog", u"Sales summary filter dialog", None))
         self.groupBox.setTitle("")
         self.label.setText(QCoreApplication.translate("IncomeSummaryFilterDialog", u"Select the working event from the list below", None))
         self.groupBoxEvent.setTitle(QCoreApplication.translate("IncomeSummaryFilterDialog", u"Event", None))

@@ -52,7 +52,7 @@ from App.Widget.Delegate import RelationDelegate
 from App.Widget.Form import FormViewManager
 from App.Widget.Dialog import PrintDialog
 from App.Widget.Dialog import EventFilterDialog
-from App.Ui.StockUnloadWidget import Ui_StockUnloadWidget
+from App.Ui.OrderedDeliveredWidget import Ui_OrderedDeliveredWidget
 from App.System.Utility import _tr
 
 
@@ -66,7 +66,7 @@ def dayPartMapping():
 
 
 def orderedDelivered(auth):
-    "Stock unload"
+    "Ordered delivered"
     logging.info('Starting ordered delivered Form')
     mw = session['mainwin']
     title = currentAction['app_activity_ordered_delivered'].text()
@@ -89,7 +89,7 @@ class OrderedDeliveredForm(FormViewManager):
         # FILTER, CHANGE, REPORT, EXPORT
         self.availableStatus = (False, False, False, True, False, False, False, False,
                                 True, False, False, False)
-        self.ui = Ui_StockUnloadWidget()
+        self.ui = Ui_OrderedDeliveredWidget()
         self.ui.setupUi(self)
         self.setView(self.ui.tableView)  # required for formviewmanager
         self.ui.tableView.setModel(model)
@@ -171,12 +171,12 @@ class OrderedDeliveredForm(FormViewManager):
         self.sortFilterDialog.show()
 
     def print_(self):
-        "CheckUnload report"
+        "Ordered delivered report"
         dialog = PrintDialog(self, 'ORDERED_DELIVERED')
         if not dialog.layoutFilters.itemAtPosition(0, 0):
             QMessageBox.warning(self,
                                 _tr("MessageDialog", "Warning"),
-                                _tr("StockUnload", "A report customization for stock unload is required"))
+                                _tr("OrderedDelivered", "A report customization for ordered delivered is required"))
             return
         # filter on current selected event/date/datepart
         # report definition must have these conditions and in this order

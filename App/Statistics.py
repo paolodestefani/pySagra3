@@ -37,7 +37,7 @@ import decimal
 import pandas as pd
 
 # PySide6
-from PySide6.QtCore import QObject
+#from PySide6.QtCore import QObject
 from PySide6.QtCore import QSettings
 from PySide6.QtCore import QDir
 from PySide6.QtCore import QByteArray
@@ -45,6 +45,8 @@ from PySide6.QtCore import QDate
 from PySide6.QtCore import QDateTime
 from PySide6.QtCore import QTime
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QGuiApplication
+from PySide6.QtGui import QCursor
 from PySide6.QtWidgets import QWidget
 from PySide6.QtWidgets import QDialog
 from PySide6.QtWidgets import QMessageBox
@@ -62,7 +64,7 @@ from App.Database.Models import OrderLinePandasModel
 from App.Ui.AnalysisWidget import Ui_AnalysisWidget
 from App.Ui.StatisticsExportDialog import Ui_StatisticsExportDialog
 from App.Widget.Dialog import PrintDialog
-from App.Widget.Delegate import PandasDelegate
+#from App.Widget.Delegate import PandasDelegate
 from App.System.Utility import _tr
 
 
@@ -80,8 +82,8 @@ def statisticsAnalysis() -> None:
 def statisticsPrint():
     "Print statistic reports"
     logging.info('Starting statistics consumption dialog')
-    mw = QObject().sender().parentWidget()
-    dialog = PrintDialog(mw, 'STATISTICS_CONSUMPTION')
+    mw = session['mainwin']
+    dialog = PrintDialog(mw, 'STATISTICS')
     dialog.show()
     logging.info('Statistics consumption dialog shown')
 
@@ -89,10 +91,10 @@ def statisticsPrint():
 def statisticsExport():
     "Statistics export"
     logging.info('Starting statistics export dialog')
-    mw = QObject().sender().parentWidget()
-    auth = QObject().sender().data()
-    title = QObject().sender().text()
-    icon = QObject().sender().icon()
+    mw = session['mainwin']
+    title = currentAction['app_statistics_export'].text()
+    auth = currentAction['app_statistics_export'].data()
+    icon = currentAction['app_statistics_export'].icon()
     dlg = StatisticsExportDialog(mw, title, icon, auth)
     dlg.exec_()
     logging.info('Statistics  export dialog shown')
@@ -263,6 +265,8 @@ class AnalysisForm(QWidget):
                 
     def changeAnalysis(self, index: int) -> None:
         "Change analysis type"
+        # cursor wait
+        QGuiApplication.setOverrideCursor(QCursor(Qt.WaitCursor))
         match index:
             case 1:
                 self.model = OrderHeaderPandasModel()
@@ -273,6 +277,8 @@ class AnalysisForm(QWidget):
             case _:
                 self.model = None
                 logging.info("No analysis selected")
+        # cursor restore
+        QGuiApplication.restoreOverrideCursor()
         # events filter
         self.ui.comboBoxEvent.clear()
         self.ui.comboBoxEvent.addItems([''] + self.model.getEvents())
@@ -405,4 +411,4 @@ class AnalysisForm(QWidget):
             self.ui.groupBoxValues.setVisible(True)
             self.ui.groupBoxRow.setVisible(True)
             self.ui.groupBoxColumn.setVisible(True)
-            self.ui.pushButtonShowApply.setText(_tr("Statistics", "Apply"))
+            self.ui.pushButtonShowApply.setText(_tr("Statistics", "Apply/Refresh"))

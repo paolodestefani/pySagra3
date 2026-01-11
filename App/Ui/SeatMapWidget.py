@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'TableWidget.ui'
+## Form generated from reading UI file 'SeatMapWidget.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.10.1
 ##
@@ -22,17 +22,17 @@ from PySide6.QtWidgets import (QApplication, QFrame, QGridLayout, QGroupBox,
 
 from App.Widget.View import EnhancedTableView
 
-class Ui_TableWidget(object):
-    def setupUi(self, TableWidget):
-        if not TableWidget.objectName():
-            TableWidget.setObjectName(u"TableWidget")
-        TableWidget.resize(890, 442)
+class Ui_SeatMapWidget(object):
+    def setupUi(self, SeatMapWidget):
+        if not SeatMapWidget.objectName():
+            SeatMapWidget.setObjectName(u"SeatMapWidget")
+        SeatMapWidget.resize(890, 442)
         font = QFont()
         font.setKerning(True)
-        TableWidget.setFont(font)
-        self.verticalLayout_5 = QVBoxLayout(TableWidget)
+        SeatMapWidget.setFont(font)
+        self.verticalLayout_5 = QVBoxLayout(SeatMapWidget)
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
-        self.stackedWidget = QStackedWidget(TableWidget)
+        self.stackedWidget = QStackedWidget(SeatMapWidget)
         self.stackedWidget.setObjectName(u"stackedWidget")
         self.pageList = QWidget()
         self.pageList.setObjectName(u"pageList")
@@ -84,7 +84,7 @@ class Ui_TableWidget(object):
 
         self.horizontalLayout_3 = QHBoxLayout()
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.groupBox = QGroupBox(TableWidget)
+        self.groupBox = QGroupBox(SeatMapWidget)
         self.groupBox.setObjectName(u"groupBox")
         self.verticalLayout_2 = QVBoxLayout(self.groupBox)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
@@ -111,12 +111,8 @@ class Ui_TableWidget(object):
 
         self.horizontalLayout_3.addItem(self.horizontalSpacer_2)
 
-        self.pushButtonPreview = QPushButton(TableWidget)
+        self.pushButtonPreview = QPushButton(SeatMapWidget)
         self.pushButtonPreview.setObjectName(u"pushButtonPreview")
-        font1 = QFont()
-        font1.setPointSize(24)
-        font1.setKerning(True)
-        self.pushButtonPreview.setFont(font1)
         self.pushButtonPreview.setCheckable(True)
 
         self.horizontalLayout_3.addWidget(self.pushButtonPreview)
@@ -125,7 +121,7 @@ class Ui_TableWidget(object):
 
         self.horizontalLayout_3.addItem(self.horizontalSpacer_3)
 
-        self.groupBox_2 = QGroupBox(TableWidget)
+        self.groupBox_2 = QGroupBox(SeatMapWidget)
         self.groupBox_2.setObjectName(u"groupBox_2")
         self.verticalLayout_3 = QVBoxLayout(self.groupBox_2)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
@@ -178,23 +174,23 @@ class Ui_TableWidget(object):
         self.verticalLayout_5.addLayout(self.horizontalLayout_3)
 
 
-        self.retranslateUi(TableWidget)
+        self.retranslateUi(SeatMapWidget)
 
         self.stackedWidget.setCurrentIndex(0)
 
 
-        QMetaObject.connectSlotsByName(TableWidget)
+        QMetaObject.connectSlotsByName(SeatMapWidget)
     # setupUi
 
-    def retranslateUi(self, TableWidget):
-        TableWidget.setWindowTitle(QCoreApplication.translate("TableWidget", u"Table", None))
-        self.groupBox.setTitle(QCoreApplication.translate("TableWidget", u"Massive editing", None))
-        self.pushButtonDeleteAll.setText(QCoreApplication.translate("TableWidget", u"Delete All", None))
-        self.pushButtonGenerate.setText(QCoreApplication.translate("TableWidget", u"Generate table numbers", None))
-        self.pushButtonPreview.setText(QCoreApplication.translate("TableWidget", u"Preview", None))
-        self.groupBox_2.setTitle(QCoreApplication.translate("TableWidget", u"Base geometry", None))
-        self.label.setText(QCoreApplication.translate("TableWidget", u"Rows", None))
-        self.label_2.setText(QCoreApplication.translate("TableWidget", u"Columns", None))
-        self.label_3.setText(QCoreApplication.translate("TableWidget", u"Spacing", None))
+    def retranslateUi(self, SeatMapWidget):
+        SeatMapWidget.setWindowTitle(QCoreApplication.translate("SeatMapWidget", u"Seat Map", None))
+        self.groupBox.setTitle(QCoreApplication.translate("SeatMapWidget", u"Massive editing", None))
+        self.pushButtonDeleteAll.setText(QCoreApplication.translate("SeatMapWidget", u"Delete All", None))
+        self.pushButtonGenerate.setText(QCoreApplication.translate("SeatMapWidget", u"Generate table numbers", None))
+        self.pushButtonPreview.setText(QCoreApplication.translate("SeatMapWidget", u"Preview", None))
+        self.groupBox_2.setTitle(QCoreApplication.translate("SeatMapWidget", u"Base geometry", None))
+        self.label.setText(QCoreApplication.translate("SeatMapWidget", u"Rows", None))
+        self.label_2.setText(QCoreApplication.translate("SeatMapWidget", u"Columns", None))
+        self.label_3.setText(QCoreApplication.translate("SeatMapWidget", u"Spacing", None))
     # retranslateUi
 

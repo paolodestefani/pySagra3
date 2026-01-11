@@ -972,59 +972,59 @@ class TimeDelegate(QStyledItemDelegate):
         super().paint(painter, option, index)
         
         
-class PandasDelegate(QStyledItemDelegate):
-    "Read only delegate for a tableview with pandas model"
+# class PandasDelegate(QStyledItemDelegate):
+#     "Read only delegate for a tableview with pandas model"
 
-    def paint(self, painter, option, index):
-        if index.isValid() is False:
-            return
-        model = index.model()
-        header = model.headerData(index.column(), Qt.Horizontal, Qt.DisplayRole)
-        header = header.split('\n')[0]  # in case of multi-line header
-        dt = model.columns[model.trcolumns[header]][2]  # (name, type)
-        value = index.data() # index.model().data(index, Qt.DisplayRole)
-        print("Val", value, "Type", type(value), "DT", dt)
-        #type = index.model().columns[index.column()][1]  # (name, type)
-        styleOption = QStyleOptionViewItem(option)
-        self.initStyleOption(styleOption, index)
+#     def paint(self, painter, option, index):
+#         if index.isValid() is False:
+#             return
+#         model = index.model()
+#         header = model.headerData(index.column(), Qt.Horizontal, Qt.DisplayRole)
+#         header = header.split('\n')[0]  # in case of multi-line header
+#         dt = model.columns[model.trcolumns[header]][2]  # (name, type)
+#         value = index.data() # index.model().data(index, Qt.DisplayRole)
+#         print("Val", value, "Type", type(value), "DT", dt)
+#         #type = index.model().columns[index.column()][1]  # (name, type)
+#         styleOption = QStyleOptionViewItem(option)
+#         self.initStyleOption(styleOption, index)
 
-        if dt == 'decimal2':
-            styleOption.text = session['qlocale'].toString(float(value or 0.0), 'f', 2)
-            styleOption.displayAlignment = Qt.AlignRight | Qt.AlignVCenter
-        elif dt == 'int':
-            styleOption.text = str(int(float(value) or 0))
-            styleOption.displayAlignment = Qt.AlignRight | Qt.AlignVCenter
-        elif dt == 'str':
-            styleOption.text = str(value or '')  # for null values
-            styleOption.displayAlignment = Qt.AlignLeft | Qt.AlignVCenter
-        else:
-            styleOption.text = str(value or '')  # for null values
-            styleOption.displayAlignment = Qt.AlignLeft | Qt.AlignVCenter
+#         if dt == 'decimal2':
+#             styleOption.text = session['qlocale'].toString(float(value or 0.0), 'f', 2)
+#             styleOption.displayAlignment = Qt.AlignRight | Qt.AlignVCenter
+#         elif dt == 'int':
+#             styleOption.text = str(int(float(value) or 0))
+#             styleOption.displayAlignment = Qt.AlignRight | Qt.AlignVCenter
+#         elif dt == 'str':
+#             styleOption.text = str(value or '')  # for null values
+#             styleOption.displayAlignment = Qt.AlignLeft | Qt.AlignVCenter
+#         else:
+#             styleOption.text = str(value or '')  # for null values
+#             styleOption.displayAlignment = Qt.AlignLeft | Qt.AlignVCenter
 
-        font = index.model().data(index, Qt.FontRole)
-        if font:
-            styleOption.font = font
-        painter.save()
-        if option.state & QStyle.State_Selected:  # selected
-            if option.state & QStyle.State_Active:  # selected active
-                styleOption.backgroundBrush = option.palette.highlight()
+#         font = index.model().data(index, Qt.FontRole)
+#         if font:
+#             styleOption.font = font
+#         painter.save()
+#         if option.state & QStyle.State_Selected:  # selected
+#             if option.state & QStyle.State_Active:  # selected active
+#                 styleOption.backgroundBrush = option.palette.highlight()
 
-        QApplication.style().drawControl(QStyle.CE_ItemViewItem,
-                                         styleOption,
-                                         painter)
-        painter.restore()
+#         QApplication.style().drawControl(QStyle.CE_ItemViewItem,
+#                                          styleOption,
+#                                          painter)
+#         painter.restore()
 
-    def getCheckBoxRect(self, option):
-        check_box_style_option = QStyleOptionButton()
-        check_box_rect = QApplication.style().subElementRect(QStyle.SE_CheckBoxIndicator, check_box_style_option, None)
-        check_box_point = QPoint(option.rect.x() +
-                                 option.rect.width() / 2 -
-                                 check_box_rect.width() / 2,
-                                 option.rect.y() +
-                                 option.rect.height() / 2 -
-                                 check_box_rect.height() / 2)
-        return QRect(check_box_point, check_box_rect.size())
+#     def getCheckBoxRect(self, option):
+#         check_box_style_option = QStyleOptionButton()
+#         check_box_rect = QApplication.style().subElementRect(QStyle.SE_CheckBoxIndicator, check_box_style_option, None)
+#         check_box_point = QPoint(option.rect.x() +
+#                                  option.rect.width() / 2 -
+#                                  check_box_rect.width() / 2,
+#                                  option.rect.y() +
+#                                  option.rect.height() / 2 -
+#                                  check_box_rect.height() / 2)
+#         return QRect(check_box_point, check_box_rect.size())
 
-    def createEditor(self, parent, option, index):
-        "Important, otherwise an editor is created if the user clicks in this cell."
-        return None
+#     def createEditor(self, parent, option, index):
+#         "Important, otherwise an editor is created if the user clicks in this cell."
+#         return None

@@ -48,7 +48,6 @@ SET search_path = company;
 
 
 -- event table 
-DROP TABLE IF EXISTS event CASCADE;
 CREATE TABLE event (
     created_at          timestamptz(3) NOT NULL,
 	created_by          text NOT NULL,
@@ -89,6 +88,8 @@ COMMENT ON TABLE event IS
     'Event definition table';
 ALTER TABLE event 
     OWNER TO {pyAppPgOwnerRole};
+
+CREATE INDEX event_keys_idx ON event (company_id, event_id, price_list_id);
 
 CREATE TRIGGER t99_update_company_user_date 
     BEFORE INSERT OR UPDATE ON event  

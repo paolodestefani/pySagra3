@@ -76,6 +76,8 @@ COMMENT ON TABLE price_list IS
 ALTER TABLE price_list 
     OWNER TO {pyAppPgOwnerRole};
 
+CREATE INDEX price_list_keys_idx ON price_list (company_id, price_list_id);
+
 CREATE TRIGGER t99_update_company_user_date 
     BEFORE INSERT OR UPDATE ON price_list 
     FOR EACH ROW EXECUTE PROCEDURE system.update_company_user_date();
@@ -120,6 +122,8 @@ COMMENT ON TABLE price_list_item IS
     'Price list prices';
 ALTER TABLE price_list_item 
     OWNER TO {pyAppPgOwnerRole};
+
+CREATE INDEX price_list_item_keys_idx ON price_list_item (company_id, price_list_item_id, price_list_id, item_id);
 
 CREATE TRIGGER t99_update_company_user_date 
     BEFORE INSERT OR UPDATE ON price_list_item 

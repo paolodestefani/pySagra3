@@ -45,7 +45,7 @@ def table_list():
         pos_column,
         text_color,
         background_color
-    FROM company.stand_table
+    FROM company.seat_map
     WHERE company_id = %s AND is_obsolete IS false;"""
     try:
         with appconn.cursor() as cur:
@@ -57,7 +57,7 @@ def table_list():
 def table_delete():
     "Delete all tables"
     script = """
-    DELETE FROM company.stand_table 
+    DELETE FROM company.seat_map 
     WHERE company_id = %s;"""
     try:
         with appconn.transaction():
@@ -70,7 +70,7 @@ def table_exists(table_code):
     "Returns True if the provided table list exists"
     script = """
     SELECT table_code
-    FROM stand_table
+    FROM seat_map
     WHERE company_id = %s AND table_code = %s AND is_obsolete IS false;"""
     try:
         with appconn.transaction():

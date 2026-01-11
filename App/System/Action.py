@@ -58,7 +58,7 @@ from App.System.Customization import customization
 from App.CashDesk import cashDesk
 from App.Printer import printer
 from App.Department import department
-from App.StandTable import table
+from App.SeatMap import seatMap
 from App.Item import item
 from App.PriceList import priceList
 from App.Event import event
@@ -67,13 +67,13 @@ from App.WebOrder import webOrder
 from App.OrderArchive import orderArchive
 from App.OrderNumbering import orderNumbering
 from App.Settings import settings
-from App.ItemsInventory import itemsInventory
+from App.Inventory import inventory
 from App.OrderProgress import orderProgress
 
 from App.OrderEntry import orderEntry
 from App.Statistics import statisticsAnalysis, statisticsPrint, statisticsExport
-from App.ItemsOrderedDelivered import orderedDelivered
-from App.IncomeSummary import incomeSummary
+from App.OrderedDelivered import orderedDelivered
+from App.SalesSummary import salesSummary
 from App.Tool import eventBasedTool
 from App.Tool import deleteTool
 from App.Tool import copyTool
@@ -509,15 +509,15 @@ def createActionDictionary(mw):
         _tr("Action", 'Departments'),
         QAction.TextHeuristicRole)
 
-    actionDefinition['app_file_table'] = (
-        _tr("Action", 'Tables'),
-        table,
+    actionDefinition['app_file_seat_map'] = (
+        _tr("Action", 'Seat map'),
+        seatMap,
         False,
-        'file_table',
+        'file_seat_map',
         None,
-        _tr("Action", 'Tables'),
-        _tr("Action", 'Tables'),
-        _tr("Action", 'Tables'),
+        _tr("Action", 'Seat map'),
+        _tr("Action", 'Seat map'),
+        _tr("Action", 'Seat map'),
         QAction.TextHeuristicRole)
 
     actionDefinition['app_file_item'] = (
@@ -598,15 +598,15 @@ def createActionDictionary(mw):
         _tr("Action", 'Order entry'),
         QAction.TextHeuristicRole)
 
-    actionDefinition['app_activity_items_inventory'] = (
-        _tr("Action", 'Items Inventory'),
-        itemsInventory,
+    actionDefinition['app_activity_inventory'] = (
+        _tr("Action", 'Inventory'),
+        inventory,
         False,
-        'activities_items_inventory',
+        'activities_inventory',
         None,
-        _tr("Action", 'Items Inventory'),
-        _tr("Action", 'Items Inventory'),
-        _tr("Action", 'Items Inventory'),
+        _tr("Action", 'Inventory'),
+        _tr("Action", 'Inventory'),
+        _tr("Action", 'Inventory'),
         QAction.TextHeuristicRole)
 
     actionDefinition['app_activity_order_progress'] = (
@@ -631,15 +631,15 @@ def createActionDictionary(mw):
         _tr("Action", 'Ordered delivered'),
         QAction.TextHeuristicRole)
 
-    actionDefinition['app_activity_income_summary'] = (
-        _tr("Action", 'Income summary'),
-        incomeSummary,
+    actionDefinition['app_activity_sales_summary'] = (
+        _tr("Action", 'Sales summary'),
+        salesSummary,
         False,
-        'activities_income_summary',
+        'activities_sales_summary',
         None,
-        _tr("Action", 'Income summary'),
-        _tr("Action", 'Income summary'),
-        _tr("Action", 'Income summary'),
+        _tr("Action", 'Sales summary'),
+        _tr("Action", 'Sales summary'),
+        _tr("Action", 'Sales summary'),
         QAction.TextHeuristicRole)
 
     # statistics
