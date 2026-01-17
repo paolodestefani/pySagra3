@@ -697,6 +697,7 @@ class Rectangle():
         pen.setColor(self.color)
         pen.setWidthF(self.lineWidth)
         pen.setStyle(self.style)
+        pen.setCapStyle(Qt.RoundCap)
         painter.setPen(pen)
         if self.brushStyle != Qt.NoBrush:
             brush = QBrush()
@@ -1323,16 +1324,10 @@ if __name__ == "__main__":
     xml_string0 = """<?xml version="1.0" encoding="UTF-8"?>
 <report version="1.0">
     <options>
-        <documentName type="str">Test of a minimal report</documentName>
-        <orientation type="str">Portrait</orientation>
-        <pageSize type="str">A4</pageSize>
         <topMargin type="float">0.0</topMargin>
         <bottomMargin type="float">0.0</bottomMargin>
         <leftMargin type="float">0.0</leftMargin>
         <rightMargin type="float">0.0</rightMargin>
-        <fontName type="str">Arial</fontName>
-        <fontSize type="int">8</fontSize>
-        <color type="str">black</color>
     </options>
     <columns>
         <fieldName>Empty</fieldName>
@@ -1358,11 +1353,10 @@ if __name__ == "__main__":
     </details>
 </report>
 """
-
     xml_string1 = """<?xml version="1.0" encoding="UTF-8"?>
 <report version="1.0">
     <options>
-        <documentName type="str">Complete test report</documentName>
+        <documentName type="str">Example of a complete report</documentName>
         <orientation type="str">Portrait</orientation>
         <pageSize type="str">A4</pageSize>
         <topMargin type="float">5.0</topMargin>
@@ -1385,13 +1379,9 @@ if __name__ == "__main__":
         <sort field="date" reverse="False"/>
         <sort field="quantity" reverse="True"/>
     </sorting>
-    <pageBackground>
-        <line x1="0.0" y1="0.0" x2="0.0" y2="837.0" lineWidth="1.0" color="blue"/>
-        <line x1="585.0" y1="0.0" x2="585.0" y2="837.0" lineWidth="1.0" color="blue"/>
-    </pageBackground>
     <pageHeader>
-        <band height="80.0">
-    <image left="0.0" top="0.0" width="48.0" height="48.0" aspectRatio="KeepAspectRatio" opacity="0.3">
+        <band height="100.0">
+        <image left="0.0" top="0.0" width="48.0" height="48.0" aspectRatio="KeepAspectRatio" opacity="1.0">
         iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABHNCSVQICAgIfAhkiAAAAAlw
         SFlzAAAFMQAABTEBt+0oUgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoA
         AApISURBVHja1Zp7jB1Xfcc/vzOP+753H/Y+jF+xnZCHG4TlhDg0jU2kkrRRGxWCEOLVVqJp
@@ -1444,96 +1434,91 @@ if __name__ == "__main__":
         5Zvo6dta+FJ9srFBjB6JW/z9yAhHp1bT2LOfWGeN87S9u8TPxeRWd7G6MsinwLs2X86OnT5Z
         /8TLX+VXc9DnC5AyyL23EGZ8vHaCveubrPw/bojI3qsIymU8vwv3ep/x/7X90Ba5k+pnAAAA
         AElFTkSuQmCC</image>
-        <label left="0.0" top="20.0" width="550.0" height="38.0" color="red"
+        <label left="0.0" top="20.0" width="550.0" height="38.0" color="blue"
         fontName="Impact" fontWeight="Bold" fontItalic="True" fontSize="24"
-        textAlign="AlignHCenter">* Page Header *</label>
-        <rectangle color="#88FF22" left="0.0" top="0.0" width="590.0" height="40.0" lineWidth="3.0"/>
-        <line x1="0.0" y1="60.0" x2="550.0" y2="60.0" lineWidth="1.0"/>
-        <label left="0.0" top="62.0" width="100.0" height="15.0">Code</label>
-        <label left="100.0" top="62.0" width="150.0" height="15.0">Description</label>
-        <label left="250.0" top="62.0" width="80.0" height="15.0">Department</label>
-        <label left="330.0" top="62.0" width="25.0" height="15.0">S.C.</label>
-        <label left="355.0" top="62.0" width="60.0" height="15.0" textAlign="AlignRight">Quantity</label>
-        <label left="480.0" top="62.0" width="70.0" height="15.0" textAlign="AlignRight">Date</label>
-        <line x1="0.0" y1="78.0" x2="550.0" y2="78.0" lineWidth="3.0" color="green"/>
+        textAlign="AlignHCenter">Example of a complete report</label>
+        <rectangle xRadius="3.0" yRadius="3.0" left="0.0" top="75.0" width="585.0" height="15.0" lineWidth="1.0"/>
+        <label left="5.0" top="60.0" width="585.0" height="15.0" fontSize="6">A complete report with 2 level of grouping, department and date, and aggregate functions</label>
+        <label left="5.0" top="75.0" width="100.0" height="15.0">Code</label>
+        <label left="100.0" top="75.0" width="240.0" height="15.0">Description</label>
+        <label left="340.0" top="75.0" width="100.0" height="15.0">Department</label>
+        <label left="440.0" top="75.0" width="15.0" height="15.0" textAlign="AlignHCenter">SC</label>
+        <label left="450.0" top="75.0" width="60.0" height="15.0" textAlign="AlignRight">Quantity</label>
+        <label left="510.0" top="75.0" width="65.0" height="15.0" textAlign="AlignRight">Date</label>
     </band>
     </pageHeader>
-    <reportHeader>
-        <band height="32">
-            <label left="0.0" top="0.0" width="550.0" height="30.0" color="red" fontName="Arial" fontSize="16"
-            textAlign="AlignHCenter">° Report Header °</label>
-        </band>
-    </reportHeader>
     <groups>
         <!-- groups are nested -->
         <group field="department" reverse="False">
             <groupHeader>
-                <band height="25.0">
-                    <execute before="True" after="True">print('TEST')</execute>
-                    <label left="0.0" top="0.0" width="100.0" height="25.0" fontWeight="Bold">Department:</label>
-                    <field left="100.0" top="0.0" width="80" height="25.0" fontWeight="Bold">department</field>
+                <band height="20.0">
+                    <label left="5.0" top="0.0" width="100.0" height="18.0" fontWeight="Bold" color="darkblue">Department:</label>
+                    <field left="100.0" top="0.0" width="80" height="18.0" fontWeight="Bold" color="darkblue">department</field>
+                    <line x1="5.0" y1="15.0" x2="250.0" y2="15.0" lineWidth="1.0" color="darkblue"/>
                 </band>
             </groupHeader>
             <groupFooter>
                 <band height="30.0" newPageAfter="True">
-                    <line x1="20.0" y1="3.0" x2="550.0" y2="3.0" width="1.0"/>
-                    <label left="20.0" top="4.0" width="140.0" height="20" fontWeight="Bold">Footer for:</label>
-                    <field left="120.0" top="4.0" width="80" height="20.0" fontWeight="Bold">department</field>
-                    <label left="200.0" top="4.0" width="30.0" height="20">Sum:</label>
-                    <summary function="sum" left="230.0" top="4.0" width="40.0" height="16">quantity</summary>
-                    <label left="280.0" top="4.0" width="35.0" height="20.0">Cnt:</label>
-                    <summary function="count" left="315.0" top="4.0" width="35.0" height="20.0">quantity</summary>
-                    <label left="350.0" top="4.0" width="35.0" height="20.0">Min:</label>
-                    <summary function="min" left="385.0" top="4.0" width="35" height="20.0">quantity</summary>
-                    <label left="410.0" top="4.0" width="30.0" height="20">Max:</label>
-                    <summary function="max" left="440.0" top="4.0" width="40" height="20">quantity</summary>
-                    <label left="480.0" top="4.0" width="30.0" height="20">Avg:</label>
-                    <summary function="average" left="510.0" top="4.0" width="40" height="20" textAlign="AlignRight" format="{:06.2f}">quantity</summary>
+                    <label left="20.0" top="4.0" width="140.0" height="20" fontWeight="Bold" color="darkblue">Summary for:</label>
+                    <field left="120.0" top="4.0" width="80" height="20.0" fontWeight="Bold" color="darkblue">department</field>
+                    <label left="200.0" top="4.0" width="30.0" height="20" color="darkblue">Sum:</label>
+                    <summary function="sum" left="230.0" top="4.0" width="40.0" height="16" color="darkblue">quantity</summary>
+                    <label left="280.0" top="4.0" width="35.0" height="20.0" color="darkblue">Cnt:</label>
+                    <summary function="count" left="315.0" top="4.0" width="35.0" height="20.0" color="darkblue">quantity</summary>
+                    <label left="350.0" top="4.0" width="35.0" height="20.0" color="darkblue">Min:</label>
+                    <summary function="min" left="385.0" top="4.0" width="35" height="20.0" color="darkblue">quantity</summary>
+                    <label left="410.0" top="4.0" width="30.0" height="20" color="darkblue">Max:</label>
+                    <summary function="max" left="440.0" top="4.0" width="40" height="20" color="darkblue">quantity</summary>
+                    <label left="480.0" top="4.0" width="30.0" height="20" color="darkblue">Avg:</label>
+                    <summary function="average" left="510.0" top="4.0" width="40" height="20" textAlign="AlignRight" format="{:06.2f}" color="darkblue">quantity</summary>
+                    <line x1="20.0" y1="3.0" x2="550.0" y2="3.0" width="1.0" color="darkblue"/>
                 </band>
             </groupFooter>
         </group>
         <group field="date" reverse="True">
             <groupHeader>
                 <band height="20">
-                    <label left="0.0" top="0.0" width="50.0" height="16" color="blue">Date:</label>
-                    <field left="60.0" top="0.0" width="80" height="16" color="blue">date</field>
+                    <label left="5.0" top="0.0" width="200.0" height="18" color="darkgreen">Date:</label>
+                    <field left="60.0" top="0.0" width="80" height="18" color="darkgreen">date</field>
+                    <line x1="5.0" y1="15.0" x2="250.0" y2="15.0" lineWidth="1.0" color="darkgreen"/>
                 </band>
             </groupHeader>
             <groupFooter>
                 <band height="30" isVisible = "True">
-                    <line x1="400.0" y1="3.0" x2="550.0" y2="3.0" width="1.0"/>
-                    <label left="80.0" top="4.0" width="40.0" height="20">Sum:</label>
-                    <summary function="sum" left="120.0" top="4.0" width="40.0" height="16">quantity</summary>
-                    <label left="160.0" top="4.0" width="40.0" height="20.0">Count:</label>
-                    <summary function="count" left="200.0" top="4.0" width="40" height="20.0">quantity</summary>
-                    <label left="240.0" top="4.0" width="40.0" height="20.0">Min:</label>
-                    <summary function="min" left="280.0" top="4.0" width="40" height="20.0">quantity</summary>
-                    <label left="320.0" top="4.0" width="40.0" height="20">Max:</label>
-                    <summary function="max" left="360.0" top="4.0" width="40" height="20">quantity</summary>
-                    <label left="400.0" top="4.0" width="50.0" height="20">Avg:</label>
-                    <summary function="average" left="450.0" top="4.0" width="50" height="20" format="{:06.2f}">quantity</summary>
+                    <label left="20.0" top="4.0" width="140.0" height="20" fontWeight="Bold" color="darkgreen">Summary for:</label>
+                    <field left="120.0" top="4.0" width="80" height="20.0" fontWeight="Bold" color="darkgreen">date</field>
+                    <label left="200.0" top="4.0" width="30.0" height="20" color="darkgreen">Sum:</label>
+                    <summary function="sum" left="230.0" top="4.0" width="40.0" height="16" color="darkgreen">quantity</summary>
+                    <label left="280.0" top="4.0" width="35.0" height="20.0" color="darkgreen">Cnt:</label>
+                    <summary function="count" left="315.0" top="4.0" width="35.0" height="20.0" color="darkgreen">quantity</summary>
+                    <label left="350.0" top="4.0" width="35.0" height="20.0" color="darkgreen">Min:</label>
+                    <summary function="min" left="385.0" top="4.0" width="35" height="20.0" color="darkgreen">quantity</summary>
+                    <label left="410.0" top="4.0" width="30.0" height="20" color="darkgreen">Max:</label>
+                    <summary function="max" left="440.0" top="4.0" width="40" height="20" color="darkgreen">quantity</summary>
+                    <label left="480.0" top="4.0" width="30.0" height="20" color="darkgreen">Avg:</label>
+                    <summary function="average" left="510.0" top="4.0" width="40" height="20" textAlign="AlignRight" format="{:06.2f}" color="darkgreen">quantity</summary>
+                    <line x1="20.0" y1="3.0" x2="550.0" y2="3.0" width="1.0" color="darkgreen"/>
                 </band>
             </groupFooter>
         </group>
     </groups>
     <details>
         <band height="20.0" canGrow="True">
-            <field left="0.0" top="3" width="100" height="20" fontName="Courier New" textAlign="AlignLeft">code</field>
-            <field left="100.0" top="3" width="150" height="20" canGrow="True">description</field>
-            <field left="250.0" top="3" width="80" height="20">department</field>
-            <field left="330.0" top="3" width="25" height="20">stock_control</field>
-            <field left="355.0" top="3" width="60" height="20" format="" textAlign="AlignRight">quantity</field>
-            <field left="480.0" top="3" width="70" height="20" format="dd.MM.yy" textAlign="AlignRight">date</field>
-            <line x1="480.0" y1="23.0" x2="550.0" y2="23.0" width="1"/>
+            <field left="5.0" top="3" width="100" height="20" fontName="Courier New" textAlign="AlignLeft">code</field>
+            <field left="100.0" top="3" width="240.0" height="20.0" canGrow="True">description</field>
+            <field left="340.0" top="3" width="100.0" height="20.0">department</field>
+            <field left="440.0" top="3" width="15.0" height="20.0" textAlign="AlignHCenter">stock_control</field>
+            <field left="450.0" top="3" width="60.0" height="20.0" textAlign="AlignRight">quantity</field>
+            <field left="510.0" top="3" width="65.0" height="20.0" format="dd.MM.yy" textAlign="AlignRight">date</field>
         </band>
     </details>
     <reportFooter>
         <band height="60.0">
-            <rectangle xRadius="4.0" yRadius="4.0" color="blue" left="0.0" top="0.0" width="550.0" height="60.0"
-            lineWidth="2.0" brushStyle="DiagCrossPattern" brushColor="lightgrey"/>
+            <rectangle xRadius="3.0" yRadius="3.0" color="red" left="15.0" top="0.0" width="540.0" height="60.0"
+            lineWidth="2.0" brushStyle="Dense6Pattern" brushColor="lightgrey"/>
             <label left="10.0" top="4.0" width="550.0" height="16" fontItalic="True"
-            fontWeight="Bold" textAlign="AlignHCenter">Report footer summaries of quantity field</label>
-            <label left="10.0" top="24.0" width="50.0" height="20" fontWeight="Bold">Sum:</label>
+            fontWeight="Bold" textAlign="AlignHCenter">Report summaries of quantity field</label>
+            <label left="20.0" top="24.0" width="50.0" height="20" fontWeight="Bold">Sum:</label>
             <summary function="sum" left="60.0" top="24.0" width="50.0" height="16" fontWeight="Bold">quantity</summary>
             <label left="110.0" top="24.0" width="50.0" height="20.0" fontWeight="Bold">Count:</label>
             <summary function="count" left="160.0" top="24.0" width="50" height="20.0" fontWeight="Bold">quantity</summary>
@@ -1547,16 +1532,12 @@ if __name__ == "__main__":
     </reportFooter>
     <pageFooter>
         <band height="24.0">
-            <rectangle left="0.0" top="0.0" width="550.0" height="18.0" brushStyle="Dense3Pattern" brushColor="lightgrey"/>
-            <label left="2.0" top="0.0" width="60.0" height="16.0" textAlign="AlignLeft">Print date:</label>
-            <special left="60.0" top="0.0" width="70.0" height="16.0" textAlign="AlignLeft">printDate</special>
-            <label left="1.0" top="0.0" width="550.0" height="16.0" textAlign="AlignHCenter">-* Page footer *-</label>
-            <label left="500.0" top="0.0" width="60.0" height="16.0" textAlign="AlignLeft">Page:</label>
-            <special left="530.0" top="0.0" width="50.0" height="16.0" textAlign="AlignLeft">pageNumber</special>
-        </band>
-        <band height="20.0">
-            <label left="0.0" top="0.0" width="550.0" height="15.0" color="black" textAlign="AlignHCenter">Test second page footer band</label>
-            <line x1="0.0" y1="18.0" x2="550.0" y2="18.0" width="1.0" style="SolidLine"/>
+            <rectangle xRadius="3.0" yRadius="3.0" left="0.0" top="0.0" width="585.0" height="18.0" brushStyle="Dense3Pattern" brushColor="lightgrey"/>
+            <label left="5.0" top="3.0" width="60.0" height="16.0" textAlign="AlignLeft">Print date:</label>
+            <special left="60.0" top="3.0" width="70.0" height="16.0" textAlign="AlignLeft">printDate</special>
+            <label left="5.0" top="3.0" width="585.0" height="16.0" textAlign="AlignHCenter">Example report</label>
+            <label left="520.0" top="3.0" width="50.0" height="16.0" textAlign="AlignLeft">Page:</label>
+            <special left="570.0" top="3.0" width="10.0" height="16.0" textAlign="AlignLeft">pageNumber</special>
         </band>
     </pageFooter>
 </report>
@@ -1751,65 +1732,11 @@ if __name__ == "__main__":
     </pageFooter>
 </report>
 """
-
-    xml_string4 = """<?xml version="1.0" encoding="UTF-8"?>
-<report version="1.0">
-    <options>
-        <documentName type="str">Test report Four</documentName>
-        <orientation type="str">Portrait</orientation>
-        <pageSize type="str">A4</pageSize>
-        <topMargin type="float">5.0</topMargin>
-        <bottomMargin type="float">5.0</bottomMargin>
-        <leftMargin type="float">5.0</leftMargin>
-        <rightMargin type="float">5.0</rightMargin>
-        <fontName type="str">Arial</fontName>
-        <fontSize type="int">8</fontSize>
-    </options>
-    <columns>
-        <fieldName>code</fieldName>
-        <fieldName>description</fieldName>
-        <fieldName>department</fieldName>
-        <fieldName>stock_control</fieldName>
-        <fieldName>quantity</fieldName>
-        <fieldName>date</fieldName>
-    </columns>
-    <sorting>
-        <sort field="department" reverse="False"/>
-        <sort field="date" reverse="False"/>
-        <sort field="quantity" reverse="True"/>
-    </sorting>
-    <pageBackground>
-        <rectangle left="0.0" top="0.0" width="560.0" height="810.0" unit="point" lineWidth="0.5"/>
-        <line x1="0.0" y1="50.0" x2="0.0" y2="779.0" lineWidth="1.0"/>
-        <line x1="550.0" y1="50.0" x2="550.0" y2="779.0" lineWidth="1.0"/>
-    </pageBackground>
-    <pageHeader>
-    </pageHeader>
-    <reportHeader>
-        <band height="32">
-            <label left="0.0" top="0.0" width="550.0" height="30.0" color="red" fontName="Arial" fontSize="16"
-            textAlign="AlignHCenter">° Report Header °</label>
-        </band>
-    </reportHeader>
-    <details>
-        <band height="20.0" canGrow="True">
-            <field left="0.0" top="3" width="100" height="20" fontName="Courier New" textAlign="AlignLeft">code</field>
-            <field left="100.0" top="3" width="150" height="20" canGrow="True">description</field>
-            <field left="250.0" top="3" width="80" height="20">department</field>
-            <field left="330.0" top="3" width="25" height="20">stock_control</field>
-            <field left="355.0" top="3" width="60" height="20" format="" textAlign="AlignRight">quantity</field>
-            <field left="480.0" top="3" width="70" height="20" format="dd.MM.yy" textAlign="AlignRight">date</field>
-            <line x1="480.0" y1="23.0" x2="550.0" y2="23.0" width="1"/>
-        </band>
-    </details>
-</report>
-"""
     for i in (
               xml_string0,
               xml_string1,
               xml_string2,
               xml_string3,
-              xml_string4,
                  ):
         r = Report(i)
         r.setData([
