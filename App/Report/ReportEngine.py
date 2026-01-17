@@ -198,10 +198,12 @@ FontWeight = {'Thin': QFont.Thin,
               'ExtraBold': QFont.ExtraBold,
               'Black': QFont.Black}
 
-TextAlign = {'AlignLeft': Qt.AlignLeft, # Default
-             'AlignRight': Qt.AlignRight,
-             'AlignHCenter': Qt.AlignHCenter,
-             'AlignJustify': Qt.AlignJustify}
+TextAlign = {'AlignLeft': Qt.AlignmentFlag.AlignLeft, # Default
+             'AlignRight': Qt.AlignmentFlag.AlignRight,
+             'AlignHCenter': Qt.AlignmentFlag.AlignHCenter,
+             'AlignJustify': Qt.AlignmentFlag.AlignJustify,
+             'AlignTop': Qt.AlignmentFlag.AlignTop,
+             'AlignCenter': Qt.AlignmentFlag.AlignCenter}
 
 # line styles
 
@@ -244,23 +246,23 @@ defaultOptions = {'documentName': 'pyReportEngine document',
                   'bottomMargin': 5.0,
                   'leftMargin': 5.0,
                   'rightMargin': 5.0,
-                  'defaultBarcodeType': None,
-                  'defaultFontName': 'Arial',
-                  'defaultFontSize': 8,
-                  'defaultFontItalic': 'False',
-                  'defaultFontWeight': 'Normal',
-                  'defaultTextAlign': 'AlignLeft',
-                  'defaultColor': 'black',
-                  'defaultLineWidth': 1.0,
-                  'defaultLineStyle': 'SolidLine',
-                  'defaultBrushStyle': 'NoBrush',
-                  'defaultBrushColor': 'Black',
-                  'defaultAspectRatio': 'KeepAspectRatio',
-                  'defaultOpacity': 1.0,
+                  'barcodeType': None,
+                  'fontName': 'Arial',
+                  'fontSize': 8,
+                  'fontItalic': 'False',
+                  'fontWeight': 'Normal',
+                  'textAlign': 'AlignLeft',
+                  'color': 'black',
+                  'lineWidth': 1.0,
+                  'lineStyle': 'SolidLine',
+                  'brushStyle': 'NoBrush',
+                  'brushColor': 'Black',
+                  'aspectRatio': 'KeepAspectRatio',
+                  'opacity': 1.0,
                   'quantityDecimals': 2,
                   'currencySymbol': '€',
-                  'trueSymbol': '\u2B24',   #'\u25CF'
-                  'falseSymbol': '\u25EF'   #'\u25CB'
+                  'trueSymbol': '\u25CF',   #'\u25CF'
+                  'falseSymbol': '\u25CB'   #'\u25CB'
                   }
 
 
@@ -340,14 +342,14 @@ class BaseRenderer():
         self.top = float(paramdict.get("top", 0))
         self.width = float(paramdict.get("width", 0))
         self.height = float(paramdict.get("height", 0))
-        self.barcode = paramdict.get("barcodeType", options['defaultBarcodeType'])
-        self.fontName = paramdict.get("fontName", options['defaultFontName'])
-        self.fontSize = int(paramdict.get("fontSize", options['defaultFontSize']))
-        self.fontItalic = 'True' == paramdict.get("fontItalic", options['defaultFontItalic'])
-        self.fontWeight = FontWeight[paramdict.get("fontWeight", options['defaultFontWeight'])]
-        self.textAlign = TextAlign[paramdict.get("textAlign", options['defaultTextAlign'])]
-        self.color = paramdict.get("color", options['defaultColor'])
-        self.opacity = float(paramdict.get("opacity", options['defaultOpacity']))
+        self.barcode = paramdict.get("barcodeType", options['barcodeType'])
+        self.fontName = paramdict.get("fontName", options['fontName'])
+        self.fontSize = int(paramdict.get("fontSize", options['fontSize']))
+        self.fontItalic = 'True' == paramdict.get("fontItalic", options['fontItalic'])
+        self.fontWeight = FontWeight[paramdict.get("fontWeight", options['fontWeight'])]
+        self.textAlign = TextAlign[paramdict.get("textAlign", options['textAlign'])]
+        self.color = paramdict.get("color", options['color'])
+        self.opacity = float(paramdict.get("opacity", options['opacity']))
         # macOS dark mode and color scheme conflicts workaround
         if self.color in ('black', '#000000'):
             self.color = '???' # an invalid color that Qt interpret as black on any platforms
@@ -497,7 +499,7 @@ class Field(BaseRenderer):
         super().__init__(options, paramdict)
         self.value = None
         self.fieldName = fieldName
-        self.aspectRatio = AspectRatio[paramdict.get("aspectRatio", options['defaultAspectRatio'])]
+        self.aspectRatio = AspectRatio[paramdict.get("aspectRatio", options['aspectRatio'])]
 
     def setValue(self, value: str|int|float|decimal.Decimal|QByteArray) -> None:
         if isinstance(value, QByteArray):
@@ -626,10 +628,10 @@ class Line():
         self.y1 = float(paramdict.get("y1", 0))
         self.x2 = float(paramdict.get("x2", 0))
         self.y2 = float(paramdict.get("y2", 0))
-        self.color = paramdict.get("color", options['defaultColor'])
-        self.opacity = float(paramdict.get("opacity", options['defaultOpacity']))
-        self.lineWidth = float(paramdict.get("lineWidth", options['defaultLineWidth']))
-        self.style = PenStyle[paramdict.get("style", options['defaultLineStyle'])]
+        self.color = paramdict.get("color", options['color'])
+        self.opacity = float(paramdict.get("opacity", options['opacity']))
+        self.lineWidth = float(paramdict.get("lineWidth", options['lineWidth']))
+        self.style = PenStyle[paramdict.get("style", options['lineStyle'])]
 
     def render(self, bandOffset: float, bandHeight: float) -> None:
         if self.isVisibleParameter:
@@ -675,11 +677,11 @@ class Rectangle():
         self.xRadius = float(paramdict.get("xRadius", 0.0)) or None
         self.yRadius = float(paramdict.get("yRadius", 0.0)) or None
         self.lineWidth = float(paramdict.get("lineWidth", 0.0))
-        self.color = QColor(paramdict.get("color", options['defaultColor']))
-        self.style = PenStyle[paramdict.get("style", options['defaultLineStyle'])]
-        self.brushColor = QColor(paramdict.get("brushColor", options['defaultColor']))
+        self.color = QColor(paramdict.get("color", options['color']))
+        self.style = PenStyle[paramdict.get("style", options['lineStyle'])]
+        self.brushColor = QColor(paramdict.get("brushColor", options['color']))
         self.brushStyle = BrushStyle[paramdict.get("brushStyle", 'NoBrush')]
-        self.opacity = float(paramdict.get("opacity", options['defaultOpacity']))
+        self.opacity = float(paramdict.get("opacity", options['opacity']))
 
     def render(self, bandOffset: float, bandHeight: float) -> None:
         if self.isVisibleParameter:
@@ -739,8 +741,8 @@ class Image():
         self.width = float(paramdict.get("width", 0.0))
         self.height = float(paramdict.get("height", 0.0))
         self.fromResource = paramdict.get("fromResource")
-        self.aspectRatio = AspectRatio[paramdict.get("aspectRatio", options['defaultAspectRatio'])]
-        self.opacity = float(paramdict.get("opacity", options['defaultOpacity']))
+        self.aspectRatio = AspectRatio[paramdict.get("aspectRatio", options['aspectRatio'])]
+        self.opacity = float(paramdict.get("opacity", options['opacity']))
         image = QImage()
         if text:
             image.loadFromData(QByteArray.fromBase64(bytearray(text.encode('utf-8')))) # Image in base64 encoding
@@ -1244,7 +1246,8 @@ class Report():
 
         # report scripting, only one time before starting
         if self.execute:
-            globalsParameters = {'report': self}
+            globalsParameters = {'Qt': Qt,
+                                 'report': self}
             exec(self.execute, globalsParameters)
 
         self.rn = first_record_num
@@ -1327,9 +1330,9 @@ if __name__ == "__main__":
         <bottomMargin type="float">0.0</bottomMargin>
         <leftMargin type="float">0.0</leftMargin>
         <rightMargin type="float">0.0</rightMargin>
-        <defaultFontName type="str">Arial</defaultFontName>
-        <defaultFontSize type="int">8</defaultFontSize>
-        <defaultColor type="str">black</defaultColor>
+        <fontName type="str">Arial</fontName>
+        <fontSize type="int">8</fontSize>
+        <color type="str">black</color>
     </options>
     <columns>
         <fieldName>Empty</fieldName>
@@ -1342,15 +1345,15 @@ if __name__ == "__main__":
     <pageHeader>
         <band height="80.0">
         <label left="0.0" top="10.0" width="595.0" height="80.0" color="blue"
-        fontName="Impact" fontWeight="Bold" fontItalic="True" fontSize="36"
+        fontName="Impact" fontWeight="Bold" fontItalic="True" fontSize="32"
         textAlign="AlignHCenter">*** MINIMAL REPORT EXAMPLE ***</label>
         </band>
     </pageHeader>
     <details>
         <band height="100.0" canGrow="True">
-            <label left="0.0" top="0.0" width="595.0" height="10.0" textAlign="AlignHCenter">A report must have at least one record, even if it is empty.</label>
-            <label left="0.0" top="20.0" width="595.0" height="10.0" textAlign="AlignHCenter">In this example the dataset is one record of one field that is None/Null</label>
-            <label left="0.0" top="50.0" width="595.0" height="10.0" textAlign="AlignHCenter">Page size is A4, no margins, page background and one detail line</label>
+            <label left="0.0" top="0.0" width="595.0" height="15.0" textAlign="AlignHCenter">A report must have at least one record, even if it is empty.</label>
+            <label left="0.0" top="20.0" width="595.0" height="15.0" textAlign="AlignHCenter">In this example the dataset is one record of one field that is None/Null</label>
+            <label left="0.0" top="50.0" width="595.0" height="15.0" textAlign="AlignHCenter">Page size is A4, no margins, page background and one dataset line</label>
         </band>
     </details>
 </report>
@@ -1366,8 +1369,8 @@ if __name__ == "__main__":
         <bottomMargin type="float">5.0</bottomMargin>
         <leftMargin type="float">5.0</leftMargin>
         <rightMargin type="float">5.0</rightMargin>
-        <defaultFontName type="str">Arial</defaultFontName>
-        <defaultFontSize type="int">8</defaultFontSize>
+        <fontName type="str">Arial</fontName>
+        <fontSize type="int">8</fontSize>
     </options>
     <columns>
         <fieldName>code</fieldName>
@@ -1561,16 +1564,16 @@ if __name__ == "__main__":
     xml_string2 = """<?xml version="1.0" encoding="UTF-8"?>
 <report version="1.0">
     <options>
-        <documentName type="str">Test report Two</documentName>
+        <documentName type="str">Test report Barcode</documentName>
         <orientation type="str">Portrait</orientation>
         <unit type="str">Point</unit>
         <pageSize type="str">A4</pageSize>
-        <topMargin type="float">15.0</topMargin>
-        <bottomMargin type="float">15.0</bottomMargin>
-        <leftMargin type="float">15.0</leftMargin>
-        <rightMargin type="float">15.0</rightMargin>
-        <defaultFontName type="str">Arial</defaultFontName>
-        <defaultFontSize type="int">8</defaultFontSize>
+        <topMargin type="float">5.0</topMargin>
+        <bottomMargin type="float">5.0</bottomMargin>
+        <leftMargin type="float">5.0</leftMargin>
+        <rightMargin type="float">5.0</rightMargin>
+        <fontName type="str">Arial</fontName>
+        <fontSize type="int">8</fontSize>
     </options>
     <columns><!-- Must have a columnNumber/fieldName for every column of the dataset -->
         <fieldName>code</fieldName>
@@ -1588,17 +1591,14 @@ if __name__ == "__main__":
         <parameter type="str" id="stringExample">String parameter example</parameter>
         <parameter type="str" id="stringSecondExample" items="First:First|Second:Second|Tirth:Tirth">Second string parameter example</parameter>
     </parameters>
-    <execute>
-    </execute>
     <sorting>
         <sort field="department" reverse="False"/>
         <sort field="date" reverse="False"/>
         <sort field="quantity" reverse="True"/>
     </sorting>
     <pageBackground>
-        <line x1="0.0" y1="95.0" x2="0.0" y2="782.0" lineWidth="0.5"/>
-        <line x1="552.0" y1="95.0" x2="552.0" y2="782.0" lineWidth="0.5"/>
-        <image left="10.0" top="20.0" width="350.0" height="350.0" aspectRatio="KeepAspectRatio">
+        <image left="0.0" top="0.0" width="590.0" height="837.0" aspectRatio="KeepAspectRatio"
+        opacity="0.3">
         iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABHNCSVQICAgIfAhkiAAAAAlw
         SFlzAAAFMQAABTEBt+0oUgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoA
         AApISURBVHja1Zp7jB1Xfcc/vzOP+753H/Y+jF+xnZCHG4TlhDg0jU2kkrRRGxWCEOLVVqJp
@@ -1653,43 +1653,34 @@ if __name__ == "__main__":
         AElFTkSuQmCC</image>
     </pageBackground>
     <pageHeader>
-        <band height="180.0">
-            <special left="0.0" top="0.0" width="40.0" height="40.0">eventImage</special>
-            <label left="460.0" top="4.0" width="30.0" height="16.0" textAlign="AlignLeft">Date:</label>
-            <special left="480.0" top="4.0" width="70.0" height="16.0" textAlign="AlignRight">printDate</special>
-            <label left="0.0" top="40.0" width="550.0" height="38.0" color="blue" fontName="Impact" fontWeight="Bold" fontItalic="True" fontSize="24" textAlign="AlignHCenter">Ordered list of items</label>
-            <label left="280.0" top="0.0" width="200.0" height="60.0" fontName="Archon Code 39 Barcode" fontSize="36" textAlign="AlignHCenter" barcodeType="Code39">ABCD12345</label>
-            <label left="0.0" top="0.0" width="200.0" height="60.0" fontName="Code 128" fontSize="36" textAlign="AlignHCenter" barcodeType="Code128">ABCD12345</label>
-            <label left="0.0" top="62.0" width="30.0" height="15.0" fontWeight="Bold">R.N.</label>
-            <label left="30.0" top="62.0" width="100.0" height="15.0" fontWeight="Bold">Code</label>
-            <label left="100.0" top="62.0" width="150.0" height="15.0" fontWeight="Bold">Description</label>
-            <label left="250.0" top="62.0" width="80.0" height="15.0" fontWeight="Bold">Department</label>
-            <label left="350.0" top="62.0" width="25.0" height="15.0" fontWeight="Bold">S.C.</label>
-            <label left="370.0" top="62.0" width="60.0" height="15.0" textAlign="AlignRight" fontWeight="Bold">Quantity</label>
-            <label left="480.0" top="62.0" width="70.0" height="15.0" textAlign="AlignRight" fontWeight="Bold">Date</label>
-            <line x1="0.0" y1="78.0" x2="550.0" y2="78.0" lineWidth="3.0"/>
+        <band height="120.0">
+            <label left="0.0" top="0.0" width="585.0" height="50.0" fontName="Archon Code 39 Barcode" fontSize="36" textAlign="AlignLeft" barcodeType="Code39">ABCD12345</label>
+            <label left="0.0" top="0.0" width="585.0" height="50.0" fontName="Code 128" fontSize="36" textAlign="AlignRight" barcodeType="Code128">ABCD12345</label>
+            <label left="0.0" top="50.0" width="585.0" height="40.0" color="blue" fontName="Impact" fontWeight="Bold" fontItalic="True" fontSize="24" textAlign="AlignHCenter">Test report Barcode</label>
+            <label left="0.0" top="90.0" width="28.0" height="15.0" fontWeight="Bold">R.N.</label>
+            <label left="30.0" top="90.0" width="110.0" height="15.0" fontWeight="Bold">Code128</label>
+            <label left="140.0" top="90.0" width="110.0" height="15.0" fontWeight="Bold">Code39</label>
+            <label left="250.0" top="90.0" width="60.0" height="15.0" fontWeight="Bold">Code</label>
+            <label left="310.0" top="90.0" width="150.0" height="15.0" fontWeight="Bold">Description</label>
+            <label left="460.0" top="90.0" width="60.0" height="15.0" textAlign="AlignRight" fontWeight="Bold">Quantity</label>
+            <label left="525.0" top="90.0" width="60.0" height="15.0" textAlign="AlignRight" fontWeight="Bold">Date</label>
+            <line x1="0.0" y1="110.0" x2="585.0" y2="110.0" lineWidth="2.0"/>
         </band>
     </pageHeader>
     <details>
-        <band height="20.0" canGrow="True">
-            <execute>
-if record['quantity'] == 25:
-    band.isVisible = False
-else:
-    band.isVisible = True
-            </execute>
-            <special left="2.0" top="3.0" width="30.0" height="14.0" textAlign="AlignLeft" color="green" format="{:0>3d}">recordNumber</special>
-            <field left="30.0" top="3" width="100" height="14.0" fontName="Courier New" textAlign="AlignLeft">code</field>
-            <field left="100.0" top="3" width="150.0" height="14.0" canGrow="True">description</field>
-            <field left="250.0" top="3" width="80.0" height="14.0">department</field>
-            <field left="350.0" top="3" width="25.0" height="14.0">stock_control</field>
-            <field left="370.0" top="3" width="60.0" height="14.0" format="" textAlign="AlignRight">quantity</field>
-            <field left="480.0" top="3" width="70.0" height="14.0" format="" textAlign="AlignRight">date</field>
+        <band height="35.0" canGrow="True">
+            <special left="2.0" top="3.0" width="28.0" height="30.0" textAlign="AlignLeft" color="red" format="{:0>3d}">recordNumber</special>
+            <field left="30.0" top="3" width="110" height="30.0" fontName="Code 128" fontSize="20" textAlign="AlignLeft" barcodeType="Code128">code</field>
+            <field left="140.0" top="3" width="110" height="30.0" fontName="Archon Code 39 Barcode" fontSize="20" textAlign="AlignLeft" barcodeType="Code39">code</field>
+            <field left="250.0" top="3" width="60" height="30.0">code</field>
+            <field left="310.0" top="3" width="150.0" height="30.0" canGrow="True">description</field>
+            <field left="460.0" top="3" width="60.0" height="30.0" textAlign="AlignRight">quantity</field>
+            <field left="525.0" top="3" width="60.0" height="30.0" textAlign="AlignRight">date</field>
         </band>
     </details>
     <pageFooter>
         <band height="45.0">
-            <line x1="0.0" y1="0.0" x2="550.0" y2="0.0" width="1.0" style="SolidLine"/>
+            <line x1="0.0" y1="0.0" x2="585.0" y2="0.0" width="1.0" style="SolidLine"/>
             <label left="240.0" top="4.0" width="50.0" height="16.0">Page:</label>
             <special left="0.0" top="4.0" width="550.0" height="16.0" textAlign="AlignHCenter">pageNumber</special>
         </band>
@@ -1699,16 +1690,16 @@ else:
     xml_string3 = """<?xml version="1.0" encoding="UTF-8"?>
 <report version="1.0">
     <options>
-        <documentName type="str">Test report Three in millimeters</documentName>
+        <documentName type="str">Test report in millimeters</documentName>
         <orientation type="str">Portrait</orientation>
         <unit type="str">Millimeter</unit>
         <pageSize type="str">A4</pageSize>
-        <topMargin type="float">5.0</topMargin>
-        <bottomMargin type="float">5.0</bottomMargin>
-        <leftMargin type="float">5.0</leftMargin>
-        <rightMargin type="float">5.0</rightMargin>
-        <defaultFontName type="str">Verdana</defaultFontName>
-        <defaultFontSize type="int">4</defaultFontSize> <!-- even font size must be in millimeters -->
+        <topMargin type="float">0.0</topMargin>
+        <bottomMargin type="float">0.0</bottomMargin>
+        <leftMargin type="float">0.0</leftMargin>
+        <rightMargin type="float">0.0</rightMargin>
+        <fontName type="str">Arial</fontName>
+        <fontSize type="int">4</fontSize>
     </options>
     <columns>
         <fieldName>code</fieldName>
@@ -1723,36 +1714,39 @@ else:
         <sort field="date" reverse="False"/>
         <sort field="quantity" reverse="True"/>
     </sorting>
+    <pageBackground>
+        <rectangle color="red" left="0" top="0" width="210" height="297" lineWidth="1"/>
+    </pageBackground>
     <pageHeader>
-        <band height="20.0">
-            <label left="0.0" top="0.0" width="550.0" height="10.0" color="blue"
-            fontName="Impact" fontWeight="Bold" fontItalic="True" fontSize="5"
-            textAlign="AlignHCenter">Ordered list of items</label>
-            <label left="0.0" top="12.0" width="10.0" height="15.0" fontWeight="Bold">R.N.</label>
-            <label left="10.0" top="12.0" width="25.0" height="15.0" fontWeight="Bold">Code</label>
-            <label left="40.0" top="12.0" width="40.0" height="15.0" fontWeight="Bold">Description</label>
-            <label left="80.0" top="12.0" width="40.0" height="15.0" fontWeight="Bold">Department</label>
-            <label left="120.0" top="12.0" width="10.0" height="15.0" fontWeight="Bold">S.C.</label>
-            <label left="140.0" top="12.0" width="25.0" height="15.0" textAlign="AlignRight" fontWeight="Bold">Quantity</label>
-            <label left="160.0" top="12.0" width="40.0" height="15.0" textAlign="AlignRight" fontWeight="Bold">Date</label>
-            <line x1="0.0" y1="48.0" x2="200.0" y2="48.0" lineWidth="1.0"/>
+        <band height="30">
+            <label left="0" top="0" width="210" height="20" color="blue"
+            fontName="Impact" fontWeight="Bold" fontItalic="True" fontSize="8"
+            textAlign="AlignHCenter">Test report in millimeters</label>
+            <label left="2" top="20" width="13" height="8" fontSize="4" fontWeight="Bold">R.N.</label>
+            <label left="15" top="20" width="30" height="8" fontSize="4" fontWeight="Bold">Code</label>
+            <label left="45" top="20" width="65" height="8" fontSize="4" fontWeight="Bold">Description</label>
+            <label left="110" top="20" width="30" height="8" fontSize="4" fontWeight="Bold">Department</label>
+            <label left="140" top="20" width="10" height="8" fontSize="4" textAlign="AlignHCenter" fontWeight="Bold">S.C.</label>
+            <label left="150" top="20" width="25" height="8" fontSize="4" textAlign="AlignRight" fontWeight="Bold">Quantity</label>
+            <label left="175" top="20" width="30" height="8" fontSize="4" textAlign="AlignRight" fontWeight="Bold">Date</label>
+            <line x1="0" y1="26" x2="210" y2="26" lineWidth="1.0"/> 
         </band>
     </pageHeader>
     <details>
-        <band height="8.0">
-            <special left="0.0" top="3.0" width="10.0" height="8.0" textAlign="AlignLeft" color="green" format="{:0>3d}">recordNumber</special>
-            <field left="10.0" top="3" width="25.0" height="8.0" fontName="Courier New" textAlign="AlignLeft">code</field>
-            <field left="40.0" top="3" width="40.0" height="8.0">description</field>
-            <field left="80.0" top="3" width="40.0" height="8.0">department</field>
-            <field left="120.0" top="3" width="10.0" height="8.0">stock_control</field>
-            <field left="140.0" top="3" width="25.0" height="8.0" format="" textAlign="AlignRight">quantity</field>
-            <field left="160.0" top="3" width="40.0" height="8.0" format="" textAlign="AlignRight">date</field>
+        <band height="8" canGrow="True">
+            <special left="2" top="2" width="13" height="6" fontSize="3" textAlign="AlignLeft" color="green" format="{:0>3d}">recordNumber</special>
+            <field left="15" top="2" width="30" height="6" fontSize="3" textAlign="AlignLeft">code</field>
+            <field left="45" top="2" width="65" height="6" fontSize="3" canGrow="True">description</field>
+            <field left="110" top="2" width="30" height="6" fontSize="3">department</field>
+            <field left="140" top="2" width="10" height="6" fontSize="3" textAlign="AlignHCenter">stock_control</field>
+            <field left="150" top="2" width="25" height="6" fontSize="3" format="" textAlign="AlignRight">quantity</field>
+            <field left="175" top="2" width="30" height="6" fontSize="3" format="" textAlign="AlignRight">date</field>
         </band>
     </details>
     <pageFooter>
-        <band height="15.0">
-            <line x1="0.0" y1="0.0" x2="200.0" y2="0.0" lineWidth="0.5" style="SolidLine"/>
-            <special left="0.0" top="4.0" width="210.0" height="16.0" textAlign="AlignHCenter">pageNumber</special>
+        <band height="20.0">
+            <line x1="0" y1="0" x2="210" y2="0" lineWidth="0.5" style="SolidLine"/>
+            <special left="0" top="4.0" width="210" height="20" textAlign="AlignHCenter">pageNumber</special>
         </band>
     </pageFooter>
 </report>
@@ -1764,12 +1758,12 @@ else:
         <documentName type="str">Test report Four</documentName>
         <orientation type="str">Portrait</orientation>
         <pageSize type="str">A4</pageSize>
-        <topMargin type="float">15.0</topMargin>
-        <bottomMargin type="float">15.0</bottomMargin>
-        <leftMargin type="float">15.0</leftMargin>
-        <rightMargin type="float">15.0</rightMargin>
-        <defaultFontName type="str">Arial</defaultFontName>
-        <defaultFontSize type="int">8</defaultFontSize>
+        <topMargin type="float">5.0</topMargin>
+        <bottomMargin type="float">5.0</bottomMargin>
+        <leftMargin type="float">5.0</leftMargin>
+        <rightMargin type="float">5.0</rightMargin>
+        <fontName type="str">Arial</fontName>
+        <fontSize type="int">8</fontSize>
     </options>
     <columns>
         <fieldName>code</fieldName>
@@ -1786,8 +1780,8 @@ else:
     </sorting>
     <pageBackground>
         <rectangle left="0.0" top="0.0" width="560.0" height="810.0" unit="point" lineWidth="0.5"/>
-          <line x1="0.0" y1="50.0" x2="0.0" y2="779.0" lineWidth="1.0"/>
-          <line x1="550.0" y1="50.0" x2="550.0" y2="779.0" lineWidth="1.0"/>
+        <line x1="0.0" y1="50.0" x2="0.0" y2="779.0" lineWidth="1.0"/>
+        <line x1="550.0" y1="50.0" x2="550.0" y2="779.0" lineWidth="1.0"/>
     </pageBackground>
     <pageHeader>
     </pageHeader>
@@ -1810,7 +1804,13 @@ else:
     </details>
 </report>
 """
-    for i in (xml_string0, xml_string1, xml_string2, xml_string3, xml_string4):
+    for i in (
+              xml_string0,
+              xml_string1,
+              xml_string2,
+              xml_string3,
+              xml_string4,
+                 ):
         r = Report(i)
         r.setData([
                 ('AAAAA', 'description 1 that is very long so it could be wrapped', 'Research', True, 22, QDate(2018, 1, 1)),
