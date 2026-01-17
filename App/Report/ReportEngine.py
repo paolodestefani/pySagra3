@@ -256,6 +256,7 @@ defaultOptions = {'documentName': 'pyReportEngine document',
                   'defaultBrushStyle': 'NoBrush',
                   'defaultBrushColor': 'Black',
                   'defaultAspectRatio': 'KeepAspectRatio',
+                  'defaultOpacity': 1.0,
                   'quantityDecimals': 2,
                   'currencySymbol': '€',
                   'trueSymbol': '\u2B24',   #'\u25CF'
@@ -346,6 +347,7 @@ class BaseRenderer():
         self.fontWeight = FontWeight[paramdict.get("fontWeight", options['defaultFontWeight'])]
         self.textAlign = TextAlign[paramdict.get("textAlign", options['defaultTextAlign'])]
         self.color = paramdict.get("color", options['defaultColor'])
+        self.opacity = float(paramdict.get("opacity", options['defaultOpacity']))
         # macOS dark mode and color scheme conflicts workaround
         if self.color in ('black', '#000000'):
             self.color = '???' # an invalid color that Qt interpret as black on any platforms
@@ -443,6 +445,8 @@ class BaseRenderer():
         pen.setColor(QColor(self.color))
         painter.setPen(pen)
         painter.setFont(QFont(self.fontName, self.fontSize, self.fontWeight, self.fontItalic))
+        # effect
+        painter.setOpacity(self.opacity)
         # contain the dimentions into the band boundary
         top = self.top + bandOffset if self.top + bandOffset <= bandOffset + bandHeight else bandOffset + bandHeight
         height = self.height if bandOffset + self.top + self.height <= bandOffset + bandHeight else bandHeight - self.top
@@ -623,6 +627,7 @@ class Line():
         self.x2 = float(paramdict.get("x2", 0))
         self.y2 = float(paramdict.get("y2", 0))
         self.color = paramdict.get("color", options['defaultColor'])
+        self.opacity = float(paramdict.get("opacity", options['defaultOpacity']))
         self.lineWidth = float(paramdict.get("lineWidth", options['defaultLineWidth']))
         self.style = PenStyle[paramdict.get("style", options['defaultLineStyle'])]
 
@@ -641,7 +646,8 @@ class Line():
         pen.setStyle(self.style)
         pen.setCapStyle(Qt.RoundCap)
         painter.setPen(pen)
-        #print("Painter act", painter.isActive())
+        # effect
+        painter.setOpacity(self.opacity)
         # contain the dimentions into the band boundary
         y1 = self.y1 + bandOffset if self.y1 + bandOffset <= bandOffset + bandHeight else bandOffset + bandHeight
         y2 = self.y2 + bandOffset if self.y2 + bandOffset <= bandOffset + bandHeight else bandOffset + bandHeight
@@ -673,6 +679,7 @@ class Rectangle():
         self.style = PenStyle[paramdict.get("style", options['defaultLineStyle'])]
         self.brushColor = QColor(paramdict.get("brushColor", options['defaultColor']))
         self.brushStyle = BrushStyle[paramdict.get("brushStyle", 'NoBrush')]
+        self.opacity = float(paramdict.get("opacity", options['defaultOpacity']))
 
     def render(self, bandOffset: float, bandHeight: float) -> None:
         if self.isVisibleParameter:
@@ -694,6 +701,8 @@ class Rectangle():
             brush.setStyle(self.brushStyle)
             brush.setColor(self.brushColor)
             painter.setBrush(brush)
+        # effect
+        painter.setOpacity(self.opacity)
         # contain the dimentions into the band boundary
         top = self.top + bandOffset if self.top + bandOffset <= bandOffset + bandHeight else bandOffset + bandHeight
         height = self.height if bandOffset + self.top + self.height <= bandOffset + bandHeight else bandHeight - self.top
@@ -731,6 +740,7 @@ class Image():
         self.height = float(paramdict.get("height", 0.0))
         self.fromResource = paramdict.get("fromResource")
         self.aspectRatio = AspectRatio[paramdict.get("aspectRatio", options['defaultAspectRatio'])]
+        self.opacity = float(paramdict.get("opacity", options['defaultOpacity']))
         image = QImage()
         if text:
             image.loadFromData(QByteArray.fromBase64(bytearray(text.encode('utf-8')))) # Image in base64 encoding
@@ -748,11 +758,11 @@ class Image():
             return
         painter = self.report.painter
         painter.save()
+        # effect
+        painter.setOpacity(self.opacity)
         # contain the dimentions into the band boundary
         top = self.top + bandOffset if self.top + bandOffset <= bandOffset + bandHeight else bandOffset + bandHeight
         height = self.height if bandOffset + self.top + self.height <= bandOffset + bandHeight else bandHeight - self.top
-        # effect
-        painter.setOpacity(0.0)
         # draw
         painter.drawImage(QRectF(self.left,
                                  top,
@@ -1313,10 +1323,10 @@ if __name__ == "__main__":
         <documentName type="str">Test of a minimal report</documentName>
         <orientation type="str">Portrait</orientation>
         <pageSize type="str">A4</pageSize>
-        <topMargin type="float">5.0</topMargin>
-        <bottomMargin type="float">5.0</bottomMargin>
-        <leftMargin type="float">5.0</leftMargin>
-        <rightMargin type="float">5.0</rightMargin>
+        <topMargin type="float">0.0</topMargin>
+        <bottomMargin type="float">0.0</bottomMargin>
+        <leftMargin type="float">0.0</leftMargin>
+        <rightMargin type="float">0.0</rightMargin>
         <defaultFontName type="str">Arial</defaultFontName>
         <defaultFontSize type="int">8</defaultFontSize>
         <defaultColor type="str">black</defaultColor>
@@ -1325,19 +1335,22 @@ if __name__ == "__main__":
         <fieldName>Empty</fieldName>
     </columns>
     <pageBackground>
-        <line x1="100.0" y1="150.0" x2="200.0" y2="500.0" lineWidth="1.0"/>
-        <line x1="550.0" y1="50.0" x2="550.0" y2="779.0" lineWidth="1.0"/>
+        <rectangle color="red" left="0.0" top="0.0" width="595.0" height="842.0" lineWidth="3.0"/>
+        <line x1="0.0" y1="0.0" x2="595.0" y2="842.0" lineWidth="1.0"/>
+        <line x1="595.0" y1="0.0" x2="0.0" y2="842.0" lineWidth="1.0"/>
     </pageBackground>
     <pageHeader>
         <band height="80.0">
-        <label left="0.0" top="20.0" width="550.0" height="38.0" color="red"
-        fontName="Impact" fontWeight="Bold" fontItalic="True" fontSize="24"
-        textAlign="AlignHCenter">* Page Header *</label>
+        <label left="0.0" top="10.0" width="595.0" height="80.0" color="blue"
+        fontName="Impact" fontWeight="Bold" fontItalic="True" fontSize="36"
+        textAlign="AlignHCenter">*** MINIMAL REPORT EXAMPLE ***</label>
         </band>
     </pageHeader>
     <details>
-        <band height="15.0" canGrow="True">
-            <field left="0.0" top="3" width="100" height="15" textAlign="AlignLeft">Empty</field>
+        <band height="100.0" canGrow="True">
+            <label left="0.0" top="0.0" width="595.0" height="10.0" textAlign="AlignHCenter">A report must have at least one record, even if it is empty.</label>
+            <label left="0.0" top="20.0" width="595.0" height="10.0" textAlign="AlignHCenter">In this example the dataset is one record of one field that is None/Null</label>
+            <label left="0.0" top="50.0" width="595.0" height="10.0" textAlign="AlignHCenter">Page size is A4, no margins, page background and one detail line</label>
         </band>
     </details>
 </report>
@@ -1346,13 +1359,13 @@ if __name__ == "__main__":
     xml_string1 = """<?xml version="1.0" encoding="UTF-8"?>
 <report version="1.0">
     <options>
-        <documentName type="str">Test report One</documentName>
+        <documentName type="str">Complete test report</documentName>
         <orientation type="str">Portrait</orientation>
         <pageSize type="str">A4</pageSize>
-        <topMargin type="float">15.0</topMargin>
-        <bottomMargin type="float">15.0</bottomMargin>
-        <leftMargin type="float">15.0</leftMargin>
-        <rightMargin type="float">15.0</rightMargin>
+        <topMargin type="float">5.0</topMargin>
+        <bottomMargin type="float">5.0</bottomMargin>
+        <leftMargin type="float">5.0</leftMargin>
+        <rightMargin type="float">5.0</rightMargin>
         <defaultFontName type="str">Arial</defaultFontName>
         <defaultFontSize type="int">8</defaultFontSize>
     </options>
@@ -1370,12 +1383,12 @@ if __name__ == "__main__":
         <sort field="quantity" reverse="True"/>
     </sorting>
     <pageBackground>
-        <line x1="0.0" y1="50.0" x2="0.0" y2="779.0" lineWidth="1.0"/>
-        <line x1="550.0" y1="50.0" x2="550.0" y2="779.0" lineWidth="1.0"/>
+        <line x1="0.0" y1="0.0" x2="0.0" y2="837.0" lineWidth="1.0" color="blue"/>
+        <line x1="585.0" y1="0.0" x2="585.0" y2="837.0" lineWidth="1.0" color="blue"/>
     </pageBackground>
     <pageHeader>
         <band height="80.0">
-    <image left="0.0" top="20.0" width="48.0" height="48.0" aspectRatio="KeepAspectRatio">
+    <image left="0.0" top="0.0" width="48.0" height="48.0" aspectRatio="KeepAspectRatio" opacity="0.3">
         iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABHNCSVQICAgIfAhkiAAAAAlw
         SFlzAAAFMQAABTEBt+0oUgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoA
         AApISURBVHja1Zp7jB1Xfcc/vzOP+753H/Y+jF+xnZCHG4TlhDg0jU2kkrRRGxWCEOLVVqJp
@@ -1431,7 +1444,7 @@ if __name__ == "__main__":
         <label left="0.0" top="20.0" width="550.0" height="38.0" color="red"
         fontName="Impact" fontWeight="Bold" fontItalic="True" fontSize="24"
         textAlign="AlignHCenter">* Page Header *</label>
-        <rectangle color="#88FF22" left="0.0" top="20.0" width="550.0" height="38.0" lineWidth="3.0"/>
+        <rectangle color="#88FF22" left="0.0" top="0.0" width="590.0" height="40.0" lineWidth="3.0"/>
         <line x1="0.0" y1="60.0" x2="550.0" y2="60.0" lineWidth="1.0"/>
         <label left="0.0" top="62.0" width="100.0" height="15.0">Code</label>
         <label left="100.0" top="62.0" width="150.0" height="15.0">Description</label>
