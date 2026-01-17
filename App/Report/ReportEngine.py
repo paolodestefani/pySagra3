@@ -105,7 +105,7 @@ if __name__ != "__main__":
 
 else:
     APPNAME = "Report Engine"
-    APPVERSIONMAJOR = 0
+    APPVERSIONMAJOR = 1
     APPVERSIONMINOR = 0
     APPVERSIONPATCH = 0
     APPVERSION = f"{APPVERSIONMAJOR:02}.{APPVERSIONMINOR:02}.{APPVERSIONPATCH:02}"
@@ -146,6 +146,7 @@ Unit = {'Millimeter': QPageLayout.Millimeter,
         'Pica': QPageLayout.Pica,
         'Didot': QPageLayout.Didot,
         'Cicero': QPageLayout.Cicero}
+
 PSUnit = {'Millimeter': QPageSize.Millimeter,
           'Point': QPageSize.Point,
           'Inch': QPageSize.Inch,
@@ -243,7 +244,7 @@ defaultOptions = {'documentName': 'pyReportEngine document',
                   'bottomMargin': 5.0,
                   'leftMargin': 5.0,
                   'rightMargin': 5.0,
-                  'defaultBarcodeType': 'None',
+                  'defaultBarcodeType': None,
                   'defaultFontName': 'Arial',
                   'defaultFontSize': 8,
                   'defaultFontItalic': 'False',
@@ -257,15 +258,15 @@ defaultOptions = {'documentName': 'pyReportEngine document',
                   'defaultAspectRatio': 'KeepAspectRatio',
                   'quantityDecimals': 2,
                   'currencySymbol': '€',
-                  'trueSymbol': 'X',   #'\u25CF'
-                  'falseSymbol': 'O'   #'\u25CB'
+                  'trueSymbol': '\u2B24',   #'\u25CF'
+                  'falseSymbol': '\u25EF'   #'\u25CB'
                   }
 
 
 # code39 barcode characters
 CODE39CHRS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-. $/+%'
 
-def code39encode(text, checksum=False):
+def code39encode(text: str, checksum: bool =False) -> str|None:
     "Calculate code39 barcode string with optional checksum"
     # sanity check
     if not text:
@@ -291,7 +292,7 @@ def code39encode(text, checksum=False):
 # Posted by Mark Ransom, modified by community. See post 'Timeline' for change history
 # Retrieved 2026-01-03, License - CC BY-SA 4.0
 
-def code128encode(s):
+def code128encode(s: str) -> str|None:
     ''' Code 128 conversion for a font as described at
         https://en.wikipedia.org/wiki/Code_128 and downloaded
         from http://www.barcodelink.net/barcode-font.php
@@ -301,6 +302,9 @@ def code128encode(s):
         Code B is the default to prefer lower case over control characters.
         Coded for https://stackoverflow.com/q/52710760/5987
     '''
+    # sanity check
+    if not s:
+        return
     s = s.encode('ascii').decode('ascii')
     if s.isdigit() and len(s) % 2 == 0:
         # use Code 128C, pairs of digits
@@ -320,14 +324,12 @@ def code128encode(s):
     return ''.join(chars[x] for x in codes)
 
 
-
-
 # base elements
 
 class BaseRenderer():
     "Base class for all tex render elements"
 
-    def __init__(self, options, paramdict, string):
+    def __init__(self, options: dict, paramdict: dict) -> None:
         self.isVisible = 'True' == paramdict.get("isVisible", "True")
         self.isVisibleParameter = paramdict.get("isVisibleParameter")
         self.isNotVisibleParameter = paramdict.get("isNotVisibleParameter")
@@ -354,8 +356,9 @@ class BaseRenderer():
         self.falseSymbol = paramdict.get("falseSymbol", options['falseSymbol'])
         self.value = None  # default value
 
-    def textFormat(self):
+    def textFormat(self) -> str|None:
         "Format text for check height and painting"
+        text = None
         match self.value:
             case bool():
                 text = self.trueSymbol if self.value else self.falseSymbol
@@ -390,54 +393,10 @@ class BaseRenderer():
             case str() if self.barcode == 'Code128':
                 text = code128encode(self.value) # None value, not an empty string, for barcode for print nothing               
             case _:
-                text = str(self.value or '') # None for string print empty string
-                
+                text = str(self.value or '') # None for string print empty string    
         return text
     
-        # if isinstance(self.value, bool):
-        #     #text = '\u2713' if self.value else '\u2717'
-        #     #text = '\u2714' if self.value else '\u2718'
-        #     #text = '\u2705' if self.value else '\u274C'
-        #     #text = '\u25C9' if self.value else '\u25CB'
-        #     #text = '\u26AB' if self.value else '\u26AA'
-        #     #text = '\u25FC' if self.value else '\u25FB'
-        #     #text = '\u25CF' if self.value else '\u25CB'
-        #     text = self.trueSymbol if self.value else self.falseSymbol
-        # elif isinstance(self.value, (int, float, decimal.Decimal)):
-        #     if self.fieldFormat:
-        #         if self.fieldFormat == 'currency':
-        #             text = session['qlocale'].toCurrencyString(float(self.value),
-        #                                                        self.currencySymbol) # looks like int/decimal require a float conversion before currency string
-        #         elif self.fieldFormat == 'decimal2':
-        #             text = session['qlocale'].toString(float(self.value),
-        #                                                'f',
-        #                                                2)
-        #         elif self.fieldFormat == 'quantity':
-        #             text = session['qlocale'].toString(float(self.value),
-        #                                                'f',
-        #                                                self.quantityDecimals)
-        #         else:
-        #             # python string format for numbers f.e. '{0:.2f}'
-        #             text = self.fieldFormat.format(self.value)
-        #     else:
-        #         if isinstance(self.value, decimal.Decimal): # decimal without format
-        #             text = session['qlocale'].toString(float(self.value), 'f', 2)
-        #         else: # qlocale format for numbers
-        #             text = session['qlocale'].toString(self.value)
-        # elif isinstance(self.value, (QDate, QDateTime, QTime)):
-        #     #print(session['qlocale'])
-        #     if self.fieldFormat: # qt string format f.e. 'dd.MM.yyyy'
-        #         text = self.value.toString(self.fieldFormat)
-        #     else:
-        #         text = session['qlocale'].toString(self.value, QLocale.FormatType.ShortFormat)
-        # elif self.barcode == 'Code39':
-        #     text = code39encode(self.value) # None value, not an empty string, for barcode print nothing
-        # else:
-        #     #text = str(self.value or '')
-        #     text = self.value
-        # return text
-
-    def checkHeight(self, bandOffset, bandHeight):
+    def checkHeight(self, bandOffset: float, bandHeight:float) -> float:
         "Returns the new band height if band can grow"
         # if an object is not visible don't need to check height
         if not self.isVisible:
@@ -470,18 +429,17 @@ class BaseRenderer():
             return max(rect.height(), bandHeight)
         return bandHeight
 
-    def render(self, bandOffset, bandHeight):
+    def render(self, bandOffset:float, bandHeight:float) -> None:
         "Paint an image or text"
         if self.isVisibleParameter:
             self.isVisible = self.report.parameter[self.isVisibleParameter]
         if self.isNotVisibleParameter:
             self.isVisible = not self.report.parameter[self.isNotVisibleParameter]
-        if not self.isVisible:  # band check this ?
+        if not self.isVisible:  
             return
         painter = self.report.painter
         painter.save()
         pen = QPen()
-        #print('Valid Color Name', self.color, QColor.isValidColorName(self.color))
         pen.setColor(QColor(self.color))
         painter.setPen(pen)
         painter.setFont(QFont(self.fontName, self.fontSize, self.fontWeight, self.fontItalic))
@@ -517,28 +475,27 @@ class BaseRenderer():
                          flags,
                          text)
         painter.restore()
+        return
 
 
 class Label(BaseRenderer):
     "Label class"
 
-    def __init__(self, options, paramdict, string):
-        super().__init__(options, paramdict, string)
+    def __init__(self, options: dict, paramdict: dict, string: str) -> None:
+        super().__init__(options, paramdict)
         self.value = string # for labels string is the text
 
 
 class Field(BaseRenderer):
     "Field class"
 
-    def __init__(self, options, paramdict, fieldName):
-        super().__init__(options, paramdict, fieldName)
-        self.value = None # band.render() set the field value
+    def __init__(self, options: dict, paramdict: dict, fieldName: str) -> None:
+        super().__init__(options, paramdict)
+        self.value = None
         self.fieldName = fieldName
         self.aspectRatio = AspectRatio[paramdict.get("aspectRatio", options['defaultAspectRatio'])]
 
-    def setValue(self, value):
-        #if value is None:
-            #self.value = None
+    def setValue(self, value: str|int|float|decimal.Decimal|QByteArray) -> None:
         if isinstance(value, QByteArray):
             image = QImage()
             image.loadFromData(value)
@@ -554,8 +511,8 @@ class Field(BaseRenderer):
 class Summary(BaseRenderer):
     "Class for summaries"
 
-    def __init__(self, options, paramdict, fieldName):
-        super().__init__(options, paramdict, fieldName)
+    def __init__(self, options: dict, paramdict: dict, fieldName: str) -> None:
+        super().__init__(options, paramdict)
         self.fieldName = fieldName
         self.function = paramdict['function']
         self.onRelatedField = paramdict.get('onRelatedField', None)
@@ -564,7 +521,7 @@ class Summary(BaseRenderer):
         self.summary = 0
         options['reportInstance'].summaries.append(self)  # used for reset all summaries
 
-    def update(self, record):
+    def update(self, record: dict) -> None:
         "Update summary value"
         # conditional summary updating based on value change of another field
         if self.onRelatedField:
@@ -592,13 +549,12 @@ class Summary(BaseRenderer):
             pass
         self.items += 1
 
-    def reset(self):
+    def reset(self) -> None:
         self.lastValue = None
         self.summary = 0
         self.items = 0
 
-    def render(self, bandOffset, bandHeight):
-        #painter = self.report.painter
+    def render(self, bandOffset: float, bandHeight: float) -> None:
         if self.function == 'average':
             if self.items != 0:
                 self.value = self.summary / self.items
@@ -612,52 +568,52 @@ class Summary(BaseRenderer):
 class Special(BaseRenderer):
     "Class for special fields"
 
-    def __init__(self, options, paramdict, varName):
-        super().__init__(options, paramdict, varName)
+    def __init__(self, options:dict, paramdict: dict, varName: str) -> None:
+        super().__init__(options, paramdict)
         self.varName = varName
         self.value = None # band.render() set the field value
 
-    def render(self, bandOffset, bandHeight):
-        #painter = self.report.painter
-        if self.varName == 'pageNumber':
-            self.value = self.report.page_num
-        elif self.varName == 'printDate':
-            self.value = session['qlocale'].toString(QDate.currentDate(), QLocale.ShortFormat)
-        elif self.varName == 'printDateTime':
-            self.value = session['qlocale'].toString(QDateTime.currentDateTime(), QLocale.ShortFormat)
-        elif self.varName == 'printTime':
-            self.value = session['qlocale'].toString(QTime.currentTime(), QLocale.ShortFormat)
-        elif self.varName == 'recordNumber':
-            self.value = self.report.rn
-        elif self.varName == 'appName':
-            self.value = APPNAME
-        elif self.varName == 'appAuthor':
-            self.value = AUTHOR
-        elif self.varName == 'appEmail':
-            self.value = EMAIL
-        elif self.varName == 'appOrganization':
-            self.value = ORGANIZATION
-        elif self.varName == 'appWebsite':
-            self.value = WEBSITE
-        elif self.varName == 'companyDescription':
-            self.value = session['company_description']
-        elif self.varName == 'companyImage':
-            self.value = QImage()
-            self.value.loadFromData = session['company_image']
-        elif self.varName == 'eventDescription':
-            self.value = session['event_description']
-        elif self.varName == 'eventImage':
-            self.value = QImage()
-            self.value.loadFromData(session['event_image'])
-        else:
-            self.value = ''
+    def render(self, bandOffset: float, bandHeight: float) -> None:
+        match self.varName:
+            case 'pageNumber':
+                self.value = self.report.page_num
+            case 'printDate':
+                self.value = session['qlocale'].toString(QDate.currentDate(), QLocale.ShortFormat)
+            case 'printDateTime':
+                self.value = session['qlocale'].toString(QDateTime.currentDateTime(), QLocale.ShortFormat)
+            case 'printTime':
+                self.value = session['qlocale'].toString(QTime.currentTime(), QLocale.ShortFormat)
+            case 'recordNumber':
+                self.value = self.report.rn
+            case 'appName':
+                self.value = APPNAME
+            case 'appAuthor':
+                self.value = AUTHOR
+            case 'appEmail':
+                self.value = EMAIL
+            case 'appOrganization':
+                self.value = ORGANIZATION
+            case 'appWebsite':
+                self.value = WEBSITE
+            case 'companyDescription':
+                self.value = session['company_description']
+            case 'companyImage':
+                self.value = QImage()
+                self.value.loadFromData = session['company_image']
+            case 'eventDescription':
+                self.value = session['event_description']
+            case 'eventImage':
+                self.value = QImage()
+                self.value.loadFromData(session['event_image'])
+            case _:
+                self.value = ''
         super().render(bandOffset, bandHeight)
 
 
 class Line():
     "Base class for lines"
 
-    def __init__(self, options, paramdict, text=None):  # text is required
+    def __init__(self, options:dict, paramdict: dict, text: str = '') -> None:  # text is required for generic drawobj
         self.isVisible = True
         self.isVisibleParameter = paramdict.get("isVisibleParameter")
         self.isNotVisibleParameter = paramdict.get("isNotVisibleParameter")
@@ -670,7 +626,7 @@ class Line():
         self.lineWidth = float(paramdict.get("lineWidth", options['defaultLineWidth']))
         self.style = PenStyle[paramdict.get("style", options['defaultLineStyle'])]
 
-    def render(self, bandOffset, bandHeight):
+    def render(self, bandOffset: float, bandHeight: float) -> None:
         if self.isVisibleParameter:
             self.isVisible = self.report.parameter[self.isVisibleParameter]
         if self.isNotVisibleParameter:
@@ -683,7 +639,9 @@ class Line():
         pen.setColor(QColor(self.color))
         pen.setWidthF(self.lineWidth)
         pen.setStyle(self.style)
+        pen.setCapStyle(Qt.RoundCap)
         painter.setPen(pen)
+        #print("Painter act", painter.isActive())
         # contain the dimentions into the band boundary
         y1 = self.y1 + bandOffset if self.y1 + bandOffset <= bandOffset + bandHeight else bandOffset + bandHeight
         y2 = self.y2 + bandOffset if self.y2 + bandOffset <= bandOffset + bandHeight else bandOffset + bandHeight
@@ -693,12 +651,13 @@ class Line():
                                 self.x2,
                                 y2))
         painter.restore()
+        return
 
 
 class Rectangle():
     "Rectangle class"
 
-    def __init__(self, options, paramdict, text=None): # text is required
+    def __init__(self, options: dict, paramdict: dict, text: str|None) -> None: # text is required for generic drawobj
         self.isVisible = True
         self.isVisibleParameter = paramdict.get("isVisibleParameter")
         self.isNotVisibleParameter = paramdict.get("isNotVisibleParameter")
@@ -715,7 +674,7 @@ class Rectangle():
         self.brushColor = QColor(paramdict.get("brushColor", options['defaultColor']))
         self.brushStyle = BrushStyle[paramdict.get("brushStyle", 'NoBrush')]
 
-    def render(self, bandOffset, bandHeight):
+    def render(self, bandOffset: float, bandHeight: float) -> None:
         if self.isVisibleParameter:
             self.isVisible = self.report.parameter[self.isVisibleParameter]
         if self.isNotVisibleParameter:
@@ -754,17 +713,13 @@ class Rectangle():
                                     top,
                                     self.width,
                                     height))
-            #print('left', self.left)
-            #print('top', top)
-            #print('width', self.width)
-            #print('height', height)
         painter.restore()
 
 
 class Image():
     "Class for embedded/external images"
 
-    def __init__(self, options, paramdict, text):
+    def __init__(self, options: dict, paramdict: dict, text: str = '') -> None: # text is required for generic drawobj
         self.isVisible = 'True' == paramdict.get("isVisible", "True")
         self.isVisibleParameter = paramdict.get("isVisibleParameter")
         self.isNotVisibleParameter = paramdict.get("isNotVisibleParameter")
@@ -783,7 +738,7 @@ class Image():
             image.load(f":/{self.fromResource}")  # from resource
         self.image = image.scaled(int(self.width), int(self.height), self.aspectRatio, Qt.SmoothTransformation)
 
-    def render(self, bandOffset, bandHeight):
+    def render(self, bandOffset: float, bandHeight: float) -> None:
         "Draw image if necessary"
         if self.isVisibleParameter:
             self.isVisible = self.report.parameter[self.isVisibleParameter]
@@ -807,12 +762,23 @@ class Image():
         painter.restore()
 
 
+# Render object dictionary
+
+drawobj = {"label": Label,
+           "field": Field,
+           "summary": Summary,
+           "special": Special,
+           "line": Line,
+           "rectangle": Rectangle,
+           "image": Image}
+
+
 # band
 
 class Band(list):
     "Report bands are elements container"
 
-    def __init__(self, options, paramdict):
+    def __init__(self, options: dict, paramdict: dict) -> None:
         "Every band must have a height"
         self.report = options['reportInstance']
         self.isVisible = 'True' == paramdict.get("isVisible", "True")
@@ -826,7 +792,7 @@ class Band(list):
         self.executeBefore = None
         self.executeAfter = None
 
-    def render(self, record, prev_record=None):
+    def render(self, record: dict, prev_record: dict|None = None) -> None:
         "Render the contained objects after setting record value"
         # call newPage if have a pending request
         if self.report.newPageRequest:
@@ -884,28 +850,19 @@ class Band(list):
             self.report.newPageRequest = True
 
 
-# Render object dictionary
-
-drawobj = {"label": Label,
-           "field": Field,
-           "summary": Summary,
-           "special": Special,
-           "line": Line,
-           "rectangle": Rectangle,
-           "image": Image}
-
 class Sort(str):
     "Class that adds a reverse boolean value to a string, used for grouping/ordering"
 
-    def __new__(self, text, reverse):
+    def __new__(self, text: str, reverse: bool) -> str:
         sg = str.__new__(self, text)
         sg.reverse = True if reverse == 'True' else False
         return sg
 
+
 class Parameter():
     "Class for store parameters settings"
 
-    def __init__(self, description, ptype, value=None, items=[], referenceList=None):
+    def __init__(self, description: str, ptype: str, value=None, items=[], referenceList=None) -> None:
         self.description = description
         self.ptype = ptype
         self.value = value
@@ -914,7 +871,7 @@ class Parameter():
 
 
 class SqlField():
-    def __init__(self, code, description, ftype):
+    def __init__(self, code: str, description: str, ftype: str) -> None:
         self.code = code
         self.description = description
         self.ftype = ftype
@@ -953,7 +910,7 @@ class Report():
         # report parameters as a param: value dictionary
         self.parameter = collections.OrderedDict()
         self.summaries = []  # each summary init update this list, must be set before calling setReportDefinition
-        print('Modules:', sys.modules.keys())
+        #print('Modules:', sys.modules.keys())
         if 'App.Database.Setting' in sys.modules:
             setting = Setting()
             defaultOptions['quantityDecimals'] = setting['quantity_decimal_places']
@@ -1346,9 +1303,6 @@ class Report():
 
 
 
-
-
-
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     QLocale.setDefault(QLocale.English)
@@ -1359,30 +1313,31 @@ if __name__ == "__main__":
         <documentName type="str">Test of a minimal report</documentName>
         <orientation type="str">Portrait</orientation>
         <pageSize type="str">A4</pageSize>
-        <topMargin type="float">15.0</topMargin>
-        <bottomMargin type="float">15.0</bottomMargin>
-        <leftMargin type="float">15.0</leftMargin>
-        <rightMargin type="float">15.0</rightMargin>
+        <topMargin type="float">5.0</topMargin>
+        <bottomMargin type="float">5.0</bottomMargin>
+        <leftMargin type="float">5.0</leftMargin>
+        <rightMargin type="float">5.0</rightMargin>
         <defaultFontName type="str">Arial</defaultFontName>
         <defaultFontSize type="int">8</defaultFontSize>
         <defaultColor type="str">black</defaultColor>
     </options>
     <columns>
-        <fieldName>code</fieldName>
-        <fieldName>description</fieldName>
-        <fieldName>department</fieldName>
-        <fieldName>stock_control</fieldName>
-        <fieldName>quantity</fieldName>
-        <fieldName>date</fieldName>
+        <fieldName>Empty</fieldName>
     </columns>
+    <pageBackground>
+        <line x1="100.0" y1="150.0" x2="200.0" y2="500.0" lineWidth="1.0"/>
+        <line x1="550.0" y1="50.0" x2="550.0" y2="779.0" lineWidth="1.0"/>
+    </pageBackground>
+    <pageHeader>
+        <band height="80.0">
+        <label left="0.0" top="20.0" width="550.0" height="38.0" color="red"
+        fontName="Impact" fontWeight="Bold" fontItalic="True" fontSize="24"
+        textAlign="AlignHCenter">* Page Header *</label>
+        </band>
+    </pageHeader>
     <details>
         <band height="15.0" canGrow="True">
-            <field left="0.0" top="3" width="100" height="15" textAlign="AlignLeft">code</field>
-            <field left="100.0" top="3" width="150" height="15" canGrow="True">description</field>
-            <field left="250.0" top="3" width="80" height="15">department</field>
-            <field left="330.0" top="3" width="25" height="15">stock_control</field>
-            <field left="355.0" top="3" width="60" height="15" format="" textAlign="AlignRight">quantity</field>
-            <field left="480.0" top="3" width="70" height="15" format="dd.MM.yy" textAlign="AlignRight">date</field>
+            <field left="0.0" top="3" width="100" height="15" textAlign="AlignLeft">Empty</field>
         </band>
     </details>
 </report>
@@ -1489,7 +1444,7 @@ if __name__ == "__main__":
     </pageHeader>
     <reportHeader>
         <band height="32">
-            <label left="0.0" top="0.0" width="550.0" height="30.0" color="red" fontName="Sans Serif" fontSize="16"
+            <label left="0.0" top="0.0" width="550.0" height="30.0" color="red" fontName="Arial" fontSize="16"
             textAlign="AlignHCenter">° Report Header °</label>
         </band>
     </reportHeader>
@@ -1547,7 +1502,7 @@ if __name__ == "__main__":
     </groups>
     <details>
         <band height="20.0" canGrow="True">
-            <field left="0.0" top="3" width="100" height="20" fontName="Courier" textAlign="AlignLeft">code</field>
+            <field left="0.0" top="3" width="100" height="20" fontName="Courier New" textAlign="AlignLeft">code</field>
             <field left="100.0" top="3" width="150" height="20" canGrow="True">description</field>
             <field left="250.0" top="3" width="80" height="20">department</field>
             <field left="330.0" top="3" width="25" height="20">stock_control</field>
@@ -1621,12 +1576,6 @@ if __name__ == "__main__":
         <parameter type="str" id="stringSecondExample" items="First:First|Second:Second|Tirth:Tirth">Second string parameter example</parameter>
     </parameters>
     <execute>
-print('test scripting before rendering anything...')
-print(report.parameter['booleanExample'])
-print(report.parameter['intExample'])
-print(report.parameter['floatExample'])
-print(report.parameter['dateExample'])
-print(report.parameter['stringExample'])
     </execute>
     <sorting>
         <sort field="department" reverse="False"/>
@@ -1636,7 +1585,7 @@ print(report.parameter['stringExample'])
     <pageBackground>
         <line x1="0.0" y1="95.0" x2="0.0" y2="782.0" lineWidth="0.5"/>
         <line x1="552.0" y1="95.0" x2="552.0" y2="782.0" lineWidth="0.5"/>
-        <image left="100.0" top="200.0" width="350.0" height="350.0" aspectRatio="KeepAspectRatio">
+        <image left="10.0" top="20.0" width="350.0" height="350.0" aspectRatio="KeepAspectRatio">
         iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABHNCSVQICAgIfAhkiAAAAAlw
         SFlzAAAFMQAABTEBt+0oUgAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoA
         AApISURBVHja1Zp7jB1Xfcc/vzOP+753H/Y+jF+xnZCHG4TlhDg0jU2kkrRRGxWCEOLVVqJp
@@ -1717,7 +1666,7 @@ else:
     band.isVisible = True
             </execute>
             <special left="2.0" top="3.0" width="30.0" height="14.0" textAlign="AlignLeft" color="green" format="{:0>3d}">recordNumber</special>
-            <field left="30.0" top="3" width="100" height="14.0" fontName="Courier" textAlign="AlignLeft">code</field>
+            <field left="30.0" top="3" width="100" height="14.0" fontName="Courier New" textAlign="AlignLeft">code</field>
             <field left="100.0" top="3" width="150.0" height="14.0" canGrow="True">description</field>
             <field left="250.0" top="3" width="80.0" height="14.0">department</field>
             <field left="350.0" top="3" width="25.0" height="14.0">stock_control</field>
@@ -1831,13 +1780,13 @@ else:
     </pageHeader>
     <reportHeader>
         <band height="32">
-            <label left="0.0" top="0.0" width="550.0" height="30.0" color="red" fontName="Sans Serif" fontSize="16"
+            <label left="0.0" top="0.0" width="550.0" height="30.0" color="red" fontName="Arial" fontSize="16"
             textAlign="AlignHCenter">° Report Header °</label>
         </band>
     </reportHeader>
     <details>
         <band height="20.0" canGrow="True">
-            <field left="0.0" top="3" width="100" height="20" fontName="Courier" textAlign="AlignLeft">code</field>
+            <field left="0.0" top="3" width="100" height="20" fontName="Courier New" textAlign="AlignLeft">code</field>
             <field left="100.0" top="3" width="150" height="20" canGrow="True">description</field>
             <field left="250.0" top="3" width="80" height="20">department</field>
             <field left="330.0" top="3" width="25" height="20">stock_control</field>
@@ -1850,12 +1799,6 @@ else:
 """
     for i in (xml_string0, xml_string1, xml_string2, xml_string3, xml_string4):
         r = Report(i)
-       
-    #r = Report(xml_string2)
-    #dlg = ReportDialog()
-    #dlg.setReport(r)
-    #dlg.exec_()
-        
         r.setData([
                 ('AAAAA', 'description 1 that is very long so it could be wrapped', 'Research', True, 22, QDate(2018, 1, 1)),
                 ('BBBBB', 'description 2', 'Production', True, 25, QDate(2018, 2, 2)),
@@ -1902,7 +1845,8 @@ else:
                 ('AAAAAAA', 'description 43', 'Production', True, 31, QDate(2018, 2, 2)),
                 ('AAAAAAAA', 'description 44', 'Accounting', False, 0, QDate(2018, 3, 3))])
         if i == xml_string0:
-            r.setData([('', 'One line recordset test', 'Accounting', False, 0, QDate(2018, 3, 3))])  # test empty dataset
+            r.setData([('', 'One line recordset test', 'Accounting', False, 0, QDate(2018, 3, 3))])
+            r.setData([(None,)])  # test empty dataset
         # cursor wait
         QGuiApplication.setOverrideCursor(QCursor(Qt.WaitCursor))
         r.generate()
@@ -1912,7 +1856,5 @@ else:
         dialog = QPrintPreviewDialog()
         dialog.setWindowFlags(Qt.Dialog|Qt.WindowMinMaxButtonsHint|Qt.WindowCloseButtonHint)
         dialog.setWindowTitle("Print preview")
-        #print(dialog.printer().pageRect(QPrinter.Point))
-        #print(dialog.printer().paperRect(QPrinter.Point))
         dialog.paintRequested.connect(r.print)
         dialog.exec()

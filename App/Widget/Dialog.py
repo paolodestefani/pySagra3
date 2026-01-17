@@ -1654,32 +1654,33 @@ class PrintDialog(QDialog):
             self.ui.tabWidget.setCurrentIndex(TABPARAMS)
         for row, par in enumerate(self.report.parameter):
             label = QLabel(self.report.parameter[par].description, self)
-            if self.report.parameter[par].ptype == 'list':
-                widget = QComboBox(self)
-                for k, v in self.report.parameter[par].items.items():
-                    widget.addItem(v, k)
-            elif self.report.parameter[par].ptype == 'bool':
-                widget = QCheckBox(self)
-                widget.setChecked(self.report.parameter[par].value)
-            elif self.report.parameter[par].ptype == 'int':
-                widget = QSpinBox(self)
-                widget.setValue(self.report.parameter[par].value)
-            elif self.report.parameter[par].ptype == 'float':
-                widget = QDoubleSpinBox(self)
-                widget.setDecimals(2)
-                widget.setRange(-9999999.99, 9999999.99)
-                widget.setValue(self.report.parameter[par].value)
-            elif self.report.parameter[par].ptype == 'date':
-                widget = QDateEdit(self.report.parameter[par].value)
-                widget.setCalendarPopup(True)
-            elif self.report.parameter[par].ptype == 'str':
-                widget = QLineEdit(self)
-                widget.setText(self.report.parameter[par].value)
-            elif self.report.parameter[par].ptype == 'reference':
-                widget = RelationalComboBox(self)
-                widget.setFunction(referenceList[self.report.parameter[par].referenceList])
-            else:
-                raise ReportPrintError("Unable to identify parameter type")
+            match self.report.parameter[par].ptype:
+                case 'list':
+                    widget = QComboBox(self)
+                    for k, v in self.report.parameter[par].items.items():
+                        widget.addItem(v, k)
+                case 'bool':
+                    widget = QCheckBox(self)
+                    widget.setChecked(self.report.parameter[par].value)
+                case 'int':
+                    widget = QSpinBox(self)
+                    widget.setValue(self.report.parameter[par].value)
+                case 'float':
+                    widget = QDoubleSpinBox(self)
+                    widget.setDecimals(2)
+                    widget.setRange(-9999999.99, 9999999.99)
+                    widget.setValue(self.report.parameter[par].value)
+                case 'date':
+                    widget = QDateEdit(self.report.parameter[par].value)
+                    widget.setCalendarPopup(True)
+                case 'str':
+                    widget = QLineEdit(self)
+                    widget.setText(self.report.parameter[par].value)
+                case 'reference':
+                    widget = RelationalComboBox(self)
+                    widget.setFunction(referenceList[self.report.parameter[par].referenceList])
+                case _:
+                    raise ReportPrintError("Unable to identify parameter type")
             #self.widgetParams[par] = widget
             widget.param = par
             self.ui.layoutParameters.addWidget(label, row, 0)
@@ -1746,8 +1747,6 @@ class PrintDialog(QDialog):
 
     def condIndexChanged(self, index):
         "Set combobox items and parameter QWidget"
-        #print("CondIndexChangegd", self.sender().currentData())
-        #print("Conditions", self.conditions)
         if index < 0:
             return
         row = self.sender().row
@@ -1764,50 +1763,45 @@ class PrintDialog(QDialog):
         if self.ui.layoutFilters.itemAtPosition(row, 2):
             self.ui.layoutFilters.itemAtPosition(row, 2).widget().deleteLater()
         self.ui.layoutFilters.itemAtPosition(row, 1).widget().clear()
-        if ftype == 'int':
-            for o, d, r in self.FILTERING['N']:
-                self.ui.layoutFilters.itemAtPosition(row, 1).widget().addItem(d, o)
-            widget = QSpinBox(self)
-            widget.setRange(0, 2147483647)
-            #widget.setSpecialValueText(_tr('dialog', 'Not set'))
-            # widget.setValue(-1)
-        elif ftype == 'bool':
-            for o, d, r in self.FILTERING['B']:
-                self.ui.layoutFilters.itemAtPosition(row, 1).widget().addItem(d, o)
-            widget = QCheckBox(self)
-            #widget.setTristate(True)
-            #widget.setCheckState(Qt.PartiallyChecked)
-        elif ftype == 'decimal2':
-            for o, d, r in self.FILTERING['N']:
-                self.ui.layoutFilters.itemAtPosition(row, 1).widget().addItem(d, o)
-            widget = QDoubleSpinBox(self)
-            widget.setDecimals(2)
-            widget.setMaximum(99999999.99)
-        elif ftype == 'str':
-            for o, d, r in self.FILTERING['S']:
-                self.ui.layoutFilters.itemAtPosition(row, 1).widget().addItem(d, o)
-            widget = QLineEdit(self)
-        elif ftype == 'date':
-            for o, d, r in self.FILTERING['N']:
-                self.ui.layoutFilters.itemAtPosition(row, 1).widget().addItem(d, o)
-            widget = QDateEdit(QDate.currentDate(), self)
-            widget.setCalendarPopup(True)
-            widget.setMinimumDate(QDate(1800, 1, 1))
-            widget.setMaximumDate(QDate(3000, 12, 31))
-            #widget.setSpecialValueText(_tr('dialog', 'Not set'))
-            widget.setDate(QDate.currentDate())
-        elif ftype == 'datetime':
-            for o, d, r in self.FILTERING['N']:
-                self.ui.layoutFilters.itemAtPosition(row, 1).widget().addItem(d, o)
-            widget = QDateTimeEdit(self)
-            widget.setCalendarPopup(True)
-            widget.setMinimumDate(QDate(1800, 1, 1))
-            widget.setMaximumDate(QDate(3000, 12, 31))
-            #widget.setSpecialValueText(_tr('dialog', 'Not set'))
-            widget.setDate(QDate.currentDate())
-        else:
-            # no widget
-            widget = QWidget(self)
+        match ftype:
+            case 'int':
+                for o, d, r in self.FILTERING['N']:
+                    self.ui.layoutFilters.itemAtPosition(row, 1).widget().addItem(d, o)
+                widget = QSpinBox(self)
+                widget.setRange(0, 2147483647)
+            case 'bool':
+                for o, d, r in self.FILTERING['B']:
+                    self.ui.layoutFilters.itemAtPosition(row, 1).widget().addItem(d, o)
+                widget = QCheckBox(self)
+            case 'decimal2':
+                for o, d, r in self.FILTERING['N']:
+                    self.ui.layoutFilters.itemAtPosition(row, 1).widget().addItem(d, o)
+                widget = QDoubleSpinBox(self)
+                widget.setDecimals(2)
+                widget.setMaximum(99999999.99)
+            case 'str':
+                for o, d, r in self.FILTERING['S']:
+                    self.ui.layoutFilters.itemAtPosition(row, 1).widget().addItem(d, o)
+                widget = QLineEdit(self)
+            case 'date':
+                for o, d, r in self.FILTERING['N']:
+                    self.ui.layoutFilters.itemAtPosition(row, 1).widget().addItem(d, o)
+                widget = QDateEdit(QDate.currentDate(), self)
+                widget.setCalendarPopup(True)
+                widget.setMinimumDate(QDate(1800, 1, 1))
+                widget.setMaximumDate(QDate(3000, 12, 31))
+                widget.setDate(QDate.currentDate())
+            case 'datetime':
+                for o, d, r in self.FILTERING['N']:
+                    self.ui.layoutFilters.itemAtPosition(row, 1).widget().addItem(d, o)
+                widget = QDateTimeEdit(self)
+                widget.setCalendarPopup(True)
+                widget.setMinimumDate(QDate(1800, 1, 1))
+                widget.setMaximumDate(QDate(3000, 12, 31))
+                widget.setDate(QDate.currentDate())
+            case _:
+                # no widget
+                widget = QWidget(self)
         if hasattr(self.conditions[self.sender().currentData()], 'reference'):
             widget = RelationalComboBox(self)
             widget.setFunction(referenceList[self.conditions[self.sender().currentData()].reference])
@@ -1846,30 +1840,23 @@ class PrintDialog(QDialog):
             for r in range(self.ui.layoutParameters.rowCount()):
                 if self.ui.layoutParameters.itemAtPosition(r, 1):
                     w = self.ui.layoutParameters.itemAtPosition(r, 1).widget()
-                    if isinstance(w, QCheckBox):
-                        self.report.parameter[w.param] = w.isChecked()
-                    elif isinstance(w, QSpinBox):
-                        self.report.parameter[w.param] = w.value()
-                    elif isinstance(w, QDoubleSpinBox):
-                        self.report.parameter[w.param] = w.value()
-                    elif isinstance(w, QDateEdit):
-                        self.report.parameter[w.param] = w.date()
-                    elif isinstance(w, QLineEdit):
-                        self.report.parameter[w.param] = w.text()
-                    elif isinstance(w, RelationalComboBox):
-                        self.report.parameter[w.param] = (w.currentData(), w.currentText())
-                    elif isinstance(w, QComboBox):
-                        self.report.parameter[w.param] = (w.currentData(), w.currentText())
-                        # value = w.currentText()
-                        # if isinstance(self.parameter[w.param], int):
-                        #     self.parameter[w.param] = int(value)
-                        # elif isinstance(self.parameter[w.param], float):
-                        #     self.parameter[w.param] = float(value)
-                        # elif isinstance(self.parameter[w.param], QDate):
-                        #     self.parameter[w.param] = QDate.fromString(value)
-                        # else:
-                        #     self.parameter[w.param] = str(value)
-
+                    match w:
+                        case QCheckBox():
+                            self.report.parameter[w.param] = w.isChecked()
+                        case QSpinBox():
+                            self.report.parameter[w.param] = w.value()
+                        case QDoubleSpinBox():
+                            self.report.parameter[w.param] = w.value()
+                        case QDateEdit():
+                            self.report.parameter[w.param] = w.date()
+                        case QLineEdit():
+                            self.report.parameter[w.param] = w.text()
+                        case RelationalComboBox():
+                            self.report.parameter[w.param] = w.currentData() #(w.currentData(), w.currentText())
+                        case QComboBox():
+                            self.report.parameter[w.param] = w.currentData() #(w.currentData(), w.currentText())
+                        case _:
+                            raise ReportException("Unknown object type")
         # get filters
         condition = []
         argument = []
@@ -1883,21 +1870,22 @@ class PrintDialog(QDialog):
                 oi = self.ui.layoutFilters.itemAtPosition(r, 1).widget().currentIndex()
                 wd = self.ui.layoutFilters.itemAtPosition(r, 2).widget()
                 if wd:
-                    if isinstance(wd, QComboBox):
-                        v = wd.currentData()
-                    elif isinstance(wd, QLineEdit):
-                        v = wd.text()
-                    elif isinstance(wd, (QSpinBox, QDoubleSpinBox)):
-                        v = wd.value()
-                    elif isinstance(wd, QDateEdit):
-                        v = wd.date()
-                    elif isinstance(wd, QDateTimeEdit):
-                        v = wd.dateTime()
-                    elif isinstance(wd, QCheckBox):
-                        if wd.checkState() == Qt.Checked:
-                            v = True
-                        else:
-                            v = False
+                    match wd:
+                        case QComboBox():
+                            v = wd.currentData()
+                        case QLineEdit():
+                            v = wd.text()
+                        case QSpinBox() | QDoubleSpinBox():
+                            v = wd.value()
+                        case QDateEdit():
+                            v = wd.date()
+                        case QDateTimeEdit():
+                            v = wd.dateTime()
+                        case QCheckBox():
+                            if wd.checkState() == Qt.Checked:
+                                v = True
+                            else:
+                                v = False
                 else:
                     v = None
                 if ty in ('int', 'decimal2', 'date', 'datetime'):
