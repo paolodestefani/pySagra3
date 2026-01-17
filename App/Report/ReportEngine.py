@@ -84,6 +84,7 @@ from PySide6.QtGui import QPainter
 from PySide6.QtGui import QPicture
 from PySide6.QtGui import QPageSize
 from PySide6.QtGui import QPageLayout
+from PySide6.QtGui import QPaintDevice
 from PySide6.QtGui import QPdfWriter
 from PySide6.QtWidgets import QApplication
 from PySide6.QtPrintSupport import QPrinter
@@ -137,132 +138,132 @@ class ReportPrintError(ReportException):
     pass
 
 
-Orientation = {'Portrait': QPageLayout.Portrait, # Default
-               'Landscape': QPageLayout.Landscape}
+Orientation = {'Portrait':  QPageLayout.Orientation.Portrait, # Default
+               'Landscape': QPageLayout.Orientation.Landscape}
 
-Unit = {'Millimeter': QPageLayout.Millimeter,
-        'Point': QPageLayout.Point,  # Default
-        'Inch': QPageLayout.Inch,
-        'Pica': QPageLayout.Pica,
-        'Didot': QPageLayout.Didot,
-        'Cicero': QPageLayout.Cicero}
+Unit = {'Millimeter':   QPageLayout.Unit.Millimeter,
+        'Point':        QPageLayout.Unit.Point,  # Default
+        'Inch':         QPageLayout.Unit.Inch,
+        'Pica':         QPageLayout.Unit.Pica,
+        'Didot':        QPageLayout.Unit.Didot,
+        'Cicero':       QPageLayout.Unit.Cicero}
 
-PSUnit = {'Millimeter': QPageSize.Millimeter,
-          'Point': QPageSize.Point,
-          'Inch': QPageSize.Inch,
-          'Pica': QPageSize.Pica,
-          'Didot': QPageSize.Didot,
-          'Cicero': QPageSize.Cicero}
+PSUnit = {'Millimeter': QPageSize.Unit.Millimeter,
+          'Point':      QPageSize.Unit.Point,
+          'Inch':       QPageSize.Unit.Inch,
+          'Pica':       QPageSize.Unit.Pica,
+          'Didot':      QPageSize.Unit.Didot,
+          'Cicero':     QPageSize.Unit.Cicero}
 
-PageSize = {'A0': QPageSize.A0,
-            'A1': QPageSize.A1,
-            'A2': QPageSize.A2,
-            'A3': QPageSize.A3,
-            'A4': QPageSize.A4,  # Default
-            'A5': QPageSize.A5,
-            'A6': QPageSize.A6,
-            'A7': QPageSize.A7,
-            'A8': QPageSize.A8,
-            'A9': QPageSize.A9,
-            'B0': QPageSize.B0,
-            'B1': QPageSize.B1,
-            'B2': QPageSize.B2,
-            'B3': QPageSize.B3,
-            'B4': QPageSize.B4,
-            'B5': QPageSize.B5,
-            'B6': QPageSize.B6,
-            'B7': QPageSize.B7,
-            'B8': QPageSize.B8,
-            'B9': QPageSize.B9,
-            'B10': QPageSize.B10,
-            'C5E': QPageSize.C5E,
-            'Comm10E': QPageSize.Comm10E,
-            'DLE': QPageSize.DLE,
-            'Executive': QPageSize.Executive,
-            'Folio': QPageSize.Folio,
-            'Ledger': QPageSize.Ledger,
-            'Legal': QPageSize.Legal,
-            'Letter': QPageSize.Letter,
-            'Tabloid': QPageSize.Tabloid,
-            'Custom': QPageSize.Custom}
+PageSize = {'A0':           QPageSize.PageSizeId.A0,
+            'A1':           QPageSize.PageSizeId.A1,
+            'A2':           QPageSize.PageSizeId.A2,
+            'A3':           QPageSize.PageSizeId.A3,
+            'A4':           QPageSize.PageSizeId.A4,  # Default
+            'A5':           QPageSize.PageSizeId.A5,
+            'A6':           QPageSize.PageSizeId.A6,
+            'A7':           QPageSize.PageSizeId.A7,
+            'A8':           QPageSize.PageSizeId.A8,
+            'A9':           QPageSize.PageSizeId.A9,
+            'B0':           QPageSize.PageSizeId.B0,
+            'B1':           QPageSize.PageSizeId.B1,
+            'B2':           QPageSize.PageSizeId.B2,
+            'B3':           QPageSize.PageSizeId.B3,
+            'B4':           QPageSize.PageSizeId.B4,
+            'B5':           QPageSize.PageSizeId.B5,
+            'B6':           QPageSize.PageSizeId.B6,
+            'B7':           QPageSize.PageSizeId.B7,
+            'B8':           QPageSize.PageSizeId.B8,
+            'B9':           QPageSize.PageSizeId.B9,
+            'B10':          QPageSize.PageSizeId.B10,
+            'C5E':          QPageSize.PageSizeId.C5E,
+            'Comm10E':      QPageSize.PageSizeId.Comm10E,
+            'DLE':          QPageSize.PageSizeId.DLE,
+            'Executive':    QPageSize.PageSizeId.Executive,
+            'Folio':        QPageSize.PageSizeId.Folio,
+            'Ledger':       QPageSize.PageSizeId.Ledger,
+            'Legal':        QPageSize.PageSizeId.Legal,
+            'Letter':       QPageSize.PageSizeId.Letter,
+            'Tabloid':      QPageSize.PageSizeId.Tabloid,
+            'Custom':       QPageSize.PageSizeId.Custom}
 
 # standard font properties
 
-FontWeight = {'Thin': QFont.Thin,
-              'ExtraLight': QFont.ExtraLight,
-              'Light': QFont.Light,
-              'Normal': QFont.Normal, # Default
-              'Medium': QFont.Medium,
-              'DemiBold': QFont.DemiBold,
-              'Bold': QFont.Bold,
-              'ExtraBold': QFont.ExtraBold,
-              'Black': QFont.Black}
+FontWeight = {'Thin':       QFont.Weight.Thin,
+              'ExtraLight': QFont.Weight.ExtraLight,
+              'Light':      QFont.Weight.Light,
+              'Normal':     QFont.Weight.Normal, # Default
+              'Medium':     QFont.Weight.Medium,
+              'DemiBold':   QFont.Weight.DemiBold,
+              'Bold':       QFont.Weight.Bold,
+              'ExtraBold':  QFont.Weight.ExtraBold,
+              'Black':      QFont.Weight.Black}
 
-TextAlign = {'AlignLeft': Qt.AlignmentFlag.AlignLeft, # Default
-             'AlignRight': Qt.AlignmentFlag.AlignRight,
-             'AlignHCenter': Qt.AlignmentFlag.AlignHCenter,
-             'AlignJustify': Qt.AlignmentFlag.AlignJustify,
-             'AlignTop': Qt.AlignmentFlag.AlignTop,
-             'AlignCenter': Qt.AlignmentFlag.AlignCenter}
+TextAlign = {'AlignLeft':       Qt.AlignmentFlag.AlignLeft, # Default
+             'AlignRight':      Qt.AlignmentFlag.AlignRight,
+             'AlignHCenter':    Qt.AlignmentFlag.AlignHCenter,
+             'AlignJustify':    Qt.AlignmentFlag.AlignJustify,
+             'AlignTop':        Qt.AlignmentFlag.AlignTop,
+             'AlignCenter':     Qt.AlignmentFlag.AlignCenter}
 
 # line styles
 
-PenStyle = {'SolidLine': Qt.SolidLine,
-            'DashLine': Qt.DashLine,
-            'DotLine': Qt.DotLine,
-            'DashDotLine': Qt.DashDotLine,
-            'DashDotDotLine': Qt.DashDotDotLine}
+PenStyle = {'SolidLine':        Qt.PenStyle.SolidLine,
+            'DashLine':         Qt.PenStyle.DashLine,
+            'DotLine':          Qt.PenStyle.DotLine,
+            'DashDotLine':      Qt.PenStyle.DashDotLine,
+            'DashDotDotLine':   Qt.PenStyle.DashDotDotLine}
 
 # brush styles
 
-BrushStyle = {'NoBrush': Qt.NoBrush,
-              'SolidPattern': Qt.SolidPattern,
-              'Dense1Pattern': Qt.Dense1Pattern,
-              'Dense2Pattern': Qt.Dense2Pattern,
-              'Dense3Pattern': Qt.Dense3Pattern,
-              'Dense4Pattern': Qt.Dense4Pattern,
-              'Dense5Pattern': Qt.Dense5Pattern,
-              'Dense6Pattern': Qt.Dense6Pattern,
-              'Dense7Pattern': Qt.Dense7Pattern,
-              'HorPattern': Qt.HorPattern,
-              'VerPattern': Qt.VerPattern,
-              'CrossPattern': Qt.CrossPattern,
-              'BDiagPattern': Qt.BDiagPattern,
-              'FDiagPattern': Qt.FDiagPattern,
-              'DiagCrossPattern': Qt.DiagCrossPattern}
+BrushStyle = {'NoBrush':            Qt.BrushStyle.NoBrush,
+              'SolidPattern':       Qt.BrushStyle.SolidPattern,
+              'Dense1Pattern':      Qt.BrushStyle.Dense1Pattern,
+              'Dense2Pattern':      Qt.BrushStyle.Dense2Pattern,
+              'Dense3Pattern':      Qt.BrushStyle.Dense3Pattern,
+              'Dense4Pattern':      Qt.BrushStyle.Dense4Pattern,
+              'Dense5Pattern':      Qt.BrushStyle.Dense5Pattern,
+              'Dense6Pattern':      Qt.BrushStyle.Dense6Pattern,
+              'Dense7Pattern':      Qt.BrushStyle.Dense7Pattern,
+              'HorPattern':         Qt.BrushStyle.HorPattern,
+              'VerPattern':         Qt.BrushStyle.VerPattern,
+              'CrossPattern':       Qt.BrushStyle.CrossPattern,
+              'BDiagPattern':       Qt.BrushStyle.BDiagPattern,
+              'FDiagPattern':       Qt.BrushStyle.FDiagPattern,
+              'DiagCrossPattern':   Qt.BrushStyle.DiagCrossPattern}
 
-AspectRatio = {'IgnoreAspectRatio': Qt.IgnoreAspectRatio,
-               'KeepAspectRatio': Qt.KeepAspectRatio,
-               'KeepAspectRatioByExpanding': Qt.KeepAspectRatioByExpanding}
+AspectRatio = {'IgnoreAspectRatio':             Qt.AspectRatioMode.IgnoreAspectRatio,
+               'KeepAspectRatio':               Qt.AspectRatioMode.KeepAspectRatio,
+               'KeepAspectRatioByExpanding':    Qt.AspectRatioMode.KeepAspectRatioByExpanding}
 
 # Default global options
 
-defaultOptions = {'documentName': 'pyReportEngine document',
-                  'orientation': 'Portrait',
-                  'unit': 'Point',
-                  'pageSize': 'A4',
+defaultOptions = {'documentName':           'pyReportEngine document',
+                  'orientation':            'Portrait',
+                  'unit':                   'Point',
+                  'pageSize':               'A4',
                   'ignoreWarningOnSetPageLayout': False,
-                  'topMargin': 5.0,
-                  'bottomMargin': 5.0,
-                  'leftMargin': 5.0,
-                  'rightMargin': 5.0,
-                  'barcodeType': None,
-                  'fontName': 'Arial',
-                  'fontSize': 8,
-                  'fontItalic': 'False',
-                  'fontWeight': 'Normal',
-                  'textAlign': 'AlignLeft',
-                  'color': 'black',
-                  'lineWidth': 1.0,
-                  'lineStyle': 'SolidLine',
-                  'brushStyle': 'NoBrush',
-                  'brushColor': 'Black',
-                  'aspectRatio': 'KeepAspectRatio',
-                  'opacity': 1.0,
-                  'quantityDecimals': 2,
-                  'currencySymbol': '€',
-                  'trueSymbol': '\u25CF',   #'\u25CF'
-                  'falseSymbol': '\u25CB'   #'\u25CB'
+                  'topMargin':              5.0,
+                  'bottomMargin':           5.0,
+                  'leftMargin':             5.0,
+                  'rightMargin':            5.0,
+                  'barcodeType':            None,
+                  'fontName':               'Arial',
+                  'fontSize':               8,
+                  'fontItalic':             False,
+                  'fontWeight':             'Normal',
+                  'textAlign':              'AlignLeft',
+                  'color':                  'black',
+                  'lineWidth':              1.0,
+                  'lineStyle':              'SolidLine',
+                  'brushStyle':             'NoBrush',
+                  'brushColor':             'Black',
+                  'aspectRatio':            'KeepAspectRatio',
+                  'opacity':                1.0,
+                  'quantityDecimals':       2,
+                  'currencySymbol':         '€',
+                  'trueSymbol':             '\u25CF',
+                  'falseSymbol':            '\u25CB'
                   }
 
 
@@ -327,10 +328,11 @@ def code128encode(s: str) -> str|None:
     return ''.join(chars[x] for x in codes)
 
 
+
 # base elements
 
 class BaseRenderer():
-    "Base class for all tex render elements"
+    "Base class for all tex renderer elements"
 
     def __init__(self, options: dict, paramdict: dict) -> None:
         self.isVisible = 'True' == paramdict.get("isVisible", "True")
@@ -421,7 +423,7 @@ class BaseRenderer():
         text = self.textFormat() or ' '  # for painter.boundingRect a string NOT empty is required
         flags = self.textAlign
         if self.canGrow:
-            flags |= Qt.TextWordWrap
+            flags |= Qt.TextFlag.TextWordWrap
         rect = painter.boundingRect(QRectF(self.left,
                                            self.top,
                                            self.width,
@@ -471,7 +473,7 @@ class BaseRenderer():
         text = self.textFormat()
         flags = self.textAlign
         if self.canGrow:
-            flags |= Qt.TextWordWrap
+            flags |= Qt.TextFlag.TextWordWrap
             height = bandHeight
         # draw text
         painter.drawText(QRectF(self.left,
@@ -584,11 +586,11 @@ class Special(BaseRenderer):
             case 'pageNumber':
                 self.value = self.report.page_num
             case 'printDate':
-                self.value = session['qlocale'].toString(QDate.currentDate(), QLocale.ShortFormat)
+                self.value = session['qlocale'].toString(QDate.currentDate(), QLocale.FormatType.ShortFormat)
             case 'printDateTime':
-                self.value = session['qlocale'].toString(QDateTime.currentDateTime(), QLocale.ShortFormat)
+                self.value = session['qlocale'].toString(QDateTime.currentDateTime(), QLocale.FormatType.ShortFormat)
             case 'printTime':
-                self.value = session['qlocale'].toString(QTime.currentTime(), QLocale.ShortFormat)
+                self.value = session['qlocale'].toString(QTime.currentTime(), QLocale.FormatType.ShortFormat)
             case 'recordNumber':
                 self.value = self.report.rn
             case 'appName':
@@ -697,9 +699,9 @@ class Rectangle():
         pen.setColor(self.color)
         pen.setWidthF(self.lineWidth)
         pen.setStyle(self.style)
-        pen.setCapStyle(Qt.RoundCap)
+        pen.setCapStyle(Qt.PenCapStyle.RoundCap)
         painter.setPen(pen)
-        if self.brushStyle != Qt.NoBrush:
+        if self.brushStyle != Qt.BrushStyle.NoBrush:
             brush = QBrush()
             brush.setStyle(self.brushStyle)
             brush.setColor(self.brushColor)
@@ -749,7 +751,7 @@ class Image():
             image.loadFromData(QByteArray.fromBase64(bytearray(text.encode('utf-8')))) # Image in base64 encoding
         if self.fromResource:
             image.load(f":/{self.fromResource}")  # from resource
-        self.image = image.scaled(int(self.width), int(self.height), self.aspectRatio, Qt.SmoothTransformation)
+        self.image = image.scaled(int(self.width), int(self.height), self.aspectRatio, Qt.TransformationMode.SmoothTransformation)
 
     def render(self, bandOffset: float, bandHeight: float) -> None:
         "Draw image if necessary"
@@ -895,7 +897,7 @@ class SqlField():
 class Report():
     "Base class for report"
 
-    def __init__(self, xml_string=None):
+    def __init__(self, xml_string: str|None = None) -> None:
         # report elements
         self.page_background = [] # printed on every page, absolute coordinates, no data
         self.page_header = [] # printed on every page
@@ -937,7 +939,7 @@ class Report():
         self.offset = 0.0
         self.page_num = 0
 
-    def appendBands(self, childElement):
+    def appendBands(self, childElement: str) -> list:
         outList = []
         for band in childElement.findall('band'):
             b = Band(self.options, band.attrib)
@@ -952,7 +954,7 @@ class Report():
             outList.append(b)
         return outList
 
-    def setReportDefinition(self, xml_string):
+    def setReportDefinition(self, xml_string: str) -> None:
         "Create painting objects and other elements from xml definition"
         try:
             root = ET.fromstring(xml_string)
@@ -1110,10 +1112,10 @@ class Report():
                                                 self.options['bottomMargin']),
                                       Unit[self.options["unit"]])
 
-    def setData(self, dataSet=None):
+    def setData(self, dataSet: list|None = None) -> None:
         self.data = dataSet
 
-    def newPage(self, record):
+    def newPage(self, record: dict) -> None:
         "Add a new page with header/footer if required"
         # reset newPageRequest first
         self.newPageRequest = False
@@ -1145,7 +1147,7 @@ class Report():
         # restore page offset
         self.offset = page_offset
 
-    def groupGenerate(self, data, group_index=0):
+    def groupGenerate(self, data: list, group_index: int = 0) -> None:
         "Resolve groups recursively"
         grp = self.groups[group_index] if self.groups else None
         for key, group in itertools.groupby(data, lambda x: x[self.column[grp]] if grp else None):  # if no group returns all the dataset
@@ -1199,7 +1201,7 @@ class Report():
                             if isinstance(a, Summary):
                                 a.reset()
 
-    def generate(self):
+    def generate(self) -> None:
         "Generate report"
         if not self.data:  # no data to render
             raise ReportNoDataError
@@ -1274,10 +1276,10 @@ class Report():
 
         self.painter.end() # newPage() do a painter.begin
 
-    def reportName(self):
+    def reportName(self) -> str:
         return self.options['documentName']
 
-    def print(self, paintDevice):
+    def print(self, paintDevice: QPaintDevice) -> None:
         "Print document from generated report"
         if isinstance(paintDevice, QPrinter):
             paintDevice.setDocName(self.options['documentName'])
@@ -1319,7 +1321,7 @@ class Report():
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    QLocale.setDefault(QLocale.English)
+    QLocale.setDefault(QLocale.Language.English)
     
     xml_string0 = """<?xml version="1.0" encoding="UTF-8"?>
 <report version="1.0">
@@ -1437,7 +1439,7 @@ if __name__ == "__main__":
         <label left="0.0" top="20.0" width="550.0" height="38.0" color="blue"
         fontName="Impact" fontWeight="Bold" fontItalic="True" fontSize="24"
         textAlign="AlignHCenter">Example of a complete report</label>
-        <rectangle xRadius="3.0" yRadius="3.0" left="0.0" top="75.0" width="585.0" height="15.0" lineWidth="1.0"/>
+        <rectangle xRadius="3.0" yRadius="3.0" left="0.0" top="72.0" width="585.0" height="15.0" lineWidth="1.0"/>
         <label left="5.0" top="60.0" width="585.0" height="15.0" fontSize="6">A complete report with 2 level of grouping, department and date, and aggregate functions</label>
         <label left="5.0" top="75.0" width="100.0" height="15.0">Code</label>
         <label left="100.0" top="75.0" width="240.0" height="15.0">Description</label>
@@ -1507,7 +1509,7 @@ if __name__ == "__main__":
             <field left="5.0" top="3" width="100" height="20" fontName="Courier New" textAlign="AlignLeft">code</field>
             <field left="100.0" top="3" width="240.0" height="20.0" canGrow="True">description</field>
             <field left="340.0" top="3" width="100.0" height="20.0">department</field>
-            <field left="440.0" top="3" width="15.0" height="20.0" textAlign="AlignHCenter">stock_control</field>
+            <field left="440.0" top="3" width="15.0" height="20.0" textAlign="AlignCenter" fontSize="12">stock_control</field>
             <field left="450.0" top="3" width="60.0" height="20.0" textAlign="AlignRight">quantity</field>
             <field left="510.0" top="3" width="65.0" height="20.0" format="dd.MM.yy" textAlign="AlignRight">date</field>
         </band>
@@ -1515,7 +1517,7 @@ if __name__ == "__main__":
     <reportFooter>
         <band height="60.0">
             <rectangle xRadius="3.0" yRadius="3.0" color="red" left="15.0" top="0.0" width="540.0" height="60.0"
-            lineWidth="2.0" brushStyle="Dense6Pattern" brushColor="lightgrey"/>
+            lineWidth="2.0" brushStyle="DiagCrossPattern" brushColor="lightgrey"/>
             <label left="10.0" top="4.0" width="550.0" height="16" fontItalic="True"
             fontWeight="Bold" textAlign="AlignHCenter">Report summaries of quantity field</label>
             <label left="20.0" top="24.0" width="50.0" height="20" fontWeight="Bold">Sum:</label>
@@ -1788,13 +1790,13 @@ if __name__ == "__main__":
             r.setData([('', 'One line recordset test', 'Accounting', False, 0, QDate(2018, 3, 3))])
             r.setData([(None,)])  # test empty dataset
         # cursor wait
-        QGuiApplication.setOverrideCursor(QCursor(Qt.WaitCursor))
+        QGuiApplication.setOverrideCursor(QCursor(Qt.CursorShape.WaitCursor))
         r.generate()
         # cursor restore
         QGuiApplication.restoreOverrideCursor()
         # print preview
         dialog = QPrintPreviewDialog()
-        dialog.setWindowFlags(Qt.Dialog|Qt.WindowMinMaxButtonsHint|Qt.WindowCloseButtonHint)
+        dialog.setWindowFlags(Qt.WindowType.Dialog|Qt.WindowType.WindowMinMaxButtonsHint|Qt.WindowType.WindowCloseButtonHint)
         dialog.setWindowTitle("Print preview")
         dialog.paintRequested.connect(r.print)
         dialog.exec()
