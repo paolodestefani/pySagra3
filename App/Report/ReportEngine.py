@@ -648,7 +648,7 @@ class Line():
         pen.setColor(QColor(self.color))
         pen.setWidthF(self.lineWidth)
         pen.setStyle(self.style)
-        pen.setCapStyle(Qt.RoundCap)
+        pen.setCapStyle(Qt.PenCapStyle.FlatCap)
         painter.setPen(pen)
         # effect
         painter.setOpacity(self.opacity)
@@ -699,7 +699,7 @@ class Rectangle():
         pen.setColor(self.color)
         pen.setWidthF(self.lineWidth)
         pen.setStyle(self.style)
-        pen.setCapStyle(Qt.PenCapStyle.RoundCap)
+        pen.setCapStyle(Qt.PenCapStyle.FlatCap)
         painter.setPen(pen)
         if self.brushStyle != Qt.BrushStyle.NoBrush:
             brush = QBrush()
