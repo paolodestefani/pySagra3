@@ -1509,7 +1509,7 @@ if __name__ == "__main__":
             <field left="5.0" top="3" width="100" height="20" fontName="Courier New" textAlign="AlignLeft">code</field>
             <field left="100.0" top="3" width="240.0" height="20.0" canGrow="True">description</field>
             <field left="340.0" top="3" width="100.0" height="20.0">department</field>
-            <field left="440.0" top="3" width="15.0" height="20.0" textAlign="AlignCenter" fontSize="12">stock_control</field>
+            <field left="440.0" top="3" width="15.0" height="20.0" textAlign="AlignHCenter">stock_control</field>
             <field left="450.0" top="3" width="60.0" height="20.0" textAlign="AlignRight">quantity</field>
             <field left="510.0" top="3" width="65.0" height="20.0" format="dd.MM.yy" textAlign="AlignRight">date</field>
         </band>
