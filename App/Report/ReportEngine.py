@@ -262,6 +262,7 @@ defaultOptions = {'documentName':           'pyReportEngine document',
                   'opacity':                1.0,
                   'quantityDecimals':       2,
                   'currencySymbol':         '€',
+                  'MacOSFontSizeOffset':    20.0, # percent
                   'trueSymbol':             '\u25CF',
                   'falseSymbol':            '\u25CB'
                   }
@@ -347,6 +348,7 @@ class BaseRenderer():
         self.barcode = paramdict.get("barcodeType", options['barcodeType'])
         self.fontName = paramdict.get("fontName", options['fontName'])
         self.fontSize = int(paramdict.get("fontSize", options['fontSize']))
+        self.MacOSFontSizeOffset = int(paramdict.get("MacOSFontSizeOffset", options['MacOSFontSizeOffset']))
         self.fontItalic = 'True' == paramdict.get("fontItalic", options['fontItalic'])
         self.fontWeight = FontWeight[paramdict.get("fontWeight", options['fontWeight'])]
         self.textAlign = TextAlign[paramdict.get("textAlign", options['textAlign'])]
@@ -419,7 +421,12 @@ class BaseRenderer():
             return max(source.height(), bandHeight)
         # check text elements
         painter.save()
-        painter.setFont(QFont(self.fontName, self.fontSize, self.fontWeight, self.fontItalic))
+        # for MacOS increase font size %
+        if QOperatingSystemVersion.currentType() == QOperatingSystemVersion.OSType.MacOS:
+            fontSize = int(self.fontSize * (100.0 + self.MacOSFontSizeOffset) / 100.0)
+        else:
+            fontSize = self.fontSize 
+        painter.setFont(QFont(self.fontName, fontSize, self.fontWeight, self.fontItalic))
         text = self.textFormat() or ' '  # for painter.boundingRect a string NOT empty is required
         flags = self.textAlign
         if self.canGrow:
@@ -448,7 +455,12 @@ class BaseRenderer():
         pen = QPen()
         pen.setColor(QColor(self.color))
         painter.setPen(pen)
-        painter.setFont(QFont(self.fontName, self.fontSize, self.fontWeight, self.fontItalic))
+        # for MacOS increase font size %
+        if QOperatingSystemVersion.currentType() == QOperatingSystemVersion.OSType.MacOS:
+            fontSize = int(self.fontSize * (100.0 + self.MacOSFontSizeOffset) / 100.0)
+        else:
+            fontSize = self.fontSize  
+        painter.setFont(QFont(self.fontName, fontSize, self.fontWeight, self.fontItalic))
         # effect
         painter.setOpacity(self.opacity)
         # contain the dimentions into the band boundary
