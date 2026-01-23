@@ -100,8 +100,8 @@ RETURNS VOID AS
 $$
 DECLARE
     odr         RECORD;         -- order detail dep record
-    item        integer;        -- item
-    itempart    integer;        -- item part
+    item        BIGINT;        -- item
+    itempart    BIGINT;        -- item part
     partqty     numeric(12, 2); -- quantity for item part
 BEGIN
     -- clear items inventory

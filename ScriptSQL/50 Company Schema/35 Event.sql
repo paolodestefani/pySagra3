@@ -61,7 +61,7 @@ CREATE TABLE event (
     description         text NOT NULL,
     start_date          timestamptz(3) NOT NULL DEFAULT now(),
     end_date            timestamptz(3) NOT NULL DEFAULT now(),
-	price_list_id       integer NULL,
+	price_list_id       BIGINT NULL,
     image               bytea,
     external_code       integer,
     --

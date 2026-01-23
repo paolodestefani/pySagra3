@@ -280,38 +280,38 @@ ALTER VIEW vw_sales_summary
 CREATE OR REPLACE VIEW  vw_order_status
 AS
 SELECT 
-	oh.company_id 	AS company_id,
-	c.description	AS company_description,
-    oh.event_id		AS event_id,
-	e.description	AS event_description,
-	oh.order_header_id	AS order_header_id,
-	oh.order_date	AS order_date,
+	oh.company_id 	        AS company_id,
+	c.description	        AS company_description,
+    oh.event_id		        AS event_id,
+	e.description	        AS event_description,
+	oh.order_header_id	    AS order_header_id,
+	oh.order_date	        AS order_date,
     oh.stat_order_date      AS stat_order_date,
 	oh.stat_order_day_part  AS stat_order_day_part,
-	oh.order_time	AS order_time,
-	oh.order_number	AS order_number,
-	oh.delivery		AS delivery,
-	oh.table_num	AS table_number,
-	oh.customer_name	AS customer_name,
-	oh.covers		AS covers,
-	oh.status		AS status,
+	oh.order_time	        AS order_time,
+	oh.order_number	        AS order_number,
+	oh.delivery		        AS delivery,
+	oh.table_num	        AS table_number,
+	oh.customer_name	    AS customer_name,
+	oh.covers		        AS covers,
+	oh.status		        AS status,
 	oh.fullfillment_date	AS fullfillment_date,
-    oh.cash_desk	AS cash_desk,
-	oh.created_by	AS user_ins,
-	oh.is_from_web	AS from_web,
+    oh.cash_desk	        AS cash_desk,
+	oh.created_by	        AS user_ins,
+	oh.is_from_web	        AS from_web,
 	-- department status
-	od.dep1			AS department1,
-	od.fullfill1	AS fullfillment1,
-	od.dep2			AS department2,
-	od.fullfill2	AS fullfillment2,
-	od.dep3			AS department3,
-	od.fullfill3	AS fullfillment3,
-	od.dep4			AS department4,
-	od.fullfill4	AS fullfillment4,
-	od.dep5			AS department5,
-	od.fullfill5	AS fullfillment5,
-	od.dep6			AS department6,
-	od.fullfill6	AS fullfillment6
+	od.dep1			        AS department1,
+	od.fullfill1	        AS fullfillment1,
+	od.dep2			        AS department2,
+	od.fullfill2	        AS fullfillment2,
+	od.dep3			        AS department3,
+	od.fullfill3	        AS fullfillment3,
+	od.dep4			        AS department4,
+	od.fullfill4	        AS fullfillment4,
+	od.dep5			        AS department5,
+	od.fullfill5	        AS fullfillment5,
+	od.dep6			        AS department6,
+	od.fullfill6	        AS fullfillment6
 FROM order_header oh
 JOIN system.company c ON oh.company_id = c.company_id
 JOIN event e ON oh.event_id = e.event_id
@@ -354,29 +354,29 @@ ALTER VIEW vw_order_status
 -- business intellligence header view
 CREATE OR REPLACE VIEW bi_order_header AS
 SELECT 
-    ev.company_id           	AS company_id,
-    ev.description          	AS event,
-    oh.order_number         	AS order_number,
-    oh.order_date::text  		AS order_date,
-    oh.order_time::text			AS order_time,
-    oh.date_time::text      	AS order_date_time,  
-    oh.fullfillment_date::text	AS fullfillment_date, 
-    oh.stat_order_date::text	AS stat_order_date,
-    oh.stat_order_day_part  	AS stat_order_day_part,
-    oh.cash_desk            	AS cash_desk,
-    oh.delivery             	AS delivery,
+    ev.company_id           	    AS company_id,
+    ev.description          	    AS event,
+    oh.order_number         	    AS order_number,
+    oh.order_date::text  		    AS order_date,
+    oh.order_time::text			    AS order_time,
+    oh.date_time::text      	    AS order_date_time,  
+    oh.fullfillment_date::text	    AS fullfillment_date, 
+    oh.stat_order_date::text	    AS stat_order_date,
+    oh.stat_order_day_part  	    AS stat_order_day_part,
+    oh.cash_desk            	    AS cash_desk,
+    oh.delivery             	    AS delivery,
     CASE oh.is_electronic_payment 
 		WHEN true THEN 'E'
 		ELSE 'C'
-	END                     	AS payment,
-    oh.is_from_web          	AS web_order,
-    oh.table_num            	AS table_num,
-    oh.customer_name        	AS customer_name,
-    oh.customer_contact     	AS customer_contact,
-    oh.covers               	AS covers,
-    oh.total_amount         	AS total_amount,
-    oh.discount             	AS discount,
-    oh.cash                 	AS cash
+	END                     	    AS payment,
+    oh.is_from_web          	    AS web_order,
+    oh.table_num            	    AS table_num,
+    oh.customer_name        	    AS customer_name,
+    oh.customer_contact     	    AS customer_contact,
+    oh.covers               	    AS covers,
+    oh.total_amount         	    AS total_amount,
+    oh.discount             	    AS discount,
+    oh.cash                 	    AS cash
 FROM order_header oh
 JOIN event ev ON oh.event_id = ev.event_id;
 
@@ -389,28 +389,28 @@ ALTER VIEW bi_order_header
 -- business intellligence detail view
 CREATE OR REPLACE VIEW bi_order_line AS
 SELECT 
-    ev.company_id       		AS company_id,
-    ev.description				AS event,
-    oh.order_number				AS order_number,
-    oh.order_date::text			AS order_date,
-    oh.order_time::text			AS order_time,
-    oh.stat_order_date::text	AS stat_order_date,
-    oh.stat_order_day_part 		AS stat_order_day_part,
-    oh.delivery         		AS delivery,
+    ev.company_id       		    AS company_id,
+    ev.description				    AS event,
+    oh.order_number				    AS order_number,
+    oh.order_date::text			    AS order_date,
+    oh.order_time::text			    AS order_time,
+    oh.stat_order_date::text	    AS stat_order_date,
+    oh.stat_order_day_part 		    AS stat_order_day_part,
+    oh.delivery         		    AS delivery,
     CASE oh.is_electronic_payment 
 		WHEN true THEN 'E'
 		ELSE 'C'
-	END                 		AS payment,
-    oh.table_num        		AS table_number,
-    oh.customer_name    		AS customer_name,
-    de.description      		AS department,
-    it.item_type        		AS item_type,
-    it.description      		AS item,
-    ol.variants         		AS variants,
+	END                 		    AS payment,
+    oh.table_num        		    AS table_number,
+    oh.customer_name    		    AS customer_name,
+    de.description      		    AS department,
+    it.item_type        		    AS item_type,
+    it.description      		    AS item,
+    ol.variants         		    AS variants,
     it.description::text || COALESCE(' '::text || ol.variants::text, ''::text) AS item_with_variants,
-    ol.quantity         		AS quantity,
-    ol.price            		AS price,
-    ol.amount           		AS amount
+    ol.quantity         		    AS quantity,
+    ol.price            		    AS price,
+    ol.amount           		    AS amount
 FROM order_line ol
 JOIN order_header oh ON ol.order_header_id = oh.order_header_id
 JOIN event ev ON oh.event_id = ev.event_id

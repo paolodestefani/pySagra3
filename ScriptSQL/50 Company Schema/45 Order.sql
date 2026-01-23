@@ -386,8 +386,8 @@ CREATE FUNCTION order_line_to_inventory()
     RETURNS trigger AS 
 $$
 DECLARE
-    item        int;            -- item
-    itempart    int;            -- item part
+    item        BIGINT;            -- item
+    itempart    BIGINT;            -- item part
     partqty     numeric(12, 2); -- part quantity
 BEGIN
     --
