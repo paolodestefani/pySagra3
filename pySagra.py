@@ -94,7 +94,8 @@ def logUnhandledException(ex_cls: str, ex:str, tb: str) -> None:
     if QMessageBox.critical(session.get('mainwin'),
                             "Unhadled exception",
                             msg,
-                            QMessageBox.Ignore | QMessageBox.Abort) == QMessageBox.Abort:
+                            QMessageBox.StandardButton.Ignore | QMessageBox.StandardButton.Abort
+                            ) == QMessageBox.StandardButton.Abort:
         sys.exit(0)
 
 
@@ -218,7 +219,7 @@ if __name__ == "__main__":
     # create a db and application connection
     logging.info('Starting the login dialog')
     login = LoginDialog()
-    if login.exec() == QDialog.Rejected:
+    if login.exec() == QDialog.DialogCode.Rejected:
         sys.exit(0)
     # create a main window
     logging.info('Starting MainWindow')

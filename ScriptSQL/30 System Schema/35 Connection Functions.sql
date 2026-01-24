@@ -139,11 +139,11 @@ BEGIN
 
 	-- check application user password
     -- coalesce is for manage null password
-    IF NOT EXISTS(
+    IF (
         SELECT coalesce(user_password = system.crypt(in_user_pwd, user_password), false) 
         FROM system.app_user 
         WHERE user_code = in_user_code
-        ) THEN
+        ) IS NOT true THEN
         RAISE EXCEPTION 'Authentication failed (wrong user or password)' 
         USING HINT = 'Check user name and password', ERRCODE = 'PA006';
     END IF;

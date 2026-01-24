@@ -1166,12 +1166,12 @@ class Report():
             sub_data = list(group)
             header_record = {k: sub_data[0][v] for k, v in self.column.items()} # first record of the group
             footer_record = {k: sub_data[-1][v] for k, v in self.column.items()} # last record of the group
-
+            
             # group headers
             if self.groups:
                 if grp in self.group_headers:
                     for b in self.group_headers[grp]:
-                        b.render(header_record)
+                        b.render(header_record, self.prev_record)
 
             # call recursively this method for nested groups
             if self.groups:
@@ -1180,11 +1180,10 @@ class Report():
                     sub_data.clear() # render details only in subgroup
 
             # details
-            prev_record = {}
-            for record in sub_data:
-                record = {k: record[v] for k, v in self.column.items()}
+            for rec in sub_data:
+                record = {k: rec[v] for k, v in self.column.items()}
                 for b in self.details:
-                    b.render(record, prev_record)
+                    b.render(record, self.prev_record)
                 # update summaries on group footers and report footers
                 # it is require to scroll all the dataset for update summaries so is not possible to put summaries on headers
                 if self.groups:
@@ -1200,13 +1199,13 @@ class Report():
                             if isinstance(a, Summary):
                                 a.update(record)
                 self.rn += 1  # increase record number only after rendering the previous one
-                prev_record = record.copy()
+                self.prev_record = record.copy()
 
             # group footer
             if self.groups:
                 if grp in self.group_footers:
                     for b in self.group_footers[grp]:
-                        b.render(footer_record)
+                        b.render(footer_record, self.prev_record)
                     # reset summaries
                     for b in self.group_footers[grp]:
                         for a in b:
@@ -1279,6 +1278,7 @@ class Report():
                 b.render(first_record)
 
         # start iterating the dataset
+        self.prev_record = {}
         self.groupGenerate(self.data)
 
         # report footer
