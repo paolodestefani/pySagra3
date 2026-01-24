@@ -27,6 +27,7 @@ pyside6-lupdate	\
 	pySagra.py \
 	App/System/Connection.py \
 	App/System/Customization.py \
+	App/System/Action.py \
 	App/System/Help.py \
 	App/System/Mainwindow.py \
 	App/System/Menu.py \

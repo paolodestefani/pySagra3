@@ -4,9 +4,9 @@
     <file alias="login_gif">login.gif</file>
   </qresource>
   <qresource>
-    <file alias="login_it">translation/login_it.qm</file>
-    <file alias="pySagra_it">translation/pySagra_it.qm</file>
-	<file alias="pySagra_th">translation/pySagra_th.qm</file>
+    <file alias="login_it.qm">translation/login_it.qm</file>
+    <file alias="pySagra_it.qm">translation/pySagra_it.qm</file>
+	<file alias="pySagra_th.qm">translation/pySagra_th.qm</file>
   </qresource>
   <qresource prefix="/flags">
 	<file alias="flag_usa">icon/flags/flag_usa.png</file>

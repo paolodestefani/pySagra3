@@ -29,7 +29,7 @@
     <message>
         <location filename="../../App/System/Login.py" line="150"/>
         <source>Error on connecting to database server</source>
-        <translation>Errore di connessione al database server</translation>
+        <translation>Errore di connessione al database server PIPPO</translation>
     </message>
     <message>
         <location filename="../../App/System/Login.py" line="161"/>
@@ -102,82 +102,82 @@
     <message>
         <location filename="../../App/Ui/LoginDialog.ui" line="409"/>
         <source>Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>Collega</translation>
     </message>
     <message>
         <location filename="../../App/Ui/LoginDialog.ui" line="422"/>
         <source>Cancel and close the login dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Annulla e chiudi la fionestra di login</translation>
     </message>
     <message>
         <location filename="../../App/Ui/LoginDialog.ui" line="425"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Annulla</translation>
     </message>
     <message>
         <location filename="../../App/Ui/LoginDialog.ui" line="439"/>
         <source>Show/hide the connection parameters</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostra/nascondi i parametri di connessione</translation>
     </message>
     <message>
         <location filename="../../App/Ui/LoginDialog.ui" line="442"/>
         <source>Connection details</source>
-        <translation type="unfinished"></translation>
+        <translation>Dettagli della connessione</translation>
     </message>
     <message>
         <location filename="../../App/Ui/LoginDialog.ui" line="463"/>
         <source>Insert the db server IP port</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserire la porta IP del server database</translation>
     </message>
     <message>
         <location filename="../../App/Ui/LoginDialog.ui" line="484"/>
         <source>Database</source>
-        <translation type="unfinished"></translation>
+        <translation>Database</translation>
     </message>
     <message>
         <location filename="../../App/Ui/LoginDialog.ui" line="494"/>
         <source>Insert the database name</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserire il nome del database</translation>
     </message>
     <message>
         <location filename="../../App/Ui/LoginDialog.ui" line="507"/>
         <source>Insert the database server name or IP address</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserire il nome del server del database oppure il suo l&apos;indirizzo IP</translation>
     </message>
     <message>
         <location filename="../../App/Ui/LoginDialog.ui" line="520"/>
         <source>Insert the database user name</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserire l&apos;utente di database</translation>
     </message>
     <message>
         <location filename="../../App/Ui/LoginDialog.ui" line="538"/>
         <source>DB User</source>
-        <translation type="unfinished"></translation>
+        <translation>Utente DB</translation>
     </message>
     <message>
         <location filename="../../App/Ui/LoginDialog.ui" line="548"/>
         <source>Insert the database user password</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserire la password dell&apos;utente di database</translation>
     </message>
     <message>
         <location filename="../../App/Ui/LoginDialog.ui" line="569"/>
         <source>DB Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Password DB</translation>
     </message>
     <message>
         <location filename="../../App/Ui/LoginDialog.ui" line="584"/>
         <source>Server</source>
-        <translation type="unfinished"></translation>
+        <translation>Server</translation>
     </message>
     <message>
         <location filename="../../App/Ui/LoginDialog.ui" line="599"/>
         <source>Port</source>
-        <translation type="unfinished"></translation>
+        <translation>Porta</translation>
     </message>
     <message>
         <location filename="../../App/Ui/LoginDialog.ui" line="617"/>
         <source>Current App Version</source>
-        <translation type="unfinished"></translation>
+        <translation>Versione Corrente dell&apos;App</translation>
     </message>
 </context>
 <context>
@@ -192,22 +192,22 @@
         <location filename="../../App/System/Login.py" line="338"/>
         <location filename="../../App/System/Login.py" line="354"/>
         <source>Critical</source>
-        <translation type="unfinished"></translation>
+        <translation>Critico</translation>
     </message>
     <message>
         <location filename="../../App/System/Login.py" line="278"/>
         <source>Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Informazioni</translation>
     </message>
     <message>
         <location filename="../../App/System/Login.py" line="307"/>
         <source>There aro no other companies you can login</source>
-        <translation type="unfinished"></translation>
+        <translation>Non ci sono altre aziende a cui collegarsi</translation>
     </message>
     <message>
         <location filename="../../App/System/Login.py" line="310"/>
         <source>Choose a company to login</source>
-        <translation type="unfinished"></translation>
+        <translation>Selezionare un&apos;azienda a cui collegarsi</translation>
     </message>
 </context>
 </TS>

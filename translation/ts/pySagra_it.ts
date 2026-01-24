@@ -2,6 +2,621 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="it_IT">
 <context>
+    <name>Action</name>
+    <message>
+        <location filename="../../App/System/Action.py" line="98"/>
+        <location filename="../../App/System/Action.py" line="103"/>
+        <source>Change company</source>
+        <translation>Cambia azienda</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="104"/>
+        <location filename="../../App/System/Action.py" line="105"/>
+        <source>Switch to another company</source>
+        <translation>Passa ad un altra azienda</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="109"/>
+        <location filename="../../App/System/Action.py" line="114"/>
+        <location filename="../../App/System/Action.py" line="116"/>
+        <source>Change password</source>
+        <translation>Modifica password</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="115"/>
+        <source>Change password of the current user</source>
+        <translation>Modifica della password dell&apos;utente corrente</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="120"/>
+        <source>Preferences</source>
+        <translation>Preferenze</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="125"/>
+        <location filename="../../App/System/Action.py" line="127"/>
+        <source>Change Theme</source>
+        <translation>Cambia tema</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="126"/>
+        <source>Change the Qt Theme used</source>
+        <translation>Cambia il tema Qt da utilizzare</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="131"/>
+        <location filename="../../App/System/Action.py" line="136"/>
+        <location filename="../../App/System/Action.py" line="138"/>
+        <source>Current connections</source>
+        <translation>Connessioni correnti</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="137"/>
+        <source>Show/Edit curent connections</source>
+        <translation>Mostra/Modifica le connessioni</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="142"/>
+        <location filename="../../App/System/Action.py" line="147"/>
+        <location filename="../../App/System/Action.py" line="149"/>
+        <source>Connections history</source>
+        <translation>Storico delle connessioni</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="148"/>
+        <source>Show connections history</source>
+        <translation>Mostra lo storico delle connessioni</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="153"/>
+        <location filename="../../App/System/Action.py" line="158"/>
+        <location filename="../../App/System/Action.py" line="160"/>
+        <source>Manage companies</source>
+        <translation>Gestione aziende</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="159"/>
+        <source>Create/drop/modify companies</source>
+        <translation>Crea/Modifica/elimina aziende</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="164"/>
+        <source>Profiles</source>
+        <translation>Profili utente</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="169"/>
+        <location filename="../../App/System/Action.py" line="170"/>
+        <location filename="../../App/System/Action.py" line="171"/>
+        <source>Profiles management</source>
+        <translation>Gestione dei profili</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="175"/>
+        <source>Users</source>
+        <translation>Utenti</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="180"/>
+        <location filename="../../App/System/Action.py" line="181"/>
+        <location filename="../../App/System/Action.py" line="182"/>
+        <source>Users management</source>
+        <translation>Gestione utenti</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="186"/>
+        <source>Menus</source>
+        <translation>Menu</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="191"/>
+        <location filename="../../App/System/Action.py" line="192"/>
+        <location filename="../../App/System/Action.py" line="193"/>
+        <source>Menus management</source>
+        <translation>Gestione dei menu</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="197"/>
+        <source>Toolbars</source>
+        <translation>Toolbar</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="202"/>
+        <location filename="../../App/System/Action.py" line="203"/>
+        <location filename="../../App/System/Action.py" line="204"/>
+        <source>Toolbars management</source>
+        <translation>Gestione delle toolbar</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="208"/>
+        <source>Reports</source>
+        <translation>Report</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="213"/>
+        <location filename="../../App/System/Action.py" line="214"/>
+        <location filename="../../App/System/Action.py" line="215"/>
+        <source>Create/Edit reports</source>
+        <translation>Crea/Modifica report di stampa</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="219"/>
+        <source>Python scripting</source>
+        <translation>Scripting python</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="224"/>
+        <location filename="../../App/System/Action.py" line="225"/>
+        <location filename="../../App/System/Action.py" line="226"/>
+        <source>Create/Edit python scripts</source>
+        <translation>Crea/Modifica script in python</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="230"/>
+        <source>Customizations</source>
+        <translation>Personalizzazioni</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="235"/>
+        <location filename="../../App/System/Action.py" line="236"/>
+        <location filename="../../App/System/Action.py" line="237"/>
+        <source>Import/Export customizations</source>
+        <translation>Importa/Esporta le personalizzazioni</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="241"/>
+        <location filename="../../App/System/Action.py" line="246"/>
+        <location filename="../../App/System/Action.py" line="248"/>
+        <source>Quit</source>
+        <translation>Esci</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="247"/>
+        <source>Close all windows and quit the application</source>
+        <translation>Chiude tutte le finestre ed esce dall&apos;applicazione</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="254"/>
+        <source>New</source>
+        <translation>Nuovo</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="259"/>
+        <location filename="../../App/System/Action.py" line="261"/>
+        <source>New record</source>
+        <translation>Nuovo record</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="260"/>
+        <source>Insert new record</source>
+        <translation>Inserire un nuovo record</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="265"/>
+        <source>Save</source>
+        <translation>Salva</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="270"/>
+        <location filename="../../App/System/Action.py" line="271"/>
+        <location filename="../../App/System/Action.py" line="272"/>
+        <source>Save record</source>
+        <translation>Salva il record corrente</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="276"/>
+        <source>Delete</source>
+        <translation>Cancella</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="281"/>
+        <location filename="../../App/System/Action.py" line="282"/>
+        <location filename="../../App/System/Action.py" line="283"/>
+        <source>Delete record</source>
+        <translation>Cancella il record corrente</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="287"/>
+        <source>Undo/Reload</source>
+        <translation>Annulla/Ricarica</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="292"/>
+        <location filename="../../App/System/Action.py" line="293"/>
+        <location filename="../../App/System/Action.py" line="294"/>
+        <source>Undo last change/Reload data</source>
+        <translation>Annulla le ultime modifiche/Rilegge i dati</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="298"/>
+        <source>First</source>
+        <translation>Primo</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="303"/>
+        <location filename="../../App/System/Action.py" line="304"/>
+        <location filename="../../App/System/Action.py" line="305"/>
+        <source>Go to first record</source>
+        <translation>Vai al primo record</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="309"/>
+        <source>Previous</source>
+        <translation>Precedente</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="314"/>
+        <location filename="../../App/System/Action.py" line="315"/>
+        <location filename="../../App/System/Action.py" line="316"/>
+        <source>Go to previous record</source>
+        <translation>Vai al record precedente</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="320"/>
+        <source>Counter</source>
+        <translation>Contatore</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="325"/>
+        <location filename="../../App/System/Action.py" line="326"/>
+        <location filename="../../App/System/Action.py" line="327"/>
+        <source>Current view record counter</source>
+        <translation>Contatore dei record della visualizzazione corrente</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="331"/>
+        <source>Next</source>
+        <translation>Successivo</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="336"/>
+        <location filename="../../App/System/Action.py" line="337"/>
+        <location filename="../../App/System/Action.py" line="338"/>
+        <source>Go to next record</source>
+        <translation>Vai al record successivo</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="342"/>
+        <source>Last</source>
+        <translation>Ultimo</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="347"/>
+        <location filename="../../App/System/Action.py" line="348"/>
+        <location filename="../../App/System/Action.py" line="349"/>
+        <source>Go to last record</source>
+        <translation>Vai all&apos;ultimo record</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="353"/>
+        <source>Filters</source>
+        <translation>Filtri</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="358"/>
+        <location filename="../../App/System/Action.py" line="359"/>
+        <location filename="../../App/System/Action.py" line="360"/>
+        <source>Edit filters</source>
+        <translation>Modifica dei filtri</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="364"/>
+        <source>Chenge view</source>
+        <translation>Cambia visualizzazione</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="369"/>
+        <location filename="../../App/System/Action.py" line="370"/>
+        <location filename="../../App/System/Action.py" line="371"/>
+        <source>Change view</source>
+        <translation>Cambia visualizzazione</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="375"/>
+        <source>Print</source>
+        <translation>Stampa</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="380"/>
+        <location filename="../../App/System/Action.py" line="381"/>
+        <location filename="../../App/System/Action.py" line="382"/>
+        <source>Generate a print report</source>
+        <translation>Genera un report di stampa</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="386"/>
+        <source>Export</source>
+        <translation>Esporta</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="391"/>
+        <location filename="../../App/System/Action.py" line="393"/>
+        <source>Export data</source>
+        <translation>Esporta i dati</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="392"/>
+        <source>Export data to a csv file</source>
+        <translation>Esporta i dati su un file csv</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="398"/>
+        <location filename="../../App/System/Action.py" line="403"/>
+        <location filename="../../App/System/Action.py" line="405"/>
+        <source>Help</source>
+        <translation>Aiuto</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="404"/>
+        <source>Help index</source>
+        <translation>Indice dell&apos;Help</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="409"/>
+        <location filename="../../App/System/Action.py" line="414"/>
+        <location filename="../../App/System/Action.py" line="416"/>
+        <source>FAQ</source>
+        <translation>FAQ</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="415"/>
+        <source>Frequently Asked Questions</source>
+        <translation>Domande frequenti</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="421"/>
+        <source>About {}</source>
+        <translation>A proposito di {}</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="426"/>
+        <location filename="../../App/System/Action.py" line="428"/>
+        <source>About...</source>
+        <translation>A proposito di...</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="427"/>
+        <source>Information about {}</source>
+        <translation>Informazioni su {}</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="432"/>
+        <location filename="../../App/System/Action.py" line="437"/>
+        <location filename="../../App/System/Action.py" line="438"/>
+        <location filename="../../App/System/Action.py" line="439"/>
+        <source>About Qt</source>
+        <translation>A proposito delle Qt</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="443"/>
+        <source>System informations</source>
+        <translation>Informazioni di sistema</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="448"/>
+        <location filename="../../App/System/Action.py" line="449"/>
+        <location filename="../../App/System/Action.py" line="450"/>
+        <source>System information</source>
+        <translation>Informazioni di sistema</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="458"/>
+        <location filename="../../App/System/Action.py" line="463"/>
+        <location filename="../../App/System/Action.py" line="465"/>
+        <source>Cash desk</source>
+        <translation>Cassa</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="464"/>
+        <source>Manage cash desk names and parameters</source>
+        <translation>Gestione dei nomi e dei parametri delle casse</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="469"/>
+        <source>Printers</source>
+        <translation>Stampanti</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="474"/>
+        <location filename="../../App/System/Action.py" line="476"/>
+        <source>Printer classes</source>
+        <translation>Classi di stampanti</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="475"/>
+        <source>Manage printer classes</source>
+        <translation>Gestione delle classi di stampanti</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="480"/>
+        <location filename="../../App/System/Action.py" line="485"/>
+        <location filename="../../App/System/Action.py" line="486"/>
+        <location filename="../../App/System/Action.py" line="487"/>
+        <source>Events</source>
+        <translation>Eventi</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="491"/>
+        <location filename="../../App/System/Action.py" line="496"/>
+        <location filename="../../App/System/Action.py" line="497"/>
+        <location filename="../../App/System/Action.py" line="498"/>
+        <source>Update W.O.Server</source>
+        <translation>Aggiorna W.O. Server</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="502"/>
+        <location filename="../../App/System/Action.py" line="507"/>
+        <location filename="../../App/System/Action.py" line="508"/>
+        <location filename="../../App/System/Action.py" line="509"/>
+        <source>Departments</source>
+        <translation>Reparti</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="513"/>
+        <location filename="../../App/System/Action.py" line="518"/>
+        <location filename="../../App/System/Action.py" line="519"/>
+        <location filename="../../App/System/Action.py" line="520"/>
+        <source>Seat map</source>
+        <translation>Mappa dei tavoli</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="524"/>
+        <location filename="../../App/System/Action.py" line="529"/>
+        <location filename="../../App/System/Action.py" line="530"/>
+        <location filename="../../App/System/Action.py" line="531"/>
+        <source>Items</source>
+        <translation>Articoli</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="535"/>
+        <location filename="../../App/System/Action.py" line="540"/>
+        <location filename="../../App/System/Action.py" line="541"/>
+        <location filename="../../App/System/Action.py" line="542"/>
+        <source>Price list</source>
+        <translation>Listini</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="546"/>
+        <location filename="../../App/System/Action.py" line="551"/>
+        <location filename="../../App/System/Action.py" line="552"/>
+        <location filename="../../App/System/Action.py" line="553"/>
+        <source>Orders</source>
+        <translation>Ordini</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="557"/>
+        <location filename="../../App/System/Action.py" line="562"/>
+        <location filename="../../App/System/Action.py" line="563"/>
+        <location filename="../../App/System/Action.py" line="564"/>
+        <source>Web orders</source>
+        <translation>Ordini web</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="568"/>
+        <location filename="../../App/System/Action.py" line="573"/>
+        <location filename="../../App/System/Action.py" line="575"/>
+        <source>Order numbers</source>
+        <translation>Progressivi ordini</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="574"/>
+        <source>Manage order number current values</source>
+        <translation>Gestione dei numeri degli ordini</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="579"/>
+        <location filename="../../App/System/Action.py" line="584"/>
+        <location filename="../../App/System/Action.py" line="586"/>
+        <source>Settings</source>
+        <translation>Impostazioni</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="585"/>
+        <source>View/Modify application settings</source>
+        <translation>Visualizzza/Modifica le impostazioni dell&apos;applicazione</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="591"/>
+        <location filename="../../App/System/Action.py" line="596"/>
+        <location filename="../../App/System/Action.py" line="597"/>
+        <location filename="../../App/System/Action.py" line="598"/>
+        <source>Order entry</source>
+        <translation>Inserimento ordini</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="602"/>
+        <location filename="../../App/System/Action.py" line="607"/>
+        <location filename="../../App/System/Action.py" line="608"/>
+        <location filename="../../App/System/Action.py" line="609"/>
+        <source>Inventory</source>
+        <translation>Inventario</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="613"/>
+        <location filename="../../App/System/Action.py" line="618"/>
+        <location filename="../../App/System/Action.py" line="619"/>
+        <location filename="../../App/System/Action.py" line="620"/>
+        <source>Order progress</source>
+        <translation>Avanzamento ordini</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="624"/>
+        <location filename="../../App/System/Action.py" line="629"/>
+        <location filename="../../App/System/Action.py" line="630"/>
+        <location filename="../../App/System/Action.py" line="631"/>
+        <source>Ordered delivered</source>
+        <translation>Ordinato consegnato</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="635"/>
+        <location filename="../../App/System/Action.py" line="640"/>
+        <location filename="../../App/System/Action.py" line="641"/>
+        <location filename="../../App/System/Action.py" line="642"/>
+        <source>Sales summary</source>
+        <translation>Riepilogo delle vendite</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="647"/>
+        <location filename="../../App/System/Action.py" line="652"/>
+        <location filename="../../App/System/Action.py" line="653"/>
+        <location filename="../../App/System/Action.py" line="654"/>
+        <source>Pivot table analysis</source>
+        <translation>Analisi su tabella pivot</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="658"/>
+        <location filename="../../App/System/Action.py" line="663"/>
+        <location filename="../../App/System/Action.py" line="664"/>
+        <location filename="../../App/System/Action.py" line="665"/>
+        <source>Print statistics</source>
+        <translation>Stampa statistiche</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="669"/>
+        <location filename="../../App/System/Action.py" line="674"/>
+        <location filename="../../App/System/Action.py" line="675"/>
+        <location filename="../../App/System/Action.py" line="676"/>
+        <source>Export statistic data</source>
+        <translation>Esporta dati statistici</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="681"/>
+        <source>Application event based tool</source>
+        <translation>Strumenti basati sugli eventi</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="686"/>
+        <location filename="../../App/System/Action.py" line="687"/>
+        <location filename="../../App/System/Action.py" line="688"/>
+        <source>Application event based utilities</source>
+        <translation>Utility basate sugli eventi</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="692"/>
+        <source>Delete tool</source>
+        <translation>Strumento di cancellazione</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="697"/>
+        <location filename="../../App/System/Action.py" line="698"/>
+        <location filename="../../App/System/Action.py" line="699"/>
+        <source>Delete company data</source>
+        <translation>Cancellazione dei dati dell&apos;azienda</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="703"/>
+        <source>Copy tool</source>
+        <translation>Strumento di copia</translation>
+    </message>
+    <message>
+        <location filename="../../App/System/Action.py" line="708"/>
+        <location filename="../../App/System/Action.py" line="709"/>
+        <location filename="../../App/System/Action.py" line="710"/>
+        <source>Copy data from another company</source>
+        <translation>Copia dati tra aziende</translation>
+    </message>
+</context>
+<context>
     <name>ChangePassword</name>
     <message>
         <location filename="../../App/System/User.py" line="409"/>
@@ -49,7 +664,7 @@
     <message>
         <location filename="../../App/System/Connection.py" line="228"/>
         <source>Number of days for deletion</source>
-        <translation type="unfinished"></translation>
+        <translation>Numero di giorni oper cancellare</translation>
     </message>
     <message>
         <location filename="../../App/System/Connection.py" line="247"/>
@@ -272,76 +887,76 @@
         <translation>Nuova personalizzazione &apos;{}&apos; creata</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="2020"/>
+        <location filename="../../App/Widget/Dialog.py" line="2008"/>
         <source>Export directory not set</source>
-        <translation type="unfinished"></translation>
+        <translation>Directory di export non impostata</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="2025"/>
+        <location filename="../../App/Widget/Dialog.py" line="2013"/>
         <source>File name not set</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome file non impostato</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="2031"/>
-        <location filename="../../App/Widget/Dialog.py" line="2224"/>
+        <location filename="../../App/Widget/Dialog.py" line="2019"/>
+        <location filename="../../App/Widget/Dialog.py" line="2212"/>
         <source>File {} exists, overwrite ?</source>
         <translation>IL file {} è già presente, sovrascrivo ?</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="2055"/>
-        <location filename="../../App/Widget/Dialog.py" line="2110"/>
+        <location filename="../../App/Widget/Dialog.py" line="2043"/>
+        <location filename="../../App/Widget/Dialog.py" line="2098"/>
         <source>Select export directory</source>
         <translation>Selezionare la directory di destinazione</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="2562"/>
+        <location filename="../../App/Widget/Dialog.py" line="2550"/>
         <source>Select a date:</source>
-        <translation type="unfinished"></translation>
+        <translation>Selezionare una data:</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="1971"/>
+        <location filename="../../App/Widget/Dialog.py" line="1959"/>
         <source>Print preview</source>
         <translation>Anteprima di stampa</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="2099"/>
+        <location filename="../../App/Widget/Dialog.py" line="2087"/>
         <source>Print current page ({})</source>
         <translation>Stampa la pagina corrente ({})</translation>
     </message>
     <message>
         <location filename="../../App/Widget/Dialog.py" line="1334"/>
-        <location filename="../../App/Widget/Dialog.py" line="2081"/>
+        <location filename="../../App/Widget/Dialog.py" line="2069"/>
         <source>Pdf 1.4</source>
         <translation>Pdf 1.4</translation>
     </message>
     <message>
         <location filename="../../App/Widget/Dialog.py" line="1335"/>
-        <location filename="../../App/Widget/Dialog.py" line="2082"/>
+        <location filename="../../App/Widget/Dialog.py" line="2070"/>
         <source>Pdf A-1b</source>
         <translation>Pdf A-1b</translation>
     </message>
     <message>
         <location filename="../../App/Widget/Dialog.py" line="1336"/>
-        <location filename="../../App/Widget/Dialog.py" line="2083"/>
+        <location filename="../../App/Widget/Dialog.py" line="2071"/>
         <source>Pdf 1.6</source>
         <translation>Pdf 1.6</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="2050"/>
+        <location filename="../../App/Widget/Dialog.py" line="2038"/>
         <source>PDF file created</source>
         <translation>File PDF generato</translation>
     </message>
     <message>
         <location filename="../../App/Widget/Dialog.py" line="1168"/>
-        <location filename="../../App/Widget/Dialog.py" line="1742"/>
+        <location filename="../../App/Widget/Dialog.py" line="1743"/>
         <source>Current customization sorting updated</source>
         <translation>Ordinamento della personalizzazione corrente aggiornato</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="1981"/>
+        <location filename="../../App/Widget/Dialog.py" line="1969"/>
+        <location filename="../../App/Widget/Dialog.py" line="1986"/>
         <location filename="../../App/Widget/Dialog.py" line="1998"/>
-        <location filename="../../App/Widget/Dialog.py" line="2010"/>
-        <location filename="../../App/Widget/Dialog.py" line="2041"/>
+        <location filename="../../App/Widget/Dialog.py" line="2029"/>
         <source>Critical</source>
         <translation>Errore critico</translation>
     </message>
@@ -351,7 +966,7 @@
         <translation>Nessun report disponibile</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="1955"/>
+        <location filename="../../App/Widget/Dialog.py" line="1943"/>
         <source>No data to render</source>
         <translation>Nessun dato da stampare</translation>
     </message>
@@ -359,7 +974,7 @@
 <context>
     <name>Dialogs</name>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="2204"/>
+        <location filename="../../App/Widget/Dialog.py" line="2192"/>
         <source>Export PDF</source>
         <translation>Esporta in PDF</translation>
     </message>
@@ -473,7 +1088,7 @@ Black = Transparent</source>
     <message>
         <location filename="../../App/Widget/Form.py" line="867"/>
         <source>Row modified before update/delete: unable to commit the transaction because the row was modified before update or delete from unother client</source>
-        <translation type="unfinished"></translation>
+        <translation>Riga modificata prima dell&apos;aggiornamento/cancellazione: impossibile salvare perchè la riga è stata modificata da un altro client</translation>
     </message>
     <message>
         <location filename="../../App/System/Mainwindow.py" line="493"/>
@@ -638,9 +1253,9 @@ Black = Transparent</source>
         <location filename="../../App/Widget/Dialog.py" line="1547"/>
         <location filename="../../App/Widget/Dialog.py" line="1554"/>
         <location filename="../../App/Widget/Dialog.py" line="1571"/>
-        <location filename="../../App/Widget/Dialog.py" line="1737"/>
-        <location filename="../../App/Widget/Dialog.py" line="2019"/>
-        <location filename="../../App/Widget/Dialog.py" line="2024"/>
+        <location filename="../../App/Widget/Dialog.py" line="1738"/>
+        <location filename="../../App/Widget/Dialog.py" line="2007"/>
+        <location filename="../../App/Widget/Dialog.py" line="2012"/>
         <location filename="../../App/Widget/Form.py" line="250"/>
         <location filename="../../App/Widget/Form.py" line="262"/>
         <location filename="../../App/Widget/Form.py" line="365"/>
@@ -680,9 +1295,9 @@ Black = Transparent</source>
         <location filename="../../App/Widget/Dialog.py" line="1520"/>
         <location filename="../../App/Widget/Dialog.py" line="1535"/>
         <location filename="../../App/Widget/Dialog.py" line="1558"/>
-        <location filename="../../App/Widget/Dialog.py" line="1741"/>
-        <location filename="../../App/Widget/Dialog.py" line="1954"/>
-        <location filename="../../App/Widget/Dialog.py" line="2049"/>
+        <location filename="../../App/Widget/Dialog.py" line="1742"/>
+        <location filename="../../App/Widget/Dialog.py" line="1942"/>
+        <location filename="../../App/Widget/Dialog.py" line="2037"/>
         <source>Information</source>
         <translation>Informazione</translation>
     </message>
@@ -700,8 +1315,8 @@ Black = Transparent</source>
         <location filename="../../App/System/Scripting.py" line="252"/>
         <location filename="../../App/System/User.py" line="248"/>
         <location filename="../../App/Widget/Control.py" line="943"/>
-        <location filename="../../App/Widget/Dialog.py" line="2030"/>
-        <location filename="../../App/Widget/Dialog.py" line="2223"/>
+        <location filename="../../App/Widget/Dialog.py" line="2018"/>
+        <location filename="../../App/Widget/Dialog.py" line="2211"/>
         <location filename="../../App/Widget/Form.py" line="194"/>
         <location filename="../../App/Widget/Form.py" line="530"/>
         <source>Question</source>
@@ -782,7 +1397,7 @@ Black = Transparent</source>
         <location filename="../../App/Widget/Dialog.py" line="729"/>
         <location filename="../../App/Widget/Dialog.py" line="750"/>
         <source>In</source>
-        <translation type="unfinished"></translation>
+        <translation>In</translation>
     </message>
     <message>
         <location filename="../../App/Widget/Dialog.py" line="708"/>
@@ -791,12 +1406,12 @@ Black = Transparent</source>
         <location filename="../../App/Widget/Dialog.py" line="746"/>
         <location filename="../../App/Widget/Dialog.py" line="751"/>
         <source>Is Null</source>
-        <translation type="unfinished"></translation>
+        <translation>E&apos; nullo</translation>
     </message>
     <message>
         <location filename="../../App/Widget/Dialog.py" line="709"/>
         <source>From list</source>
-        <translation type="unfinished"></translation>
+        <translation>Da lista</translation>
     </message>
     <message>
         <location filename="../../App/Widget/Dialog.py" line="1316"/>
@@ -853,12 +1468,12 @@ Black = Transparent</source>
     <message>
         <location filename="../../App/System/Preferences.py" line="106"/>
         <source>Light</source>
-        <translation type="unfinished"></translation>
+        <translation>Chiaro</translation>
     </message>
     <message>
         <location filename="../../App/System/Preferences.py" line="107"/>
         <source>Dark</source>
-        <translation type="unfinished"></translation>
+        <translation>Scuro</translation>
     </message>
     <message>
         <location filename="../../App/System/Preferences.py" line="110"/>
@@ -929,14 +1544,14 @@ Black = Transparent</source>
 <context>
     <name>PrintDialog</name>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="1935"/>
+        <location filename="../../App/Widget/Dialog.py" line="1923"/>
         <source>Error executing database query</source>
-        <translation type="unfinished"></translation>
+        <translation>Errore eseguendo la query sul database</translation>
     </message>
     <message>
-        <location filename="../../App/Widget/Dialog.py" line="1938"/>
+        <location filename="../../App/Widget/Dialog.py" line="1926"/>
         <source>Database error</source>
-        <translation type="unfinished"></translation>
+        <translation>Errore di database</translation>
     </message>
 </context>
 <context>
@@ -1005,7 +1620,7 @@ Black = Transparent</source>
     <message>
         <location filename="../../App/System/Report.py" line="186"/>
         <source>Can&apos;t use &apos;.&apos; (dot) in report code</source>
-        <translation type="unfinished"></translation>
+        <translation>Non è possibile utilizzare &apos;.&apos; (punto) nel codice del report</translation>
     </message>
     <message>
         <location filename="../../App/System/Report.py" line="288"/>
@@ -1020,7 +1635,7 @@ Black = Transparent</source>
     <message>
         <location filename="../../App/System/Report.py" line="248"/>
         <source>Delete ALL reports ?</source>
-        <translation type="unfinished"></translation>
+        <translation>Cancellare TUTTI i report ?</translation>
     </message>
     <message>
         <location filename="../../App/System/Report.py" line="283"/>
@@ -1210,7 +1825,7 @@ Black = Transparent</source>
     <message>
         <location filename="../../App/Widget/Dialog.py" line="841"/>
         <source>Not</source>
-        <translation type="unfinished"></translation>
+        <translation>Non</translation>
     </message>
 </context>
 <context>
@@ -1310,7 +1925,7 @@ Black = Transparent</source>
     <message>
         <location filename="../../App/System/Scripting.py" line="186"/>
         <source>All</source>
-        <translation type="unfinished"></translation>
+        <translation>Tutto</translation>
     </message>
     <message>
         <location filename="../../App/System/Scripting.py" line="146"/>

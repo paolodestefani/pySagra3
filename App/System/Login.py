@@ -92,7 +92,7 @@ from App.Ui.ChangeCompanyDialog import Ui_ChangeCompanyDialog
 class LoginDialog(QDialog):
     "Login dialog, ask for parameters and launch th connection to server"
 
-    def __init__(self, parent: QWidget = None) -> None:
+    def __init__(self, parent: QWidget|None = None) -> None:
         super().__init__(parent)
         self.ui = Ui_LoginDialog()
         self.ui.setupUi(self)
@@ -142,7 +142,7 @@ class LoginDialog(QDialog):
         # connect
         try:
             # on network error is better to have a wait cursor
-            QGuiApplication.setOverrideCursor(QCursor(Qt.WaitCursor))
+            QGuiApplication.setOverrideCursor(QCursor(Qt.CursorShape.WaitCursor))
             appconn.connect(par)
         except PyAppDBConnectionError as er:
             # for normal cursor on error message box
@@ -171,7 +171,7 @@ class LoginDialog(QDialog):
                 msg = f"Error:{er.code or 'undefined'}"
 
             mbox = QMessageBox(self)
-            mbox.setIcon(QMessageBox.Critical)
+            mbox.setIcon(QMessageBox.Icon.Critical)
             mbox.setWindowTitle(_tr('MessageDialog', 'Critical'))
             mbox.setText(f"<p><b>{msg}</b>")
             mbox.setDetailedText(str(er.message))
@@ -216,7 +216,7 @@ class LoginDialog(QDialog):
         # remove login translator if any
         logging.info("Removing login translations")
         for i in ('qt', APPNAME):
-            QCoreApplication.instance().removeTranslator(session.get(i + '_translator'))
+            QCoreApplication.removeTranslator(session.get(i + '_translator'))
         # install user's translators if lang != 'en'
         if session['l10n']:
             lang = session['l10n'][:2]
@@ -225,12 +225,12 @@ class LoginDialog(QDialog):
                 for i in ('qt', APPNAME):
                     t = QTranslator()
                     if t.load(f"{i}_{lang}", ":/"):
-                        if QCoreApplication.instance().installTranslator(t):
+                        if QCoreApplication.installTranslator(t):
                             session[i + '_translator'] = t
                         else:
-                            logging.error("Error installing application translator")
+                            logging.error("Error installing application translator for %s", i)
                     else:
-                        logging.error("Error loading application translator")
+                        logging.error("Error loading application translator for %s", i)
         else:
             logging.info("No translation required for user %s", session['app_user_code'])
         
@@ -248,7 +248,7 @@ class LoginDialog(QDialog):
         else:
             if has_companies_available(session['app_user_code']):
                 dlg = ChangeCompanyDialog(self)
-                if dlg.exec() == QDialog.Rejected:
+                if dlg.exec() == QDialog.DialogCode.Rejected:
                     sys.exit(0)
                 dlg.close()
             else:
@@ -278,7 +278,7 @@ class LoginDialog(QDialog):
                                     _tr('MessageDialog', "Information"),
                                     _tr('Login', "Password change is required"))
             pd = ChangePasswordDialog(self, session['user'])
-            if pd.exec_() == QDialog.Rejected:
+            if pd.exec_() == QDialog.DialogCode.Rejected:
                 sys.exit(0)
         super().accept()
 
@@ -286,7 +286,7 @@ class LoginDialog(QDialog):
 class ChangeCompanyDialog(QDialog):
     "Choose/change company dialog"
 
-    def __init__(self, parent: QWidget) -> None:  # first access after installation
+    def __init__(self, parent: QWidget|None) -> None:  # first access after installation
         super().__init__(parent)
         # this dialog is used in first access too and is not always called by
         # an action so can't use action properties for set title , icon, etc.
@@ -305,10 +305,10 @@ class ChangeCompanyDialog(QDialog):
             return
         if not companies:
             self.ui.labelMessage.setText(_tr('MessageDialog', "There aro no other companies you can login"))
-            self.ui.buttonBox.button(QDialogButtonBox.Ok).setDisabled(True)
+            self.ui.buttonBox.button(QDialogButtonBox.StandardButton.Ok).setDisabled(True)
         else:
             self.ui.labelMessage.setText(_tr('MessageDialog', "Choose a company to login"))
-        self.ui.buttonBox.button(QDialogButtonBox.Cancel).setDefault(True)
+        self.ui.buttonBox.button(QDialogButtonBox.StandardButton.Cancel).setDefault(True)
         self.ui.lineEditUser.setText(session['user'])
         self.ui.lineEditCompany.setText(session.get('company_description') or '')
         self.ui.comboBoxCompanies.setItemList(companies)
@@ -316,7 +316,7 @@ class ChangeCompanyDialog(QDialog):
     def accept(self) -> None:
         "Change company"
         # get the new company code and description
-        value = self.ui.comboBoxCompanies.currentData(Qt.UserRole)
+        value = self.ui.comboBoxCompanies.currentData(Qt.ItemDataRole.UserRole)
         if not value:  # no other companies available for user
             super().reject()
             return
@@ -334,7 +334,7 @@ class ChangeCompanyDialog(QDialog):
                 msg = f"Database error: {er.code}"
 
             mbox = QMessageBox(self)
-            mbox.setIcon(QMessageBox.Critical)
+            mbox.setIcon(QMessageBox.Icon.Critical)
             mbox.setWindowTitle(_tr('MessageDialog', 'Critical'))
             mbox.setText(f"<p><b>{msg}</b>")
             mbox.setDetailedText(str(er.message))
