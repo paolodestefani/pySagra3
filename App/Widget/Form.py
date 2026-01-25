@@ -45,6 +45,7 @@ from App import session
 from App.System import _tr
 from App.Database.Connect import appconn
 from App.Database.Exceptions import PyAppDBError
+from App.Database.AbstractModels.TableModel import TableModel
 #from App.Widget.Delegate import mapperItemDelegate
 from App.Widget.Control import DataWidgetMapper
 from App.Widget.Dialog import SortFilterDialog
@@ -70,14 +71,14 @@ class FormManager(QWidget):
 
     def __init__(self, parent: QWidget, auth: str) -> None:
         super().__init__(parent)
-        self.setAttribute(Qt.WA_DeleteOnClose)
+        self.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)
         # subclass must define available status, default: nothing is available
         # 12 boolean values:
         # NEW, SAVE, DELETE, RELOAD, FIRST, PREVIOUS, NEXT, LAST
         # FILTER, CHANGE, REPORT, EXPORT
         self.availableStatus = (False, False, False, False, False, False, False, False,
                                 False, False, False, False)
-        self.model = None # main form model
+        self.model = TableModel(self) # main form model
         self.detailRelations = []  # detail relation list
         self.state = VIEW # initial state
         self.repr = 'Generic form manager'
@@ -86,7 +87,7 @@ class FormManager(QWidget):
         self._state = VIEW # initial state
         # mapper
         self.mapper = DataWidgetMapper(self)
-        self.mapper.setSubmitPolicy(QDataWidgetMapper.AutoSubmit)
+        self.mapper.setSubmitPolicy(QDataWidgetMapper.SubmitPolicy.AutoSubmit)
         #self.mapper.setItemDelegate(mapperItemDelegate(self))
         self.linkedMappers = [] # linked mapper list
         self.auth = auth
@@ -682,11 +683,11 @@ class FormIndexManager(QWidget):
         self.indexModel = None
         # index mapper
         self.indexMapper = QDataWidgetMapper(self)
-        self.indexMapper.setSubmitPolicy(QDataWidgetMapper.AutoSubmit)
+        self.indexMapper.setSubmitPolicy(QDataWidgetMapper.SubmitPolicy.AutoSubmit)
         self.indexMapper.currentIndexChanged.connect(self.mapperIndexChanged)
         # form mapper
         self.mapper = DataWidgetMapper(self)
-        self.mapper.setSubmitPolicy(QDataWidgetMapper.AutoSubmit)
+        self.mapper.setSubmitPolicy(QDataWidgetMapper.SubmitPolicy.AutoSubmit)
         #self.mapper.setItemDelegate(mapperItemDelegate(self))
 
     def setModel(self, model, indexModel):

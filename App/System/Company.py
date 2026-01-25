@@ -42,8 +42,6 @@ from PySide6.QtCore import QDir
 from PySide6.QtCore import QFileInfo
 from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import QWidget
-from PySide6.QtWidgets import QVBoxLayout
-from PySide6.QtWidgets import QAbstractItemView
 from PySide6.QtWidgets import QMessageBox
 from PySide6.QtWidgets import QFileDialog
 from PySide6.QtWidgets import QDialog
@@ -153,7 +151,7 @@ class CompanyForm(FormIndexManager):
     def upload(self, checked: bool) -> None:
         "Upload company image file"
         st = QSettings()
-        path = st.value("PathImagesCompanies", QDir.current().path())
+        path = str(st.value("PathImagesCompanies", QDir.current().path()))
         f, t = QFileDialog.getOpenFileName(self,
                                            _tr('Company', "Select the image to upload"),
                                            path,

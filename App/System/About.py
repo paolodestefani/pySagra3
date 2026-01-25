@@ -130,7 +130,7 @@ class AboutDialog(QDialog):
         rect = QPixmap(":/login_gif").rect()
         self.logo = QMovie(":/login_gif")
         if self.logo.isValid():
-            self.logo.setScaledSize(QSize(rect.width()/2, rect.height()/2))
+            self.logo.setScaledSize(QSize(rect.width()//2, rect.height()//2))
             self.ui.labelAnimation.setMovie(self.logo)
             self.logo.start()
 

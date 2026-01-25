@@ -32,7 +32,7 @@ the working company
 # standard library
 import sys
 import logging
-import cryptography
+from cryptography.fernet import InvalidToken
 
 # PySide6
 from PySide6.QtCore import Qt
@@ -109,16 +109,16 @@ class LoginDialog(QDialog):
         if self.logo.isValid():
             self.ui.labelMain.setMovie(self.logo)
             self.logo.start()
-        self.ui.lineEditServer.setText(st.value("LogInServer", ""))
-        self.ui.spinBoxPort.setValue(st.value("LogInPort", 5432, type=int))
-        self.ui.lineEditDatabase.setText(st.value("LogInDatabase", ""))
+        self.ui.lineEditServer.setText(str(st.value("LogInServer", ""))) # str obly for pylance conformance...
+        self.ui.spinBoxPort.setValue(st.value("LogInPort", 5432, type=int)) # type: ignore
+        self.ui.lineEditDatabase.setText(str(st.value("LogInDatabase", "")))
         try:
-            self.ui.lineEditDBUser.setText(string_decode(st.value("LogInDbUser", "")))
-        except cryptography.fernet.InvalidToken:
+            self.ui.lineEditDBUser.setText(string_decode(str(st.value("LogInDbUser", ""))))
+        except InvalidToken:
             self.ui.lineEditDBUser.setText("")
         try:
-            self.ui.lineEditDBPassword.setText(string_decode(st.value("LogInDbPassword", "")))
-        except cryptography.fernet.InvalidToken:
+            self.ui.lineEditDBPassword.setText(string_decode(str(st.value("LogInDbPassword", ""))))
+        except InvalidToken:
             self.ui.lineEditDBPassword.setText("")
         self.ui.lineEditUser.setFocus()
         self.ui.checkBoxMore.clicked.connect(self.expand) # error if i set this in QtDesigner
@@ -216,7 +216,7 @@ class LoginDialog(QDialog):
         # remove login translator if any
         logging.info("Removing login translations")
         for i in ('qt', APPNAME):
-            QCoreApplication.removeTranslator(session.get(i + '_translator'))
+            QCoreApplication.removeTranslator(session.get(i + '_translator')) # type: ignore
         # install user's translators if lang != 'en'
         if session['l10n']:
             lang = session['l10n'][:2]

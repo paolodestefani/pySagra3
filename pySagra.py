@@ -32,6 +32,7 @@ the main window
 import sys
 import os
 import traceback
+import types
 import logging
 import argparse
 
@@ -77,7 +78,7 @@ from App.System.Login import LoginDialog
 from App.System.MainWindow import MainWindow
 
 
-def logUnhandledException(ex_cls: str, ex:str, tb: str) -> None:
+def logUnhandledException(ex_cls: str, ex:str, tb: types.TracebackType) -> None:
     "Function to get and log unhadked exceptions"
     logging.critical(''.join(traceback.format_tb(tb)))
     logging.critical('%s', ex_cls)
