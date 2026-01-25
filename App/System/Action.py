@@ -29,6 +29,7 @@ This module contains actions definitions
 
 # PySide6
 from PySide6.QtCore import Qt
+from PySide6.QtCore import QKeyCombination
 from PySide6.QtGui import QAction
 from PySide6.QtGui import QKeySequence
 
@@ -99,33 +100,33 @@ def createActionDictionary(mw):
         mw.changeCompany,
         False,
         'system_change_company',
-        QKeySequence.Open,
+        QKeySequence.StandardKey.Open,
         _tr("Action", 'Change company'),
         _tr("Action", 'Switch to another company'),
         _tr("Action", 'Switch to another company'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
 
     actionDefinition['sys_change_password'] = (
         _tr("Action", 'Change password'),
         changePassword,
         False,
         'system_password',
-        QKeySequence(Qt.Modifier.CTRL | Qt.Key.Key_X),
+        QKeySequence(QKeyCombination(Qt.KeyboardModifier.ControlModifier, Qt.Key.Key_X)),
         _tr("Action", 'Change password'),
         _tr("Action", 'Change password of the current user'),
         _tr("Action", 'Change password'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
     
     actionDefinition['sys_preferences'] = (
         _tr("Action", 'Preferences'),
         preferences,
         False,
         'system_preferences',
-        QKeySequence.Preferences,
+        QKeySequence.StandardKey.Preferences,
         _tr("Action", 'Change Theme'),
         _tr("Action", 'Change the Qt Theme used'),
         _tr("Action", 'Change Theme'),
-        QAction.PreferencesRole)
+        QAction.MenuRole.PreferencesRole)
     
     actionDefinition['sys_connection'] = (
         _tr("Action", 'Current connections'),
@@ -136,7 +137,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Current connections'),
         _tr("Action", 'Show/Edit curent connections'),
         _tr("Action", 'Current connections'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
     
     actionDefinition['sys_connection_history'] = (
         _tr("Action", 'Connections history'),
@@ -147,7 +148,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Connections history'),
         _tr("Action", 'Show connections history'),
         _tr("Action", 'Connections history'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
     
     actionDefinition['sys_company'] = (
         _tr("Action", 'Manage companies'),
@@ -158,7 +159,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Manage companies'),
         _tr("Action", 'Create/drop/modify companies'),
         _tr("Action", 'Manage companies'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
     
     actionDefinition['sys_profile'] = (
         _tr("Action", 'Profiles'),
@@ -169,7 +170,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Profiles management'),
         _tr("Action", 'Profiles management'),
         _tr("Action", 'Profiles management'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
     
     actionDefinition['sys_user'] = (
         _tr("Action", 'Users'),
@@ -180,7 +181,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Users management'),
         _tr("Action", 'Users management'),
         _tr("Action", 'Users management'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
     
     actionDefinition['sys_menu'] = (
         _tr("Action", 'Menus'),
@@ -191,7 +192,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Menus management'),
         _tr("Action", 'Menus management'),
         _tr("Action", 'Menus management'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
     
     actionDefinition['sys_toolbar'] = (
         _tr("Action", 'Toolbars'),
@@ -202,7 +203,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Toolbars management'),
         _tr("Action", 'Toolbars management'),
         _tr("Action", 'Toolbars management'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
     
     actionDefinition['sys_report'] = (
         _tr("Action", 'Reports'),
@@ -213,7 +214,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Create/Edit reports'),
         _tr("Action", 'Create/Edit reports'),
         _tr("Action", 'Create/Edit reports'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
     
     actionDefinition['sys_scripting'] = (
         _tr("Action", 'Python scripting'),
@@ -224,7 +225,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Create/Edit python scripts'),
         _tr("Action", 'Create/Edit python scripts'),
         _tr("Action", 'Create/Edit python scripts'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
     
     actionDefinition['sys_customization'] = (
         _tr("Action", 'Customizations'),
@@ -235,18 +236,18 @@ def createActionDictionary(mw):
         _tr("Action", 'Import/Export customizations'),
         _tr("Action", 'Import/Export customizations'),
         _tr("Action", 'Import/Export customizations'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
 
     actionDefinition['sys_quit'] = (
         _tr("Action", 'Quit'),
         mw.close,
         False,
         'system_quit',
-        QKeySequence.Quit,
+        QKeySequence.StandardKey.Quit,
         _tr("Action", 'Quit'),
         _tr("Action", 'Close all windows and quit the application'),
         _tr("Action", 'Quit'),
-        QAction.QuitRole)
+        QAction.MenuRole.QuitRole)
 
 
     # EDIT ACTIONS
@@ -255,66 +256,66 @@ def createActionDictionary(mw):
         mw.new,
         False,
         'edit_new',
-        QKeySequence.New,
+        QKeySequence.StandardKey.New,
         _tr("Action", 'New record'),
         _tr("Action", 'Insert new record'),
         _tr("Action", 'New record'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
 
     actionDefinition['edit_save'] = (
         _tr("Action", 'Save'),
         mw.save,
         False,
         'edit_save',
-        QKeySequence.Save,
+        QKeySequence.StandardKey.Save,
         _tr("Action", 'Save record'),
         _tr("Action", 'Save record'),
         _tr("Action", 'Save record'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
 
     actionDefinition['edit_delete'] = (
         _tr("Action", 'Delete'),
         mw.delete,
         False,
         'edit_delete',
-        QKeySequence.Delete,
+        QKeySequence.StandardKey.Delete,
         _tr("Action", 'Delete record'),
         _tr("Action", 'Delete record'),
         _tr("Action", 'Delete record'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
 
     actionDefinition['edit_reload'] = (
         _tr("Action", 'Undo/Reload'),
         mw.reload,
         False,
         'edit_reload',
-        QKeySequence.Refresh,
+        QKeySequence.StandardKey.Refresh,
         _tr("Action", 'Undo last change/Reload data'),
         _tr("Action", 'Undo last change/Reload data'),
         _tr("Action", 'Undo last change/Reload data'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
 
     actionDefinition['edit_first'] = (
         _tr("Action", 'First'),
         mw.toFirst,
         False,
         'edit_first',
-        QKeySequence.MoveToStartOfDocument,
+        QKeySequence.StandardKey.MoveToStartOfDocument,
         _tr("Action", 'Go to first record'),
         _tr("Action", 'Go to first record'),
         _tr("Action", 'Go to first record'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
 
     actionDefinition['edit_previous'] = (
         _tr("Action", 'Previous'),
         mw.toPrevious,
         False,
         'edit_previous',
-        QKeySequence.Back,
+        QKeySequence.StandardKey.Back,
         _tr("Action", 'Go to previous record'),
         _tr("Action", 'Go to previous record'),
         _tr("Action", 'Go to previous record'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
 
     actionDefinition['edit_counter'] = (
         _tr("Action", 'Counter'),
@@ -325,40 +326,40 @@ def createActionDictionary(mw):
         _tr("Action", 'Current view record counter'),
         _tr("Action", 'Current view record counter'),
         _tr("Action", 'Current view record counter'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
 
     actionDefinition['edit_next'] = (
         _tr("Action", 'Next'),
         mw.toNext,
         False,
         'edit_next',
-        QKeySequence.Forward,
+        QKeySequence.StandardKey.Forward,
         _tr("Action", 'Go to next record'),
         _tr("Action", 'Go to next record'),
         _tr("Action", 'Go to next record'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
 
     actionDefinition['edit_last'] = (
         _tr("Action", 'Last'),
         mw.toLast,
         False,
         'edit_last',
-        QKeySequence.MoveToEndOfDocument,
+        QKeySequence.StandardKey.MoveToEndOfDocument,
         _tr("Action", 'Go to last record'),
         _tr("Action", 'Go to last record'),
         _tr("Action", 'Go to last record'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
 
     actionDefinition['edit_filter'] = (
         _tr("Action", 'Filters'),
         mw.setFilters,
         False,
         'edit_filter',
-        QKeySequence.Find,
+        QKeySequence.StandardKey.Find,
         _tr("Action", 'Edit filters'),
         _tr("Action", 'Edit filters'),
         _tr("Action", 'Edit filters'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
 
     actionDefinition['edit_change_view'] = (
         _tr("Action", 'Chenge view'),
@@ -369,18 +370,18 @@ def createActionDictionary(mw):
         _tr("Action", 'Change view'),
         _tr("Action", 'Change view'),
         _tr("Action", 'Change view'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
 
     actionDefinition['edit_print'] = (
         _tr("Action", 'Print'),
         mw.print,
         False,
         'edit_print',
-        QKeySequence.Print,
+        QKeySequence.StandardKey.Print,
         _tr("Action", 'Generate a print report'),
         _tr("Action", 'Generate a print report'),
         _tr("Action", 'Generate a print report'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
 
     actionDefinition['edit_export'] = (
         _tr("Action", 'Export'),
@@ -391,7 +392,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Export data'),
         _tr("Action", 'Export data to a csv file'),
         _tr("Action", 'Export data'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
 
     # HELP ACTIONS
     actionDefinition['help_index'] = (
@@ -399,11 +400,11 @@ def createActionDictionary(mw):
         help,
         False,
         'help_content',
-        QKeySequence.HelpContents,
+        QKeySequence.StandardKey.HelpContents,
         _tr("Action", 'Help'),
         _tr("Action", 'Help index'),
         _tr("Action", 'Help'),
-        QAction.NoRole)
+        QAction.MenuRole.NoRole)
 
     actionDefinition['help_faq'] = (
         _tr("Action", 'FAQ'),
@@ -414,7 +415,7 @@ def createActionDictionary(mw):
         _tr("Action", 'FAQ'),
         _tr("Action", 'Frequently Asked Questions'),
         _tr("Action", 'FAQ'),
-        QAction.NoRole)
+        QAction.MenuRole.NoRole)
 
      # ABOUT ACTIONS
     actionDefinition['about_program'] = (
@@ -426,7 +427,7 @@ def createActionDictionary(mw):
         _tr("Action", 'About...'),
         _tr("Action", 'Information about {}').format(APPNAME),
         _tr("Action", 'About...'),
-        QAction.AboutRole)
+        QAction.MenuRole.AboutRole)
 
     actionDefinition['about_qt'] = (
         _tr("Action", 'About Qt'),
@@ -437,7 +438,7 @@ def createActionDictionary(mw):
         _tr("Action", 'About Qt'),
         _tr("Action", 'About Qt'),
         _tr("Action", 'About Qt'),
-        QAction.AboutQtRole)
+        QAction.MenuRole.AboutQtRole)
 
     actionDefinition['about_system_info'] = (
         _tr("Action", 'System informations'),
@@ -448,7 +449,7 @@ def createActionDictionary(mw):
         _tr("Action", 'System information'),
         _tr("Action", 'System information'),
         _tr("Action", 'System information'),
-        QAction.NoRole)
+        QAction.MenuRole.NoRole)
 
     # APPLICATION SPECIFIC ACTIONS
 
@@ -463,7 +464,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Cash desk'),
         _tr("Action", 'Manage cash desk names and parameters'),
         _tr("Action", 'Cash desk'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
     
     actionDefinition['app_file_printer'] = (
         _tr("Action", 'Printers'),
@@ -474,7 +475,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Printer classes'),
         _tr("Action", 'Manage printer classes'),
         _tr("Action", 'Printer classes'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
 
     actionDefinition['app_file_event'] = (
         _tr("Action", 'Events'),
@@ -485,7 +486,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Events'),
         _tr("Action", 'Events'),
         _tr("Action", 'Events'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
     
     actionDefinition['app_file_update_wo_server'] = (
         _tr("Action", 'Update W.O.Server'),
@@ -496,7 +497,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Update W.O.Server'),
         _tr("Action", 'Update W.O.Server'),
         _tr("Action", 'Update W.O.Server'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
 
     actionDefinition['app_file_department'] = (
         _tr("Action", 'Departments'),
@@ -507,7 +508,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Departments'),
         _tr("Action", 'Departments'),
         _tr("Action", 'Departments'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
 
     actionDefinition['app_file_seat_map'] = (
         _tr("Action", 'Seat map'),
@@ -518,7 +519,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Seat map'),
         _tr("Action", 'Seat map'),
         _tr("Action", 'Seat map'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
 
     actionDefinition['app_file_item'] = (
         _tr("Action", 'Items'),
@@ -529,7 +530,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Items'),
         _tr("Action", 'Items'),
         _tr("Action", 'Items'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
 
     actionDefinition['app_file_price_list'] = (
         _tr("Action", 'Price list'),
@@ -540,7 +541,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Price list'),
         _tr("Action", 'Price list'),
         _tr("Action", 'Price list'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
 
     actionDefinition['app_file_order'] = (
         _tr("Action", 'Orders'),
@@ -551,7 +552,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Orders'),
         _tr("Action", 'Orders'),
         _tr("Action", 'Orders'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
 
     actionDefinition['app_file_web_order'] = (
         _tr("Action", 'Web orders'),
@@ -562,7 +563,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Web orders'),
         _tr("Action", 'Web orders'),
         _tr("Action", 'Web orders'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
     
     actionDefinition['app_file_order_number'] = (
         _tr("Action", 'Order numbers'),
@@ -573,7 +574,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Order numbers'),
         _tr("Action", 'Manage order number current values'),
         _tr("Action", 'Order numbers'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
     
     actionDefinition['app_file_setting'] = (
         _tr("Action", 'Settings'),
@@ -584,7 +585,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Settings'),
         _tr("Action", 'View/Modify application settings'),
         _tr("Action", 'Settings'),
-        QAction.NoRole)
+        QAction.MenuRole.NoRole)
 
     # activities actions
     actionDefinition['app_activity_order_entry'] = (
@@ -596,7 +597,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Order entry'),
         _tr("Action", 'Order entry'),
         _tr("Action", 'Order entry'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
 
     actionDefinition['app_activity_inventory'] = (
         _tr("Action", 'Inventory'),
@@ -607,7 +608,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Inventory'),
         _tr("Action", 'Inventory'),
         _tr("Action", 'Inventory'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
 
     actionDefinition['app_activity_order_progress'] = (
         _tr("Action", 'Order progress'),
@@ -618,7 +619,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Order progress'),
         _tr("Action", 'Order progress'),
         _tr("Action", 'Order progress'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
 
     actionDefinition['app_activity_ordered_delivered'] = (
         _tr("Action", 'Ordered delivered'),
@@ -629,7 +630,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Ordered delivered'),
         _tr("Action", 'Ordered delivered'),
         _tr("Action", 'Ordered delivered'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
 
     actionDefinition['app_activity_sales_summary'] = (
         _tr("Action", 'Sales summary'),
@@ -640,7 +641,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Sales summary'),
         _tr("Action", 'Sales summary'),
         _tr("Action", 'Sales summary'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
 
     # statistics
     actionDefinition['app_statistics_analysis'] = (
@@ -652,7 +653,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Pivot table analysis'),
         _tr("Action", 'Pivot table analysis'),
         _tr("Action", 'Pivot table analysis'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
 
     actionDefinition['app_statistics_print'] = (
         _tr("Action", 'Print statistics'),
@@ -663,7 +664,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Print statistics'),
         _tr("Action", 'Print statistics'),
         _tr("Action", 'Print statistics'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
 
     actionDefinition['app_statistics_export'] = (
         _tr("Action", 'Export statistic data'),
@@ -674,7 +675,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Export statistic data'),
         _tr("Action", 'Export statistic data'),
         _tr("Action", 'Export statistic data'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
 
     # tools actions
     actionDefinition['app_tool_event_based'] = (
@@ -686,7 +687,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Application event based utilities'),
         _tr("Action", 'Application event based utilities'),
         _tr("Action", 'Application event based utilities'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
 
     actionDefinition['app_tool_delete'] = (
         _tr("Action", 'Delete tool'),
@@ -697,7 +698,7 @@ def createActionDictionary(mw):
         _tr("Action", 'Delete company data'),
         _tr("Action", 'Delete company data'),
         _tr("Action", 'Delete company data'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
 
     actionDefinition['app_tool_copy'] = (
         _tr("Action", 'Copy tool'),
@@ -708,5 +709,5 @@ def createActionDictionary(mw):
         _tr("Action", 'Copy data from another company'),
         _tr("Action", 'Copy data from another company'),
         _tr("Action", 'Copy data from another company'),
-        QAction.TextHeuristicRole)
+        QAction.MenuRole.TextHeuristicRole)
 

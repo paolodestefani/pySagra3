@@ -6,9 +6,9 @@
 # Copyright (C) 2026 Paolo De Stefani
 # License:
 
-"""Help
+"""About
 
-This module define and launch Help/SystemInfo/Faq/About dialogs
+This module define and launch About/SystemInfo dialogs
 
 """
 
@@ -56,12 +56,14 @@ def about() -> None:
     a.show()
     logging.info('About dialog shown')
 
+
 def systemInfo() -> None:
     "System Information action"
     logging.info('Starting system info dialog')
     h = SystemInfoDialog(session['mainwin'])
     h.show()
     logging.info('System info shown')
+
 
 def aboutQt() -> None:
     "About Qt"
@@ -70,16 +72,17 @@ def aboutQt() -> None:
     logging.info('About qt dialog shown')
 
 
+
 class AboutDialog(QDialog):
     "Dialog showing About informations"
 
-    def __init__(self, parent: QWidget) -> None:
+    def __init__(self, parent: QWidget|None) -> None:
         QDialog.__init__(self, parent)
         self.ui = Ui_AboutDialog()
         self.ui.setupUi(self)
         self.ui.labelIcon.setPixmap(QGuiApplication.windowIcon().pixmap(100))
-        self.setAttribute(Qt.WA_DeleteOnClose)
-        self.setWindowFlags(Qt.Dialog|Qt.WindowMinMaxButtonsHint|Qt.WindowCloseButtonHint)
+        self.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)
+        self.setWindowFlags(Qt.WindowType.Dialog|Qt.WindowType.WindowMinMaxButtonsHint|Qt.WindowType.WindowCloseButtonHint)
         versionLabel = _tr("Help", "Version")
         devDescription = _tr("Help", "Developed with:")
         pythonRef = _tr('Help', 'programming language')
@@ -135,13 +138,13 @@ class AboutDialog(QDialog):
 class SystemInfoDialog(QDialog):
     "Dialog showing system informations"
 
-    def __init__(self, parent: QWidget) -> None:
+    def __init__(self, parent: QWidget|None) -> None:
         QDialog.__init__(self, parent)
         self.ui = Ui_SystemInfoDialog()
         self.ui.setupUi(self)
         self.ui.labelIcon.setPixmap(currentAction['about_system_info'].icon().pixmap(128))
-        self.setAttribute(Qt.WA_DeleteOnClose)
-        self.setWindowFlags(Qt.Dialog|Qt.WindowMinMaxButtonsHint|Qt.WindowCloseButtonHint)
+        self.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)
+        self.setWindowFlags(Qt.WindowType.Dialog|Qt.WindowType.WindowMinMaxButtonsHint|Qt.WindowType.WindowCloseButtonHint)
         self.ui.lineEditServer.setText(f"{session['server']}:{session['port']}")
         self.ui.lineEditDatabase.setText(session['database'])
         self.ui.lineEditCompany.setText(f"{session['current_company']} {session['company_description']}")

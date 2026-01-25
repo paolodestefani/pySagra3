@@ -234,7 +234,7 @@ def setIconTheme(theme: str) -> None: # used in login, currentIcon created befor
     "Fill currentIcon dictionary"
     # application icon
     currentIcon[APPNAME] = QIcon(f":/{APPNAME}")
-    it = QDirIterator(f":/icon/{theme or 'oxygen'}", QDirIterator.NoIteratorFlags)
+    it = QDirIterator(f":/icon/{theme or 'oxygen'}", QDirIterator.IteratorFlag.NoIteratorFlags)
     # in resource.qrc an alias is mandatory, the it.fileName() is the alias
     while it.hasNext():
         it.next()
@@ -257,5 +257,5 @@ def setFont(ffamily: str|None = None, fsize: int = 10):
     else:
         font = QFont(ffamily,
                      fsize,
-                     QFont.Normal)
+                     QFont.Weight.Normal)
     app.setFont(font)

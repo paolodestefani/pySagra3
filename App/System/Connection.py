@@ -22,7 +22,7 @@
 # along with pySagra.  If not, see <http://www.gnu.org/licenses/>.
 
 
-"""Connections
+"""Connection
 
 This module manage current connections and connection history
 
@@ -57,6 +57,7 @@ from App.System.Utility import _tr
 from App.Widget.Form import FormManager
 
 
+
 def connection() -> None:
     "Show/Edit curent connections"
     logging.info('Starting connections Form')
@@ -68,6 +69,7 @@ def connection() -> None:
     mw.addTab(title, cw)
     logging.info('Connections Form added to main window')
 
+
 def connectionHistory() -> None:
     "Show connections history, clear history"
     logging.info('Starting connections history Form')
@@ -77,19 +79,6 @@ def connectionHistory() -> None:
     cw = ConnectionHistoryForm(mw, title, auth)
     mw.addTab(title, cw)
     logging.info('Connections history Form added to main window')
-
-
-# class ConnectionWidget(QWidget, Ui_ConnectionWidget):
-#     "Connections widget"
-#     def __init__(self, parent: QWidget = None) -> None:
-#         QWidget.__init__(self, parent)
-#         self.setupUi(self)
-
-#     def updateList(self) -> None:
-#         self.tableView.model().select()
-#         self.tableView.selectRow(0)
-#         self.tableView.setFocus()
-
 
 
 class ConnectionForm(FormManager):
@@ -119,7 +108,7 @@ class ConnectionForm(FormManager):
         #self.ui.sendBrcMsgButton.clicked.connect(self.sendBroadcastMessage)
         self.ui.tableView.setModel(model)
         self.ui.tableView.setLayoutName('currentConnection')  # must be set AFTER model
-        self.ui.tableView.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.ui.tableView.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         self.ui.tableView.activateWindow()
         self.ui.tableView.setSortingEnabled(True)
         self.ui.tableView.horizontalHeader().setSectionsMovable(True)
@@ -138,27 +127,27 @@ class ConnectionForm(FormManager):
             QMessageBox.warning(self,
                                 _tr('MessageDialog', 'Warning'),
                                 _tr('Connection', "You must select a connection record first"),
-                                QMessageBox.NoButton)
+                                QMessageBox.StandardButton.NoButton)
             return
         if pid == session['session_id']:
             QMessageBox.warning(self,
                                 _tr('MessageDialog', 'Warning'),
                                 _tr('Connection', "Cant't kill current connection"),
-                                QMessageBox.NoButton)
+                                QMessageBox.StandardButton.NoButton)
             return
         msg = _tr('Connection', "Are you sure you want to kill PID")
         if QMessageBox.question(self,
                                 _tr('MessageDialog', "Question"),
                                 f"{msg}: {pid} ?",
-                                QMessageBox.Yes | QMessageBox.No,
-                                QMessageBox.No) == QMessageBox.Yes:
+                                QMessageBox.StandardButton.Yes|QMessageBox.StandardButton.No,
+                                QMessageBox.StandardButton.No) == QMessageBox.StandardButton.Yes:
             try:
                 kill_client(pid)
             except PyAppDBError as er:
                 QMessageBox.critical(self,
                                      _tr('MessageDialog', "Critical"),
                                      f"Database error: {er.code}\n{er.message}",
-                                     QMessageBox.Ok)
+                                     QMessageBox.StandardButton.Ok)
                 logging.error('Database error on kill client: %s', er.message)
 
     def export(self) -> None:
@@ -186,7 +175,7 @@ class ConnectionHistoryForm(FormManager):
         self.ui.tableView.setModel(model)
         self.ui.tableView.setLayoutName("connectionsHistory")
         # set read only view
-        self.ui.tableView.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.ui.tableView.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         # mapper - view connections
         #self.ui.tableView.selectionModel().currentRowChanged.connect(self.mapper.setCurrentModelIndex)
         #self.mapper.currentIndexChanged.connect(self.ui.tableView.selectRow)
@@ -215,7 +204,7 @@ class ConnectionHistoryForm(FormManager):
             QMessageBox.critical(self,
                                  _tr('MessageDialog', 'Critical'),
                                  f"Database error: {er.code}\n{er.message}",
-                                 QMessageBox.Ok)
+                                 QMessageBox.StandardButton.Ok)
             logging.error('Database error on select connection history: %s', er.message)
             return
         self.ui.tableView.selectRow(0)
@@ -238,7 +227,7 @@ class ConnectionHistoryForm(FormManager):
             QMessageBox.critical(self,
                                  _tr('MessageDialog', 'Critical'),
                                  f"Database error: {er.code}\n{er.message}",
-                                 QMessageBox.Ok)
+                                 QMessageBox.StandardButton.Ok)
             logging.error('Database error on delete connection: %s', er.message)
         else:
             self.reload()
@@ -251,9 +240,9 @@ class ConnectionHistoryForm(FormManager):
         if QMessageBox.question(self,
                                 _tr('MessageDialog', "Question"),
                                 _tr('Connection', "Are you sure you want to delete ALL records ?"),
-                                QMessageBox.Yes | QMessageBox.No,  # butons
-                                QMessageBox.No  # default botton
-                                ) == QMessageBox.No:
+                                QMessageBox.StandardButton.Yes|QMessageBox.StandardButton.No,  # butons
+                                QMessageBox.StandardButton.No  # default botton
+                                ) == QMessageBox.StandardButton.No:
             return
         try:
             delete_connection_history(0)
@@ -261,7 +250,7 @@ class ConnectionHistoryForm(FormManager):
             QMessageBox.critical(self,
                                  _tr('MessageDialog', 'Critical'),
                                  f"Database error: {er.code}\n{er.message}",
-                                 QMessageBox.Ok)
+                                 QMessageBox.StandardButton.Ok)
             logging.error('Database error on delete connection history: %s', er.message)
         else:
             self.reload()

@@ -21,7 +21,7 @@
 # You should have received a copy of the GNU General Public License
 # along with pySagra.  If not, see <http://www.gnu.org/licenses/>.
 
-"""Users
+"""User
 
 This module manages application users and user access rights to each company
 
@@ -42,14 +42,10 @@ from PySide6.QtCore import QSize
 from PySide6.QtCore import QAbstractItemModel
 from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import QWidget
-from PySide6.QtWidgets import QVBoxLayout
-from PySide6.QtWidgets import QAbstractItemView
 from PySide6.QtWidgets import QFileDialog
 from PySide6.QtWidgets import QDialog
 from PySide6.QtWidgets import QDialogButtonBox
 from PySide6.QtWidgets import QMessageBox
-from PySide6.QtWidgets import QDataWidgetMapper
-
 
 # application modules
 from App import session
@@ -65,15 +61,11 @@ from App.Database.Models import UserModel
 from App.Database.Models import UserIndexModel
 from App.Database.Models import UserCompanyModelReferenceUser
 from App.Database.User import encrypt_password
-from App.Database.User import force_password_change
 from App.Widget.Dialog import PrintDialog
 from App.Widget.Form import FormIndexManager
-from App.Widget.Control import TextEditor
 from App.Widget.Delegate import ImageDelegate
-from App.Widget.Delegate import HideTextDelegate
 from App.Widget.Delegate import RelationDelegate
 from App.Widget.Delegate import BooleanDelegate
-from App.Widget.Delegate import PasswordDelegate
 from App.Ui.UserWidget import Ui_UserWidget
 from App.Ui.ChangePasswordDialog import Ui_ChangePasswordDialog
 from App.System.Utility import _tr
@@ -142,8 +134,8 @@ class UsersForm(FormIndexManager):
         self.setIndexView(self.ui.tableView)
         self.ui.tableView.setLayoutName('user')
         # can't change system checkbox
-        self.ui.checkBoxSystem.setAttribute(Qt.WA_TransparentForMouseEvents)
-        self.ui.checkBoxSystem.setFocusPolicy(Qt.NoFocus)
+        self.ui.checkBoxSystem.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+        self.ui.checkBoxSystem.setFocusPolicy(Qt.FocusPolicy.NoFocus)
         #self.ui.tableView.setItemDelegateForColumn(CHANGEPWDREQ, BooleanDelegate(self.ui.tableView))
         self.ui.tableView.setItemDelegateForColumn(V_SYSTEM, BooleanDelegate(self.ui.tableView))
         self.ui.tableView.setItemDelegateForColumn(V_ISADMIN, BooleanDelegate(self.ui.tableView))
@@ -202,8 +194,8 @@ class UsersForm(FormIndexManager):
         self.script = scriptInit(self)
 
     def deactivateTls(self, state: int) -> None:
-        if state == Qt.Checked:
-            self.ui.checkBoxTLS.setCheckState(Qt.Unchecked)
+        if state == Qt.CheckState.Checked:
+            self.ui.checkBoxTLS.setCheckState(Qt.CheckState.Unchecked)
             self.ui.checkBoxTLS.setDisabled(True)
         else:
             self.ui.checkBoxTLS.setEnabled(True)
@@ -247,9 +239,9 @@ class UsersForm(FormIndexManager):
         if QMessageBox.question(self,
                                 _tr('MessageDialog', "Question"),
                                 f"{msg}\n{userId} - {userDescription}",
-                                QMessageBox.Yes | QMessageBox.No,  # butons
-                                QMessageBox.No  # default botton
-                                ) == QMessageBox.No:
+                                QMessageBox.StandardButton.Yes|QMessageBox.StandardButton.No,  # butons
+                                QMessageBox.StandardButton.No  # default botton
+                                ) == QMessageBox.StandardButton.No:
             return
         # ok, delete
         super().delete()
@@ -297,7 +289,7 @@ class UsersForm(FormIndexManager):
             return
         pix = QPixmap(f)
         if pix.width() > 640 or pix.height() > 480:
-            pix = pix.scaled(640, 480, Qt.KeepAspectRatio)
+            pix = pix.scaled(640, 480, Qt.AspectRatioMode.KeepAspectRatio)
             self.ui.labelCompanyImage.setPixmap(pix)
             QMessageBox.warning(self,
                                 _tr('MessageDialog', "Warning"),
@@ -356,7 +348,7 @@ class ChangePasswordDialog(QDialog):
         self.setWindowTitle(_tr('User', 'Change password'))
         self.ui.labelIcon.setPixmap(currentIcon['system_password'].pixmap(100))
         self.ui.lineEditUser.setText(user)
-        self.ui.buttonBox.button(QDialogButtonBox.Cancel).setDefault(True)
+        self.ui.buttonBox.button(QDialogButtonBox.StandardButton.Cancel).setDefault(True)
         #self.buttonBox.button(QDialogButtonBox.Help).clicked.connect(self.helpRequested)
 
     def accept(self) -> None:

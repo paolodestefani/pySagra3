@@ -6,7 +6,7 @@
 # Copyright (C) 2026 Paolo De Stefani
 # License:
 
-"""Utilities
+"""Utility
 
 This module provide some system utilities
 
@@ -69,7 +69,7 @@ def toCurrency(val):
     return session['qlocale'].toCurrencyString(float(val), ' ')  # = no currency symbol
 
 
-# encoding decoding
+# encoding decoding password
 
 def string_encode(token):
     "Cryptography Fernet"

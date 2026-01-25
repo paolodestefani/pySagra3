@@ -22,7 +22,7 @@
 # along with pySagra.  If not, see <http://www.gnu.org/licenses/>.
 
 
-"""Menus
+"""Menu
 
 This module manages application menus
 
@@ -107,8 +107,8 @@ class MenusForm(FormIndexManager):
         self.mapper.addMapping(self.ui.lineEditDescription, DESCRIPTION)
         self.mapper.addMapping(self.ui.checkBoxSystem, SYSTEM)
         # make system checkbox not user editable
-        self.ui.checkBoxSystem.setAttribute(Qt.WA_TransparentForMouseEvents)
-        self.ui.checkBoxSystem.setFocusPolicy(Qt.NoFocus)
+        self.ui.checkBoxSystem.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+        self.ui.checkBoxSystem.setFocusPolicy(Qt.FocusPolicy.NoFocus)
         # menu item treeview
         self.ui.treeViewMenuItems.setModel(treeModel)
         self.ui.treeViewMenuItems.setItemDelegateForColumn(ACTION, ActionDelegate(self))
@@ -123,13 +123,11 @@ class MenusForm(FormIndexManager):
             return
         for column in range(model.columnCount(index)):
             child = model.index(0, column, index)
-            model.setData(child, "[No data]", Qt.EditRole)
-            if model.headerData(column, Qt.Horizontal) is None:
-                model.setHeaderData(column, Qt.Horizontal, "[No header]",
-                                        Qt.EditRole)
-
+            model.setData(child, "[No data]", Qt.ItemDataRole.EditRole)
+            if model.headerData(column, Qt.Orientation.Horizontal) is None:
+                model.setHeaderData(column, Qt.Orientation.Horizontal, "[No header]",Qt.ItemDataRole.EditRole)
         self.ui.treeViewMenuItems.selectionModel().setCurrentIndex(model.index(0, 0, index),
-                                                                       QItemSelectionModel.ClearAndSelect)
+                                                                   QItemSelectionModel.SelectionFlag.ClearAndSelect)
 
     def add(self) -> None:
         index = self.ui.treeViewMenuItems.selectionModel().currentIndex()
@@ -166,7 +164,8 @@ class MenusForm(FormIndexManager):
         if QMessageBox.question(self,
                                 _tr('MessageDialog', "Question"),
                                 f"{msg}\n{scheme} - {description}",
-                                QMessageBox.Yes | QMessageBox.No) == QMessageBox.No:
+                                QMessageBox.StandardButton.Yes|QMessageBox.StandardButton.No
+                                ) == QMessageBox.StandardButton.No:
             return
         super().delete()
 

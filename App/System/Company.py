@@ -22,7 +22,7 @@
 # along with pySagra.  If not, see <http://www.gnu.org/licenses/>.
 
 
-"""Companies
+"""Company
 
 This module manages company creation/deletion/modification and user access
 to each company
@@ -36,7 +36,6 @@ import logging
 from PySide6.QtCore import QByteArray
 from PySide6.QtCore import QBuffer
 from PySide6.QtCore import QIODevice
-#from PySide6.QtCore import QObject
 from PySide6.QtCore import Qt
 from PySide6.QtCore import QSettings
 from PySide6.QtCore import QDir
@@ -132,8 +131,8 @@ class CompanyForm(FormIndexManager):
         self.mapper.addMapping(self.ui.labelCompanyImage, COMP_IMAGE, b"imageBytearray")
         self.mapper.addMapping(self.ui.checkBoxSystem, COMP_SYSTEM)
         # make system checkbox not user editable
-        self.ui.checkBoxSystem.setAttribute(Qt.WA_TransparentForMouseEvents)
-        self.ui.checkBoxSystem.setFocusPolicy(Qt.NoFocus)
+        self.ui.checkBoxSystem.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+        self.ui.checkBoxSystem.setFocusPolicy(Qt.FocusPolicy.NoFocus)
         # user company
         self.ui.userTableView.setModel(model2)
         self.ui.userTableView.setLayoutName('userCompany')
@@ -164,7 +163,7 @@ class CompanyForm(FormIndexManager):
             return
         pix = QPixmap(f)
         if pix.width() > 640 or pix.height() > 480:
-            pix = pix.scaled(640, 480, Qt.KeepAspectRatio)
+            pix = pix.scaled(640, 480, Qt.AspectRatioMode.KeepAspectRatio)
             self.ui.labelCompanyImage.setPixmap(pix)
             QMessageBox.warning(self,
                                 _tr('MessageDialog', "Warning"),
@@ -207,7 +206,7 @@ class CompanyForm(FormIndexManager):
 
     def new(self) -> None:
         dlg = NewCompanyDialog(self)
-        if dlg.exec_() == QDialog.Accepted:
+        if dlg.exec_() == QDialog.DialogCode.Accepted:
             self.reload()
 
     def delete(self) -> None:
@@ -222,18 +221,18 @@ class CompanyForm(FormIndexManager):
         if QMessageBox.question(self,
                                 _tr('MessageDialog', "Question"),
                                 f"{msg}\n{companyId} {companyDescription}",
-                                QMessageBox.Yes | QMessageBox.No,  # butons
-                                QMessageBox.No  # default botton
-                                ) == QMessageBox.No:
+                                QMessageBox.StandardButton.Yes|QMessageBox.StandardButton.No,  # butons
+                                QMessageBox.StandardButton.No  # default botton
+                                ) == QMessageBox.StandardButton.No:
             return
         if QMessageBox.question(self,
                                 _tr('MessageDialog', "Question"),
                                 _tr('Company', "It is possible to restore the "
                                     "company only if you have a valid copy of "
                                     "the database\nProceed anyway ?"),
-                                QMessageBox.Yes | QMessageBox.No,  # butons
-                                QMessageBox.No  # default botton
-                                ) == QMessageBox.No:
+                                QMessageBox.StandardButton.Yes|QMessageBox.StandardButton.No,  # butons
+                                QMessageBox.StandardButton.No  # default botton
+                                ) == QMessageBox.StandardButton.No:
             return
         try:
             drop_company(companyId)
@@ -280,7 +279,7 @@ class NewCompanyDialog(QDialog):
             return
         pix = QPixmap(f)
         if pix.width() > 640 or pix.height() > 480:
-            pix = pix.scaled(640, 480, Qt.KeepAspectRatio)
+            pix = pix.scaled(640, 480, Qt.AspectRatioMode.KeepAspectRatio)
             self.ui.labelImage.setPixmap(pix)
             QMessageBox.warning(self,
                                 _tr('MessageDialog', "Warning"),
@@ -299,9 +298,9 @@ class NewCompanyDialog(QDialog):
         if QMessageBox.question(self,
                                 _tr('MessageDialog', "Question"),
                                 _tr('Company', "Create the new company ?"),
-                                QMessageBox.Yes | QMessageBox.No,  # butons
-                                QMessageBox.No  # default botton
-                                ) == QMessageBox.No:
+                                QMessageBox.StandardButton.Yes|QMessageBox.StandardButton.No,  # butons
+                                QMessageBox.StandardButton.No  # default botton
+                                ) == QMessageBox.StandardButton.No:
             return
         companyCode = self.ui.spinBoxCode.value()
         companyDescription = self.ui.lineEditDescription.text()
@@ -309,7 +308,7 @@ class NewCompanyDialog(QDialog):
         if pixmap:
             companyImage = QByteArray()
             buffer = QBuffer(companyImage)
-            buffer.open(QIODevice.WriteOnly)
+            buffer.open(QIODevice.OpenModeFlag.WriteOnly)
             pixmap.save(buffer, "PNG")
         else:
             companyImage = None
@@ -338,7 +337,7 @@ class NewCompanyDialog(QDialog):
             else:
                 msg = f"Error: {er.code}\n{er.message}"
             mbox = QMessageBox(self)
-            mbox.setIcon(QMessageBox.Critical)
+            mbox.setIcon(QMessageBox.Icon.Critical)
             mbox.setWindowTitle(_tr("MessageDialog", "Critical"))
             mbox.setText(msg)
             mbox.setDetailedText(er.message)

@@ -249,39 +249,39 @@ class TabWidget(QTabWidget):
         y = (self.height() - img.height()) // 2
         painter.drawPixmap(x, y, img)
         painter.setPen(color1)
-        painter.setFont(QFont("Arial", 28, QFont.Bold, True))
+        painter.setFont(QFont("Arial", 28, QFont.Weight.Bold, True))
         painter.drawText(QRectF(3,   # x
                                 50, # y
                                 self.width(), # width
                                 60), # height
-                         Qt.AlignCenter,
+                         Qt.AlignmentFlag.AlignCenter,
                          session['company_description'][:40])
         painter.setPen(color2)
-        painter.setFont(QFont("Arial", 28, QFont.Bold, True))
+        painter.setFont(QFont("Arial", 28, QFont.Weight.Bold, True))
         painter.drawText(QRectF(0,   # x
                                 47, # y
                                 self.width(), # width
                                 60), # height
-                         Qt.AlignCenter,
+                         Qt.AlignmentFlag.AlignCenter,
                          session['company_description'][:40])
         # event
         msg = _tr('MainWindow', 'No event available')
         evds = f"{session['event_description'] or msg}"
         painter.setPen(color1)
-        painter.setFont(QFont("Arial", 28, QFont.Bold, True))
+        painter.setFont(QFont("Arial", 28, QFont.Weight.Bold, True))
         painter.drawText(QRectF(3,   # x
                                 self.height() - 150,  # y
                                 self.width(),  # width
                                 60),  # height
-                         Qt.AlignCenter,
+                         Qt.AlignmentFlag.AlignCenter,
                          evds)
         painter.setPen(color2)
-        painter.setFont(QFont("Arial", 28, QFont.Bold, True))
+        painter.setFont(QFont("Arial", 28, QFont.Weight.Bold, True))
         painter.drawText(QRectF(0,   # x
                                 self.height() - 153,  # y
                                 self.width(),  # width
                                 60),  # height
-                         Qt.AlignCenter,
+                         Qt.AlignmentFlag.AlignCenter,
                          evds)
 
 
@@ -293,7 +293,7 @@ class TabWidget(QTabWidget):
 class MainWindow(QMainWindow):
     """Application Main Window"""
 
-    def __init__(self, parent: QWidget = None) -> None:
+    def __init__(self, parent: QWidget|None = None) -> None:
         """Initialization"""
         super().__init__(parent)
         # window title
@@ -302,10 +302,10 @@ class MainWindow(QMainWindow):
         # tab widget = central widget
         self.tabWidget = TabWidget(self)
         self.tabWidget.setTabPosition(tab_position[session['tab_position'] or 'N'])
-        self.tabWidget.setContextMenuPolicy(Qt.ActionsContextMenu)
+        self.tabWidget.setContextMenuPolicy(Qt.ContextMenuPolicy.ActionsContextMenu)
         self.tabWidget.setTabsClosable(True)
         self.tabWidget.setMovable(True)
-        self.tabWidget.setElideMode(Qt.ElideRight)
+        self.tabWidget.setElideMode(Qt.TextElideMode.ElideRight)
         self.tabWidget.tabCloseRequested.connect(self.closeTab)
         self.setCentralWidget(self.tabWidget)
         # change tab action
@@ -318,10 +318,10 @@ class MainWindow(QMainWindow):
         self.status_user = QLabel()
         #self.status_profile = QLabel()
         self.status_company = QLabel()
-        self.status_user.setFrameShape(QFrame.Panel)
-        self.status_user.setFrameShadow(QFrame.Sunken)
-        self.status_company.setFrameShape(QFrame.Panel)
-        self.status_company.setFrameShadow(QFrame.Sunken)
+        self.status_user.setFrameShape(QFrame.Shape.Panel)
+        self.status_user.setFrameShadow(QFrame.Shadow.Sunken)
+        self.status_company.setFrameShape(QFrame.Shape.Panel)
+        self.status_company.setFrameShadow(QFrame.Shadow.Sunken)
         self.status_bar.addPermanentWidget(self.status_user)
         #self.status_bar.addPermanentWidget(self.status_profile)
         self.status_bar.addPermanentWidget(self.status_company)
@@ -340,8 +340,8 @@ class MainWindow(QMainWindow):
         else:  # useful default
             self.setGeometry(50, 50, 800, 600)
         # center windows
-        self.setGeometry(QStyle.alignedRect(Qt.LeftToRight,
-                                            Qt.AlignCenter,
+        self.setGeometry(QStyle.alignedRect(Qt.LayoutDirection.LeftToRight,
+                                            Qt.AlignmentFlag.AlignCenter,
                                             self.size(),
                                             QGuiApplication.primaryScreen().availableGeometry()))
         if st.value("MainWindowState"):
@@ -375,7 +375,7 @@ class MainWindow(QMainWindow):
         self.counter.setFont(font)
         self.counter.setStyleSheet(COUNTER_NORMAL)
         self.counter.setFixedWidth(120)
-        self.counter.setAlignment(Qt.AlignCenter)
+        self.counter.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.counter.setReadOnly(True)
         # actions
         createActions(self)
@@ -383,7 +383,7 @@ class MainWindow(QMainWindow):
         createMenuBar(self)
         createToolBar(self)
 
-    def updateEditStatus(self, status: tuple, current: int, total: int, limit: int = None) -> None:
+    def updateEditStatus(self, status: tuple, current: int, total: int, limit: int|None = None) -> None:
         "Enable/disable navigation buttons and update counter"
         # status must be a tuple of 12 boolena values, current and total integers
         for i in range(12):
@@ -491,8 +491,9 @@ class MainWindow(QMainWindow):
                     if QMessageBox.question(self,
                                             _tr("MessageDialog", "Question"),
                                             _tr("Form", "Undo changes and reload data ?"),
-                                            QMessageBox.Yes | QMessageBox.No,
-                                            QMessageBox.No) == QMessageBox.No:
+                                            QMessageBox.StandardButton.Yes|QMessageBox.StandardButton.No,
+                                            QMessageBox.StandardButton.No
+                                            ) == QMessageBox.StandardButton.No:
                         return
                 self.tabWidget.currentWidget().reload()
 
@@ -559,7 +560,7 @@ class MainWindow(QMainWindow):
         QMessageBox.critical(self,
                              _tr('MessageDialog', "Critical"),
                              f"<p><b>{msg1}</b></p><pre><tt>{error}</tt></pre><b>{msg2}</b>",
-                             QMessageBox.Ok)
+                             QMessageBox.StandardButton.Ok)
         sys.exit(0)
 
     def changeCompany(self) -> None:
@@ -571,15 +572,15 @@ class MainWindow(QMainWindow):
                                     _tr('MessageDialog', "Question"),
                                     _tr('MainWindow', "Warning: open tabs will "
                                         "be closed, continue anyway ?"),
-                                    QMessageBox.Yes | QMessageBox.No,  # butons
-                                    QMessageBox.No  # default botton
-                                    ) == QMessageBox.No:
+                                    QMessageBox.StandardButton.Yes|QMessageBox.StandardButton.No,  # butons
+                                    QMessageBox.StandardButton.No  # default botton
+                                    ) == QMessageBox.StandardButton.No:
                 self.close()
                 return
         # close all open tabs
         self.closeAllTabs()
         dlg = ChangeCompanyDialog(self)
-        if dlg.exec() == QDialog.Rejected:
+        if dlg.exec() == QDialog.DialogCode.Rejected:
             return
         # update user interface
         self.updateActionMenuToolbar()
@@ -595,9 +596,9 @@ class MainWindow(QMainWindow):
         if QMessageBox.question(self,
                                 _tr('MessageDialog', "Question"),
                                 f"{msg} <b>{APPNAME}</b> ?",
-                                QMessageBox.Yes | QMessageBox.No,  # butons
-                                QMessageBox.No  # default botton
-                                ) == QMessageBox.Yes:
+                                QMessageBox.StandardButton.Yes|QMessageBox.StandardButton.No,  # butons
+                                QMessageBox.StandardButton.No  # default botton
+                                ) == QMessageBox.StandardButton.Yes:
             # save window state
             st = QSettings()
             st.setValue("MainWindowGeometry", self.saveGeometry())
@@ -611,7 +612,7 @@ class MainWindow(QMainWindow):
         else:
             event.ignore()
 
-    def helpLink(self) -> None:
+    def helpLink(self) -> str:
         "Return contect help link if available"
         if hasattr(self.tabWidget.currentWidget(), 'helpLink'):
             return self.tabWidget.currentWidget().helpLink

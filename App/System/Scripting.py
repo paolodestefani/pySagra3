@@ -34,13 +34,9 @@ import logging
 import re
 
 # PySide6
-from PySide6.QtCore import QFile
-from PySide6.QtCore import QObject
 from PySide6.QtCore import Qt
 from PySide6.QtCore import QSettings
 from PySide6.QtCore import QDir
-from PySide6.QtCore import QFileInfo
-from PySide6.QtCore import QTextStream
 from PySide6.QtCore import QDirIterator
 from PySide6.QtGui import QGuiApplication
 from PySide6.QtGui import QColorConstants
@@ -50,14 +46,10 @@ from PySide6.QtGui import QFontMetricsF
 from PySide6.QtGui import QSyntaxHighlighter
 from PySide6.QtGui import QTextCharFormat
 from PySide6.QtWidgets import QWidget
-from PySide6.QtWidgets import QVBoxLayout
-from PySide6.QtWidgets import QAbstractItemView
 from PySide6.QtWidgets import QMessageBox
 from PySide6.QtWidgets import QFileDialog
-from PySide6.QtWidgets import QDataWidgetMapper
 
 # application modules
-from App import currentIcon
 from App import session
 from App import currentAction
 from App.Database.Exceptions import PyAppDBError
@@ -251,9 +243,9 @@ class ScriptingForm(FormIndexManager):
         if QMessageBox.question(self,
                                 _tr('MessageDialog', 'Question'),
                                 f"{msg}",
-                                QMessageBox.Yes | QMessageBox.No,  # butons
-                                QMessageBox.No  # default botton
-                                ) == QMessageBox.No:
+                                QMessageBox.StandardButton.Yes|QMessageBox.StandardButton.No,  # butons
+                                QMessageBox.StandardButton.No  # default botton
+                                ) == QMessageBox.StandardButton.No:
             return
         super().delete()
 
@@ -405,7 +397,7 @@ class ScriptingForm(FormIndexManager):
             return
 
         error = False
-        it = QDirIterator(QDir(directory), QDirIterator.NoIteratorFlags)
+        it = QDirIterator(QDir(directory), QDirIterator.IteratorFlag.NoIteratorFlags)
         while it.hasNext():
             it.next()
             if it.fileInfo().isFile() and it.fileInfo().completeSuffix() == 'scp.zip':
@@ -456,7 +448,7 @@ def format(color, style=''):
     tcf = QTextCharFormat()
     tcf.setForeground(color)
     if 'bold' in style:
-        tcf.setFontWeight(QFont.Bold)
+        tcf.setFontWeight(QFont.Weight.Bold)
     if 'italic' in style:
         tcf.setFontItalic(True)
     return tcf
@@ -492,10 +484,10 @@ class PythonHighlighter(QSyntaxHighlighter):
     """
     # Python keywords
     keywords = [
-        'and', 'assert', 'break', 'class', 'continue', 'def',
+        'and', 'assert', 'break', 'case','class', 'continue', 'def',
         'del', 'elif', 'else', 'except', 'exec', 'finally',
         'for', 'from', 'global', 'if', 'import', 'in',
-        'is', 'lambda', 'not', 'or', 'pass', 'print',
+        'is', 'lambda', 'match', 'not', 'or', 'pass', 'print',
         'raise', 'return', 'try', 'while', 'yield',
         'None', 'True', 'False',
     ]

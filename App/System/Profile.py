@@ -22,7 +22,7 @@
 # along with pySagra.  If not, see <http://www.gnu.org/licenses/>.
 
 
-"""Profiles
+"""Profile
 
 This module manages user profiles
 
@@ -34,12 +34,7 @@ import logging
 # PySide6
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QWidget
-from PySide6.QtWidgets import QAbstractItemView
 from PySide6.QtWidgets import QDialog
-from PySide6.QtWidgets import QHBoxLayout
-from PySide6.QtWidgets import QApplication
-from PySide6.QtWidgets import QStyle
-from PySide6.QtWidgets import QStyleOptionViewItem
 from PySide6.QtWidgets import QMessageBox
 from PySide6.QtWidgets import QPushButton
 from PySide6.QtWidgets import QButtonGroup
@@ -69,7 +64,7 @@ CODE, DESCRIPTION, SYSTEM = range(3)
 PROFILE, ACTION, AUTHORIZATION = range(3)
 
 
-def authorizations() -> list[tuple[str, str]]:
+def authorizations() -> tuple[tuple[str, str]]:
     return (('R', _tr('Profile', 'Read')),
             ('W', _tr('Profile', 'Write')),
             ('X', _tr('Profile', 'Execute')))
@@ -142,8 +137,8 @@ class ProfileForm(FormIndexManager):
         self.mapper.addMapping(self.ui.lineEditDescription, DESCRIPTION)
         self.mapper.addMapping(self.ui.checkBoxSystem, SYSTEM)
         # make system checkbox not user editable
-        self.ui.checkBoxSystem.setAttribute(Qt.WA_TransparentForMouseEvents)
-        self.ui.checkBoxSystem.setFocusPolicy(Qt.NoFocus)
+        self.ui.checkBoxSystem.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+        self.ui.checkBoxSystem.setFocusPolicy(Qt.FocusPolicy.NoFocus)
         # detail tableview
         self.ui.tableViewActions.setModel(paModel)
         self.ui.tableViewActions.setLayoutName('profileAction')
@@ -199,7 +194,8 @@ class ProfileForm(FormIndexManager):
         if QMessageBox.question(self,
                                 _tr('MessageDialog', "Question"),
                                 f"{msg}\n{profile} - {description}",
-                                QMessageBox.Yes | QMessageBox.No) == QMessageBox.No:
+                                QMessageBox.StandardButton.Yes|QMessageBox.StandardButton.No
+                                ) == QMessageBox.StandardButton.No:
             return
         super().delete()
 

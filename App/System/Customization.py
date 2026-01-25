@@ -22,9 +22,9 @@
 # along with pySagra.  If not, see <http://www.gnu.org/licenses/>.
 
 
-"""Customizations
+"""Customization
 
-This module allow import/export of report and sort-filter customizations
+This module allow import/export of report, itemview and sort-filter customizations
 
 
 """
@@ -230,9 +230,9 @@ class CustomizationsDialog(QDialog):
         if QMessageBox.question(self,
                                 _tr('MessageDialog', 'Question'),
                                 _tr('Customizations', 'Customizations will be cleared, continue ?'),
-                                QMessageBox.Yes | QMessageBox.No,  # butons
-                                QMessageBox.No  # default botton
-                                ) == QMessageBox.No:
+                                QMessageBox.StandardButton.Yes|QMessageBox.StandardButton.No,  # butons
+                                QMessageBox.StandardButton.No  # default botton
+                                ) == QMessageBox.StandardButton.No:
             return
         if self.ui.checkBoxItemView.isChecked():
             clear_customization('I')

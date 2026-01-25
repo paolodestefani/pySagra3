@@ -22,7 +22,7 @@
 # along with pySagra.  If not, see <http://www.gnu.org/licenses/>.
 
 
-"""Reports
+"""Report
 
 This modules manages reports: creation/deletion/modification of sql reports
 
@@ -34,14 +34,11 @@ import logging
 import re
 
 # PySide6
-from PySide6.QtCore import QFile
 from PySide6.QtCore import QObject
 from PySide6.QtCore import Qt
 from PySide6.QtCore import QSettings
 from PySide6.QtCore import QDir
 from PySide6.QtCore import QFileInfo
-from PySide6.QtCore import QTextStream
-from PySide6.QtCore import QDirIterator
 from PySide6.QtCore import QIODevice
 from PySide6.QtCore import QBuffer
 from PySide6.QtCore import QByteArray
@@ -54,16 +51,12 @@ from PySide6.QtGui import QTextCharFormat
 from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import QApplication
 from PySide6.QtWidgets import QWidget
-from PySide6.QtWidgets import QVBoxLayout
-from PySide6.QtWidgets import QAbstractItemView
 from PySide6.QtWidgets import QMessageBox
 from PySide6.QtWidgets import QFileDialog
-from PySide6.QtWidgets import QDataWidgetMapper
 
 # application modules
 from App import session
 from App import currentAction
-from App import currentIcon
 from App.Database.Exceptions import PyAppDBError
 from App.Database.Report import delete_all_reports
 from App.Database.Report import load_report
@@ -72,12 +65,9 @@ from App.Database.Models import ReportModel
 from App.Database.Models import ReportIndexModel
 from App.Widget.Form import FormIndexManager
 from App.Widget.Delegate import BooleanDelegate
-from App.Widget.Delegate import RelationDelegate
-from App.Widget.Delegate import HideTextDelegate
 from App.Widget.Dialog import PrintDialog
 from App.Ui.ReportWidget import Ui_ReportWidget
 from App.System.Utility import _tr
-from App.System.Utility import langCountry
 from App.System.Utility import langCountryFlags
 
 V_ID, V_CODE, V_L10N, V_CLASS, V_DESCRIPTION, V_SYSTEM, V_USER_INS, V_DATE_INS, V_USER_UPD, V_DATE_UPD = range(10)
@@ -201,9 +191,9 @@ class ReportForm(FormIndexManager):
         if QMessageBox.question(self,
                                 _tr('MessageDialog', 'Question'),
                                 f"{msg}\n{self.ui.lineEditCode.text()}",
-                                QMessageBox.Yes | QMessageBox.No,  # butons
-                                QMessageBox.No  # default botton
-                                ) == QMessageBox.No:
+                                QMessageBox.StandardButton.Yes|QMessageBox.StandardButton.No,  # butons
+                                QMessageBox.StandardButton.No  # default botton
+                                ) == QMessageBox.StandardButton.No:
             return
         super().delete()
 
@@ -237,7 +227,7 @@ class ReportForm(FormIndexManager):
         pix = QPixmap(f)
         ba = QByteArray()
         buf = QBuffer(ba)
-        buf.open(QIODevice.WriteOnly)
+        buf.open(QIODevice.OpenModeFlag.WriteOnly)
         pix.save(buf, "PNG")
         cb = QApplication.clipboard()
         cb.setText(f"""<image left="0.0" top="0.0" width="45.0" height="48.0" aspectRatio="KeepAspectRatio">{str(ba.toBase64(), encoding='utf8')}</image>""")
@@ -249,9 +239,9 @@ class ReportForm(FormIndexManager):
         if QMessageBox.question(self,
                                 _tr('MessageDialog', 'Question'),
                                 msg,
-                                QMessageBox.Yes | QMessageBox.No,  # butons
-                                QMessageBox.No  # default botton
-                                ) == QMessageBox.No:
+                                QMessageBox.StandardButton.Yes|QMessageBox.StandardButton.No,  # butons
+                                QMessageBox.StandardButton.No  # default botton
+                                ) == QMessageBox.StandardButton.No:
             return
         delete_all_reports()
         self.reload()        
@@ -423,7 +413,7 @@ class ReportForm(FormIndexManager):
 
 class XMLHighlighter(QSyntaxHighlighter):
 
-    def __init__(self, parent: QObject = None) -> None:
+    def __init__(self, parent: QObject) -> None:
         super(XMLHighlighter, self).__init__(parent)
         self._mappings = {}
         # singleline/multiline comment
@@ -452,32 +442,32 @@ class XMLHighlighter(QSyntaxHighlighter):
             # element value inline >text<
             xmlValueElementFormat = QTextCharFormat()
             xmlValueElementFormat.setForeground(QColorConstants.Svg.lightcyan)
-            xmlValueElementFormat.setFontWeight(QFont.Bold)
+            xmlValueElementFormat.setFontWeight(QFont.Weight.Bold)
             self._mappings.update({">[^\n]*<": xmlValueElementFormat})
             # singleline/multiline comment
             #self._mappings.update({QColorConstants.Svg.lime)
         else:
             # comment
             xmlCommentFormat = QTextCharFormat()
-            xmlCommentFormat.setForeground(Qt.darkGreen)
+            xmlCommentFormat.setForeground(Qt.GlobalColor.darkGreen)
             self._mappings.update({r"<!--[\s\S\n]*?-->": xmlCommentFormat})
             # element <Text> </Text>
             xmlElementFormat = QTextCharFormat()
-            xmlElementFormat.setForeground(Qt.blue)
+            xmlElementFormat.setForeground(Qt.GlobalColor.blue)
             # xmlElementFormat.setFontWeight(QFont.Bold)
             self._mappings.update({"<[\\s]*[/]?[\\s]*([^\\n]\\w*)(?=[\\s/>])": xmlElementFormat})
             # attribute < Text= >
             xmlAttributeFormat = QTextCharFormat()
-            xmlAttributeFormat.setForeground(Qt.red)
+            xmlAttributeFormat.setForeground(Qt.GlobalColor.red)
             self._mappings.update({"\\w+(?=\\=)": xmlAttributeFormat})
             # attribute value < text=" " >
             xmlValueAttributeFormat = QTextCharFormat()
-            xmlValueAttributeFormat.setForeground(Qt.darkMagenta)
+            xmlValueAttributeFormat.setForeground(Qt.GlobalColor.darkMagenta)
             self._mappings.update({"\"[^\\n\"]+\"(?=[\\s/>])": xmlValueAttributeFormat})
             # element value inline >text<
             xmlValueElementFormat = QTextCharFormat()
-            xmlValueElementFormat.setForeground(Qt.black)
-            xmlValueElementFormat.setFontWeight(QFont.Bold)
+            xmlValueElementFormat.setForeground(Qt.GlobalColor.black)
+            xmlValueElementFormat.setFontWeight(QFont.Weight.Bold)
             self._mappings.update({">[^\n]*<": xmlValueElementFormat})
             # singleline/multiline comment
             #self.commentFormat.setForeground(Qt.darkGreen)

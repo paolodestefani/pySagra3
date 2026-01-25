@@ -21,10 +21,9 @@
 # You should have received a copy of the GNU General Public License
 # along with pySagra.  If not, see <http://www.gnu.org/licenses/>.
 
+"""Toolbar
 
-"""Menus
-
-This module manages application menus
+This module manages application toolbars
 
 """
 
@@ -33,18 +32,9 @@ import logging
 
 # PySide6
 from PySide6.QtCore import Qt
-from PySide6.QtCore import QObject
 from PySide6.QtCore import QItemSelectionModel
 from PySide6.QtWidgets import QWidget
-from PySide6.QtWidgets import QAbstractItemView
-from PySide6.QtWidgets import QDialog
-#from PySide6.QtWidgets import QStyledItemDelegate
-from PySide6.QtWidgets import QHBoxLayout
-#from PySide6.QtWidgets import QApplication
-#from PySide6.QtWidgets import QStyle
-#from PySide6.QtWidgets import QStyleOptionViewItem
 from PySide6.QtWidgets import QMessageBox
-#from PySide6.QtWidgets import QButtonGroup
 
 
 # application modules
@@ -53,16 +43,12 @@ from App import currentAction
 from App import currentIcon
 from App.System.Utility import _tr
 from App.Database.Exceptions import PyAppDBError
-#from App.Database.Shortcuts import duplicate_scheme
 from App.Database.Models import ToolbarIndexModel
 from App.Database.Models import ToolbarModel
 from App.Database.Models import ToolbarItemTreeModel
-#from App.Database.Models import ShortcutKeysequenceModel
 from App.Widget.Delegate import BooleanDelegate
 from App.Widget.Delegate import ActionDelegate
-#from App.Widget.Delegate import KeySequenceDelegate
 from App.Widget.Form import FormIndexManager
-#from App.Widgets.Actions import actionDefinition
 from App.Widget.Dialog import PrintDialog
 from App.Ui.ToolbarWidget import Ui_ToolbarWidget
 from App.Ui.DuplicateDialog import Ui_DuplicateDialog
@@ -116,8 +102,8 @@ class ToolbarForm(FormIndexManager):
         self.mapper.addMapping(self.ui.lineEditDescription, DESCRIPTION)
         self.mapper.addMapping(self.ui.checkBoxSystem, SYSTEM)
         # make system checkbox not user editable
-        self.ui.checkBoxSystem.setAttribute(Qt.WA_TransparentForMouseEvents)
-        self.ui.checkBoxSystem.setFocusPolicy(Qt.NoFocus)
+        self.ui.checkBoxSystem.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+        self.ui.checkBoxSystem.setFocusPolicy(Qt.FocusPolicy.NoFocus)
         # menu item treeview
         self.ui.treeViewMenuItems.setModel(treeModel)
         # self.ui.tableViewKeySequence.setLayoutName('shortcutKeys')
@@ -139,13 +125,12 @@ class ToolbarForm(FormIndexManager):
             return
         for column in range(model.columnCount(index)):
             child = model.index(0, column, index)
-            model.setData(child, "[No data]", Qt.EditRole)
-            if model.headerData(column, Qt.Horizontal) is None:
-                model.setHeaderData(column, Qt.Horizontal, "[No header]",
-                                        Qt.EditRole)
+            model.setData(child, "[No data]", Qt.ItemDataRole.EditRole)
+            if model.headerData(column, Qt.Orientation.Horizontal) is None:
+                model.setHeaderData(column, Qt.Orientation.Horizontal, "[No header]", Qt.ItemDataRole.EditRole)
 
         self.ui.treeViewMenuItems.selectionModel().setCurrentIndex(model.index(0, 0, index),
-                                                                       QItemSelectionModel.ClearAndSelect)
+                                                                   QItemSelectionModel.SelectionFlag.ClearAndSelect)
 
     def add(self):
         index = self.ui.treeViewMenuItems.selectionModel().currentIndex()
@@ -192,7 +177,8 @@ class ToolbarForm(FormIndexManager):
         if QMessageBox.question(self,
                                 _tr('MessageDialog', "Question"),
                                 f"{msg}\n{scheme} - {description}",
-                                QMessageBox.Yes | QMessageBox.No) == QMessageBox.No:
+                                QMessageBox.StandardButton.Yes|QMessageBox.StandardButton.No
+                                ) == QMessageBox.StandardButton.No:
             return
         super().delete()
 

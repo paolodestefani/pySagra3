@@ -8,7 +8,7 @@
 
 """Help
 
-This module define and launch Help/SystemInfo/Faq/About dialogs
+This module define and launch Help and Faq dialogs
 
 """
 
@@ -35,11 +35,13 @@ from App.Ui.HelpDialog import Ui_HelpDialog
 from App.Widget.Dialog import PrintPreviewDialog
 
 
+
 def help() -> None:
     logging.info('Starting help dialog')
     dialog = HelpDialog(APPNAME, session['mainwin'].helpLink(), session['mainwin'])
     dialog.show()
     logging.info('Help dialog shown')
+
 
 def faq() -> None:
     logging.info('Starting faq dialog')
@@ -51,13 +53,13 @@ def faq() -> None:
 class HelpDialog(QDialog):
     "Dialog showing help content"
 
-    def __init__(self, title: str, source: str, parent: QWidget = None) -> None:
+    def __init__(self, title: str, source: str, parent: QWidget|None = None) -> None:
         "Initialize"
         super().__init__(parent)
         self.ui = Ui_HelpDialog()
         self.ui.setupUi(self)
-        self.setAttribute(Qt.WA_DeleteOnClose)
-        self.setWindowFlags(Qt.Dialog|Qt.WindowMinMaxButtonsHint|Qt.WindowCloseButtonHint)
+        self.setAttribute(Qt.WidgetAttribute.WA_DeleteOnClose)
+        self.setWindowFlags(Qt.WindowType.Dialog|Qt.WindowType.WindowMinMaxButtonsHint|Qt.WindowType.WindowCloseButtonHint)
         # set buttons' icons
         self.ui.toolButtonBack.setIcon(currentIcon['edit_previous'])
         self.ui.toolButtonHome.setIcon(currentIcon['edit_home'])
@@ -106,7 +108,7 @@ class HelpDialog(QDialog):
         "Print help contents"
         dialog = PrintPreviewDialog(self)
         dialog.setGeometry(50, 50, 750, 550)
-        dialog.setWindowFlags(Qt.Dialog | Qt.WindowMinMaxButtonsHint | Qt.WindowCloseButtonHint)
+        dialog.setWindowFlags(Qt.WindowType.Dialog|Qt.WindowType.WindowMinMaxButtonsHint|Qt.WindowType.WindowCloseButtonHint)
         title = _tr('Help', "Print preview of")
         dialog.setWindowTitle(f"{title} {self.windowTitle()}")
         dialog.paintRequested.connect(self.ui.textBrowserContent.print_)
@@ -121,7 +123,7 @@ class HelpDialog(QDialog):
                                 _tr('Help', "Text not found"))
             self.ui.textBrowserContent.home()
             cur = self.ui.textBrowserContent.textCursor()
-            cur.setPosition(0, QTextCursor.MoveAnchor)
+            cur.setPosition(0, QTextCursor.MoveMode.MoveAnchor)
             self.ui.textBrowserContent.setTextCursor(cur)
 
     def closeEvent(self, event: QEvent) -> None:
