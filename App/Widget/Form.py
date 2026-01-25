@@ -42,7 +42,7 @@ from PySide6.QtWidgets import QAbstractItemView
 
 # application modules
 from App import session
-from App.System.Utility import _tr
+from App.System import _tr
 from App.Database.Connect import appconn
 from App.Database.Exceptions import PyAppDBError
 #from App.Widget.Delegate import mapperItemDelegate

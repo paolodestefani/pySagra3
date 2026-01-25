@@ -53,9 +53,9 @@ from App.Widget.Delegate import RelationDelegate
 from App.Widget.Delegate import BooleanDelegate
 from App.Widget.Form import FormManager
 from App.Ui.WebOrderWidget import Ui_WebOrderWidget
-from App.System.Utility import _tr
-from App.System.Utility import scriptInit
-from App.System.Utility import scriptMethod
+from App.System import _tr
+from App.System import scriptInit
+from App.System import scriptMethod
 
 
 

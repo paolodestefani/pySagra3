@@ -71,6 +71,7 @@
     <name>LoginDialog</name>
     <message>
         <location filename="../../App/Ui/LoginDialog.ui" line="20"/>
+        <location filename="../../App/Ui/LoginDialog.ui" line="409"/>
         <source>Login</source>
         <translation>Login</translation>
     </message>
@@ -98,11 +99,6 @@
         <location filename="../../App/Ui/LoginDialog.ui" line="406"/>
         <source>Click to connect to the server and start the application</source>
         <translation>Cliccare per connettarsi al server ed avviare l&apos;applicazione</translation>
-    </message>
-    <message>
-        <location filename="../../App/Ui/LoginDialog.ui" line="409"/>
-        <source>Connect</source>
-        <translation>Collega</translation>
     </message>
     <message>
         <location filename="../../App/Ui/LoginDialog.ui" line="422"/>

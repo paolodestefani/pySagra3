@@ -30,7 +30,7 @@ from PySide6.QtWidgets import QMessageBox
 from App import APPNAME
 from App import session
 from App import currentIcon
-from App.System.Utility import _tr
+from App.System import _tr
 from App.Ui.HelpDialog import Ui_HelpDialog
 from App.Widget.Dialog import PrintPreviewDialog
 

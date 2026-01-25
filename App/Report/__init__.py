@@ -22,3 +22,19 @@
 # along with pySagra.  If not, see <http://www.gnu.org/licenses/>.
 
 
+REPORT_CLASSES = ["COMPANY",
+                  "PROFILE",
+                  "USER",
+                  "PRINTER",
+                  "TABLE",
+                  "EVENT",
+                  "ITEM",
+                  "PRICE_LIST", 
+                  "ORDER_CUSTOMER",
+                  "ORDER_DEPARTMENT",
+                  "ORDER_COVER",
+                  "ORDER_LIST",
+                  "STOCK_UNLOAD",
+                  "CASH_SUMMARY",
+                  "STATISTICS",
+                  "STATSVIEW"]

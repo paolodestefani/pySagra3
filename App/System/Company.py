@@ -74,7 +74,7 @@ from App.Widget.Delegate import RelationDelegate
 from App.Widget.Dialog import PrintDialog
 from App.Ui.CompanyWidget import Ui_CompanyWidget
 from App.Ui.NewCompanyDialog import Ui_NewCompanyDialog
-from App.System.Utility import _tr
+from App.System import _tr
 
 
 COMP_ID, COMP_DESC, COMP_SYSTEM, COMP_IMAGE = range(4)

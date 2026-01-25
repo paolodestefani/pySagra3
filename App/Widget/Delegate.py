@@ -71,8 +71,8 @@ from PySide6.QtWidgets import QColorDialog
 # application modules
 from App import session
 from App import actionDefinition
-from App.System.Utility import string_encode
-from App.System.Utility import string_decode
+from App.System import string_encode
+from App.System import string_decode
 from App.Database.Setting import SettingClass
 from App.Widget.Control import ColorComboBox
 from App.Widget.Control import RelationalComboBox

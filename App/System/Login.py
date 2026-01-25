@@ -67,9 +67,9 @@ from App.Database import EUKNC # Unknown company
 from App.Database import ENACR # No access rights to required company
 
 # application modules
-from App.System.Utility import string_encode
-from App.System.Utility import string_decode
-from App.System.Utility import _tr
+from App.System import string_encode
+from App.System import string_decode
+from App.System import _tr
 from App.Database.Connect import appconn
 from App.Database.Exceptions import PyAppDBError
 from App.Database.Exceptions import PyAppDBConnectionError

@@ -25,7 +25,7 @@ class Ui_LoginDialog(object):
     def setupUi(self, LoginDialog):
         if not LoginDialog.objectName():
             LoginDialog.setObjectName(u"LoginDialog")
-        LoginDialog.resize(320, 552)
+        LoginDialog.resize(335, 552)
         font = QFont()
         font.setPointSize(10)
         LoginDialog.setFont(font)
@@ -33,10 +33,10 @@ class Ui_LoginDialog(object):
         LoginDialog.setModal(False)
         self.verticalLayout_3 = QVBoxLayout(LoginDialog)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.verticalLayout_3.setSizeConstraint(QLayout.SetFixedSize)
+        self.verticalLayout_3.setSizeConstraint(QLayout.SizeConstraint.SetFixedSize)
         self.verticalLayout_2 = QVBoxLayout()
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.verticalLayout_2.setSizeConstraint(QLayout.SetFixedSize)
+        self.verticalLayout_2.setSizeConstraint(QLayout.SizeConstraint.SetFixedSize)
         self.labelMain = QLabel(LoginDialog)
         self.labelMain.setObjectName(u"labelMain")
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
@@ -97,10 +97,10 @@ class Ui_LoginDialog(object):
 #endif
         self.labelMain.setPalette(palette)
         self.labelMain.setAutoFillBackground(False)
-        self.labelMain.setLocale(QLocale(QLocale.C, QLocale.AnyCountry))
-        self.labelMain.setFrameShape(QFrame.NoFrame)
-        self.labelMain.setFrameShadow(QFrame.Plain)
-        self.labelMain.setAlignment(Qt.AlignCenter)
+        self.labelMain.setLocale(QLocale(QLocale.C, QLocale.AnyTerritory))
+        self.labelMain.setFrameShape(QFrame.Shape.NoFrame)
+        self.labelMain.setFrameShadow(QFrame.Shadow.Plain)
+        self.labelMain.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout_2.addWidget(self.labelMain)
 
@@ -108,10 +108,10 @@ class Ui_LoginDialog(object):
         self.gridLayout.setObjectName(u"gridLayout")
         self.lineEditPassword = QLineEdit(LoginDialog)
         self.lineEditPassword.setObjectName(u"lineEditPassword")
-        self.lineEditPassword.setContextMenuPolicy(Qt.DefaultContextMenu)
+        self.lineEditPassword.setContextMenuPolicy(Qt.ContextMenuPolicy.DefaultContextMenu)
         self.lineEditPassword.setAcceptDrops(False)
         self.lineEditPassword.setMaxLength(256)
-        self.lineEditPassword.setEchoMode(QLineEdit.Password)
+        self.lineEditPassword.setEchoMode(QLineEdit.EchoMode.Password)
         self.lineEditPassword.setClearButtonEnabled(False)
 
         self.gridLayout.addWidget(self.lineEditPassword, 1, 1, 1, 1)
@@ -144,14 +144,14 @@ class Ui_LoginDialog(object):
 
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.pushButtonConnect = QPushButton(LoginDialog)
-        self.pushButtonConnect.setObjectName(u"pushButtonConnect")
+        self.pushButtonLogin = QPushButton(LoginDialog)
+        self.pushButtonLogin.setObjectName(u"pushButtonLogin")
         font2 = QFont()
         font2.setPointSize(10)
         font2.setBold(True)
-        self.pushButtonConnect.setFont(font2)
+        self.pushButtonLogin.setFont(font2)
 
-        self.horizontalLayout.addWidget(self.pushButtonConnect)
+        self.horizontalLayout.addWidget(self.pushButtonLogin)
 
         self.pushButtonCancel = QPushButton(LoginDialog)
         self.pushButtonCancel.setObjectName(u"pushButtonCancel")
@@ -170,8 +170,8 @@ class Ui_LoginDialog(object):
 
         self.frameMore = QFrame(LoginDialog)
         self.frameMore.setObjectName(u"frameMore")
-        self.frameMore.setFrameShape(QFrame.NoFrame)
-        self.frameMore.setFrameShadow(QFrame.Plain)
+        self.frameMore.setFrameShape(QFrame.Shape.NoFrame)
+        self.frameMore.setFrameShadow(QFrame.Shadow.Plain)
         self.frameMore.setLineWidth(0)
         self.verticalLayout = QVBoxLayout(self.frameMore)
         self.verticalLayout.setObjectName(u"verticalLayout")
@@ -208,7 +208,7 @@ class Ui_LoginDialog(object):
         self.lineEditDBUser = QLineEdit(self.frameMore)
         self.lineEditDBUser.setObjectName(u"lineEditDBUser")
         self.lineEditDBUser.setMaxLength(48)
-        self.lineEditDBUser.setEchoMode(QLineEdit.PasswordEchoOnEdit)
+        self.lineEditDBUser.setEchoMode(QLineEdit.EchoMode.PasswordEchoOnEdit)
 
         self.gridLayout_2.addWidget(self.lineEditDBUser, 5, 1, 1, 1)
 
@@ -221,7 +221,7 @@ class Ui_LoginDialog(object):
         self.lineEditDBPassword = QLineEdit(self.frameMore)
         self.lineEditDBPassword.setObjectName(u"lineEditDBPassword")
         self.lineEditDBPassword.setMaxLength(255)
-        self.lineEditDBPassword.setEchoMode(QLineEdit.Password)
+        self.lineEditDBPassword.setEchoMode(QLineEdit.EchoMode.Password)
         self.lineEditDBPassword.setProperty(u"mandatoryFieldFlag", True)
 
         self.gridLayout_2.addWidget(self.lineEditDBPassword, 6, 1, 1, 1)
@@ -250,7 +250,7 @@ class Ui_LoginDialog(object):
         self.labelVersion = QLabel(self.frameMore)
         self.labelVersion.setObjectName(u"labelVersion")
         self.labelVersion.setFont(font1)
-        self.labelVersion.setAlignment(Qt.AlignCenter)
+        self.labelVersion.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout.addWidget(self.labelVersion)
 
@@ -270,8 +270,8 @@ class Ui_LoginDialog(object):
         self.label_3.setBuddy(self.spinBoxPort)
 #endif // QT_CONFIG(shortcut)
         QWidget.setTabOrder(self.lineEditUser, self.lineEditPassword)
-        QWidget.setTabOrder(self.lineEditPassword, self.pushButtonConnect)
-        QWidget.setTabOrder(self.pushButtonConnect, self.pushButtonCancel)
+        QWidget.setTabOrder(self.lineEditPassword, self.pushButtonLogin)
+        QWidget.setTabOrder(self.pushButtonLogin, self.pushButtonCancel)
         QWidget.setTabOrder(self.pushButtonCancel, self.checkBoxMore)
         QWidget.setTabOrder(self.checkBoxMore, self.lineEditServer)
         QWidget.setTabOrder(self.lineEditServer, self.spinBoxPort)
@@ -281,7 +281,7 @@ class Ui_LoginDialog(object):
 
         self.retranslateUi(LoginDialog)
         self.checkBoxMore.clicked["bool"].connect(self.frameMore.setVisible)
-        self.pushButtonConnect.clicked.connect(LoginDialog.accept)
+        self.pushButtonLogin.clicked.connect(LoginDialog.accept)
         self.pushButtonCancel.clicked.connect(LoginDialog.reject)
 
         QMetaObject.connectSlotsByName(LoginDialog)
@@ -298,9 +298,9 @@ class Ui_LoginDialog(object):
 #endif // QT_CONFIG(whatsthis)
         self.label_6.setText(QCoreApplication.translate("LoginDialog", u"Password", None))
 #if QT_CONFIG(whatsthis)
-        self.pushButtonConnect.setWhatsThis(QCoreApplication.translate("LoginDialog", u"Click to connect to the server and start the application", None))
+        self.pushButtonLogin.setWhatsThis(QCoreApplication.translate("LoginDialog", u"Click to connect to the server and start the application", None))
 #endif // QT_CONFIG(whatsthis)
-        self.pushButtonConnect.setText(QCoreApplication.translate("LoginDialog", u"Connect", None))
+        self.pushButtonLogin.setText(QCoreApplication.translate("LoginDialog", u"Login", None))
 #if QT_CONFIG(whatsthis)
         self.pushButtonCancel.setWhatsThis(QCoreApplication.translate("LoginDialog", u"Cancel and close the login dialog", None))
 #endif // QT_CONFIG(whatsthis)

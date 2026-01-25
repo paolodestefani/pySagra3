@@ -63,22 +63,19 @@ from App.Database.Report import load_report
 from App.Database.Report import list_all_reports
 from App.Database.Models import ReportModel
 from App.Database.Models import ReportIndexModel
+from App.Report import REPORT_CLASSES
 from App.Widget.Form import FormIndexManager
 from App.Widget.Delegate import BooleanDelegate
 from App.Widget.Dialog import PrintDialog
 from App.Ui.ReportWidget import Ui_ReportWidget
-from App.System.Utility import _tr
-from App.System.Utility import langCountryFlags
+from App.System import _tr
+from App.System import langCountryFlags
 
 V_ID, V_CODE, V_L10N, V_CLASS, V_DESCRIPTION, V_SYSTEM, V_USER_INS, V_DATE_INS, V_USER_UPD, V_DATE_UPD = range(10)
 
 ID, CODE, L10N, CLASS, DESCRIPTION, XML, SYSTEM, USER_INS, DATE_INS, USER_UPD, DATE_UPD = range(11)
 
-REPORT_CLASSES = [None,
-                  "COMPANY", "PROFILE", "USER",
-                  "PRINTER", "TABLE", "EVENT", "ITEM", "PRICE_LIST", 
-                  "ORDER_CUSTOMER", "ORDER_DEPARTMENT", "ORDER_COVER", "ORDER_LIST",
-                  "STOCK_UNLOAD", "CASH_SUMMARY", "STATISTICS", "STATSVIEW"]
+
 
 FORM, GRID = range(2)
 
@@ -118,13 +115,13 @@ class ReportForm(FormIndexManager):
         self.ui.comboBoxL10n.setItemList(langCountryFlags())
         self.mapper.addMapping(self.ui.comboBoxL10n, L10N, b"modelDataStr")
         self.mapper.addMapping(self.ui.lineEditDescription, DESCRIPTION)
-        self.ui.comboBoxClass.addItems(REPORT_CLASSES)
+        self.ui.comboBoxClass.addItems([None] + REPORT_CLASSES)
         self.mapper.addMapping(self.ui.comboBoxClass, CLASS)
         self.mapper.addMapping(self.ui.checkBoxSystem, SYSTEM)
         self.mapper.addMapping(self.ui.textEditXML, XML, b"plainText")
         # make system checkbox not user editable
-        self.ui.checkBoxSystem.setAttribute(Qt.WA_TransparentForMouseEvents)
-        self.ui.checkBoxSystem.setFocusPolicy(Qt.NoFocus)
+        self.ui.checkBoxSystem.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+        self.ui.checkBoxSystem.setFocusPolicy(Qt.FocusPolicy.NoFocus)
         # set font
         st = QSettings()
         self.font = st.value("XMLEditorFont", QFont('Courier', 8))

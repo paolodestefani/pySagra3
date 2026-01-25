@@ -54,9 +54,9 @@ from App.Widget.Delegate import AmountDelegate
 from App.Widget.Form import FormIndexManager
 from App.Widget.Dialog import PrintDialog
 from App.Ui.PriceListWidget import Ui_PriceListWidget
-from App.System.Utility import _tr
-from App.System.Utility import scriptInit
-from App.System.Utility import scriptMethod
+from App.System import _tr
+from App.System import scriptInit
+from App.System import scriptMethod
 
 (I_ID, I_DESCRIPTION, 
  I_USER_INS, I_DATE_INS, I_USER_UPD, I_DATE_UPD) = range(6)

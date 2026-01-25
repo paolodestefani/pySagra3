@@ -52,8 +52,8 @@ from PySide6.QtWidgets import QFileDialog
 from App import session
 from App import currentAction
 from App import currentIcon
-from App.System.Utility import string_encode
-from App.System.Utility import string_decode
+from App.System import string_encode
+from App.System import string_decode
 from App.Database.Connect import get_current_event
 from App.Database.Models import EventIndexModel
 from App.Database.Models import EventModel
@@ -66,9 +66,9 @@ from App.Widget.Delegate import ImageDelegate
 from App.Widget.Form import FormIndexManager
 from App.Widget.Dialog import PrintDialog
 from App.Ui.EventWidget import Ui_EventWidget
-from App.System.Utility import _tr
-from App.System.Utility import scriptInit
-from App.System.Utility import scriptMethod
+from App.System import _tr
+from App.System import scriptInit
+from App.System import scriptMethod
 
 
 (ID, DESCRIPTION, DATE_START, DATE_END, PRICELIST, IMAGE,

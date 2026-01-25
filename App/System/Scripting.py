@@ -63,9 +63,9 @@ from App.Widget.Delegate import RelationDelegate
 from App.Widget.Delegate import HideTextDelegate
 #from App.Widgets.Dialogs import PrintReportDialog
 from App.Ui.ScriptingWidget import Ui_ScriptingWidget
-from App.System.Utility import _tr
-from App.System.Utility import langCountry
-from App.System.Utility import langCountryFlags
+from App.System import _tr
+from App.System import langCountry
+from App.System import langCountryFlags
 
 SCRIPTABLE = {'PrintersForm': ['__init__',
                                'new',

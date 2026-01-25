@@ -43,9 +43,9 @@ from PySide6.QtWidgets import QDialog
 from App import session
 from App import currentAction
 from App import currentIcon
-from App.System.Utility import _tr
-from App.System.Utility import scriptInit
-from App.System.Utility import scriptMethod
+from App.System import _tr
+from App.System import scriptInit
+from App.System import scriptMethod
 from App.Widget.Delegate import RelationDelegate
 from App.Widget.Delegate import ColorComboDelegate
 from App.Widget.Delegate import BooleanDelegate

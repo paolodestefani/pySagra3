@@ -53,9 +53,9 @@ from App.Database.Table import table_list
 from App.Database.Table import table_delete
 from App.Database.Models import SeatMapModel
 from App.Database.Setting import SettingClass
-from App.System.Utility import _tr
-from App.System.Utility import scriptInit
-from App.System.Utility import scriptMethod
+from App.System import _tr
+from App.System import scriptInit
+from App.System import scriptMethod
 from App.Ui.SeatMapWidget import Ui_SeatMapWidget
 from App.Ui.GenerateTableNumbersDialog import Ui_GenerateTableNumbers
 from App.Widget.Form import  FormManager

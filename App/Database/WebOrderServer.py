@@ -31,8 +31,8 @@ import psycopg
 # application modules
 from App.Database.Exceptions import PyAppDBError
 from App.Database.Connect import appconn
-from App.System.Utility import string_encode
-from App.System.Utility import string_decode
+from App.System import string_encode
+from App.System import string_decode
 
 
 

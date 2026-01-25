@@ -7,7 +7,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>320</width>
+    <width>335</width>
     <height>552</height>
    </rect>
   </property>
@@ -27,12 +27,12 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <property name="sizeConstraint">
-    <enum>QLayout::SetFixedSize</enum>
+    <enum>QLayout::SizeConstraint::SetFixedSize</enum>
    </property>
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <property name="sizeConstraint">
-      <enum>QLayout::SetFixedSize</enum>
+      <enum>QLayout::SizeConstraint::SetFixedSize</enum>
      </property>
      <item>
       <widget class="QLabel" name="labelMain">
@@ -305,16 +305,16 @@
         <bool>false</bool>
        </property>
        <property name="locale">
-        <locale language="C" country="AnyCountry"/>
+        <locale language="C" country="AnyTerritory"/>
        </property>
        <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
+        <enum>QFrame::Shape::NoFrame</enum>
        </property>
        <property name="frameShadow">
-        <enum>QFrame::Plain</enum>
+        <enum>QFrame::Shadow::Plain</enum>
        </property>
        <property name="alignment">
-        <set>Qt::AlignCenter</set>
+        <set>Qt::AlignmentFlag::AlignCenter</set>
        </property>
       </widget>
      </item>
@@ -323,7 +323,7 @@
        <item row="1" column="1">
         <widget class="QLineEdit" name="lineEditPassword">
          <property name="contextMenuPolicy">
-          <enum>Qt::DefaultContextMenu</enum>
+          <enum>Qt::ContextMenuPolicy::DefaultContextMenu</enum>
          </property>
          <property name="acceptDrops">
           <bool>false</bool>
@@ -335,7 +335,7 @@
           <number>256</number>
          </property>
          <property name="echoMode">
-          <enum>QLineEdit::Password</enum>
+          <enum>QLineEdit::EchoMode::Password</enum>
          </property>
          <property name="clearButtonEnabled">
           <bool>false</bool>
@@ -395,7 +395,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QPushButton" name="pushButtonConnect">
+        <widget class="QPushButton" name="pushButtonLogin">
          <property name="font">
           <font>
            <pointsize>10</pointsize>
@@ -406,7 +406,7 @@
           <string>Click to connect to the server and start the application</string>
          </property>
          <property name="text">
-          <string>Connect</string>
+          <string>Login</string>
          </property>
         </widget>
        </item>
@@ -446,10 +446,10 @@
      <item>
       <widget class="QFrame" name="frameMore">
        <property name="frameShape">
-        <enum>QFrame::NoFrame</enum>
+        <enum>QFrame::Shape::NoFrame</enum>
        </property>
        <property name="frameShadow">
-        <enum>QFrame::Plain</enum>
+        <enum>QFrame::Shadow::Plain</enum>
        </property>
        <property name="lineWidth">
         <number>0</number>
@@ -523,7 +523,7 @@
              <number>48</number>
             </property>
             <property name="echoMode">
-             <enum>QLineEdit::PasswordEchoOnEdit</enum>
+             <enum>QLineEdit::EchoMode::PasswordEchoOnEdit</enum>
             </property>
            </widget>
           </item>
@@ -551,7 +551,7 @@
              <number>255</number>
             </property>
             <property name="echoMode">
-             <enum>QLineEdit::Password</enum>
+             <enum>QLineEdit::EchoMode::Password</enum>
             </property>
             <property name="mandatoryFieldFlag" stdset="0">
              <bool>true</bool>
@@ -617,7 +617,7 @@
            <string>Current App Version</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignCenter</set>
+           <set>Qt::AlignmentFlag::AlignCenter</set>
           </property>
          </widget>
         </item>
@@ -631,7 +631,7 @@
  <tabstops>
   <tabstop>lineEditUser</tabstop>
   <tabstop>lineEditPassword</tabstop>
-  <tabstop>pushButtonConnect</tabstop>
+  <tabstop>pushButtonLogin</tabstop>
   <tabstop>pushButtonCancel</tabstop>
   <tabstop>checkBoxMore</tabstop>
   <tabstop>lineEditServer</tabstop>
@@ -661,7 +661,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>pushButtonConnect</sender>
+   <sender>pushButtonLogin</sender>
    <signal>clicked()</signal>
    <receiver>LoginDialog</receiver>
    <slot>accept()</slot>

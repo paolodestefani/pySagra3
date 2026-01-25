@@ -90,8 +90,8 @@ from PySide6.QtCore import QDateTime
 # application modules
 #from App import session
 #from App import currentIcon
-from App.System.Utility import _tr
-from App.System.Utility import string_decode
+from App.System import _tr
+from App.System import string_decode
 #from App.Ui.MessageDialog import Ui_MessageDialog
 #from App.Ui.PrintPDFDialog import Ui_PrintPDFDialog
 #from App.Ui.SelectImageDialog import Ui_SelectImageDialog

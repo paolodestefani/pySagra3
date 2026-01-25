@@ -75,9 +75,9 @@ from PySide6.QtWidgets import QMenu
 # application modules
 from App import session
 from App import currentIcon
-from App.System.Utility import _tr
-from App.System.Utility import string_encode
-from App.System.Utility import string_decode
+from App.System import _tr
+from App.System import string_encode
+from App.System import string_decode
 #from App.Database.AbstractModels.TableModels import LookUpQueryModel
 #from App.Database.Models import LookUpMunicipalityModel
 #from App.Widgets.LookUpDialog import LookUpDialog
