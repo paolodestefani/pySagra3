@@ -34,9 +34,9 @@ import logging
 from PySide6.QtCore import Qt
 from PySide6.QtCore import QDirIterator
 from PySide6.QtCore import QSysInfo
-from PySide6.QtGui import QGuiApplication
 from PySide6.QtGui import QFont
 from PySide6.QtGui import QIcon
+from PySide6.QtWidgets import QApplication
 from PySide6.QtWidgets import QToolBar
 from PySide6.QtWidgets import QDialog
 from PySide6.QtWidgets import QMessageBox
@@ -154,8 +154,8 @@ class PreferencesDialog(QDialog):
             
     def apply(self) -> None:
         "Apply settings variations"
-        app = QGuiApplication.instance()
-        if app is None:
+        app = QApplication.instance()
+        if app is None or not isinstance(app, QApplication):
             return
         # gui preferences
         theme = self.ui.comboBoxTheme.currentText()
@@ -223,14 +223,14 @@ class PreferencesDialog(QDialog):
 
 def setTheme(theme: str) -> None:
     "Set the application theme"
-    app = QGuiApplication.instance()
-    if app is not None:
-        app.setStyle(theme)
+    app = QApplication.instance()
+    if app is not None and isinstance(app, QApplication):
+        app.setStyle(QStyleFactory.create(theme))
         app.processEvents()
     
 def setColorScheme(color: str) -> None:
     "Set the application color scheme"
-    QGuiApplication.styleHints().setColorScheme(color_scheme.get(color, Qt.ColorScheme.Unknown))
+    QApplication.styleHints().setColorScheme(color_scheme.get(color, Qt.ColorScheme.Unknown))
     
 def setIconTheme(theme: str) -> None: # used in login, currentIcon created before currentAction
     "Fill currentIcon dictionary"
@@ -253,8 +253,8 @@ def setIcon(theme: str) -> None:
 
 def setFont(ffamily: str|None = None, fsize: int = 10):
     "Set font family and font size"
-    app = QGuiApplication.instance()
-    if app is None:
+    app = QApplication.instance()
+    if app is None or not isinstance(app, QApplication):
         return
     if ffamily is None:
         font = QFont()

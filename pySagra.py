@@ -42,11 +42,6 @@ from psycopg import __version__ as psycopg_version
 from PySide6 import __version__ as pyside6_version
 from PySide6.QtCore import qVersion
 
-# disable highdpi scaling (handled by application)
-#os.environ["QT_ENABLE_HIGHDPI_SCALING"] = "0"  
-#os.environ["QT_SCALE_FACTOR"] = "1"
-#os.environ["QT_SCREEN_SCALE_FACTORS"] = "1"
-
 # PySide6
 from PySide6.QtCore import QOperatingSystemVersion
 from PySide6.QtCore import Qt

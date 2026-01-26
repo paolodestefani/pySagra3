@@ -174,7 +174,7 @@ class LoginDialog(QDialog):
             mbox.setIcon(QMessageBox.Icon.Critical)
             mbox.setWindowTitle(_tr('MessageDialog', 'Critical'))
             mbox.setText(f"<p><b>{msg}</b>")
-            mbox.setDetailedText(er.message)
+            mbox.setDetailedText(str(er.message))
             mbox.exec()
 
             self.ui.lineEditPassword.clear()

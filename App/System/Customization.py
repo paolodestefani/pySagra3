@@ -100,10 +100,10 @@ class CustomizationsDialog(QDialog):
     def exportCustomization(self) -> None:
         "Export customizations to CSV file"
         st = QSettings()
-        path = str(st.value("PathExportCustomizations", QDir.current().path()))
+        path = st.value("PathExportCustomizations", QDir.current().path())
         directory = QFileDialog.getExistingDirectory(self,
                                                      _tr('Customizations', "Select the directory"),
-                                                     path)
+                                                     str(path))
         if directory == "":
             return
         try:
