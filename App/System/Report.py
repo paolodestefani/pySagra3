@@ -21,7 +21,6 @@
 # You should have received a copy of the GNU General Public License
 # along with pySagra.  If not, see <http://www.gnu.org/licenses/>.
 
-
 """Report
 
 This modules manages reports: creation/deletion/modification of sql reports

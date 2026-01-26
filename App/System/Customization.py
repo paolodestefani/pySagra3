@@ -21,7 +21,6 @@
 # You should have received a copy of the GNU General Public License
 # along with pySagra.  If not, see <http://www.gnu.org/licenses/>.
 
-
 """Customization
 
 This module allow import/export of report, itemview and sort-filter customizations
@@ -101,7 +100,7 @@ class CustomizationsDialog(QDialog):
     def exportCustomization(self) -> None:
         "Export customizations to CSV file"
         st = QSettings()
-        path = st.value("PathExportCustomizations", QDir.current().path())
+        path = str(st.value("PathExportCustomizations", QDir.current().path()))
         directory = QFileDialog.getExistingDirectory(self,
                                                      _tr('Customizations', "Select the directory"),
                                                      path)
@@ -160,7 +159,7 @@ class CustomizationsDialog(QDialog):
         path = st.value("PathExportCustomizations", QDir.current().path())
         directory = QFileDialog.getExistingDirectory(self,
                                                      _tr('Customizations', "Select the directory"),
-                                                     path)
+                                                     str(path))
         if directory == "":
             return
 

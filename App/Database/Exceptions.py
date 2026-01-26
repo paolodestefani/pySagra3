@@ -46,10 +46,10 @@ class PyAppDBConnectionError(PyAppDatabaseException):
 class PyAppDBError(PyAppDatabaseException):
     "Error on interacting with database server"
 
-    def __init__(self, code=None, message=None):
+    def __init__(self, code: str|None = None, message: str|None = None) -> None:
         super().__init__(code, message)
-        self.code = code
-        self.message = message
+        self.code = code or ''
+        self.message = message or ''
 
 
 class PyAppDBConcurrencyError(PyAppDBError):

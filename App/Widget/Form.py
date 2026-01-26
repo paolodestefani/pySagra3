@@ -679,7 +679,7 @@ class FormIndexManager(QWidget):
         self.state = VIEW # initial state
         self.auth = auth
         self.detailRelations = []  # detail relation list
-        self.model = None
+        self.model = TableModel()
         self.indexModel = None
         # index mapper
         self.indexMapper = QDataWidgetMapper(self)

@@ -21,7 +21,6 @@
 # You should have received a copy of the GNU General Public License
 # along with pySagra.  If not, see <http://www.gnu.org/licenses/>.
 
-
 """Preferences
 
 This module allow to set/modify user preferences: ui theme, icon set, font, ecc.
@@ -156,6 +155,8 @@ class PreferencesDialog(QDialog):
     def apply(self) -> None:
         "Apply settings variations"
         app = QGuiApplication.instance()
+        if app is None:
+            return
         # gui preferences
         theme = self.ui.comboBoxTheme.currentText()
         color = self.ui.comboBoxColorScheme.modelDataStr
@@ -223,8 +224,9 @@ class PreferencesDialog(QDialog):
 def setTheme(theme: str) -> None:
     "Set the application theme"
     app = QGuiApplication.instance()
-    app.setStyle(theme)
-    app.processEvents()
+    if app is not None:
+        app.setStyle(theme)
+        app.processEvents()
     
 def setColorScheme(color: str) -> None:
     "Set the application color scheme"
@@ -252,6 +254,8 @@ def setIcon(theme: str) -> None:
 def setFont(ffamily: str|None = None, fsize: int = 10):
     "Set font family and font size"
     app = QGuiApplication.instance()
+    if app is None:
+        return
     if ffamily is None:
         font = QFont()
     else:

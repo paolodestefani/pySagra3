@@ -21,7 +21,6 @@
 # You should have received a copy of the GNU General Public License
 # along with pySagra.  If not, see <http://www.gnu.org/licenses/>.
 
-
 """Connection
 
 This module manage current connections and connection history
@@ -199,7 +198,7 @@ class ConnectionHistoryForm(FormManager):
 
     def updateList(self) -> None:
         try:
-            self.ui.tableView.model().select()
+            self.ui.tableView.model().select() # type: ignore
         except PyAppDBError as er:
             QMessageBox.critical(self,
                                  _tr('MessageDialog', 'Critical'),
@@ -269,7 +268,7 @@ class ConnectionHistoryForm(FormManager):
             QMessageBox.critical(self,
                                  _tr('MessageDialog', 'Critical'),
                                  f"Database error: {er.code}\n{er.message}",
-                                 QMessageBox.Ok)
+                                 QMessageBox.StandardButton.Ok)
             logging.error('Database error on setting automatic delete options: %s', er.message)
         else:
             self.reload()

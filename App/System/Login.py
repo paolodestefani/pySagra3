@@ -109,15 +109,15 @@ class LoginDialog(QDialog):
         if self.logo.isValid():
             self.ui.labelMain.setMovie(self.logo)
             self.logo.start()
-        self.ui.lineEditServer.setText(str(st.value("LogInServer", ""))) # str obly for pylance conformance...
-        self.ui.spinBoxPort.setValue(st.value("LogInPort", 5432, type=int)) # type: ignore
-        self.ui.lineEditDatabase.setText(str(st.value("LogInDatabase", "")))
+        self.ui.lineEditServer.setText(st.value("LogInServer", ""))
+        self.ui.spinBoxPort.setValue(st.value("LogInPort", 5432, type=int))
+        self.ui.lineEditDatabase.setText(st.value("LogInDatabase", ""))
         try:
-            self.ui.lineEditDBUser.setText(string_decode(str(st.value("LogInDbUser", ""))))
+            self.ui.lineEditDBUser.setText(string_decode(st.value("LogInDbUser", "")))
         except InvalidToken:
             self.ui.lineEditDBUser.setText("")
         try:
-            self.ui.lineEditDBPassword.setText(string_decode(str(st.value("LogInDbPassword", ""))))
+            self.ui.lineEditDBPassword.setText(string_decode(st.value("LogInDbPassword", "")))
         except InvalidToken:
             self.ui.lineEditDBPassword.setText("")
         self.ui.lineEditUser.setFocus()
@@ -174,7 +174,7 @@ class LoginDialog(QDialog):
             mbox.setIcon(QMessageBox.Icon.Critical)
             mbox.setWindowTitle(_tr('MessageDialog', 'Critical'))
             mbox.setText(f"<p><b>{msg}</b>")
-            mbox.setDetailedText(str(er.message))
+            mbox.setDetailedText(er.message)
             mbox.exec()
 
             self.ui.lineEditPassword.clear()
@@ -337,7 +337,7 @@ class ChangeCompanyDialog(QDialog):
             mbox.setIcon(QMessageBox.Icon.Critical)
             mbox.setWindowTitle(_tr('MessageDialog', 'Critical'))
             mbox.setText(f"<p><b>{msg}</b>")
-            mbox.setDetailedText(str(er.message))
+            mbox.setDetailedText(er.message)
             mbox.exec_()
 
             logging.error("Database error %s %s", er.code, er.message)

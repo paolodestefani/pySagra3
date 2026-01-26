@@ -21,7 +21,6 @@
 # You should have received a copy of the GNU General Public License
 # along with pySagra.  If not, see <http://www.gnu.org/licenses/>.
 
-
 """Company
 
 This module manages company creation/deletion/modification and user access
@@ -151,7 +150,7 @@ class CompanyForm(FormIndexManager):
     def upload(self, checked: bool) -> None:
         "Upload company image file"
         st = QSettings()
-        path = str(st.value("PathImagesCompanies", QDir.current().path()))
+        path = st.value("PathImagesCompanies", QDir.current().path())
         f, t = QFileDialog.getOpenFileName(self,
                                            _tr('Company', "Select the image to upload"),
                                            path,
@@ -237,7 +236,7 @@ class CompanyForm(FormIndexManager):
         except PyAppDBError as er:
             QMessageBox.critical(self,
                                  _tr('MessageDialog', "Critical"),
-                                 f"Database error: {er.code}\n{er.message}"),
+                                 f"Database error: {er.code}\n{er.message}")
             logging.error('Database error on drop company: %s', er.message)
         else:
             QMessageBox.information(self,
