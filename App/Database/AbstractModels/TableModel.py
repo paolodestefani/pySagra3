@@ -46,6 +46,7 @@ from PySide6.QtCore import QDateTime
 from PySide6.QtCore import Signal
 from PySide6.QtCore import QAbstractTableModel
 from PySide6.QtCore import QModelIndex
+from PySide6.QtCore import QPersistentModelIndex
 
 # application modules
 from App import session
@@ -418,7 +419,7 @@ class TableModel(QAbstractTableModel):
     userDataChanged = Signal()  # can not use dataChanged because is emitted even on select
     rowCountChanged = Signal(int)
 
-    def __init__(self, parent: QObject = None) -> None:
+    def __init__(self, parent: QObject|None = None) -> None:
         "Initialize some empty or default data structure"
         super().__init__(parent)
         self.dataSet = [] # a list of dict (integer key = record column/field,
@@ -435,8 +436,8 @@ class TableModel(QAbstractTableModel):
         # subclasses must define this properties
         self.table = None # table or view name - string, subclass must define this
         self.isCompanyTable = False # True if is a company table
-        self.columns = None # model columns definition (field, description, readonly, type)
-        self.primaryKey = None # primary key fields name - sequence, subclass must define this
+        self.columns = [] # model columns definition (field, description, readonly, type)
+        self.primaryKey = [] # primary key fields name - sequence, subclass must define this
         self.automaticPKey = False  # set pkey filds at DEFAULT value on insert
         self.recordType = None  # list of field:value key for record type (a table with different record type)
         self.newRecordDefault = {} # a record dictionary with default values for some field on insert
@@ -450,16 +451,16 @@ class TableModel(QAbstractTableModel):
         "Model representation"
         return self.repr
 
-    def flags(self, index: QModelIndex) -> int:
+    def flags(self, index: QModelIndex|QPersistentModelIndex) -> Qt.ItemFlag:
         "Return standard flags or readonly for some columns"
         if not index.isValid():
-            return Qt.ItemIsEnabled
-        flags = Qt.ItemFlags(QAbstractTableModel.flags(self, index) | Qt.ItemIsEditable)
+            return Qt.ItemFlag.ItemIsEnabled
+        flags = QAbstractTableModel.flags(self, index)|Qt.ItemFlag.ItemIsEditable
         if self.columns[index.column()][RO]:
-            flags = flags ^ Qt.ItemIsEditable
+            flags = flags ^ Qt.ItemFlag.ItemIsEditable
         return flags
 
-    def data(self, index: QModelIndex = QModelIndex(), role: int = Qt.DisplayRole) -> str|int|float|QDate|QDateTime|None:
+    def data(self, index: QModelIndex|QPersistentModelIndex = QModelIndex(), role: int = Qt.ItemDataRole.DisplayRole) -> str|int|float|QDate|QDateTime|None:
         # sometimes dataSet could be empty
         if (not index.isValid() 
             or index.row() > self.rowCount()
@@ -467,23 +468,23 @@ class TableModel(QAbstractTableModel):
             return None
         row = index.row()
         col = index.column()
-        if role == Qt.DisplayRole or role == Qt.EditRole:
+        if role == Qt.ItemDataRole.DisplayRole or role == Qt.ItemDataRole.EditRole:
             if len(self.dataSet) <= row:
                 return None
             if not col in self.dataSet[row]:
                 return None
             result = self.dataSet[row][col]
             return result
-        elif role == Qt.TextAlignmentRole:
+        elif role == Qt.ItemDataRole.TextAlignmentRole:
             # numbers aligned right anything else aligned left
             if isinstance(index.data(), (int, decimal.Decimal, QDate, QDateTime)):
-                return Qt.AlignRight | Qt.AlignVCenter
+                return Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignVCenter
             else:
-                return Qt.AlignLeft | Qt.AlignVCenter
+                return Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter
         else:
             return None
 
-    def setData(self, index: QModelIndex = QModelIndex(), value: str|int|float|QDate|QDateTime|None = None, role: int = Qt.EditRole) -> bool:
+    def setData(self, index: QModelIndex|QPersistentModelIndex = QModelIndex(), value: str|int|float|QDate|QDateTime|None = None, role: int = Qt.ItemDataRole.EditRole) -> bool:
         "Set data in dataSet and mark row as modified"
         # sanity checks
         if (not index.isValid() 
@@ -492,7 +493,7 @@ class TableModel(QAbstractTableModel):
             return False
         row = index.row()
         col = index.column()
-        if role == Qt.EditRole:
+        if role == Qt.ItemDataRole.EditRole:
             # check if different from before
             if self.dataSet[row][col] == value:
                 return False
@@ -506,7 +507,7 @@ class TableModel(QAbstractTableModel):
                 value = value or None # convert empty strings in Sql Null
             self.dataSet[row][col] = value
             self.isDirty = True
-            self.dataChanged.emit(index, index, [Qt.DisplayRole, Qt.EditRole])
+            self.dataChanged.emit(index, index, [Qt.ItemDataRole.DisplayRole, Qt.ItemDataRole.EditRole])
             self.userDataChanged.emit()
             return True
         return False
@@ -521,7 +522,7 @@ class TableModel(QAbstractTableModel):
         # BUT is needed for proper DataWidgetMapper use
         return True
 
-    def submitAll(self, column: int = None, value: str|int|float|QDate|QDateTime|None = None) -> bool:
+    def submitAll(self, column: int|None = None, value: str|int|float|QDate|QDateTime|None = None) -> bool:
         "Update database: insert/delete/update rows"
         # if a referenceKey is provided fill all the rows with reference value
         if not column is None :
@@ -692,27 +693,27 @@ class TableModel(QAbstractTableModel):
         self.rows = 0 # usually updated by select
         self.cols = len(self.columns) # usually updated by select
 
-    def headerData(self, section: int, orientation: int, role: int = Qt.DisplayRole) -> str|None:
-        if orientation == Qt.Horizontal:
-            if role == Qt.DisplayRole:
+    def headerData(self, section: int, orientation: Qt.Orientation, role: int = Qt.ItemDataRole.DisplayRole) -> str|None:
+        if orientation == Qt.Orientation.Horizontal:
+            if role == Qt.ItemDataRole.DisplayRole:
                 return self.columns[section][DESCRIPTION]
             else:
                 return None
-        if orientation == Qt.Vertical:
-            if role == Qt.DisplayRole:
+        if orientation == Qt.Orientation.Vertical:
+            if role == Qt.ItemDataRole.DisplayRole:
                 return super().headerData(section, orientation, role)
             else:
                 return None
 
-    def rowCount(self, parent: QModelIndex = QModelIndex()) -> int:
+    def rowCount(self, parent: QModelIndex|QPersistentModelIndex = QModelIndex()) -> int:
         "Returns the rows number of the dataSet"
         return self.rows
 
-    def columnCount(self, parent: QModelIndex = QModelIndex()) -> int:
+    def columnCount(self, parent: QModelIndex|QPersistentModelIndex = QModelIndex()) -> int:
         "Returns the columns number of the dataSet"
         return self.cols
 
-    def insertRows(self, position: int, count: int, parent: QModelIndex = QModelIndex()) -> bool:
+    def insertRows(self, position: int, count: int, parent: QModelIndex|QPersistentModelIndex = QModelIndex()) -> bool:
         "Insert rows in model"
         self.beginInsertRows(parent, position, position + count - 1)
         for i in range(position, position + count):
@@ -724,10 +725,10 @@ class TableModel(QAbstractTableModel):
         self.rowCountChanged.emit(self.rows)
         return True
 
-    def removeRows(self, position: int, count: int, parent: QModelIndex = QModelIndex()) -> bool:
+    def removeRows(self, position: int, count: int, parent: QModelIndex|QPersistentModelIndex = QModelIndex()) -> bool:
         "Remove rows from model"
         if self.rowCount() < 1:
-            return
+            return True
         # for removed rows we can't use row number because it is renumbered
         # every time a row is removed. Also inserted/modified rows have to be
         # renumbered when a row before is removed
@@ -760,7 +761,7 @@ class TableModel(QAbstractTableModel):
         self.rowCountChanged.emit(self.rows)
         return True
 
-    def sort(self, column: int, order: int = Qt.AscendingOrder) -> None:
+    def sort(self, column: int, order: Qt.SortOrder = Qt.SortOrder.AscendingOrder) -> None:
         "Inplace sorting of the model, manage null values base on declared data time"
         # manage Null values
         dt = self.columns[column][TYPE]
@@ -773,14 +774,14 @@ class TableModel(QAbstractTableModel):
               'time': QTime(),
               'datetime': QDateTime()}[dt]
         # inplace list sorting
-        if order == Qt.AscendingOrder:
+        if order == Qt.SortOrder.AscendingOrder:
             self.dataSet.sort(key=lambda x: x[column] or nv)
         else:
             self.dataSet.sort(key=lambda x: x[column] or nv, reverse=True)
         # notify about changes
         self.dataChanged.emit(self.createIndex(0, 0),
                               self.createIndex(self.rowCount(), self.columnCount()),
-                              [Qt.DisplayRole, Qt.EditRole])
+                              [Qt.ItemDataRole.DisplayRole, Qt.ItemDataRole.EditRole])
 
     def filter(self, column: int|None = None, value: str|int|float|QDate|QDateTime|None = None) -> None:
         "Filter records on a master/detail logic, this model is for detail"
@@ -804,7 +805,7 @@ class TableModel(QAbstractTableModel):
         # notify of changes
         self.dataChanged.emit(self.createIndex(0, 0),
                               self.createIndex(self.rowCount(), self.columnCount()),
-                              [Qt.DisplayRole, Qt.EditRole])
+                              [Qt.ItemDataRole.DisplayRole, Qt.ItemDataRole.EditRole])
         self.layoutChanged.emit()
         self.rowCountChanged.emit(self.rows)
     
@@ -821,7 +822,7 @@ class TableModel(QAbstractTableModel):
         else:
             raise TypeError("Order by expression must be string or list/tuple of strings")
 
-    def primaryKey(self, row: int) -> str:
+    def primaryKey(self, row: int) -> str|None:
         if row < 0:
             return
         return self.dataSet[row].get('pkey')
@@ -897,7 +898,7 @@ class TableModel(QAbstractTableModel):
         # notify of changes
         self.dataChanged.emit(self.createIndex(0, 0),
                               self.createIndex(self.rowCount(), self.columnCount()),
-                              [Qt.DisplayRole, Qt.EditRole])
+                              [Qt.ItemDataRole.DisplayRole, Qt.ItemDataRole.EditRole])
         self.layoutChanged.emit()
         self.rowCountChanged.emit(self.rows)
         
@@ -911,7 +912,7 @@ class PandasModel(QAbstractTableModel):
         self._pivot = None
         self.table = None # table or view name - string, subclass must define this
         self.isCompanyTable = False # True if is a company table, subclass must define this
-        self.columns = None # model columns definition, subclass must define this
+        self.columns = () # model columns definition, subclass must define this
         # Number of rows needed for column headers
         #self.col_levels = dataframe.columns.nlevels if hasattr(dataframe.columns, 'nlevels') else 1
         self.col_levels = 0
@@ -995,24 +996,24 @@ class PandasModel(QAbstractTableModel):
         self.row_levels = self._pivot.index.nlevels if hasattr(self._pivot.index, 'nlevels') else 1
         self.row_levels += totals
 
-    def rowCount(self, parent: QModelIndex = QModelIndex()) -> int:
+    def rowCount(self, parent: QModelIndex|QPersistentModelIndex = QModelIndex()) -> int:
         return self._pivot.shape[0] + self.col_levels
 
-    def columnCount(self, parent: QModelIndex = QModelIndex()) -> int:
+    def columnCount(self, parent: QModelIndex|QPersistentModelIndex = QModelIndex()) -> int:
         return self._pivot.shape[1] + self.row_levels
 
-    def data(self, index: QModelIndex, role=Qt.DisplayRole):
+    def data(self, index: QModelIndex|QPersistentModelIndex = QModelIndex(), role: int = Qt.ItemDataRole.DisplayRole) -> str|int|float|QDate|QDateTime|None:
         if not index.isValid():
             return None
-        header = self.headerData(index.column(), Qt.Horizontal, Qt.DisplayRole)
+        header = self.headerData(index.column(), Qt.Orientation.Horizontal, Qt.ItemDataRole.DisplayRole)
         header = header.split('\n')[0]  # in case of multi-line header
         fm = self.columns[self.trcolumns[header]][4]  # (name, format)
-        if role == Qt.TextAlignmentRole:
+        if role == Qt.ItemDataRole.TextAlignmentRole:
             if fm in ('int', 'float', 'decimal2'):   
-                return Qt.AlignRight | Qt.AlignVCenter
-            return Qt.AlignLeft | Qt.AlignVCenter
+                return Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignVCenter
+            return Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter
         
-        if role == Qt.DisplayRole:
+        if role == Qt.ItemDataRole.DisplayRole:
             r, c = index.row(), index.column()
             dt = self._pivot.iloc[r - self.col_levels, c - self.row_levels] if r >= self.col_levels and c >= self.row_levels else None
             # CASE 1: Top-Left Empty Corner
@@ -1050,9 +1051,9 @@ class PandasModel(QAbstractTableModel):
         
         return None
 
-    def headerData(self, section, orientation, role=Qt.DisplayRole):
-        if role == Qt.DisplayRole:
-            if orientation == Qt.Horizontal:
+    def headerData(self, section, orientation, role: int =Qt.ItemDataRole.DisplayRole) -> str|None:
+        if role == Qt.ItemDataRole.DisplayRole:
+            if orientation == Qt.Orientation.Horizontal:
                 if section < self.row_levels:
                     #print('Index;', self._pivot.index)
                     return self._pivot.index.names[section]
@@ -1061,7 +1062,7 @@ class PandasModel(QAbstractTableModel):
                 # If MultiIndex, join levels
                 return "\n".join(map(str, col_label)) if isinstance(col_label, tuple) else str(col_label)
             
-            if orientation == Qt.Vertical:
+            if orientation == Qt.Orientation.Vertical:
                 return None
         return None
 
