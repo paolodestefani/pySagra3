@@ -138,7 +138,6 @@ from App.Report.ReportEngine import Report
 from App.Report.ReportEngine import ReportException, ReportPrintError
 from App.Widget.Control import RelationalComboBox
 from App.Widget.Control import CheckableComboBox
-from App.Widget.Control import TextEditor
 from App.Other.Email import sendEmail
 from App.Other.Email import EmailException
 
